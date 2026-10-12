@@ -14,14 +14,14 @@ chat_vllm(
   api_key = NULL,
   credentials = NULL,
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 
 models_vllm(base_url, api_key = NULL, credentials = NULL)
 }
 \arguments{
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
@@ -53,11 +53,16 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 \href{https://docs.vllm.ai/en/latest/}{vLLM} is an open source library that
 provides an efficient and convenient LLMs model server. You can use
 \code{chat_vllm()} to connect to endpoints powered by vLLM.

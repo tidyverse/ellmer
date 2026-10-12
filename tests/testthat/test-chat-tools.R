@@ -57,7 +57,7 @@ test_that("chat can get and register a list of tools", {
 test_that("can handle parallel tools", {
   vcr::local_cassette("chat-tools-parallel")
 
-  chat <- chat_openai_test("Be terse")
+  chat <- chat_openai_test("Be terse", model = "gpt-4.1-nano")
   chat$register_tool(tool(
     replay(c(2, 5)),
     name = "dice",
@@ -207,6 +207,28 @@ test_that("chat callbacks for tool requests/results", {
   last_request <- NULL
   cb_count_request <- 0
   cb_count_result <- 0
+  cb_count_req_start <- 0
+  cb_count_req_end <- 0
+  last_start_turns <- NULL
+  last_end_turn <- NULL
+
+  # Fires before each model request in the tool loop (does not emit, so the
+  # snapshot below is unaffected). Receives the pending turns.
+  chat$on_request_start(function(turns) {
+    cb_count_req_start <<- cb_count_req_start + 1
+    last_start_turns <<- turns
+    expect_type(turns, "list")
+    expect_s7_class(turns[[length(turns)]], Turn)
+  })
+
+  # Fires after each model response, before its tool calls run. Receives the
+  # assistant turn.
+  chat$on_request_end(function(turn) {
+    cb_count_req_end <<- cb_count_req_end + 1
+    last_end_turn <<- turn
+    expect_s7_class(turn, Turn)
+    expect_equal(turn@role, "assistant")
+  })
 
   chat$on_tool_request(function(request) {
     cb_count_request <<- cb_count_request + 1
@@ -231,11 +253,81 @@ test_that("chat callbacks for tool requests/results", {
   )
   expect_equal(cb_count_request, 2L)
   expect_equal(cb_count_result, 2L)
+  # One request-start + one request-end per model request: initial request + the
+  # follow-up after the tool results are fed back.
+  expect_equal(cb_count_req_start, 2L)
+  expect_equal(cb_count_req_end, 2L)
+  # on_request_start sees the pending turns ending in the (tool-result) user turn
+  # of the 2nd request; on_request_end sees the final assistant turn.
+  expect_equal(last_start_turns[[length(last_start_turns)]]@role, "user")
+  expect_equal(last_end_turn@role, "assistant")
 
   expect_snapshot(error = TRUE, {
     chat$on_tool_request(function(data) NULL)
     chat$on_tool_result(function(data) NULL)
   })
+})
+
+test_that("on_request_start() can rewrite history with set_turns()", {
+  vcr::local_cassette("chat-tools-on-request")
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
+  ))
+
+  turn_text <- function(t) {
+    tx <- tryCatch(contents_text(t), error = function(e) "")
+    if (length(tx) != 1L || is.na(tx)) "" else tx
+  }
+
+  # Inject a turn into the history from inside the callback on the first request,
+  # then confirm the *next* request's payload reflects it -- i.e. calling
+  # set_turns() from on_request_start actually changes what gets sent.
+  calls <- 0L
+  seen <- list()
+  chat$on_request_start(function(turns) {
+    calls <<- calls + 1L
+    seen[[calls]] <<- vapply(turns, turn_text, character(1))
+    if (calls == 1L) {
+      chat$set_turns(c(
+        list(Turn("user", "INJECTED_BY_CALLBACK")),
+        chat$get_turns()
+      ))
+    }
+  })
+
+  . <- chat$chat("What are Joe and Hadley's favorite colors?")
+
+  expect_equal(calls, 2L)
+  # The first request predates the rewrite; the second reflects it.
+  expect_false(any(grepl("INJECTED_BY_CALLBACK", seen[[1]], fixed = TRUE)))
+  expect_true(any(grepl("INJECTED_BY_CALLBACK", seen[[2]], fixed = TRUE)))
+})
+
+test_that("on_request_start() / on_request_end() fire on the async tool loop", {
+  vcr::local_cassette("chat-tools-callbacks")
+  chat <- chat_openai_test()
+  chat$register_tool(tool(
+    function(user) c("red", "blue")[nchar(user) %% 2 + 1],
+    name = "user_favorite_color",
+    description = "Find out a user's favorite color",
+    arguments = list(user = type_string("User's name"))
+  ))
+
+  n_start <- 0L
+  n_end <- 0L
+  chat$on_request_start(function(turns) n_start <<- n_start + 1L)
+  chat$on_request_end(function(turn) n_end <<- n_end + 1L)
+
+  sync(chat$chat_async("What are Joe and Hadley's favorite colors?"))
+
+  # Fires once per model request on the async loop too: initial request plus the
+  # follow-up after the tool results are fed back.
+  expect_equal(n_start, 2L)
+  expect_equal(n_end, 2L)
 })
 
 test_that("$chat_async() can run tools concurrently", {
@@ -322,7 +414,7 @@ test_that("$stream(stream='content') yields tool request/result contents", {
 })
 
 test_that("$stream_async(stream='content', tool_mode='concurrent') yields tool request/result contents concurrently", {
-  chat <- chat_openai_test()
+  chat <- chat_openai_test(model = "gpt-4.1-nano")
   tool_current_date <- tool(
     coro::async(function() {
       coro::await(coro::async_sleep(0.1))
@@ -425,7 +517,7 @@ test_that("invoke_tool returns a ContentToolResult", {
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
-  expect_equal(res@value, 1)
+  expect_equal(res@value, to_json(1))
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
   expect_equal(res@request@tool, tool_f)
@@ -506,7 +598,7 @@ test_that("invoke_tool_async returns a ContentToolResult", {
   expect_s3_class(res, "ellmer::ContentToolResult")
   expect_equal(res@error, NULL)
   expect_false(tool_errored(res))
-  expect_equal(res@value, 1)
+  expect_equal(res@value, to_json(1))
   expect_s3_class(res@request, "ellmer::ContentToolRequest")
   expect_equal(res@request@id, "x")
   expect_equal(res@request@tool, tool_f)
@@ -635,7 +727,10 @@ test_that("invoke_tools_async() yields tool requests and promises results", {
 test_that("invoke_tools() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(x, y) out <<- list(x = x, y = y),
+    function(x, y) {
+      out <<- list(x = x, y = y)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -662,7 +757,10 @@ test_that("invoke_tools() converts to R data structures", {
 test_that("invoke_tools_async() converts to R data structures", {
   out <- NULL
   tool <- tool(
-    function(x, y) out <<- list(x = x, y = y),
+    function(x, y) {
+      out <<- list(x = x, y = y)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -690,7 +788,10 @@ test_that("invoke_tools_async() converts to R data structures", {
 test_that("invoke_tools() can invoke tools with args with default values", {
   out <- NULL
   tool <- tool(
-    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    function(x, y, z = "z") {
+      out <<- list(x = x, y = y, z = z)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -720,7 +821,10 @@ test_that("invoke_tools() can invoke tools with args with default values", {
 test_that("invoke_tools_async() can invoke tools with args with default values", {
   out <- NULL
   tool <- tool(
-    function(x, y, z = "z") out <<- list(x = x, y = y, z = z),
+    function(x, y, z = "z") {
+      out <<- list(x = x, y = y, z = z)
+      return()
+    },
     description = "A tool",
     arguments = list(
       x = type_array(type_number()),
@@ -800,8 +904,8 @@ test_that("dangling tool requests are inserted into user message", {
       })
     )
   )
-  provider <- ProviderOpenAI("name", "model", "base_url")
-  chat <- Chat$new(provider)
+  provider <- test_provider()
+  chat <- Chat$new(provider, model = test_model())
 
   # Simulate a broken chat history with dangling tool request
   tool_request <- ContentToolRequest(id = "1", name = "get_date")
@@ -845,4 +949,241 @@ test_that("can resume chat after dangling tool requests", {
 
   # resume chat and get answer, not error
   expect_match(chat$chat("try again"), "2001")
+})
+
+# normalize_tool_result -------------------------------------------------------
+
+test_that("normalize_tool_result handles different return types", {
+  expect_null(normalize_tool_result(NULL))
+
+  json_val <- jsonlite::toJSON(list(a = 1), auto_unbox = TRUE)
+  expect_identical(normalize_tool_result(json_val), json_val)
+
+  content <- ContentText("hi")
+  expect_identical(normalize_tool_result(content), content)
+
+  content_list <- list(ContentText("a"), ContentText("b"))
+  expect_identical(normalize_tool_result(content_list), content_list)
+
+  expect_equal(normalize_tool_result("hello"), "hello")
+  expect_equal(normalize_tool_result(c("a", "b", "c")), "a\nb\nc")
+
+  expect_equal(normalize_tool_result(1), to_json(1))
+  expect_equal(normalize_tool_result(TRUE), to_json(TRUE))
+
+  expect_snapshot(normalize_tool_result(data.frame(x = 1)))
+  expect_snapshot(normalize_tool_result(list(a = 1, b = 2)))
+})
+
+# Tool context ----------------------------------------------------------------
+
+test_that("invoke_tools() supplies a minimal context when tool_context is NULL", {
+  captured <- NULL
+  t <- tool(
+    function() {
+      captured <<- tool_context()
+      "ok"
+    },
+    name = "ctx_tool",
+    description = "A tool that reads tool_context()"
+  )
+  req <- ContentToolRequest(
+    id = "c1",
+    name = "ctx_tool",
+    arguments = list(),
+    tool = t
+  )
+
+  coro::collect(invoke_tools(
+    AssistantTurn(list(req)),
+    tool_context = NULL
+  ))
+
+  expect_s3_class(captured, "ellmer_tool_context")
+  expect_identical(captured$request, req)
+  expect_equal(captured$turns, list())
+})
+
+test_that("invoke_tools_async() supplies a minimal context when tool_context is NULL", {
+  captured <- NULL
+  t <- tool(
+    coro::async(function() {
+      captured <<- tool_context()
+      "ok"
+    }),
+    name = "ctx_tool",
+    description = "An async tool that reads tool_context()"
+  )
+  req <- ContentToolRequest(
+    id = "c1",
+    name = "ctx_tool",
+    arguments = list(),
+    tool = t
+  )
+
+  sync(gen_async_promise_all(invoke_tools_async(
+    AssistantTurn(list(req)),
+    tool_context = NULL
+  )))
+
+  expect_s3_class(captured, "ellmer_tool_context")
+  expect_identical(captured$request, req)
+  expect_equal(captured$turns, list())
+})
+
+test_that("invoke_tool() passes tool_context to the tool (sync)", {
+  turns <- list()
+  factory <- \(request) new_tool_context(request, turns)
+
+  captured_name <- NULL
+  t <- tool(
+    function() {
+      captured_name <<- tool_context()$request@name
+      "ok"
+    },
+    name = "ctx_tool",
+    description = "A tool that reads tool_context()"
+  )
+  req <- ContentToolRequest(
+    id = "c1",
+    name = "ctx_tool",
+    arguments = list(),
+    tool = t
+  )
+  turn <- AssistantTurn(list(req))
+
+  coro::collect(invoke_tools(turn, tool_context = factory))
+  expect_equal(captured_name, "ctx_tool")
+})
+
+test_that("invoke_tool() stack depth returns to 0 after a tool error (sync)", {
+  factory <- new_tool_context
+
+  t <- tool(
+    function() stop("boom"),
+    name = "err_tool",
+    description = "A tool that errors"
+  )
+  req <- ContentToolRequest(
+    id = "e1",
+    name = "err_tool",
+    arguments = list(),
+    tool = t
+  )
+  turn <- AssistantTurn(list(req))
+
+  coro::collect(invoke_tools(turn, tool_context = factory))
+  expect_equal(length(the$tool_context_stack), 0L)
+})
+
+test_that("invoke_tool_async() passes tool_context to the tool (B1 bracketing)", {
+  factory <- new_tool_context
+
+  captured <- list()
+
+  make_async_tool <- function(tool_name) {
+    t_fun <- coro::async(function() {
+      captured[[tool_name]] <<- tool_context()$request@name
+      coro::await(promises::promise_resolve(NULL))
+      "done"
+    })
+    tool(t_fun, name = tool_name, description = "async tool")
+  }
+
+  tool_a <- make_async_tool("tool_a")
+  tool_b <- make_async_tool("tool_b")
+
+  req_a <- ContentToolRequest(
+    id = "a1",
+    name = "tool_a",
+    arguments = list(),
+    tool = tool_a
+  )
+  req_b <- ContentToolRequest(
+    id = "b1",
+    name = "tool_b",
+    arguments = list(),
+    tool = tool_b
+  )
+  turn <- AssistantTurn(list(req_a, req_b))
+
+  sync(gen_async_promise_all(invoke_tools_async(turn, tool_context = factory)))
+
+  expect_equal(captured[["tool_a"]], "tool_a")
+  expect_equal(captured[["tool_b"]], "tool_b")
+  expect_equal(length(the$tool_context_stack), 0L)
+})
+
+test_that("invoke_tool_async() stack depth returns to 0 after a tool error (async)", {
+  factory <- new_tool_context
+
+  t <- tool(
+    coro::async(function() stop("async boom")),
+    name = "async_err",
+    description = "async tool that errors"
+  )
+  req <- ContentToolRequest(
+    id = "ae1",
+    name = "async_err",
+    arguments = list(),
+    tool = t
+  )
+  turn <- AssistantTurn(list(req))
+
+  sync(gen_async_promise_all(invoke_tools_async(turn, tool_context = factory)))
+  expect_equal(length(the$tool_context_stack), 0L)
+})
+
+test_that("capture-before-await: context captured before await remains usable", {
+  factory <- new_tool_context
+
+  captured_name <- NULL
+  t <- tool(
+    coro::async(function() {
+      ctx <- tool_context()
+      coro::await(promises::promise_resolve(NULL))
+      captured_name <<- ctx$request@name
+      "done"
+    }),
+    name = "mutate_tool",
+    description = "async tool that reads context captured before await"
+  )
+  req <- ContentToolRequest(
+    id = "m1",
+    name = "mutate_tool",
+    arguments = list(),
+    tool = t
+  )
+  turn <- AssistantTurn(list(req))
+
+  sync(gen_async_promise_all(invoke_tools_async(turn, tool_context = factory)))
+  expect_equal(captured_name, "mutate_tool")
+})
+
+test_that("tool_context() after await aborts with ellmer_error_tool_context_unavailable", {
+  factory <- new_tool_context
+
+  t <- tool(
+    coro::async(function() {
+      coro::await(promises::promise_resolve(NULL))
+      tool_context()
+    }),
+    name = "post_await_tool",
+    description = "async tool that calls tool_context() after await"
+  )
+  req <- ContentToolRequest(
+    id = "p1",
+    name = "post_await_tool",
+    arguments = list(),
+    tool = t
+  )
+  turn <- AssistantTurn(list(req))
+
+  results <- sync(gen_async_promise_all(invoke_tools_async(
+    turn,
+    tool_context = factory
+  )))
+  result <- results[[1]]
+  expect_true(tool_errored(result))
+  expect_s3_class(result@error, "ellmer_error_tool_context_unavailable")
 })

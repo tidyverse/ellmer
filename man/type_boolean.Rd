@@ -28,7 +28,7 @@ type_object(
   .description = NULL,
   ...,
   .required = TRUE,
-  .additional_properties = FALSE
+  .additional_properties = deprecated()
 )
 
 type_from_schema(text, path)
@@ -60,8 +60,9 @@ value, the default value will be used.}
 \item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> Name-type pairs defining
 the components that the object must possess.}
 
-\item{.additional_properties}{Can the object have arbitrary additional
-properties that are not explicitly listed? Only supported by Claude.}
+\item{.additional_properties}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Can the
+object have arbitrary additional properties that are not explicitly listed?
+Only supported by Claude.}
 
 \item{text}{A JSON string.}
 
@@ -114,7 +115,7 @@ type_array(type_object(
 ))
 
 # There's no specific type for dates, but you use a string with the
-# requested format in the description (it's not gauranteed that you'll
+# requested format in the description (it's not guaranteed that you'll
 # get this format back, but you should most of the time)
 type_string("The creation date, in YYYY-MM-DD format.")
 type_string("The update date, in dd/mm/yyyy format.")

@@ -180,6 +180,63 @@ test_pdf_local <- function(chat_fun) {
   )
 }
 
+# Files -------------------------------------------------------------------
+
+test_file_lifecycle <- function(chat_fun) {
+  # Avoid using an absolute path in form_file
+  local_mocked_bindings(
+    form_file = function(path, type) {
+      structure(
+        list(path = path, type = type, name = NULL),
+        class = "form_file"
+      )
+    }
+  )
+
+  chat <- chat_fun()
+  upload <- chat$file_upload(test_path("apples.pdf"))
+  defer(chat$file_delete(upload))
+  expect_s7_class(upload, ContentUploaded)
+
+  response <- chat$chat("What's the title of this document?", upload)
+  expect_match(response, "Apples are tasty")
+
+  files <- chat$file_list()
+  expect_contains(files$id, upload@uri)
+  expect_s3_class(files$created_at, "POSIXct")
+  expect_s3_class(files$expires_at, "POSIXct")
+
+  file <- chat$file_get(upload@uri)
+  expect_s7_class(file, ContentUploaded)
+  expect_equal(file@uri, upload@uri)
+  expect_equal(file@mime_type, "application/pdf")
+  expect_s3_class(file@extra$expires_at, "POSIXct")
+  expect_equal(
+    as.numeric(difftime(
+      file@extra$expires_at,
+      file@extra$created_at,
+      units = "hours"
+    )),
+    48,
+    tolerance = 0.01
+  )
+
+  # Providers only serve back model-generated files, not user uploads
+  path <- withr::local_tempfile()
+  expect_error(chat$file_download(upload, path))
+}
+
+# Documents ---------------------------------------------------------------
+
+test_document_local <- function(chat_fun) {
+  chat <- chat_fun()
+  response <- chat$chat(
+    "Which penguin won the race? Answer with just the penguin's name.",
+    content_document_file(test_path("penguin_race.csv"))
+  )
+  expect_match(response, "turbo tuxedo", ignore.case = TRUE)
+}
+
 # Models ------------------------------------------------------------------
 
 test_models <- function(models_fun) {
@@ -187,4 +244,38 @@ test_models <- function(models_fun) {
   expect_gt(nrow(models), 0)
   expect_s3_class(models, "data.frame")
   expect_contains(names(models), "id")
+}
+
+# Token counting -----------------------------------------------------------
+
+test_token_count <- function(chat_fun) {
+  chat <- chat_fun("Answer succinctly")
+
+  result_new <- chat$token_count("What's the current date?")
+  expect_type(result_new, "integer")
+  expect_gt(result_new, 0)
+
+  result_all <- chat$token_count(
+    "What's the current date?",
+    include = "complete"
+  )
+  expect_gt(result_all, result_new)
+
+  chat$chat("What's the current date?")
+
+  result_all_with_history <- chat$token_count(
+    "And tomorrow?",
+    include = "complete"
+  )
+  expect_gt(result_all_with_history, chat$token_count("And tomorrow?"))
+
+  result_structured <- chat$token_count(
+    "Apples are tasty. By Hadley Wickham.",
+    type = type_object(
+      title = type_string("Content title"),
+      author = type_string("Name of the author")
+    )
+  )
+  expect_type(result_structured, "integer")
+  expect_gt(result_structured, 0)
 }

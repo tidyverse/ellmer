@@ -14,6 +14,8 @@ chat_openai_compatible(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  preserve_thinking = FALSE,
+  strict = FALSE,
   echo = c("none", "output", "all")
 )
 }
@@ -41,6 +43,15 @@ with \code{\link[=modifyList]{modifyList()}}.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{preserve_thinking}{If \code{TRUE}, reasoning content returned by the model
+is included when sending conversation history back to the API. If \code{FALSE}
+(the default), reasoning content is still captured in the turn but dropped
+from subsequent requests. Set to \code{TRUE} if your provider requires or
+benefits from seeing prior reasoning in multi-turn conversations.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.}
 
 \item{echo}{One of the following options:
 \itemize{
@@ -78,22 +89,24 @@ chat$chat("What is the difference between a tibble and a data frame?")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

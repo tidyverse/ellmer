@@ -117,3 +117,29 @@
       x [returns_json (call1)]: The JSON was invalid: {[1, 2, 3]}
       x [throws (call2)]: went boom!
 
+# normalize_tool_result handles different return types
+
+    Code
+      normalize_tool_result(data.frame(x = 1))
+    Condition
+      Warning:
+      Automatic conversion of tool results to JSON was deprecated in ellmer 0.5.0.
+      i The tool returned a <data.frame> object.
+      i Tool functions should return a string, a json object, a Content object, or a list of Content objects.
+      i Use `jsonlite::toJSON()` to convert complex objects to JSON before returning.
+    Output
+      [{"x":1}] 
+
+---
+
+    Code
+      normalize_tool_result(list(a = 1, b = 2))
+    Condition
+      Warning:
+      Automatic conversion of tool results to JSON was deprecated in ellmer 0.5.0.
+      i The tool returned a list.
+      i Tool functions should return a string, a json object, a Content object, or a list of Content objects.
+      i Use `jsonlite::toJSON()` to convert complex objects to JSON before returning.
+    Output
+      {"a":1,"b":2} 
+

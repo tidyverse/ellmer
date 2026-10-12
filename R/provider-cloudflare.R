@@ -4,7 +4,9 @@ NULL
 #' Chat with a model hosted on CloudFlare
 #'
 #' @description
-#' [Cloudflare](https://www.cloudflare.com/developer-platform/products/workers-ai/)
+#' `r support_badge("community")`
+#'
+#' [Cloudflare](https://www.cloudflare.com/products/workers-ai/)
 #' Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 #' API, you must have an Account ID and an Access Token, which you can obtain
 #' [by following these instructions](https://developers.cloudflare.com/workers-ai/get-started/rest-api/).
@@ -60,14 +62,18 @@ chat_cloudflare <- function(
   provider <- ProviderCloudflare(
     name = "Cloudflare",
     base_url = base_url,
-    model = model,
-    params = params,
     credentials = credentials,
-    extra_args = api_args,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
+  model <- Model(name = model, params = params, extra_args = api_args)
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderCloudflare <- new_class(

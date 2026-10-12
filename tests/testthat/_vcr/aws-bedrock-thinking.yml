@@ -1,0 +1,41 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://bedrock-runtime.us-east-1.amazonaws.com/model/us.anthropic.claude-sonnet-4-5-20250929-v1:0/converse
+    body:
+      string: '{"messages":[{"role":"user","content":[{"text":"Create a riddle for
+        data scientists"},{"cachePoint":{"type":"default"}}]}],"additionalModelRequestFields":{"thinking":{"type":"enabled","budget_tokens":4000}},"inferenceConfig":{"temperature":1}}'
+  response:
+    status: 200
+    headers:
+      date: Wed, 15 Apr 2026 13:52:22 GMT
+      content-type: application/json
+      content-length: '3614'
+      x-amzn-requestid: 99d9f126-4521-4354-a939-0fc0e161b473
+    body:
+      string: "{\"metrics\":{\"latencyMs\":9542},\"output\":{\"message\":{\"content\":[{\"reasoningContent\":{\"reasoningText\":{\"signature\":\"EpUJCkgIDBABGAIqQO8yqu3hAS47hyuJXjCieM6EpFjWLF4a2XvrLmPjpypVu19GUDZKYIctRGB8h002b+SqO5RP+MmioErKla/FEPgSDHBtdC+ajvWsjM8KpRoMnKXRO6OjPyh0eBiZIjDBJATdB6Ifi31ykjv30U6hyRTNyavjAxe0LCR0UdnHRrqRk7o4x3P51sQBQWkexp8q+gdRwtEMsmU5VOaAa9RhcMXAhKmah+72b2yjNxKzs8oe4v/JcGwm5Pzb48SkB5bzl9Q5XIocukX+yZYMn0wd1vfTDcWVqe9Ya+AHYl2MWjhN0f3Res/lEJ8lyvC6W0Y/gDjuaQ+TaYptoyHJ4rBDWad5JR0Rre3bBKdhnsmSvYlnTCl9pfrXClppGnDzqZH5MpilLp/7eaym7/7ah1mA1sqTTeN7Z6p3rB8H7Sanm8eerkLsxkFq2EfFsIwpjr17ZvYVoL/mwKLLujYcDEyGVXFJTd61MWc2IWRk0NXN/MxEqS3nW9H761uGPe+aOpKZ6r25yo0AvOJoqYioZv8rHlmF7+Z33mrdq1t7HIllbdtnt9bjEiHuqYSpIBuoJKugp5ebMfQz0xnrogHlI+EKQ0ryUgCOgcHmQCsgBVRxvhHRjlDskV9bkGwlR/Ag969efUcj5+39joUlO7+Z+i2gZyIqjF0UncJuP6kRFnyv7IppSY6sIT+912L7Acg7Xe6RonzPQmAWiMzK2Ca8II23Y4tFAme7VNaiAxSf98OO3a06E/bEpfVOrozFLGJp6x7Yl2bvEDbElxjPgVRJ9Fw5tkiBd0VuTmQtfuchZCycAUzKn3JLWJlbGqN212sEKQdN0baXmPL3z5ROPHnsGGxvoZ/iXn15/duO2QtLQMeBXXgS03eb/YTOLERExP0FGAc1akU6AepQaWRbp+wyVEuKvTcCaM75vbaNRChJ2eD2gsP/yG2c9hdUMA3TFFn1113Xy3pYQ+1kJ2+U9utugw0kD3ZKTL2IjYxst6ixVt4/pN7/Oz7rt2I4o8SvoZjigSK/pm0OpUjsFz2niMAR9XcEUrGIqLTvk/GfKpRqngyqXAMchLG0WXGnuys3H4v6hNKow7zGJdvUCO6zopP/gjnX7UUv3ARDyCusI1a71YoL51COqxwB5tLnbwbKTyFvhEI/58rRH8XjArKheNYZon2fhURurDunyG54zD1mVzZJ/HQtUOfHvJKCzUzt70uXRyzoACwRZFk60VQHQ2b3GceK7Hf0VXSJdMV1WHiZ5gSR+0c/LQwedpIxRyuf2QhGX4Zuv6KNW53vGkZOFl94MVZcb1uWBMl0BwsJX2yeC6UXoZ4mwqNZ5F0pV4vje77Ep6aIKR2/lPkf7DZEAMTpJHU+n1017v/AcNc4w9MYW71j5/eIUyeD6cypBWmZTzN1nr6oZPuEIOxTr0xyMZHVZB3S4NuuEg68Vs2AnUPMAofbjnx7Opj8QFzdlPCPcPmvtFnVMy5rPXpeIMU+wCK96336171FLyup4FlUwBcf2vIgES/NTuvA9VfZRIxYJ5QRtrXPMVPLLC7dZdQkrA81GAE=\",\"text\":\"I'll
+        create a riddle that incorporates data science concepts and terminology in
+        a clever way. Let me think of something that would appeal to data scientists
+        and uses their domain knowledge.\\n\\nHere's my riddle:\\n\\nI have no bias,
+        yet I overfit with ease,\\nI branch out widely, but I'm not the trees.\\nPrune
+        me back gently to help me generalize,\\nRandom forests need me, despite my
+        size.\\n\\nWhat am I?\\n\\nAnswer: A Decision Tree\\n\\nLet me make sure this
+        works:\\n- \\\"No bias\\\" - decision trees can have low bias\\n- \\\"Overfit
+        with ease\\\" - they're prone to overfitting\\n- \\\"Branch out widely\\\"
+        - they have branches/splits\\n- \\\"Not the trees\\\" - misdirection, but
+        also referencing that a single tree isn't a forest\\n- \\\"Prune me back\\\"
+        - pruning is a technique to reduce overfitting in decision trees\\n- \\\"Help
+        me generalize\\\" - pruning helps with generalization\\n- \\\"Random forests
+        need me\\\" - random forests are made of decision trees\\n\\nThis seems like
+        a good riddle for data scientists! It uses their jargon and concepts in a
+        playful way.\"}}},{\"text\":\"# A Data Science Riddle\\n\\n*I have no bias,
+        yet overfit with ease,*  \\n*I branch out widely, but I'm not the trees.*
+        \ \\n*Prune me back gently to help me generalize,*  \\n*Random forests need
+        me, despite my size.*\\n\\n**What am I?**\\n\\n<details>\\n<summary>Click
+        for answer</summary>\\n\\n**A Decision Tree** \U0001F333\\n\\n</details>\\n\\n---\\n\\n**Bonus
+        riddle:**\\n\\n*I'm measured but never touched,*  \\n*Without me, your model's
+        a crutch.*  \\n*Split me three ways if you're being cautious,*  \\n*Train,
+        validate, test—though the order might nauseous.*\\n\\n<details>\\n<summary>Click
+        for answer</summary>\\n\\n**Data/Dataset**\\n\\n</details>\"}],\"role\":\"assistant\"}},\"stopReason\":\"end_turn\",\"usage\":{\"cacheReadInputTokenCount\":0,\"cacheReadInputTokens\":0,\"cacheWriteInputTokenCount\":0,\"cacheWriteInputTokens\":0,\"inputTokens\":43,\"outputTokens\":459,\"serverToolUsage\":{},\"totalTokens\":502}}"
+  recorded_at: 2026-04-15 13:52:22
+recorded_with: VCR-vcr/2.0.0

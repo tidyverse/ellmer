@@ -19,7 +19,7 @@
 #' @param log_probs Include the log probabilities in the output?
 #' @param stop_sequences A character vector of tokens to stop generation on.
 #' @param reasoning_effort,reasoning_tokens How much effort to spend thinking?
-#'   `ressoning_effort` is a string, like "low", "medium", "high".
+#'   `reasoning_effort` is a string, like "low", "medium", "high".
 #'   `reasoning_tokens` is an integer, giving a maximum token budget.
 #'   Each provider only takes one of these two parameters.
 #' @param ... Additional named parameters to send to the provider.

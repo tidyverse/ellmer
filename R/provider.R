@@ -14,36 +14,51 @@ NULL
 #'
 #' @export
 #' @param name Name of the provider.
-#' @param model Name of the model.
 #' @param base_url The base URL for the API.
-#' @param params A list of standard parameters created by [params()].
-#' @param credentials A zero-argument function that returns the credentials to use
-#'   for authentication. Can either return a string, representing an API key,
-#'   or a named list of headers.
-#' @param extra_args Arbitrary extra arguments to be included in the request body.
+#' @param credentials A zero-argument function that returns the credentials
+#'   to use for authentication. Can either return a string, representing an
+#'   API key, or a named list of headers.
 #' @param extra_headers Arbitrary extra headers to be added to the request.
+#' @param model,params,extra_args `r lifecycle::badge("deprecated")` These now
+#'   live on the [Model] object; use `chat$get_model_object()` instead.
 #' @return An S7 Provider object.
 #' @examples
 #' Provider(
 #'   name = "CoolModels",
-#'   model = "my_model",
 #'   base_url = "https://cool-models.com"
 #' )
 Provider <- new_class(
   "Provider",
   properties = list(
     name = prop_string(),
-    model = prop_string(),
     base_url = prop_string(),
-    params = class_list,
-    extra_args = class_list,
     extra_headers = class_character,
-    credentials = class_function | NULL
+    credentials = class_function | NULL,
+    # Deprecated in 0.5.0: model details now live on Model. Remove in 0.6.0 (#1098).
+    model = prop_deprecated("model", "name"),
+    params = prop_deprecated("params", "params"),
+    extra_args = prop_deprecated("extra_args", "extra_args")
   )
 )
 
-test_provider <- function(name = "", model = "", base_url = "", ...) {
-  Provider(name = name, model = model, base_url = base_url, ...)
+# Default S7 print calls every getter, which would trigger the deprecation
+# warnings. Remove along with the deprecated properties (#1098).
+method(print, Provider) <- function(x, ...) {
+  names <- setdiff(prop_names(x), c("model", "params", "extra_args"))
+  props <- set_names(lapply(names, \(name) prop(x, name)), names)
+  cat("<", class(x)[[1]], ">\n", sep = "")
+  str(
+    props,
+    no.list = TRUE,
+    give.attr = FALSE,
+    comp.str = "@ ",
+    indent.str = " "
+  )
+  invisible(x)
+}
+
+test_provider <- function(name = "", base_url = "", ...) {
+  Provider(name = name, base_url = base_url, ...)
 }
 
 # Create a request------------------------------------
@@ -65,6 +80,7 @@ chat_request <- new_generic(
   "provider",
   function(
     provider,
+    model,
     stream = TRUE,
     turns = list(),
     tools = list(),
@@ -76,6 +92,7 @@ chat_request <- new_generic(
 
 method(chat_request, Provider) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -86,16 +103,27 @@ method(chat_request, Provider) <- function(
 
   body <- chat_body(
     provider = provider,
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  body <- modify_list(body, model@extra_args)
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
 
   req
+}
+
+chat_body_tools <- new_generic(
+  "chat_body_tools",
+  "provider",
+  function(provider, tools) S7_dispatch()
+)
+
+method(chat_body_tools, Provider) <- function(provider, tools) {
+  as_json(provider, unname(tools))
 }
 
 chat_body <- new_generic(
@@ -103,6 +131,7 @@ chat_body <- new_generic(
   "provider",
   function(
     provider,
+    model,
     stream = TRUE,
     turns = list(),
     tools = list(),
@@ -144,13 +173,51 @@ stream_parse <- new_generic(
     S7_dispatch()
   }
 )
-stream_text <- new_generic(
-  "stream_text",
+stream_content <- new_generic(
+  "stream_content",
   "provider",
-  function(provider, event) {
+  function(provider, event, completion = NULL) {
     S7_dispatch()
   }
 )
+stream_content_with_turns <- new_generic(
+  "stream_content_with_turns",
+  "provider",
+  function(provider, event, completion = NULL, turns = list()) {
+    S7_dispatch()
+  }
+)
+method(stream_content_with_turns, Provider) <- function(
+  provider,
+  event,
+  completion = NULL,
+  turns = list()
+) {
+  stream_content(provider, event, completion)
+}
+
+stream_text <- function(provider, event) {
+  contents <- stream_content(provider, event)
+  contents <- keep(contents, is_stream_text_content)
+  if (length(contents) == 0) {
+    return(NULL)
+  }
+  paste0(map_chr(contents, content_text), collapse = "")
+}
+
+content_text <- function(content) {
+  switch(
+    class(content)[1],
+    "ellmer::ContentThinking" = content@thinking,
+    "ellmer::ContentText" = content@text,
+    format(content)
+  )
+}
+
+is_stream_text_content <- function(content) {
+  S7_inherits(content, ContentText) ||
+    S7_inherits(content, ContentThinking)
+}
 stream_merge_chunks <- new_generic(
   "stream_merge_chunks",
   "provider",
@@ -161,7 +228,29 @@ stream_merge_chunks <- new_generic(
 
 # Extract data from non-streaming results --------------------------------------
 
-value_turn <- new_generic("value_turn", "provider")
+value_turn <- new_generic(
+  "value_turn",
+  "provider",
+  function(provider, model, result, has_type = FALSE) {
+    S7_dispatch()
+  }
+)
+value_turn_with_turns <- new_generic(
+  "value_turn_with_turns",
+  "provider",
+  function(provider, model, result, has_type = FALSE, turns = list()) {
+    S7_dispatch()
+  }
+)
+method(value_turn_with_turns, Provider) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE,
+  turns = list()
+) {
+  value_turn(provider, model, result, has_type = has_type)
+}
 
 # Extract token counts from API response
 # Returns a named list produced by token_usage()
@@ -174,6 +263,17 @@ value_tokens <- new_generic(
 )
 method(value_tokens, Provider) <- function(provider, json) {
   tokens()
+}
+
+value_finish_reason <- new_generic(
+  "value_finish_reason",
+  "provider",
+  function(provider, result) {
+    S7_dispatch()
+  }
+)
+method(value_finish_reason, Provider) <- function(provider, result) {
+  NA_character_
 }
 
 # Convert to JSON
@@ -189,6 +289,17 @@ method(as_json, list(Provider, class_list)) <- function(provider, x, ...) {
   compact(lapply(x, as_json, provider = provider, ...))
 }
 
+method(as_json, list(Provider, ContentCitation)) <- function(provider, x, ...) {
+  NULL
+}
+
+method(as_json, list(Provider, ContentUploaded)) <- function(provider, x, ...) {
+  cli::cli_abort(
+    "{provider@name} doesn't support uploaded files.",
+    class = "not_implemented"
+  )
+}
+
 method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
   if (!is.null(x@string)) {
     string <- x@string
@@ -196,6 +307,54 @@ method(as_json, list(Provider, ContentJson)) <- function(provider, x, ...) {
     string <- unclass(jsonlite::toJSON(x@data, auto_unbox = TRUE))
   }
   as_json(provider, ContentText(string), ...)
+}
+
+# Token counting -------------------------------------------------------------
+
+count_tokens <- new_generic(
+  "count_tokens",
+  "provider",
+  function(
+    provider,
+    model,
+    ...,
+    system_prompt = NULL,
+    tools = list(),
+    type = NULL
+  ) {
+    S7_dispatch()
+  }
+)
+
+method(count_tokens, Provider) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  cli::cli_abort(
+    "{provider@name} doesn't support token counting.",
+    class = "not_implemented"
+  )
+}
+
+# Models -------------------------------------------------------------------
+
+models_list <- new_generic("models_list", "provider", function(provider) {
+  S7_dispatch()
+})
+
+method(models_list, Provider) <- function(provider) {
+  cli::cli_abort(
+    "{.arg provider} doesn't support model listing.",
+    class = "not_implemented"
+  )
+}
+
+method(models_list, new_S3_class("Chat")) <- function(provider) {
+  models_list(provider$get_provider())
 }
 
 # Batch AI ---------------------------------------------------------------
@@ -217,7 +376,7 @@ method(has_batch_support, Provider) <- function(provider) {
 batch_submit <- new_generic(
   "batch_submit",
   "provider",
-  function(provider, conversations, type = NULL) {
+  function(provider, model, conversations, type = NULL) {
     S7_dispatch()
   }
 )
@@ -258,7 +417,7 @@ batch_retrieve <- new_generic(
 batch_result_turn <- new_generic(
   "batch_result_turn",
   "provider",
-  function(provider, result, has_type = FALSE) {
+  function(provider, model, result, has_type = FALSE) {
     S7_dispatch()
   }
 )

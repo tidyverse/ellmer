@@ -3,18 +3,28 @@
 \name{Content}
 \alias{Content}
 \alias{ContentText}
+\alias{ContentCitation}
 \alias{ContentImage}
 \alias{ContentImageRemote}
 \alias{ContentImageInline}
 \alias{ContentToolRequest}
 \alias{ContentToolResult}
+\alias{ContentUploaded}
 \alias{ContentThinking}
 \alias{ContentPDF}
+\alias{ContentDocument}
 \title{Content types received from and sent to a chatbot}
 \usage{
 Content()
 
 ContentText(text = stop("Required"))
+
+ContentCitation(
+  source = NULL,
+  grounded_span = NULL,
+  cited_quote = NULL,
+  extra = NULL
+)
 
 ContentImage()
 
@@ -32,16 +42,41 @@ ContentToolRequest(
 
 ContentToolResult(value = NULL, error = NULL, extra = list(), request = NULL)
 
+ContentUploaded(
+  uri = stop("Required"),
+  mime_type = "",
+  provider = "",
+  extra = list()
+)
+
 ContentThinking(thinking = stop("Required"), extra = list())
 
 ContentPDF(
   type = stop("Required"),
   data = stop("Required"),
-  filename = stop("Required")
+  filename = stop("Required"),
+  url = NULL
+)
+
+ContentDocument(
+  mime_type = stop("Required"),
+  data = stop("Required"),
+  filename = stop("Required"),
+  url = NULL
 )
 }
 \arguments{
 \item{text}{A single string.}
+
+\item{source}{A \link{Source} identifying the cited evidence, or \code{NULL} when the
+provider does not supply one.}
+
+\item{grounded_span}{The answer text grounded by the citation, or \code{NULL}.}
+
+\item{cited_quote}{The source-side evidence quoted by the provider, or
+\code{NULL}.}
+
+\item{extra}{Additional data.}
 
 \item{url}{URL to a remote image.}
 
@@ -61,9 +96,9 @@ Automatically managed by \pkg{ellmer}.}
 \item{tool}{ellmer automatically matches a tool request to the tools defined
 for the chatbot. If \code{NULL}, the request did not match a defined tool.}
 
-\item{extra}{Additional data.}
-
-\item{value}{The results of calling the tool function, if it succeeded.}
+\item{value}{The results of calling the tool function, if it succeeded.
+\code{NULL}, a string, an atomic vector, a \code{json}-class object, a \link{Content}
+object, or a list of \link{Content} objects.}
 
 \item{error}{The error message, as a string, or the error condition thrown
 as a result of a failure when calling the tool function. Must be \code{NULL}
@@ -71,6 +106,14 @@ when the tool call is successful.}
 
 \item{request}{The \link{ContentToolRequest} associated with the tool result,
 automatically added by \pkg{ellmer} when evaluating the tool call.}
+
+\item{uri}{The URI or provider-assigned id of the uploaded file.}
+
+\item{mime_type}{MIME type of the file or document.}
+
+\item{provider}{Lowercase name of the provider the file was uploaded to
+(e.g. \code{"openai"}, \code{"anthropic"}, \code{"google"}), or \code{""} when unknown. Used
+to detect a file uploaded to one provider being used with another.}
 
 \item{thinking}{The text of the thinking output.}
 
@@ -89,8 +132,12 @@ represent various types of content, allowing you to more easily write
 code that works with any chatbot. This set of classes represents types of
 content that can be either sent to and received from a provider:
 \itemize{
-\item \code{ContentText}: simple text (often in markdown format). This is the only
-type of content that can be streamed live as it's received.
+\item \code{ContentText}: simple text (often in markdown format). Text streams yield
+only text and thinking content, while content streams can also yield
+annotations such as citations and web activity.
+\item \code{ContentCitation}: provider-supplied evidence metadata associated with
+generated text. Citations are preserved in conversation history but are
+not sent back to providers.
 \item \code{ContentImageRemote} and \code{ContentImageInline}: images, either as a pointer
 to a remote URL or included inline in the object. See
 \code{\link[=content_image_file]{content_image_file()}} and friends for convenient ways to construct these

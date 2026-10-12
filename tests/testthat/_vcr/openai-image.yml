@@ -8,49 +8,50 @@ http_interactions:
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e894efc236b22-DFW
-      content-encoding: gzip
+      cf-ray: a24efa204bc218ad-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:37:12 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1021'
+      date: Sun, 02 Aug 2026 17:59:34 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '988'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=eHl1WzZxJjQ_TArA0URHZFa_QKc62Cjgr0jOSQj0RtA-1751463432-1.0.1.1-aAJnyWH9kbsdM0KvSVqWqGWIyMOrdQ_QxgwqnHiY7IsqLGOOka7N9O3WlZ7kO87YHl1UsCoI0CnJZ3BZvo5h5l2RXs.JunDG0krKniNrcqc;
-        path=/; expires=Wed, 02-Jul-25 14:07:12 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=ZSrHJkzlleDjxvD1ebyfTg9b5Ud1U0iqr.6RBtIicHc-1751463432599-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=AlUGiuM9BFcpYnQSFkLeJ_f.VPrUV9LKYZVkT_G4nrc-1785693573.1692894-1.0.1.1-TRXy0ILpG885J0P9BLjUDsYbIz_A8.qWeqfeH.MAFmWkTdM41K6se0TFYDuAR._B3YwJYhCpWnbN85TZYfN3EoFO62hR.luplV30HsnpKhuQF_67Tm1oC3BdDl1bZBIP;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:34 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '994'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-input-images: '50000'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
       x-ratelimit-remaining-input-images: '49999'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999213'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '199214'
       x-ratelimit-reset-input-images: 1ms
-      x-ratelimit-reset-requests: 2ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_c8dc629d7d20af6b995f35084c356a71
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 235ms
+      x-request-id: req_d25dcb9ae44a4044ac831d8b5dc53055
     body:
       string: |
         {
-          "id": "chatcmpl-Borw7h9orcpkeue0pUs7YNS6TZUdt",
+          "id": "chatcmpl-E8UlB2CwlgmILrFcDLZQbWPsZYv2Z",
           "object": "chat.completion",
-          "created": 1751463431,
+          "created": 1785693573,
           "model": "gpt-4.1-mini-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "The image is inside a hexagon shape. It features a red silhouette of a baseball player swinging a bat, with a red baseball nearby. The text \"htr2\" is written in white script above the player. The background is dark blue.",
+                "content": "The image is inside a hexagon shape. It features a red silhouette of a baseball player swinging a bat, with a red baseball nearby. The text \"htr2\" is written in white above the player.",
                 "refusal": null,
                 "annotations": []
               },
@@ -59,9 +60,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 208,
-            "completion_tokens": 50,
-            "total_tokens": 258,
+            "prompt_tokens": 207,
+            "completion_tokens": 43,
+            "total_tokens": 250,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -74,9 +75,9 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_6f2eabb9a5"
+          "system_fingerprint": "fp_b6de018a9d"
         }
-  recorded_at: 2025-07-02 13:37:12
+  recorded_at: 2026-08-02 17:59:34
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
@@ -86,49 +87,50 @@ http_interactions:
   response:
     status: 200
     headers:
-      access-control-expose-headers: X-Request-ID
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 958e8955fc186b22-DFW
-      content-encoding: gzip
+      cf-ray: a24efa295d4718ad-EWR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 02 Jul 2025 13:37:14 GMT
-      openai-organization: user-wfrajlxs4zxa4ixjljhmt9vx
-      openai-processing-ms: '1869'
+      date: Sun, 02 Aug 2026 17:59:36 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1604'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=nYGNJruDwzaIOscx0Cja1B56CVD.3Ovn5Ej6yvWt478-1751463434-1.0.1.1-3Wgv2sMfdKFlI3W5myUQZ0A50kI3ypdc9Sh5AWos2rd.dW3KpiV1B4CQh14k1zmFgh3ROmzBRy_STM4gY92jMwA2ahuIA4CrxDykRnYfCjg;
-        path=/; expires=Wed, 02-Jul-25 14:07:14 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=RJjuLIlb.M1JtkSAC.N__kyf_hVIRaDwK7gztIxjk.0-1751463434574-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=gG3dg16d5chgG5OyKnVX_J6YYywggFnlNLlt4pl2PJQ-1785693574.620091-1.0.1.1-wuLSZDoTMfNG0qoqN96gjhuhgotCguuWeQ49fe9piX__OvMbhf02XRO7crxIPNGTWWsO0Q6gNHZd4rmio.JR2ZRVhu95LC2O_acZ0w0FH0ClKxm0ITgQw_x8sulZ0giL;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        02 Aug 2026 18:29:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '1536'
+      x-openai-proxy-wasm: v0.1
       x-ratelimit-limit-input-images: '50000'
-      x-ratelimit-limit-requests: '30000'
-      x-ratelimit-limit-tokens: '150000000'
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
       x-ratelimit-remaining-input-images: '49999'
-      x-ratelimit-remaining-requests: '29999'
-      x-ratelimit-remaining-tokens: '149999213'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '199214'
       x-ratelimit-reset-input-images: 1ms
-      x-ratelimit-reset-requests: 2ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_e545377321b9da8830e8e17a2ba5d5c8
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 235ms
+      x-request-id: req_975fa535d1654a7a91516e4361a581fa
     body:
       string: |
         {
-          "id": "chatcmpl-Borw9xBM9jiU5UwjLFULneAm5DKRT",
+          "id": "chatcmpl-E8UlDllyPJYl9wwuyh9i3fDEb43yu",
           "object": "chat.completion",
-          "created": 1751463433,
+          "created": 1785693575,
           "model": "gpt-4.1-mini-2025-04-14",
           "choices": [
             {
               "index": 0,
               "message": {
                 "role": "assistant",
-                "content": "The image is inside a hexagon shape. It shows a red silhouette of a baseball player swinging a bat, with a small ball labeled \"www\" near the bat. Above the player, the text \"httr2\" is written in a stylized white font. The background is dark blue.",
+                "content": "The image is inside a hexagon shape. It features a red silhouette of a baseball player swinging a bat, with a small ball labeled \"www\" near the bat. Above the player, there is stylized white text that reads \"httr2.\" The background is dark blue.",
                 "refusal": null,
                 "annotations": []
               },
@@ -137,9 +139,9 @@ http_interactions:
             }
           ],
           "usage": {
-            "prompt_tokens": 146,
-            "completion_tokens": 60,
-            "total_tokens": 206,
+            "prompt_tokens": 145,
+            "completion_tokens": 57,
+            "total_tokens": 202,
             "prompt_tokens_details": {
               "cached_tokens": 0,
               "audio_tokens": 0
@@ -152,7 +154,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_6f2eabb9a5"
+          "system_fingerprint": "fp_b6de018a9d"
         }
-  recorded_at: 2025-07-02 13:37:14
-recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
+  recorded_at: 2026-08-02 17:59:36
+recorded_with: VCR-vcr/2.1.0

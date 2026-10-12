@@ -27,8 +27,7 @@ models_openai(
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
@@ -37,7 +36,7 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
 If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
-\item{model}{The model to use for the chat (defaults to "gpt-4.1").
+\item{model}{The model to use for the chat (defaults to "gpt-5.6-terra").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_openai()} to see all options.}
 
@@ -72,6 +71,8 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 This is the main interface to \href{https://openai.com/}{OpenAI}'s models,
 using the \strong{responses API}. You can use this to access OpenAI's latest
 models and features like image generation and web search. If you need to use
@@ -94,22 +95,24 @@ chat$chat("Tell me three funny jokes about statisticians")
 \dontshow{ellmer:::vcr_example_end()}
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

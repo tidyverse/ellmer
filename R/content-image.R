@@ -4,11 +4,16 @@
 #' chatbot. The `content_image_url()` function is used to provide a URL to an
 #' image, while `content_image_file()` is used to provide the image data itself.
 #'
+#' `content_image_file()` embeds the image's contents in every request, so for
+#' a large image, or one you'll refer to across several turns, prefer
+#' `chat$file_upload()`. It uploads the file once and later turns reference
+#' it by id.
+#'
 #' @param url The URL of the image to include in the chat input. Can be a
 #'   `data:` URL or a regular URL. Valid image types are PNG, JPEG, WebP, and
 #'   non-animated GIF.
 #' @param detail The [detail
-#'   setting](https://platform.openai.com/docs/guides/images/image-input-requirements)
+#'   setting](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
 #'   for this image. Can be `"auto"`, `"low"`, or `"high"`.
 #' @returns An input object suitable for including in the `...` parameter of
 #'   the `chat()`, `stream()`, `chat_async()`, or `stream_async()` methods.
@@ -51,7 +56,7 @@ content_image_url <- function(url, detail = c("auto", "low", "high")) {
 #'   `"auto"`, the content type is inferred from the file extension.
 #' @param resize If `"low"`, resize images to fit within 512x512. If `"high"`,
 #'   resize to fit within 2000x768 or 768x2000. (See the [OpenAI
-#'   docs](https://platform.openai.com/docs/guides/images/image-input-requirements)
+#'   docs](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
 #'   for more on why these specific sizes are used.) If `"none"`, do not resize.
 #'
 #'   You can also pass a custom string to resize the image to a specific size,
@@ -73,7 +78,7 @@ content_image_file <- function(path, content_type = "auto", resize = "low") {
 
   if (content_type == "auto") {
     # OpenAI supports .png, .jpeg, .jpg, .webp, .gif
-    # https://platform.openai.com/docs/guides/images/image-input-requirements
+    # https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements
     ext <- tolower(tools::file_ext(path))
     content_type <- switch(
       ext,

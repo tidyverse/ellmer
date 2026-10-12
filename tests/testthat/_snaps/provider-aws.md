@@ -18,7 +18,7 @@
     Code
       . <- chat_aws_bedrock()
     Message
-      Using model = "anthropic.claude-3-5-sonnet-20240620-v1:0".
+      Using model = "us.anthropic.claude-sonnet-5".
 
 # can use images
 
@@ -27,4 +27,27 @@
     Condition
       Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentImageRemote))`:
       ! Bedrock doesn't support remote images
+
+# document formats are mapped to the converse enum
+
+    Code
+      as_json(provider, json_doc)
+    Condition
+      Error in `method(as_json, list(ellmer::ProviderAWSBedrock, ellmer::ContentDocument))`:
+      ! Bedrock doesn't support "application/json" documents.
+      i Convert the document to plain text or PDF first.
+
+# invalid api and cache combinations are rejected
+
+    Code
+      chat_aws_bedrock(model = "openai.gpt-5.4", api = "responses", cache = "5m")
+    Condition
+      Error in `chat_aws_bedrock()`:
+      ! `cache` is not supported when `api = "responses"`.
+      i The Responses API caches prompts automatically.
+    Code
+      chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
+    Condition
+      Error in `chat_aws_bedrock()`:
+      ! `api` must be one of "converse", "messages", or "responses", not "mantle".
 

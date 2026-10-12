@@ -1,0 +1,64 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What is 1 + 1?"}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014,"thinkingConfig":{"thinkingLevel":"low","includeThoughts":true}}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '1009'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:49 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=1576
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "**My Immediate Response to the Query**\n\nOkay, so the user wants the sum of 1 and 1. Straightforward enough. My process is pretty automatic for something this basic. First, I identify the fundamental question: they're asking \"What is 1 + 1?\". Next, I perform the computation – it's a simple addition, so I know 1 + 1 equals 2. Finally, I construct the answer. Given the simplicity of the request, a direct and clear response is most appropriate. No need for complex explanations here.\n\n\n",
+                    "thought": true
+                  },
+                  {
+                    "text": "1 + 1 = 2",
+                    "thoughtSignature": "ErICCq8CARFNMg8O+gIQx62tx9jH/wi0+5vc3XqQDlSSR/H6aC1x6yn/ISFPv9aecfcenf0s1AMQ2BdHLVJc0OTF4KdqRC13bHNwCK1SB2a6VF7mwfeXkpIYounu/XD1e1Z+OeaDc30T/bbiekD0dcHoLdRi/cBS8ohjzsMiucGl8nBIRSKoAwuVZ3R0z2J+Qb5fDo3ppWO+hcAy9w5lMICCl4MjKMAgN56VWxMqLDgwFLp0zg5SYOOqhC38N89tzUhaCw/OsgmXHs9FDXqHL1AYI7TS6tBnEhaq2YqFhLkTWZ3WQOb/NiqXBVG+Dfvi7Ok2hWvg7c9PyPhh1kCLdyDs22Rd2AqbVM+AomUIIE/14QQ8TkGhj/wvOCVuFQQ+APPbKLT7im/iBBFJeIslofiqRZ36"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 9,
+            "candidatesTokenCount": 7,
+            "totalTokenCount": 80,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 9
+              }
+            ],
+            "thoughtsTokenCount": 64,
+            "serviceTier": "standard"
+          },
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "cAeZavewA_H6xN8PlsWGuQw"
+        }
+  recorded_at: 2026-09-03 05:36:49
+recorded_with: VCR-vcr/2.1.0

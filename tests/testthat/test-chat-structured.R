@@ -65,6 +65,13 @@ test_that("optional base types (scalars) stay as NULL", {
   expect_equal(convert_from_type(NULL, type_string(required = FALSE)), NULL)
 })
 
+test_that("single-element arrays are unwrapped for scalar types (#931)", {
+  expect_equal(convert_from_type(list("hello"), type_string()), "hello")
+  expect_equal(convert_from_type(list(42L), type_integer()), 42L)
+  expect_equal(convert_from_type(list(3.14), type_number()), 3.14)
+  expect_equal(convert_from_type(list(TRUE), type_boolean()), TRUE)
+})
+
 test_that("can convert arrays of basic types to simple vectors", {
   expect_equal(
     convert_from_type(list(FALSE, TRUE), type_array(type_boolean())),
@@ -155,7 +162,13 @@ test_that("completely missing optional components become NULL", {
   )
 })
 
+test_that("type_object(.additional_properties) is deprecated", {
+  expect_snapshot(. <- type_object(.additional_properties = TRUE))
+})
+
 test_that("objects take order from type", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+
   x <- list(y = 1, x = 2)
   type1 <- type_object(x = type_integer(), y = type_integer())
   expect_equal(convert_from_type(x, type1), list(x = 2, y = 1))
@@ -165,6 +178,8 @@ test_that("objects take order from type", {
 })
 
 test_that("additional properties are ignored, unless specified by type", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+
   x <- list(y = 1, x = 2, z = 3)
   type <- type_object(x = type_integer())
   expect_equal(convert_from_type(x, type), list(x = 2))
@@ -217,6 +232,8 @@ test_that("arrays of enums are converted to factors", {
 })
 
 test_that("can convert arrays of objects to data frames", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+
   x <- list(list(x = 1, y = "x"), list(x = 3, y = "y"))
   type <- type_array(type_object(x = type_integer(), y = type_string()))
   expect_equal(

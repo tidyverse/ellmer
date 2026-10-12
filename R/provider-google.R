@@ -7,6 +7,8 @@ NULL
 #' Chat with a Google Gemini or Vertex AI model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 #' Most enterprises are likely to use Vertex AI, and individuals are likely
 #' to use Gemini.
@@ -16,8 +18,8 @@ NULL
 #' ## Authentication
 #' These functions try a number of authentication strategies, in this order:
 #'
-#' * An API key set in the `GOOGLE_API_KEY` env var, or,
-#'   for `chat_google_gemini()` only, `GEMINI_API_KEY`.
+#' * An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
+#'   (Gemini only).
 #' * Google's default application credentials, if the \pkg{gargle} package
 #'   is installed.
 #' * Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
@@ -30,7 +32,7 @@ NULL
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
 #'   or `NULL`, the default, to use ambient credentials. See above for details.
-#' @param model `r param_model("gemini-2.5-flash", "google_gemini")`
+#' @param model `r param_model("gemini-3.7-flash", "google_gemini")`
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -51,7 +53,7 @@ chat_google_gemini <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-2.5-flash")
+  model <- set_default(model, "gemini-3.7-flash")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -64,18 +66,25 @@ chat_google_gemini <- function(
   provider <- ProviderGoogleGemini(
     name = "Google/Gemini",
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
     credentials = credentials
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_google_gemini_test <- function(
   ...,
-  model = "gemini-2.5-flash",
+  model = "gemini-3.7-flash",
   params = NULL,
   echo = "none"
 ) {
@@ -92,8 +101,8 @@ chat_google_gemini_test <- function(
 #'   `global`.
 #' @param project_id Project ID.
 chat_google_vertex <- function(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -101,23 +110,31 @@ chat_google_vertex <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  check_string(location)
-  check_string(project_id)
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
-  model <- set_default(model, "gemini-2.5-flash")
+  model <- set_default(model, "gemini-3.7-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(variant = "vertex")
 
   provider <- ProviderGoogleGemini(
     name = "Google/Vertex",
     base_url = vertex_url(location, project_id),
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    project_id = project_id
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 # https://cloud.google.com/vertex-ai/docs/reference/rest/v1/projects.locations.endpoints/generateContent
@@ -135,7 +152,7 @@ ProviderGoogleGemini <- new_class(
   "ProviderGoogleGemini",
   parent = Provider,
   properties = list(
-    model = prop_string()
+    project_id = prop_string(allow_null = TRUE)
   )
 )
 
@@ -157,6 +174,7 @@ method(base_request, ProviderGoogleGemini) <- function(provider) {
 
 method(chat_request, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -170,25 +188,26 @@ method(chat_request, ProviderGoogleGemini) <- function(
     # https://ai.google.dev/api/generate-content#method:-models.streamgeneratecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "streamGenerateContent")
+      paste0(model@name, ":", "streamGenerateContent")
     )
     req <- req_url_query(req, alt = "sse")
   } else {
     # https://ai.google.dev/api/generate-content#method:-models.generatecontent
     req <- req_url_path_append(
       req,
-      paste0(provider@model, ":", "generateContent")
+      paste0(model@name, ":", "generateContent")
     )
   }
 
   body <- chat_body(
     provider = provider,
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
     type = type
   )
-  body <- modify_list(body, provider@extra_args)
+  body <- modify_list(body, model@extra_args)
 
   req <- req_body_json(req, body)
   req <- req_headers(req, !!!provider@extra_headers)
@@ -197,6 +216,7 @@ method(chat_request, ProviderGoogleGemini) <- function(
 
 method(chat_body, ProviderGoogleGemini) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -208,38 +228,48 @@ method(chat_body, ProviderGoogleGemini) <- function(
     system <- list(parts = list(text = ""))
   }
 
-  generation_config <- chat_params(provider, provider@params)
+  generation_config <- chat_params(provider, model@params)
   if (!is.null(type)) {
     generation_config$response_mime_type <- "application/json"
     generation_config$response_schema <- as_json(provider, type)
   }
 
-  if (has_name(generation_config, "thinkingBudget")) {
-    generation_config$thinkingConfig <- list(
+  if (
+    has_name(generation_config, "thinkingBudget") ||
+      has_name(generation_config, "thinkingLevel")
+  ) {
+    generation_config$thinkingConfig <- compact(list(
       thinkingBudget = generation_config$thinkingBudget,
+      thinkingLevel = generation_config$thinkingLevel,
       includeThoughts = TRUE
-    )
+    ))
     generation_config$thinkingBudget <- NULL
+    generation_config$thinkingLevel <- NULL
   }
 
   contents <- as_json(provider, turns)
 
   # https://ai.google.dev/api/caching#Tool
+  tool_config <- NULL
   if (length(tools) > 0) {
     is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
-    funs <- as_json(provider, unname(tools))
-
-    tools <- c(
-      compact(list(functionDeclarations = funs[!is_builtin])),
-      unlist(funs[is_builtin], recursive = FALSE)
-    )
-  } else {
-    tools <- NULL
+    # Mixing built-in and custom tools on Gemini 3+ requires setting
+    # `includeServerSideToolInvocations`. This is only supported by the
+    # Gemini Developer API; Vertex AI rejects the field.
+    if (
+      any(is_builtin) &&
+        !all(is_builtin) &&
+        has_google_mixed_tool_support(provider@name, model@name)
+    ) {
+      tool_config <- list(includeServerSideToolInvocations = TRUE)
+    }
   }
+  tools <- chat_body_tools(provider, tools)
 
   compact(list(
     contents = contents,
     tools = tools,
+    toolConfig = tool_config,
     systemInstruction = system,
     generationConfig = generation_config
   ))
@@ -258,7 +288,8 @@ method(chat_params, ProviderGoogleGemini) <- function(provider, params) {
       maxOutputTokens = "max_tokens",
       responseLogprobs = "log_probs",
       stopSequences = "stop_sequences",
-      thinkingBudget = "reasoning_tokens"
+      thinkingBudget = "reasoning_tokens",
+      thinkingLevel = "reasoning_effort"
     )
   )
 }
@@ -272,8 +303,37 @@ method(stream_parse, ProviderGoogleGemini) <- function(provider, event) {
     jsonlite::parse_json(event$data)
   }
 }
-method(stream_text, ProviderGoogleGemini) <- function(provider, event) {
-  event$candidates[[1]]$content$parts[[1]]$text
+method(stream_content, ProviderGoogleGemini) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
+  candidate <- event$candidates[[1]]
+  parts <- candidate$content$parts %||% list()
+  part_contents <- list_c(lapply(parts, function(part) {
+    if (isTRUE(part[["thought"]]) && !is.null(part$text)) {
+      list(ContentThinking(part$text))
+    } else if (!is.null(part$text)) {
+      list(ContentText(part$text))
+    } else {
+      list()
+    }
+  }))
+
+  # Grounding and URL context metadata can arrive before the answer text
+  # they support, so defer them until the final chunk and rebuild from the
+  # merged completion. Citations come first so they stay adjacent to text.
+  if (is.null(candidate$finishReason) || is.null(completion)) {
+    return(part_contents)
+  }
+  merged <- completion$candidates[[1]]
+  grounding <- merged$groundingMetadata
+  c(
+    part_contents,
+    google_grounding_citations(grounding),
+    google_search_contents(grounding),
+    google_url_context_contents(merged$urlContextMetadata)
+  )
 }
 method(stream_merge_chunks, ProviderGoogleGemini) <- function(
   provider,
@@ -312,15 +372,41 @@ method(value_tokens, ProviderGoogleGemini) <- function(provider, json) {
   )
 }
 
+# https://ai.google.dev/api/generate-content
+method(value_finish_reason, ProviderGoogleGemini) <- function(
+  provider,
+  result
+) {
+  reason <- result$candidates[[1]]$finishReason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    STOP = "success",
+    MAX_TOKENS = "max_tokens",
+    SAFETY = ,
+    RECITATION = ,
+    BLOCKLIST = ,
+    PROHIBITED_CONTENT = ,
+    SPII = "content_filter",
+    I(reason)
+  )
+}
+
 method(value_turn, ProviderGoogleGemini) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
-  message <- result$candidates[[1]]$content
+  candidate <- result$candidates[[1]]
+  message <- candidate$content
 
   contents <- lapply(message$parts, function(content) {
-    if (has_name(content, "text")) {
+    if (isTRUE(content[["thought"]]) && has_name(content, "text")) {
+      ContentThinking(content$text)
+    } else if (has_name(content, "text")) {
       if (has_type) {
         ContentJson(string = content$text)
       } else {
@@ -341,6 +427,12 @@ method(value_turn, ProviderGoogleGemini) <- function(
         type = content$inlineData$mimeType,
         data = content$inlineData$data
       )
+    } else if (
+      has_name(content, "toolCall") || has_name(content, "toolResponse")
+    ) {
+      # Server-side built-in tool invocations (e.g. google_search) returned
+      # when includeServerSideToolInvocations is TRUE; skip silently.
+      NULL
     } else {
       cli::cli_abort(
         "Unknown content type with names {.str {names(content)}}.",
@@ -349,9 +441,126 @@ method(value_turn, ProviderGoogleGemini) <- function(
     }
   })
   contents <- compact(contents)
+
+  grounding <- candidate$groundingMetadata
+  search_contents <- google_search_contents(grounding)
+  citations <- google_grounding_citations(grounding)
+  fetch_contents <- google_url_context_contents(candidate$urlContextMetadata)
+  contents <- c(search_contents, contents, citations, fetch_contents)
+
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  cost <- get_token_cost(provider@name, model@name, tokens)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
+}
+
+google_search_contents <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  queries <- grounding$webSearchQueries %||% list()
+  requests <- lapply(queries, function(query) {
+    ContentToolRequestSearch(
+      query = query,
+      extra = list(webSearchQueries = queries)
+    )
+  })
+
+  sources <- compact(google_web_sources(grounding))
+  response <- if (length(sources) == 0) {
+    list()
+  } else {
+    list(
+      ContentToolResponseSearch(
+        sources = sources,
+        extra = list(groundingMetadata = grounding)
+      )
+    )
+  }
+  c(requests, response)
+}
+
+google_grounding_citations <- function(grounding) {
+  if (is.null(grounding)) {
+    return(list())
+  }
+
+  sources <- google_web_sources(grounding)
+  citations <- lapply(
+    grounding$groundingSupports %||% list(),
+    function(support) {
+      indices <- unique(
+        unlist(
+          support$groundingChunkIndices %||% list(),
+          use.names = FALSE
+        )
+      )
+      lapply(indices, function(index) {
+        source_index <- index + 1L
+        if (source_index > length(sources)) {
+          return(NULL)
+        }
+        ContentCitation(
+          source = sources[[source_index]],
+          grounded_span = support$segment$text,
+          extra = list(groundingSupport = support)
+        )
+      })
+    }
+  )
+  compact(list_c(citations))
+}
+
+google_web_sources <- function(grounding) {
+  lapply(grounding$groundingChunks %||% list(), function(chunk) {
+    web <- chunk$web
+    if (is.null(web$uri) || !nzchar(web$uri)) {
+      NULL
+    } else {
+      WebSource(url = web$uri, title = web$title)
+    }
+  })
+}
+
+google_url_context_contents <- function(context) {
+  metadata <- context$urlMetadata %||% list()
+  list_c(
+    lapply(metadata, function(meta) {
+      url <- meta$retrievedUrl
+      if (is.null(url) || !nzchar(url)) {
+        return(list())
+      }
+      extra <- list(urlMetadata = meta)
+      list(
+        ContentToolRequestFetch(url = url, extra = extra),
+        ContentToolResponseFetch(
+          url = url,
+          status = google_retrieval_status(meta$urlRetrievalStatus),
+          extra = extra
+        )
+      )
+    })
+  )
+}
+
+google_retrieval_status <- function(status) {
+  if (
+    is.null(status) ||
+      identical(status, "URL_RETRIEVAL_STATUS_UNSPECIFIED")
+  ) {
+    NULL
+  } else if (identical(status, "URL_RETRIEVAL_STATUS_SUCCESS")) {
+    "success"
+  } else {
+    "error"
+  }
 }
 
 # ellmer -> Gemini --------------------------------------------------------------
@@ -371,7 +580,12 @@ method(as_json, list(ProviderGoogleGemini, Turn)) <- function(
       parts = as_json(provider, x@contents, ...)
     )
   } else if (is_assistant_turn(x)) {
-    list(role = "model", parts = as_json(provider, x@contents, ...))
+    parts <- as_json(provider, x@contents, ...)
+    if (length(parts) == 0) {
+      NULL
+    } else {
+      list(role = "model", parts = parts)
+    }
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -404,6 +618,15 @@ method(as_json, list(ProviderGoogleGemini, ContentText)) <- function(
   }
 }
 
+method(as_json, list(ProviderGoogleGemini, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # https://ai.google.dev/gemini-api/docs/thinking
+  list(thought = TRUE, text = x@thinking)
+}
+
 method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   provider,
   x,
@@ -412,6 +635,26 @@ method(as_json, list(ProviderGoogleGemini, ContentPDF)) <- function(
   list(
     inlineData = list(
       mimeType = x@type,
+      data = x@data
+    )
+  )
+}
+
+method(as_json, list(ProviderGoogleGemini, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (!is_text_document(x@mime_type)) {
+    cli::cli_abort(c(
+      "Gemini doesn't support {.str {x@mime_type}} documents.",
+      i = "Convert the document to plain text or PDF first."
+    ))
+  }
+
+  list(
+    inlineData = list(
+      mimeType = x@mime_type,
       data = x@data
     )
   )
@@ -511,6 +754,12 @@ method(as_json, list(ProviderGoogleGemini, TypeObject)) <- function(
 merge_last <- function() {
   function(left, right, path = NULL) {
     right
+  }
+}
+
+merge_last_non_null <- function() {
+  function(left, right, path = NULL) {
+    right %||% left
   }
 }
 
@@ -652,6 +901,8 @@ merge_gemini_chunks <- merge_objects(
     citationMetadata = merge_optional(
       merge_objects(citationSources = merge_append())
     ),
+    groundingMetadata = merge_last_non_null(),
+    urlContextMetadata = merge_last_non_null(),
     tokenCount = merge_last()
   ),
   promptFeedback = merge_last(),
@@ -664,12 +915,14 @@ default_google_credentials <- function(
 ) {
   variant <- arg_match(variant)
 
-  api_key <- Sys.getenv("GOOGLE_API_KEY")
-  if (variant == "gemini" && api_key == "") {
-    api_key <- Sys.getenv("GEMINI_API_KEY")
-  }
-  if (nzchar(api_key)) {
-    return(\() api_key)
+  if (variant == "gemini") {
+    api_key <- Sys.getenv("GOOGLE_API_KEY")
+    if (!nzchar(api_key)) {
+      api_key <- Sys.getenv("GEMINI_API_KEY")
+    }
+    if (nzchar(api_key)) {
+      return(\() api_key)
+    }
   }
 
   gemini_scope <- switch(
@@ -709,7 +962,7 @@ default_google_credentials <- function(
     testthat::skip("no Google credentials available")
   }
 
-  if (is_interactive()) {
+  if (is.null(token) && is_interactive()) {
     return(function() {
       function(req) {
         req_oauth_auth_code(
@@ -732,9 +985,19 @@ default_google_credentials <- function(
     )
   }
 
+  # A token can exist but have a NULL access_token if it has expired.
+  if (is.null(token$credentials$access_token)) {
+    cli::cli_abort(
+      c(
+        "Google credentials were found but are not valid.",
+        "i" = "Try refreshing your credentials or configuring new ones."
+      ),
+      call = error_call
+    )
+  }
+
   # gargle emits an httr-style token, which we awkwardly shim into something
   # httr2 can work with.
-
   if (!token$can_refresh()) {
     # TODO: Not really sure what to do in this case when the token expires.
     return(function() {
@@ -757,6 +1020,85 @@ google_oauth_reset <- function() {
   httr2::oauth_cache_clear(gemini_client())
 }
 
+gemini_client <- function() {
+  httr2::oauth_client(
+    id = "148439353047-kit3pok9u920mhmqbc3c0pdr50bvb7pt.apps.googleusercontent.com",
+    secret = httr2::obfuscated(
+      "o2yDPr_4BNgZvhLT9kIZS6jAYp43sAzAjMrmW60FUC-N4btRmTwOQ1650vS2pDRSvbKK"
+    ),
+    token_url = "https://oauth2.googleapis.com/token",
+    name = "gemini-r-client"
+  )
+}
+
+method(chat_body_tools, ProviderGoogleGemini) <- function(provider, tools) {
+  if (length(tools) == 0) {
+    return(NULL)
+  }
+  is_builtin <- map_lgl(tools, \(tool) S7_inherits(tool, ToolBuiltIn))
+  funs <- as_json(provider, unname(tools))
+  user_tools <- funs[!is_builtin]
+  c(
+    if (length(user_tools) > 0) list(list(functionDeclarations = user_tools)),
+    funs[is_builtin]
+  )
+}
+
+# Token counting ----------------------------------------------------------
+
+# https://ai.google.dev/api/tokens
+method(count_tokens, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(model@name, ":", "countTokens")
+  )
+
+  if (!is.null(system_prompt)) {
+    system <- list(parts = list(text = system_prompt))
+  } else {
+    system <- list(parts = list(text = ""))
+  }
+
+  contents <- as_json(provider, list(user_turn(...)))
+  tools <- chat_body_tools(provider, tools)
+
+  if (!is.null(type)) {
+    generation_config <- list(
+      response_mime_type = "application/json",
+      response_schema = as_json(provider, type)
+    )
+  } else {
+    generation_config <- NULL
+  }
+
+  token_body <- compact(list(
+    contents = contents,
+    tools = tools,
+    systemInstruction = system,
+    generationConfig = generation_config
+  ))
+
+  if (identical(provider@name, "Google/Gemini")) {
+    token_body$model <- paste0("models/", model@name)
+    token_body <- list(generateContentRequest = token_body)
+  }
+
+  req <- req_body_json(req, token_body)
+  req <- req_headers(req, !!!provider@extra_headers)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)$totalTokens
+}
+
 # Pricing ----------------------------------------------------------------------
 
 # Models -----------------------------------------------------------------------
@@ -777,14 +1119,23 @@ models_google_gemini <- function(
     api_key = api_key
   )
 
-  models_google(base_url, credentials = credentials, variant = "gemini")
+  provider <- ProviderGoogleGemini(
+    name = "Google/Gemini",
+    base_url = base_url,
+    credentials = credentials
+  )
+  models_list(provider)
 }
 
 #' @rdname chat_google_gemini
 #' @export
-models_google_vertex <- function(location, project_id, credentials = NULL) {
-  check_string(location)
-  check_string(project_id)
+models_google_vertex <- function(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+) {
+  check_string(location, allow_empty = FALSE)
+  check_string(project_id, allow_empty = FALSE)
 
   credentials <- credentials %||% default_google_credentials(variant = "vertex")
   check_credentials(credentials)
@@ -795,28 +1146,25 @@ models_google_vertex <- function(location, project_id, credentials = NULL) {
     "/publishers/google/"
   )
 
-  models_google(base_url, project_id = project_id, variant = "vertex")
+  provider <- ProviderGoogleGemini(
+    name = "Google/Vertex",
+    base_url = base_url,
+    credentials = credentials,
+    project_id = project_id
+  )
+  models_list(provider)
 }
 
-models_google <- function(
-  base_url = "https://generativelanguage.googleapis.com/v1beta/",
-  credentials,
-  project_id = NULL,
-  variant = c("gemini", "vertex")
-) {
-  variant <- arg_match(variant)
-
-  provider <- ProviderGoogleGemini(
-    name = "Google/Gemini",
-    model = "",
-    base_url = base_url,
-    # https://cloud.google.com/docs/authentication/troubleshoot-adc#user-creds-client-based
-    credentials = credentials
+method(models_list, ProviderGoogleGemini) <- function(provider) {
+  is_vertex <- grepl(
+    "aiplatform.googleapis.com",
+    provider@base_url,
+    fixed = TRUE
   )
 
   req <- base_request(provider)
-  if (variant == "vertex") {
-    req <- req_headers(req, `x-goog-user-project` = project_id)
+  if (is_vertex) {
+    req <- req_headers(req, `x-goog-user-project` = provider@project_id)
   }
   req <- req_headers(req, !!!provider@extra_headers)
   req <- req_url_path_append(req, "/models")
@@ -824,7 +1172,7 @@ models_google <- function(
 
   json <- resp_body_json(resp)
 
-  if (variant == "vertex") {
+  if (is_vertex) {
     name <- map_chr(json$publisherModels, "[[", "name")
     name <- gsub("^publishers/google/models/", "", name)
     # this is the closest to "generateContent" in "supportedGenerationMethods" for Gemini
@@ -834,7 +1182,6 @@ models_google <- function(
   } else {
     name <- map_chr(json$models, "[[", "name")
     name <- gsub("^models/", "", name)
-    display_name <- map_chr(json$models, "[[", "displayName")
 
     methods <- map(json$models, \(x) unlist(x$supportedGenerationMethods))
     can_generate <- map_lgl(methods, \(x) "generateContent" %in% x)
@@ -850,4 +1197,239 @@ models_google <- function(
 # https://github.com/googleapis/python-genai/blob/cc9e470326e0c1b84ec3ce9891c9f96f6c74688e/google/genai/_api_client.py#L646-L654
 google_location <- function(location) {
   if (location == "global") "" else paste0(location, "-")
+}
+
+# Batched requests -------------------------------------------------------------
+
+# https://ai.google.dev/gemini-api/docs/batch-api
+# Only the Gemini Developer API is supported; Vertex AI's batch API has a
+# different request shape (GCS bucket URIs instead of file uploads).
+method(has_batch_support, ProviderGoogleGemini) <- function(provider) {
+  identical(provider@name, "Google/Gemini")
+}
+
+method(batch_submit, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  conversations,
+  type = NULL
+) {
+  path <- withr::local_tempfile(fileext = ".jsonl")
+
+  requests <- map(seq_along(conversations), function(i) {
+    body <- chat_body(
+      provider,
+      model,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+
+    list(
+      key = paste0("chat-", i),
+      request = gemini_prepare_batch_body(body)
+    )
+  })
+
+  json_lines <- map_chr(requests, to_json)
+  writeLines(json_lines, path)
+
+  uploaded <- gemini_upload_file(provider, path)
+  if (is.null(uploaded$name) || !nzchar(uploaded$name)) {
+    cli::cli_abort(
+      "Gemini upload did not return a file resource name.",
+      .internal = TRUE
+    )
+  }
+
+  req <- base_request(provider)
+  req <- req_url_path_append(
+    req,
+    "models",
+    paste0(model@name, ":batchGenerateContent")
+  )
+  req <- req_body_json(
+    req,
+    list(
+      batch = list(
+        displayName = paste0("ellmer-", as.integer(Sys.time())),
+        model = paste0("models/", model@name),
+        inputConfig = list(fileName = uploaded$name)
+      )
+    )
+  )
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_poll, ProviderGoogleGemini) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, batch$name)
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_status, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  stats <- metadata$batchStats %||% list()
+  state <- metadata$state %||% "BATCH_STATE_UNSPECIFIED"
+
+  total <- as.integer(stats$requestCount %||% 0L)
+  pending <- as.integer(stats$pendingRequestCount %||% 0L)
+  succeeded <- as.integer(stats$successfulRequestCount %||% 0L)
+  failed <- as.integer(stats$failedRequestCount %||% 0L)
+
+  if (!is.null(batch$error) && total > 0 && failed == 0L) {
+    failed <- total
+  }
+
+  terminal_states <- c(
+    "BATCH_STATE_SUCCEEDED",
+    "BATCH_STATE_FAILED",
+    "BATCH_STATE_CANCELLED",
+    "BATCH_STATE_EXPIRED"
+  )
+
+  is_done <- state %in% terminal_states
+
+  # The API can report BATCH_STATE_SUCCEEDED before responsesFile is populated.
+  if (state == "BATCH_STATE_SUCCEEDED") {
+    responses_file <- batch$response$responsesFile %||% ""
+    if (!nzchar(responses_file)) {
+      is_done <- FALSE
+    }
+  }
+
+  n_processing <- max(pending, total - succeeded - failed, 0L)
+
+  list(
+    working = !is_done,
+    n_processing = n_processing,
+    n_succeeded = max(succeeded, 0L),
+    n_failed = max(failed, 0L)
+  )
+}
+
+method(batch_retrieve, ProviderGoogleGemini) <- function(provider, batch) {
+  metadata <- batch$metadata %||% list()
+  stats <- metadata$batchStats %||% list()
+  request_count <- as.integer(stats$requestCount %||% 0L)
+
+  if (!is.null(batch$error)) {
+    code <- as.integer(batch$error$code %||% 500L)
+    return(rep(
+      list(list(status_code = code, body = NULL)),
+      max(0L, request_count)
+    ))
+  }
+
+  responses_file <- batch$response$responsesFile %||% ""
+
+  if (!nzchar(responses_file)) {
+    cli::cli_abort(
+      "Gemini batch completed but no output file was returned.",
+      .internal = TRUE
+    )
+  }
+
+  path_output <- withr::local_tempfile(fileext = ".jsonl")
+  gemini_download_file(provider, responses_file, path_output)
+
+  parsed <- read_ndjson(path_output)
+
+  normalized <- imap(parsed, function(x, i) {
+    gemini_normalize_result(x, index_default = as.integer(i))
+  })
+
+  ids <- vapply(normalized, function(x) x$index, integer(1))
+  results <- lapply(normalized, function(x) x$result)
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderGoogleGemini) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE
+) {
+  if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
+    value_turn(provider, model, result$body, has_type = has_type)
+  } else {
+    NULL
+  }
+}
+
+# Gemini batch helpers ---------------------------------------------------------
+
+# The Gemini REST API accepts both camelCase and snake_case, but the batch
+# JSONL file parser requires protobuf field names which are always snake_case.
+# Without this conversion, the batch API rejects requests with HTTP 400.
+gemini_to_snake_case <- function(x) {
+  if (is.list(x)) {
+    if (!is.null(names(x))) {
+      names(x) <- gsub("([a-z])([A-Z])", "\\1_\\2", names(x), perl = TRUE) |>
+        tolower()
+    }
+    lapply(x, gemini_to_snake_case)
+  } else {
+    x
+  }
+}
+
+gemini_prepare_batch_body <- function(body) {
+  # Drop empty system instructions ; the batch JSONL parser rejects empty text.
+  text <- body$systemInstruction$parts$text
+  if (!is.null(text) && identical(text, "")) {
+    body$systemInstruction <- NULL
+  }
+
+  # Save schema before snake_case conversion so user property names like
+  # "firstName" survive. Look up both spellings since chat_body mixes cases.
+  gc <- body$generationConfig
+  saved_schema <- gc$response_schema %||% gc$responseSchema
+
+  body <- gemini_to_snake_case(body)
+
+  # The batch JSONL parser uses response_json_schema, not response_schema.
+  if (!is.null(saved_schema)) {
+    body$generation_config$response_json_schema <- saved_schema
+    body$generation_config$response_schema <- NULL
+  }
+
+  body
+}
+
+gemini_extract_index <- function(x, default = NA_integer_) {
+  key <- x$key %||% ""
+  if (grepl("^chat-[0-9]+$", key)) {
+    return(as.integer(sub("^chat-([0-9]+)$", "\\1", key)))
+  }
+  as.integer(default)
+}
+
+gemini_normalize_result <- function(x, index_default) {
+  index <- gemini_extract_index(x, default = index_default)
+
+  if (!is.null(x$response) && is.null(x$error) && is.null(x$status)) {
+    return(list(
+      index = index,
+      result = list(status_code = 200L, body = x$response)
+    ))
+  }
+
+  if (!is.null(x$error) || !is.null(x$status)) {
+    code <- x$error$code %||% 500L
+    return(list(
+      index = index,
+      result = list(status_code = as.integer(code), body = NULL)
+    ))
+  }
+
+  list(index = index, result = list(status_code = 500L, body = NULL))
+}
+
+has_google_mixed_tool_support <- function(provider_name, model_name) {
+  identical(provider_name, "Google/Gemini") &&
+    grepl("^gemini-([3-9]|[0-9]{2,})", model_name)
 }

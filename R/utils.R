@@ -30,11 +30,6 @@ key_exists <- function(name) {
   !identical(Sys.getenv(name), "")
 }
 
-defer <- function(expr, env = caller_env(), after = FALSE) {
-  thunk <- as.call(list(function() expr))
-  do.call(on.exit, list(thunk, TRUE, after), envir = env)
-}
-
 set_default <- function(value, default, arg = caller_arg(value)) {
   if (is.null(value)) {
     if (!is_testing() || is_snapshot()) {
@@ -223,6 +218,23 @@ param_model <- function(default, provider = NULL) {
   )
 }
 
+support_badge <- function(tier = c("official", "community")) {
+  tier <- arg_match(tier)
+  alt <- paste0("[", tools::toTitleCase(tier), " supported provider]")
+  img <- paste0("support-", tier, ".svg")
+  paste0(
+    "\\ifelse{html}{",
+    "\\figure{",
+    img,
+    "}{options: alt='",
+    alt,
+    "'}",
+    "}{\\strong{",
+    alt,
+    "}}"
+  )
+}
+
 unrowname <- function(df) {
   rownames(df) <- NULL
   df
@@ -247,9 +259,12 @@ counter <- function() {
 }
 
 match_prices <- function(provider, id) {
-  prices <- prices[prices$provider == provider, ]
-  idx <- match(id, prices$model)
-  prices[idx, c("cached_input", "input", "output")]
+  p <- prices_get()
+  p <- p[p$provider == provider, ]
+  idx <- match(id, p$model)
+  p <- p[idx, c("cached_input", "input", "output")]
+  rownames(p) <- NULL
+  p
 }
 
 base64_enc <- function(path, raw) {

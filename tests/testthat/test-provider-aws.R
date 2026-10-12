@@ -1,12 +1,12 @@
 test_that("can make simple batch request", {
-  chat <- chat_aws_bedrock("Be as terse as possible; no punctuation")
+  chat <- chat_aws_bedrock_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?", echo = FALSE)
   expect_match(resp, "2")
   expect_equal(unname(chat$last_turn()@tokens[1:2] > 0), c(TRUE, TRUE))
 })
 
 test_that("can make simple streaming request", {
-  chat <- chat_aws_bedrock("Be as terse as possible; no punctuation")
+  chat <- chat_aws_bedrock_test("Be as terse as possible; no punctuation")
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
@@ -16,28 +16,31 @@ test_that("can list models", {
 })
 
 test_that("can set api args", {
-  chat <- chat_aws_bedrock(
-    api_args = list(inferenceConfig = list(maxTokens = 1)),
-    echo = FALSE
+  chat <- chat_aws_bedrock_test(
+    api_args = list(inferenceConfig = list(maxTokens = 1))
   )
-  result <- chat$chat("Who are the reindeer?")
+  expect_warning(
+    result <- chat$chat("Who are the reindeer?"),
+    "max_tokens"
+  )
   expect_true(nchar(result) < 10)
 })
 
 test_that("api args overwrite params", {
-  chat <- chat_aws_bedrock(
+  chat <- chat_aws_bedrock_test(
     api_args = list(inferenceConfig = list(maxTokens = 1)),
-    params = params(max_tokens = 100),
-    echo = FALSE
+    params = params(max_tokens = 100)
   )
-  result <- chat$chat("Who are the reindeer?")
+  expect_warning(
+    result <- chat$chat("Who are the reindeer?"),
+    "max_tokens"
+  )
   expect_true(nchar(result) < 10)
 })
 
 test_that("handles errors", {
-  chat <- chat_aws_bedrock(
-    api_args = list(inferenceConfig = list(temperature = "hot")),
-    echo = FALSE
+  chat <- chat_aws_bedrock_test(
+    api_args = list(inferenceConfig = list(temperature = "hot"))
   )
   expect_snapshot(error = TRUE, {
     chat$chat("What is 1 + 1?", echo = FALSE)
@@ -52,39 +55,417 @@ test_that("defaults are reported", {
 })
 
 test_that("supports tool calling", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_tools_simple(chat_fun)
 })
 
 test_that("can extract data", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_data_extraction(chat_fun)
 })
 
 test_that("can use images", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_images_inline(chat_fun)
   test_images_remote_error(chat_fun)
 })
 
 test_that("can use pdfs", {
-  chat_fun <- chat_aws_bedrock
+  chat_fun <- chat_aws_bedrock_test
 
   test_pdf_local(chat_fun)
+})
+
+test_that("can use documents", {
+  chat_fun <- chat_aws_bedrock_test
+
+  test_document_local(chat_fun)
+})
+
+test_that("document formats are mapped to the converse enum", {
+  provider <- test_aws_bedrock_provider()
+
+  docx <- ContentDocument(
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "YQ==",
+    "report.docx"
+  )
+  expect_equal(as_json(provider, docx)$document$format, "docx")
+
+  json_doc <- ContentDocument("application/json", "YQ==", "data.json")
+  expect_snapshot(as_json(provider, json_doc), error = TRUE)
+})
+
+# Prompt caching ----------------------------------------------------------
+
+has_cache_point <- function(content) {
+  any(vapply(content, function(b) "cachePoint" %in% names(b), logical(1)))
+}
+
+block_types <- function(content) {
+  vapply(content, function(b) names(b)[[1]], character(1))
+}
+
+test_that("as_bedrock_cache_point() resolves 'auto' for known models", {
+  # Anthropic models (direct and cross-region)
+  expect_equal(
+    as_bedrock_cache_point("auto", "anthropic.claude-3-5-haiku-20241022-v1:0"),
+    "5m"
+  )
+  expect_equal(
+    as_bedrock_cache_point(
+      "auto",
+      "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    ),
+    "5m"
+  )
+
+  # Amazon Nova models (direct and cross-region)
+  expect_equal(as_bedrock_cache_point("auto", "amazon.nova-pro-v1:0"), "5m")
+  expect_equal(as_bedrock_cache_point("auto", "us.amazon.nova-lite-v1:0"), "5m")
+
+  # Unsupported models
+  expect_equal(as_bedrock_cache_point("auto", "zai.glm-5"), "none")
+  expect_equal(
+    as_bedrock_cache_point("auto", "meta.llama3-1-8b-instruct-v1:0"),
+    "none"
+  )
+})
+
+test_that("as_bedrock_cache_point() passes through non-auto values", {
+  expect_equal(as_bedrock_cache_point("5m", "zai.glm-5"), "5m")
+  expect_equal(as_bedrock_cache_point("1h", "zai.glm-5"), "1h")
+  expect_equal(
+    as_bedrock_cache_point("none", "anthropic.claude-3-5-haiku-20241022-v1:0"),
+    "none"
+  )
+})
+
+test_that("cache points are inserted in last turn when cache is enabled", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
+
+  # Non-last turn should not have a cache point
+  result <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
+  expect_disjoint(block_types(result$content), "cachePoint")
+
+  # Last turn should have a cache point appended
+  result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
+  last_block <- result$content[[length(result$content)]]
+  expect_equal(last_block, list(cachePoint = list(type = "default")))
+})
+
+test_that("cache points after a document block are padded with text", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
+
+  turn <- UserTurn(list(
+    ContentText("Hello"),
+    ContentDocument("text/csv", "YQ==", "data.csv")
+  ))
+  result <- as_json(provider, turn, is_last = TRUE)
+  expect_equal(
+    block_types(result$content),
+    c("text", "document", "text", "cachePoint")
+  )
+
+  # No padding needed when the last block is text
+  result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
+  expect_equal(block_types(result$content), c("text", "cachePoint"))
+})
+
+test_that("cache points are omitted when cache = 'none'", {
+  provider <- test_aws_bedrock_provider(cache_point = "none")
+
+  result <- as_json(provider, UserTurn("Hello"), is_last = TRUE)
+  expect_disjoint(block_types(result$content), "cachePoint")
+})
+
+test_that("cache TTL is included for '1h' but not '5m'", {
+  provider_5m <- test_aws_bedrock_provider(cache_point = "5m")
+  provider_1h <- test_aws_bedrock_provider(cache_point = "1h")
+
+  # 5m: cachePoint should be list(type = "default") with no ttl
+  cp_5m <- bedrock_cache_point(provider_5m)
+  expect_equal(cp_5m, list(list(cachePoint = list(type = "default"))))
+
+  # 1h: cachePoint should include ttl = "1h"
+  cp_1h <- bedrock_cache_point(provider_1h)
+  expect_equal(
+    cp_1h,
+    list(list(cachePoint = list(type = "default", ttl = "1h")))
+  )
+})
+
+test_that("cache point is only on the last turn in multi-turn conversations", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
+
+  # Intermediate turns (is_last = FALSE) should not have cache points
+  r1 <- as_json(provider, UserTurn("Hello"), is_last = FALSE)
+  expect_false(has_cache_point(r1$content))
+
+  r2 <- as_json(
+    provider,
+    AssistantTurn(list(ContentText("Hi there!"))),
+    is_last = FALSE
+  )
+  expect_false(has_cache_point(r2$content))
+
+  # Last turn should have a cache point
+  r3 <- as_json(provider, UserTurn("How are you?"), is_last = TRUE)
+  expect_true(has_cache_point(r3$content))
+})
+
+test_that("bedrock_cache_point() is added to the system prompt", {
+  provider <- test_aws_bedrock_provider(cache_point = "5m")
+  cp <- bedrock_cache_point(provider)
+
+  # Mirrors the system prompt construction in chat_request()
+  system <- c(
+    list(list(text = "You are a helpful assistant.")),
+    cp
+  )
+
+  expect_length(system, 2)
+  expect_equal(system[[1]], list(text = "You are a helpful assistant."))
+  expect_equal(system[[2]], list(cachePoint = list(type = "default")))
+
+  # cache = "none" should not add a cache point
+  provider_none <- test_aws_bedrock_provider(cache_point = "none")
+  expect_equal(bedrock_cache_point(provider_none), list())
+})
+
+# Reasoning / thinking content --------------------------------------------
+
+test_that("can use extended thinking", {
+  vcr::local_cassette("aws-bedrock-thinking")
+
+  chat <- chat_aws_bedrock_test(
+    params = params(temperature = 1),
+    api_args = list(
+      additionalModelRequestFields = list(
+        thinking = list(type = "enabled", budget_tokens = 4000)
+      )
+    ),
+    model = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  )
+  resp <- chat$chat("Create a riddle for data scientists", echo = FALSE)
+
+  contents <- chat$last_turn()@contents
+  thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
+  expect_length(thinking, 1)
+  expect_gt(nchar(thinking[[1]]@thinking), 0)
+  expect_match(resp, "\\S")
 })
 
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {
-  chat <- chat_aws_bedrock()
+  chat <- chat_aws_bedrock_test()
   chat$chat("Respond with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
   )
+})
+
+# APIs --------------------------------------------------------------------
+
+test_that("aws_bedrock_api() guesses the api from the model", {
+  local_mocked_bindings(
+    aws_bedrock_model_apis = c(
+      "anthropic.mantle-only" = "messages",
+      "openai.mantle-only" = "responses"
+    )
+  )
+  expect_equal(aws_bedrock_api("us.anthropic.claude-sonnet-5"), "converse")
+  expect_equal(aws_bedrock_api("anthropic.mantle-only"), "messages")
+  expect_equal(aws_bedrock_api("openai.mantle-only"), "responses")
+})
+
+test_that("aws_bedrock_api() ignores cross-region inference prefixes", {
+  local_mocked_bindings(
+    aws_bedrock_model_apis = c(
+      "anthropic.mantle-only" = "messages",
+      "openai.mantle-only" = "responses"
+    )
+  )
+  expect_equal(aws_bedrock_api("us.anthropic.mantle-only"), "messages")
+  expect_equal(aws_bedrock_api("eu.openai.mantle-only"), "responses")
+})
+
+test_that("aws_bedrock_api() falls back to converse for unknown models", {
+  expect_equal(aws_bedrock_api(NULL), "converse")
+  expect_equal(aws_bedrock_api(""), "converse")
+  expect_equal(aws_bedrock_api("meta.llama3-1-8b-instruct-v1:0"), "converse")
+  expect_equal(
+    aws_bedrock_api("arn:aws:bedrock:us-east-1:123:custom-model/mine"),
+    "converse"
+  )
+})
+
+test_that("each api has its own endpoint", {
+  local_mocked_aws_credentials()
+
+  converse <- provider_aws_bedrock(api = "converse")
+  expect_s7_class(converse, ProviderAWSBedrock)
+  expect_equal(
+    converse@base_url,
+    "https://bedrock-runtime.us-east-1.amazonaws.com"
+  )
+
+  messages <- provider_aws_bedrock(api = "messages")
+  expect_s7_class(messages, ProviderAWSBedrockMessages)
+  expect_equal(
+    messages@base_url,
+    "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1"
+  )
+
+  responses <- provider_aws_bedrock(api = "responses")
+  expect_s7_class(responses, ProviderAWSBedrockResponses)
+  expect_equal(
+    responses@base_url,
+    "https://bedrock-mantle.us-east-1.api.aws/openai/v1"
+  )
+})
+
+test_that("explicit api overrides the guess", {
+  local_mocked_aws_credentials()
+
+  provider <- provider_aws_bedrock(
+    model = "openai.gpt-5.6-sol",
+    api = "converse"
+  )
+  expect_s7_class(provider, ProviderAWSBedrock)
+})
+
+test_that("mantle sends bytes rather than urls for pdfs and documents", {
+  local_mocked_aws_credentials()
+
+  pdf <- ContentPDF(
+    "application/pdf",
+    "YQ==",
+    "x.pdf",
+    url = "https://example.com/x.pdf"
+  )
+  doc <- ContentDocument(
+    "text/csv",
+    "YQ==",
+    "data.csv",
+    url = "https://example.com/data.csv"
+  )
+
+  messages <- provider_aws_bedrock(api = "messages")
+  expect_equal(
+    as_json(messages, pdf)$source,
+    list(type = "base64", media_type = "application/pdf", data = "YQ==")
+  )
+
+  responses <- provider_aws_bedrock(api = "responses")
+  expect_equal(
+    as_json(responses, pdf)$content[[1]],
+    list(
+      type = "input_file",
+      filename = "x.pdf",
+      file_data = "data:application/pdf;base64,YQ=="
+    )
+  )
+  expect_equal(
+    as_json(responses, doc)$content[[1]],
+    list(
+      type = "input_file",
+      filename = "data.csv",
+      file_data = "data:text/csv;base64,YQ=="
+    )
+  )
+})
+
+test_that("mantle requests are signed as bedrock in the right region", {
+  local_mocked_aws_credentials(region = "eu-west-1")
+
+  req <- chat_request(
+    provider_aws_bedrock(api = "messages"),
+    test_model("anthropic.claude-sonnet-5"),
+    turns = list(Turn("user", "Hi"))
+  )
+  expect_equal(
+    req$url,
+    "https://bedrock-mantle.eu-west-1.api.aws/anthropic/v1/messages"
+  )
+  expect_equal(req$headers$`anthropic-version`, "2023-06-01")
+
+  params <- req$policies$auth_sign$params
+  expect_equal(params$aws_service, "bedrock")
+  expect_equal(params$aws_region, "eu-west-1")
+})
+
+test_that("aws_error_body() handles responses without a content type", {
+  expect_null(aws_error_body(response(404, headers = list())))
+  expect_equal(
+    aws_error_body(response_json(400, body = list(message = "Nope."))),
+    "Nope."
+  )
+})
+
+test_that("converse suggests mantle when it doesn't recognise the model", {
+  req <- base_request_error(
+    test_aws_bedrock_provider(),
+    request("http://example.com")
+  )
+  body <- function(message) {
+    req$policies$error_body(response_json(400, body = list(message = message)))
+  }
+
+  hint <- body("The provided model identifier is invalid.")
+  expect_length(hint, 2)
+  expect_match(hint[[2]], 'set `api` to "messages" or "responses"')
+
+  expect_length(body("Nope."), 1)
+})
+
+test_that("converse suggests a region prefix when given a bare model ID", {
+  req <- base_request_error(
+    test_aws_bedrock_provider(),
+    request("http://example.com")
+  )
+  body <- function(message) {
+    req$policies$error_body(response_json(400, body = list(message = message)))
+  }
+
+  hint <- body(
+    "Invocation of model ID openai.gpt-5.6-sol with on-demand throughput isn't supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+  )
+  expect_length(hint, 2)
+  expect_match(hint[[2]], "adding a region prefix")
+})
+
+test_that("cross-region prefix is stripped for mantle but kept for converse", {
+  local_mocked_aws_credentials()
+
+  expect_equal(
+    chat_aws_bedrock(api = "messages")$get_model(),
+    "anthropic.claude-sonnet-5"
+  )
+  expect_equal(
+    chat_aws_bedrock(api = "converse")$get_model(),
+    "us.anthropic.claude-sonnet-5"
+  )
+})
+
+test_that("as_bedrock_message_cache() resolves 'auto'", {
+  expect_equal(as_bedrock_message_cache("auto"), "5m")
+  expect_equal(as_bedrock_message_cache("1h"), "1h")
+  expect_equal(as_bedrock_message_cache("none"), "none")
+})
+
+test_that("invalid api and cache combinations are rejected", {
+  local_mocked_aws_credentials()
+
+  expect_snapshot(error = TRUE, {
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "responses", cache = "5m")
+    chat_aws_bedrock(model = "openai.gpt-5.4", api = "mantle")
+  })
 })
 
 # Auth --------------------------------------------------------------------
@@ -130,4 +511,115 @@ test_that("AWS credential caching works as expected", {
   expect_false(identical(creds_modified, paws_credentials(profile = "test")))
   expect_false(identical(creds1, paws_credentials(profile = "test")))
   expect_false(identical(creds2, paws_credentials(profile = "test")))
+})
+
+test_that("inference profile ARN slash is encoded in URL (#792)", {
+  arn <- "arn:aws:bedrock:us-east-1:123456789:application-inference-profile/abc123"
+  provider <- test_aws_bedrock_provider(model = arn)
+  local_mocked_bindings(
+    paws_credentials = function(...) {
+      list(
+        access_key_id = "x",
+        secret_access_key = "x",
+        session_token = "x",
+        access_token = ""
+      )
+    }
+  )
+  req <- chat_request(provider, test_model(arn), stream = FALSE, turns = list())
+  expect_match(req$url, "inference-profile%2Fabc123", fixed = TRUE)
+})
+
+test_that("base_url defaults to the SDK endpoint override env vars", {
+  local_mocked_aws_credentials()
+
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://runtime.example.com",
+    AWS_ENDPOINT_URL_BEDROCK_MANTLE = "https://mantle.example.com/"
+  )
+  expect_equal(
+    provider_aws_bedrock(api = "converse")@base_url,
+    "https://runtime.example.com"
+  )
+  expect_equal(
+    provider_aws_bedrock(api = "messages")@base_url,
+    "https://mantle.example.com/anthropic/v1"
+  )
+  expect_equal(
+    provider_aws_bedrock(api = "responses")@base_url,
+    "https://mantle.example.com/openai/v1"
+  )
+})
+
+test_that("aws_bedrock_models_url() resolves the model-listing endpoint", {
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK = NA,
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = NA
+  )
+  expect_equal(
+    aws_bedrock_models_url(
+      "https://bedrock-runtime.us-east-1.amazonaws.com",
+      "us-east-1"
+    ),
+    "https://bedrock.us-east-1.amazonaws.com"
+  )
+
+  # The runtime override doesn't apply to model listing
+  withr::local_envvar(
+    AWS_ENDPOINT_URL_BEDROCK_RUNTIME = "https://gateway.example.com"
+  )
+  expect_equal(
+    aws_bedrock_models_url("https://gateway.example.com", "us-east-1"),
+    "https://bedrock.us-east-1.amazonaws.com"
+  )
+
+  withr::local_envvar(AWS_ENDPOINT_URL_BEDROCK = "https://bedrock.example.com")
+  expect_equal(
+    aws_bedrock_models_url("https://gateway.example.com", "us-east-1"),
+    "https://bedrock.example.com"
+  )
+})
+
+test_that("sends placeholder for empty assistant turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(provider, list(UserTurn("Hi"), AssistantTurn()))
+
+  expect_length(turns_json, 2)
+  expect_equal(turns_json[[2]]$content, list(list(text = "[empty string]")))
+})
+
+test_that("drops empty user turns (#1070)", {
+  provider <- test_aws_bedrock_provider()
+  turns_json <- as_json(
+    provider,
+    list(UserTurn("Hi"), AssistantTurn("Hello"), UserTurn())
+  )
+
+  expect_length(turns_json, 2)
+})
+
+test_that("value_turn() handles thinking blocks with no text (#1085)", {
+  provider <- test_aws_bedrock_provider()
+  result <- list(
+    output = list(
+      message = list(
+        content = list(
+          list(
+            reasoningContent = list(reasoningText = list(signature = "abc"))
+          ),
+          list(text = "Knock knock")
+        )
+      )
+    ),
+    stopReason = "end_turn",
+    usage = list(inputTokens = 10, outputTokens = 5)
+  )
+
+  turn <- value_turn(
+    provider,
+    test_model("us.anthropic.claude-sonnet-5"),
+    result
+  )
+  expect_equal(turn@contents[[1]]@thinking, "")
+  expect_equal(turn@contents[[1]]@extra$signature, "abc")
 })

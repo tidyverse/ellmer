@@ -2,10 +2,13 @@
 #'
 #' @description
 #' `batch_chat()` and `batch_chat_structured()` currently only work with
-#' [chat_openai()] and [chat_anthropic()]. They use the
-#' [OpenAI](https://platform.openai.com/docs/guides/batch) and
-#' [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing)
-#' batch APIs which allow you to submit multiple requests simultaneously.
+#' [chat_openai()], [chat_anthropic()], [chat_google_gemini()], and
+#' [chat_groq()]. They use the
+#' [OpenAI](https://developers.openai.com/api/docs/guides/batch),
+#' [Anthropic](https://docs.claude.com/en/docs/build-with-claude/batch-processing),
+#' [Google Gemini](https://ai.google.dev/gemini-api/docs/batch-api), and
+#' [Groq](https://console.groq.com/docs/batch) batch APIs which allow you
+#' to submit multiple requests simultaneously.
 #' The results can take up to 24 hours to complete, but in return you pay 50%
 #' less than usual (but note that ellmer doesn't include this discount in
 #' its pricing metadata). If you want to get results back more quickly, or
@@ -49,7 +52,7 @@
 #' For any of the aboves, will return `NULL` if `wait = FALSE` and the job
 #' is not complete.
 #' @examplesIf has_credentials("openai")
-#' chat <- chat_openai(model = "gpt-4.1-nano")
+#' chat <- chat_openai(model = "gpt-5-nano")
 #'
 #' # Chat ----------------------------------------------------------------------
 #'
@@ -89,7 +92,9 @@ batch_chat <- function(chat, prompts, path, wait = TRUE, ignore_hash = FALSE) {
     wait = wait,
     ignore_hash = ignore_hash
   )
-  job$step_until_done()
+  if (is.null(job$step_until_done())) {
+    return()
+  }
 
   assistant_turns <- job$result_turns()
   map2(job$user_turns, assistant_turns, function(user, assistant) {
@@ -119,6 +124,9 @@ batch_chat_text <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
+  if (is.null(chats)) {
+    return()
+  }
   map_chr(chats, \(chat) {
     if (is.null(chat)) NA_character_ else chat$last_turn()@text
   })
@@ -150,7 +158,9 @@ batch_chat_structured <- function(
     wait = wait,
     ignore_hash = ignore_hash
   )
-  job$step_until_done()
+  if (is.null(job$step_until_done())) {
+    return()
+  }
   turns <- job$result_turns()
 
   multi_convert(
@@ -193,6 +203,7 @@ BatchJob <- R6::R6Class(
 
     # Internal state
     provider = NULL,
+    model = NULL,
     started_at = NULL,
     stage = NULL,
     batch = NULL,
@@ -208,6 +219,7 @@ BatchJob <- R6::R6Class(
       call = caller_env(2)
     ) {
       self$provider <- chat$get_provider()
+      self$model <- chat$get_model_object()
       check_has_batch_support(self$provider, call = call)
 
       user_turns <- as_user_turns(prompts, call = call)
@@ -278,7 +290,12 @@ BatchJob <- R6::R6Class(
       existing <- self$chat$get_turns(include_system_prompt = TRUE)
       conversations <- append_turns(list(existing), self$user_turns)
 
-      self$batch <- batch_submit(self$provider, conversations, type = self$type)
+      self$batch <- batch_submit(
+        self$provider,
+        self$model,
+        conversations,
+        type = self$type
+      )
       self$stage <- "waiting"
       self$save_state()
       TRUE
@@ -326,7 +343,7 @@ BatchJob <- R6::R6Class(
 
     retrieve = function() {
       self$results <- batch_retrieve(self$provider, self$batch)
-      log_turns(self$provider, self$result_turns())
+      log_turns(self$provider, self$model, self$result_turns())
 
       self$stage <- "done"
       self$save_state()
@@ -341,7 +358,12 @@ BatchJob <- R6::R6Class(
         ))
       }
       map2(self$results, self$user_turns, function(result, user_turn) {
-        batch_result_turn(self$provider, result, has_type = !is.null(self$type))
+        batch_result_turn(
+          self$provider,
+          self$model,
+          result,
+          has_type = !is.null(self$type)
+        )
       })
     },
 
@@ -349,6 +371,7 @@ BatchJob <- R6::R6Class(
       # TODO: replace with JSON serialization when available
       list(
         provider = hash(provider_hash(self$provider)),
+        model = hash(model_hash(self$model)),
         prompts = hash(lapply(self$user_turns, format)),
         user_turns = hash(lapply(self$chat$get_turns(TRUE), format))
       )
@@ -382,11 +405,16 @@ BatchJob <- R6::R6Class(
   )
 )
 
-provider_hash <- function(x) {
+provider_hash <- function(provider) {
   list(
-    name = x@name,
-    model = x@model,
-    base_url = x@base_url
+    name = provider@name,
+    base_url = provider@base_url
+  )
+}
+
+model_hash <- function(model) {
+  list(
+    name = model@name
   )
 }
 

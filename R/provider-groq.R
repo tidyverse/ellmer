@@ -4,19 +4,17 @@ NULL
 #' Chat with a model hosted on Groq
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Sign up at <https://groq.com>.
 #'
 #' Built on top of [chat_openai_compatible()].
-#'
-#' ## Known limitations
-#'
-#' groq does not currently support structured data extraction.
 #'
 #' @export
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("GROQ_API_KEY")`
-#' @param model `r param_model("llama-3.1-8b-instant")`
+#' @param model `r param_model("openai/gpt-oss-20b")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
@@ -36,7 +34,7 @@ chat_groq <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "llama-3.1-8b-instant")
+  model <- set_default(model, "openai/gpt-oss-20b")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -52,56 +50,21 @@ chat_groq <- function(
   provider <- ProviderGroq(
     name = "Groq",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = TRUE
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderGroq <- new_class("ProviderGroq", parent = ProviderOpenAICompatible)
 
-method(as_json, list(ProviderGroq, Turn)) <- function(provider, x, ...) {
-  if (is_assistant_turn(x)) {
-    # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    tool_calls <- as_json(provider, x@contents[is_tool], ...)
-
-    # Grok contents is just a string. Hopefully it never sends back more
-    # than a single text response.
-    if (any(!is_tool)) {
-      content <- x@contents[!is_tool][[1]]@text
-    } else {
-      content <- NULL
-    }
-
-    list(
-      compact(list(
-        role = "assistant",
-        content = content,
-        tool_calls = tool_calls
-      ))
-    )
-  } else {
-    as_json(super(provider, ProviderOpenAICompatible), x, ...)
-  }
-}
-
-method(as_json, list(ProviderGroq, TypeObject)) <- function(provider, x, ...) {
-  if (x@additional_properties) {
-    cli::cli_abort("{.arg .additional_properties} not supported for Groq.")
-  }
-  required <- map_lgl(x@properties, function(prop) prop@required)
-
-  compact(list(
-    type = "object",
-    description = x@description,
-    properties = as_json(provider, x@properties, ...),
-    required = as.list(names2(x@properties)[required])
-  ))
-}
 
 method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   list(
@@ -114,6 +77,135 @@ method(as_json, list(ProviderGroq, ToolDef)) <- function(provider, x, ...) {
   )
 }
 
+#' @export
+#' @rdname chat_groq
+models_groq <- function(
+  base_url = "https://api.groq.com/openai/v1",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_groq",
+    \() groq_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderGroq(
+    name = "Groq",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
 groq_key <- function() {
   key_get("GROQ_API_KEY")
+}
+
+# Batched requests -------------------------------------------------------------
+
+# https://console.groq.com/docs/batch
+method(has_batch_support, ProviderGroq) <- function(provider) {
+  TRUE
+}
+
+method(batch_submit, ProviderGroq) <- function(
+  provider,
+  model,
+  conversations,
+  type = NULL
+) {
+  path <- withr::local_tempfile(fileext = ".jsonl")
+
+  requests <- map(seq_along(conversations), function(i) {
+    body <- chat_body(
+      provider,
+      model = model,
+      stream = FALSE,
+      turns = conversations[[i]],
+      type = type
+    )
+    list(
+      custom_id = paste0("chat-", i),
+      method = "POST",
+      url = "/v1/chat/completions",
+      body = body
+    )
+  })
+  json <- map_chr(requests, to_json)
+  writeLines(json, path)
+
+  uploaded <- openai_upload(provider, path)
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "batches")
+  req <- req_body_json(
+    req,
+    list(
+      input_file_id = uploaded$id,
+      endpoint = "/v1/chat/completions",
+      completion_window = "24h"
+    )
+  )
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_poll, ProviderGroq) <- function(provider, batch) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "batches", batch$id)
+
+  resp <- req_perform(req)
+  resp_body_json(resp)
+}
+
+method(batch_status, ProviderGroq) <- function(provider, batch) {
+  terminal_states <- c("completed", "failed", "expired", "cancelled")
+
+  total <- batch$request_counts$total %||% 0L
+  completed <- batch$request_counts$completed %||% 0L
+  failed <- batch$request_counts$failed %||% 0L
+
+  list(
+    working = !(batch$status %in% terminal_states),
+    n_processing = max(total - completed - failed, 0L),
+    n_succeeded = completed,
+    n_failed = failed
+  )
+}
+
+method(batch_retrieve, ProviderGroq) <- function(provider, batch) {
+  json <- list()
+
+  if (length(batch$output_file_id) == 1 && nzchar(batch$output_file_id)) {
+    path_output <- withr::local_tempfile()
+    openai_download_file(provider, batch$output_file_id, path_output)
+    json <- read_ndjson(path_output, fallback = openai_json_fallback)
+  }
+
+  if (length(batch$error_file_id) == 1 && nzchar(batch$error_file_id)) {
+    path_error <- withr::local_tempfile()
+    openai_download_file(provider, batch$error_file_id, path_error)
+    json <- c(json, read_ndjson(path_error, fallback = openai_json_fallback))
+  }
+
+  ids <- as.numeric(gsub("chat-", "", map_chr(json, "[[", "custom_id")))
+  results <- lapply(json, "[[", "response")
+  results[order(ids)]
+}
+
+method(batch_result_turn, ProviderGroq) <- function(
+  provider,
+  model,
+  result,
+  has_type = FALSE
+) {
+  if (!is.null(result) && result$status_code == 200L && !is.null(result$body)) {
+    value_turn(provider, model, result$body, has_type = has_type)
+  } else {
+    NULL
+  }
 }

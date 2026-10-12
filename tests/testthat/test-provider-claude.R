@@ -1,5 +1,5 @@
-test_that("can make simple batch request", {
-  vcr::local_cassette("anthropic-batch")
+test_that("can make simple request", {
+  vcr::local_cassette("anthropic-basic")
 
   chat <- chat_anthropic_test("Be as terse as possible; no punctuation")
   resp <- chat$chat("What is 1 + 1?")
@@ -9,8 +9,7 @@ test_that("can make simple batch request", {
 
 test_that("can make simple streaming request", {
   chat <- chat_anthropic_test(
-    "Be as terse as possible; no punctuation",
-    model = "claude-3-7-sonnet-20250219"
+    "Be as terse as possible; no punctuation"
   )
   resp <- coro::collect(chat$stream("What is 1 + 1?"))
   expect_match(paste0(unlist(resp), collapse = ""), "2")
@@ -67,6 +66,27 @@ test_that("can extract data", {
   test_data_extraction(chat_fun)
 })
 
+test_that("has_claude_structured_output() matches Claude 4.5+ and 5+ models", {
+  expect_all_true(has_claude_structured_output(c(
+    "claude-sonnet-4-5",
+    "claude-opus-4-6",
+    "claude-sonnet-5",
+    "claude-sonnet-5-20260201",
+    "claude-sonnet-6",
+    "claude-opus-7-1",
+    "claude-haiku-10"
+  )))
+  expect_all_equal(
+    has_claude_structured_output(c(
+      "claude-sonnet-4-0",
+      "claude-3-5-sonnet-20241022",
+      "claude-3-7-sonnet-20250219",
+      "claude-4-sonnet-20250514"
+    )),
+    FALSE
+  )
+})
+
 test_that("can use images", {
   vcr::local_cassette("anthropic-images")
   chat_fun <- chat_anthropic_test
@@ -82,11 +102,65 @@ test_that("can use pdfs", {
   test_pdf_local(chat_fun)
 })
 
+test_that("can use documents", {
+  vcr::local_cassette("anthropic-documents")
+  chat_fun <- chat_anthropic_test
+
+  test_document_local(chat_fun)
+})
+
+test_that("binary documents are rejected", {
+  provider <- chat_anthropic_test()$get_provider()
+
+  docx <- ContentDocument(
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "YQ==",
+    "report.docx"
+  )
+  expect_snapshot(as_json(provider, docx), error = TRUE)
+})
+
+test_that("pdfs with a url use the url source", {
+  provider <- chat_anthropic_test()$get_provider()
+
+  pdf <- ContentPDF(
+    "application/pdf",
+    "YQ==",
+    "x.pdf",
+    url = "https://example.com/x.pdf"
+  )
+  expect_equal(
+    as_json(provider, pdf),
+    list(
+      type = "document",
+      source = list(type = "url", url = "https://example.com/x.pdf")
+    )
+  )
+})
+
 # Custom features --------------------------------------------------------
+
+test_that("base_url defaults to ANTHROPIC_BASE_URL when set", {
+  # The env var follows the official SDK convention: no /v1 suffix.
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com")
+  chat <- chat_anthropic_test(credentials = function() "key")
+  expect_equal(chat$get_provider()@base_url, "https://example.com/v1")
+
+  # A value already ending in /v1 is used as is rather than getting a second
+  # /v1.
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com/v1")
+  expect_equal(anthropic_base_url(), "https://example.com/v1")
+
+  withr::local_envvar(ANTHROPIC_BASE_URL = "https://example.com/v1/")
+  expect_equal(anthropic_base_url(), "https://example.com/v1")
+
+  withr::local_envvar(ANTHROPIC_BASE_URL = NA)
+  expect_equal(anthropic_base_url(), "https://api.anthropic.com/v1")
+})
 
 test_that("can set beta headers", {
   chat <- chat_anthropic_test(beta_headers = c("a", "b"))
-  req <- chat_request(chat$get_provider())
+  req <- chat_request(chat$get_provider(), chat$get_model_object())
   headers <- req_get_headers(req)
   expect_equal(headers$`anthropic-beta`, "a,b")
 })
@@ -95,7 +169,7 @@ test_that("continues to work after whitespace only outputs (#376)", {
   vcr::local_cassette("anthropic-whitespace")
 
   chat <- chat_anthropic_test()
-  chat$chat("Respond with only two blank lines")
+  chat$chat("Respond to this question with only two blank lines")
   expect_equal(
     chat$chat("What's 1+1? Just give me the number"),
     ellmer_output("2")
@@ -103,13 +177,12 @@ test_that("continues to work after whitespace only outputs (#376)", {
 })
 
 test_that("can match prices for some common models", {
-  provider <- chat_anthropic_test()$get_provider()
+  chat <- chat_anthropic_test()
 
-  expect_true(has_cost(provider, "claude-sonnet-4-20250514"))
-  expect_true(has_cost(provider, "claude-3-7-sonnet-latest"))
+  expect_true(has_cost(chat$get_provider()@name, chat$get_model_object()@name))
 })
 
-test_that("removes empty final chat messages", {
+test_that("sends placeholder for empty assistant turns (#711, #1070)", {
   chat <- chat_anthropic_test()
   chat$set_turns(
     list(
@@ -120,16 +193,17 @@ test_that("removes empty final chat messages", {
 
   turns_json <- as_json(chat$get_provider(), chat$get_turns())
 
-  expect_length(turns_json, 1)
-  expect_equal(turns_json[[1]]$role, "user")
+  expect_length(turns_json, 2)
   expect_equal(
-    turns_json[[1]]$content,
-    list(list(type = "text", text = "Don't say anything"))
+    turns_json[[2]]$content,
+    list(list(type = "text", text = "[empty string]"))
   )
 })
 
 test_that("batch chat works", {
-  chat <- chat_anthropic_test(system_prompt = "Answer with just the city name")
+  chat <- chat_anthropic_test(
+    system_prompt = "Answer with just the city name. No formatting."
+  )
 
   prompts <- list(
     "What's the capital of Iowa?",
@@ -144,4 +218,623 @@ test_that("batch chat works", {
     path = test_path("batch/state-capitals-anthropic.json")
   )
   expect_equal(out, c("Des Moines", "Albany", "Sacramento", "Austin"))
+})
+
+test_that("value_turn() parses server_tool_use input from JSON string", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "server_tool_use",
+        id = "srvtoolu_1",
+        name = "web_search",
+        input = '{"query":"test search"}'
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
+  search_content <- turn@contents[[1]]
+  expect_s7_class(search_content, ContentToolRequestSearch)
+  expect_equal(search_content@query, "test search")
+})
+
+test_that("value_turn() parses server_tool_use web_fetch input from JSON string", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  result <- list(
+    content = list(
+      list(
+        type = "server_tool_use",
+        id = "srvtoolu_2",
+        name = "web_fetch",
+        input = '{"url":"https://example.com"}'
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 10,
+      output_tokens = 5,
+      cache_creation_input_tokens = 0,
+      cache_read_input_tokens = 0
+    )
+  )
+
+  turn <- value_turn(provider, test_model("claude-sonnet-4-20250514"), result)
+  fetch_content <- turn@contents[[1]]
+  expect_s7_class(fetch_content, ContentToolRequestFetch)
+  expect_equal(fetch_content@url, "https://example.com")
+})
+
+test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  # Fixed test rates, independent of the live price table
+  cache_path <- local_prices_cache()
+  write_prices_cache(
+    cache_path,
+    data.frame(
+      provider = "Anthropic",
+      model = "test-model",
+      variant = "",
+      input = 10,
+      output = 100,
+      cached_input = 1
+    ),
+    updated_at = "2126-01-01T00:00:00Z"
+  )
+
+  result <- list(
+    content = list(list(type = "text", text = "ok")),
+    stop_reason = "end_turn",
+    usage = list(
+      input_tokens = 1000,
+      output_tokens = 50,
+      cache_creation_input_tokens = 400,
+      cache_read_input_tokens = 200
+    )
+  )
+
+  turn <- value_turn(provider, test_model("test-model"), result)
+
+  # tokens slot reports raw integer counts (no 1.25x weighting on input).
+  expect_equal(
+    unname(turn@tokens),
+    c(1000 + 400, 50, 200)
+  )
+
+  # Cost matches the 1.25x cache-write weighting:
+  #   (1000 + 400 * 1.25) * $10/1M + 50 * $100/1M + 200 * $1/1M
+  expected_cost <- ((1000 + 400 * 1.25) * 10 + 50 * 100 + 200 * 1) / 1e6
+  expect_equal(unclass(turn@cost), expected_cost)
+})
+
+test_that("value_turn() prices a refusal fallback at the serving model's rate", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+  model <- Model(name = "test-model-from")
+
+  cache_path <- local_prices_cache()
+  write_prices_cache(
+    cache_path,
+    data.frame(
+      provider = "Anthropic",
+      model = c("test-model-from", "test-model-to"),
+      variant = "",
+      input = c(1, 5),
+      output = c(2, 25),
+      cached_input = c(0, 0)
+    ),
+    updated_at = "2126-01-01T00:00:00Z"
+  )
+
+  result <- list(
+    model = "test-model-to",
+    content = list(
+      list(
+        type = "fallback",
+        from = list(model = "test-model-from"),
+        to = list(model = "test-model-to")
+      ),
+      list(type = "text", text = "ok")
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 1000, output_tokens = 50)
+  )
+
+  turn <- value_turn(provider, model, result)
+
+  # test-model-to rates ($5/$25 per 1M), not test-model-from's ($1/$2).
+  expect_equal(unclass(turn@cost), (1000 * 5 + 50 * 25) / 1e6)
+})
+
+test_that("serving_model() prefers the last fallback block's to.model", {
+  expect_equal(serving_model(list(model = "a", content = list())), "a")
+  expect_equal(
+    serving_model(list(
+      model = "requested",
+      content = list(
+        list(type = "fallback", to = list(model = "served")),
+        list(type = "text", text = "hi")
+      )
+    )),
+    "served"
+  )
+})
+
+test_that("stream_merge_chunks() handles citations_delta", {
+  provider <- ProviderAnthropic(
+    name = "Anthropic",
+    base_url = "https://api.anthropic.com/v1",
+    extra_headers = character(),
+    credentials = NULL,
+    beta_headers = character(),
+    cache = ""
+  )
+
+  chunks <- list(
+    list(
+      type = "message_start",
+      message = list(
+        id = "msg_1",
+        type = "message",
+        role = "assistant",
+        content = list(),
+        model = "claude-sonnet-4-20250514",
+        stop_reason = NULL,
+        stop_sequence = NULL,
+        usage = list(input_tokens = 10, output_tokens = 1)
+      )
+    ),
+    list(
+      type = "content_block_start",
+      index = 0L,
+      content_block = list(
+        type = "text",
+        text = ""
+      )
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(
+        type = "text_delta",
+        text = "Hello"
+      )
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(
+        type = "citations_delta",
+        citation = list(
+          type = "web_search_result_location",
+          cited_text = "example text",
+          url = "https://example.com"
+        )
+      )
+    ),
+    list(type = "content_block_stop", index = 0L),
+    list(
+      type = "message_delta",
+      delta = list(
+        stop_reason = "end_turn",
+        stop_sequence = NULL
+      ),
+      usage = list(output_tokens = 5)
+    )
+  )
+
+  result <- NULL
+  expect_no_warning({
+    for (chunk in chunks) {
+      result <- stream_merge_chunks(provider, result, chunk)
+    }
+  })
+
+  expect_equal(result$content[[1]]$text, "Hello")
+  expect_length(result$content[[1]]$citations, 1)
+  expect_equal(result$content[[1]]$citations[[1]]$url, "https://example.com")
+})
+
+test_that("stream_content() emits Anthropic citations after completed text", {
+  provider <- chat_anthropic_test()$get_provider()
+  chunks <- list(
+    list(
+      type = "message_start",
+      message = list(content = list(), usage = list())
+    ),
+    list(
+      type = "content_block_start",
+      index = 0L,
+      content_block = list(type = "text", text = "", citations = list())
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(type = "text_delta", text = "Grounded answer")
+    ),
+    list(
+      type = "content_block_delta",
+      index = 0L,
+      delta = list(
+        type = "citations_delta",
+        citation = list(
+          type = "web_search_result_location",
+          cited_text = "source evidence",
+          url = "https://example.com",
+          title = "Example"
+        )
+      )
+    ),
+    list(type = "content_block_stop", index = 0L)
+  )
+
+  completion <- NULL
+  streamed <- list()
+  for (chunk in chunks) {
+    completion <- stream_merge_chunks(provider, completion, chunk)
+    streamed <- c(streamed, stream_content(provider, chunk, completion))
+  }
+
+  expect_s7_class(streamed[[1]], ContentText)
+  expect_equal(streamed[[1]]@text, "Grounded answer")
+  expect_s7_class(streamed[[2]], ContentCitation)
+  expect_equal(streamed[[2]]@grounded_span, "Grounded answer")
+  expect_equal(streamed[[2]]@cited_quote, "source evidence")
+})
+
+test_that("value_turn() preserves Anthropic web activity and citations", {
+  provider <- chat_anthropic_test()$get_provider()
+  citation <- list(
+    type = "web_search_result_location",
+    cited_text = "source evidence",
+    url = "https://example.com",
+    title = "Example"
+  )
+  search_result <- list(
+    type = "web_search_result",
+    url = "https://search.example",
+    title = "Search result"
+  )
+  result <- list(
+    content = list(
+      list(type = "text", text = "Grounded answer", citations = list(citation)),
+      list(
+        type = "web_search_tool_result",
+        tool_use_id = "search-1",
+        content = list(search_result)
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-1",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://fetch.example"
+        )
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-2",
+        content = list(
+          type = "web_fetch_tool_result_error",
+          error_code = "denied"
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_s7_class(contents[[1]], ContentText)
+  expect_s7_class(contents[[2]], ContentCitation)
+  expect_equal(contents[[2]]@source@url, "https://example.com")
+  expect_equal(contents[[2]]@grounded_span, "Grounded answer")
+  expect_equal(contents[[2]]@cited_quote, "source evidence")
+
+  expect_s7_class(contents[[3]], ContentToolResponseSearch)
+  expect_equal(contents[[3]]@sources[[1]]@title, "Search result")
+  expect_equal(contents[[4]]@status, "success")
+  expect_equal(contents[[4]]@url, "https://fetch.example")
+  expect_equal(contents[[5]]@status, "error")
+  expect_null(contents[[5]]@url)
+})
+
+test_that("value_turn() links Anthropic web-fetch citations to fetched URLs", {
+  provider <- chat_anthropic_test()$get_provider()
+  citation <- list(
+    type = "char_location",
+    cited_text = "second source evidence",
+    document_index = 1L,
+    document_title = "Second document",
+    start_char_index = 0L,
+    end_char_index = 22L
+  )
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-1",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://first.example"
+        )
+      ),
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-2",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://second.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Grounded answer",
+        citations = list(citation)
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn(provider, test_model(), result)@contents
+  expect_s7_class(contents[[4]], ContentCitation)
+  expect_equal(contents[[4]]@source@url, "https://second.example")
+  expect_equal(contents[[4]]@source@title, "Second document")
+})
+
+test_that("value_turn() resolves Anthropic citations across request turns", {
+  provider <- chat_anthropic_test()$get_provider()
+  prior_fetch <- list(
+    type = "web_fetch_tool_result",
+    tool_use_id = "fetch-prior",
+    content = list(
+      type = "web_fetch_result",
+      url = "https://prior.example"
+    )
+  )
+  turns <- list(
+    UserTurn("Read the first page."),
+    AssistantTurn(list(
+      ContentToolResponseFetch(
+        url = "https://prior.example",
+        status = "success",
+        extra = prior_fetch
+      )
+    )),
+    UserTurn("Compare it with the second page.")
+  )
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-current",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://current.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Comparison",
+        citations = list(
+          list(
+            type = "char_location",
+            cited_text = "prior evidence",
+            document_index = 0L,
+            document_title = "Prior document",
+            start_char_index = 0L,
+            end_char_index = 14L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "current evidence",
+            document_index = 1L,
+            document_title = "Current document",
+            start_char_index = 15L,
+            end_char_index = 31L
+          )
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn_with_turns(
+    provider,
+    test_model(),
+    result,
+    turns = turns
+  )@contents
+  citations <- keep(contents, \(x) S7_inherits(x, ContentCitation))
+
+  expect_equal(citations[[1]]@source@url, "https://prior.example")
+  expect_equal(citations[[2]]@source@url, "https://current.example")
+})
+
+test_that("as_json() serializes uploaded file references", {
+  provider <- chat_anthropic_test()$get_provider()
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "application/pdf")),
+    list(type = "document", source = list(type = "file", file_id = "file-1"))
+  )
+  # unmapped mime types fall back to document, or image for image/*
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "audio/mpeg"))$type,
+    "document"
+  )
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "image/svg+xml"))$type,
+    "image"
+  )
+  # container_upload blocks take file_id directly, with no source wrapper
+  expect_equal(
+    as_json(provider, ContentUploaded("file-1", "text/csv")),
+    list(type = "container_upload", file_id = "file-1")
+  )
+})
+
+test_that("value_turn() preserves unresolved Anthropic document slots", {
+  provider <- chat_anthropic_test()$get_provider()
+  turns <- list(UserTurn(list(
+    ContentPDF("application/pdf", "ZGF0YQ==", "report.pdf"),
+    ContentUploaded("file-pdf", "application/pdf"),
+    ContentUploaded("file-csv", "text/csv"),
+    ContentText("Compare the documents with the fetched page.")
+  )))
+  result <- list(
+    content = list(
+      list(
+        type = "web_fetch_tool_result",
+        tool_use_id = "fetch-current",
+        content = list(
+          type = "web_fetch_result",
+          url = "https://current.example"
+        )
+      ),
+      list(
+        type = "text",
+        text = "Comparison",
+        citations = list(
+          list(
+            type = "char_location",
+            cited_text = "inline PDF evidence",
+            document_index = 0L,
+            document_title = "report.pdf",
+            start_char_index = 0L,
+            end_char_index = 19L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "uploaded PDF evidence",
+            document_index = 1L,
+            document_title = "uploaded.pdf",
+            start_char_index = 20L,
+            end_char_index = 41L
+          ),
+          list(
+            type = "char_location",
+            cited_text = "web evidence",
+            document_index = 2L,
+            document_title = "Current document",
+            start_char_index = 42L,
+            end_char_index = 54L
+          )
+        )
+      )
+    ),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 5)
+  )
+
+  contents <- value_turn_with_turns(
+    provider,
+    test_model(),
+    result,
+    turns = turns
+  )@contents
+  citations <- keep(contents, \(x) S7_inherits(x, ContentCitation))
+
+  expect_null(citations[[1]]@source)
+  expect_null(citations[[2]]@source)
+  expect_equal(citations[[3]]@source@url, "https://current.example")
+})
+
+test_that("stream_content() resolves Anthropic citations across request turns", {
+  provider <- chat_anthropic_test()$get_provider()
+  prior_fetch <- list(
+    type = "web_fetch_tool_result",
+    tool_use_id = "fetch-prior",
+    content = list(
+      type = "web_fetch_result",
+      url = "https://prior.example"
+    )
+  )
+  turns <- list(AssistantTurn(list(
+    ContentToolResponseFetch(
+      url = "https://prior.example",
+      status = "success",
+      extra = prior_fetch
+    )
+  )))
+  completion <- list(
+    content = list(list(
+      type = "text",
+      text = "Grounded answer",
+      citations = list(list(
+        type = "char_location",
+        cited_text = "prior evidence",
+        document_index = 0L,
+        document_title = "Prior document",
+        start_char_index = 0L,
+        end_char_index = 14L
+      ))
+    ))
+  )
+
+  contents <- stream_content_with_turns(
+    provider,
+    list(type = "content_block_stop", index = 0L),
+    completion,
+    turns = turns
+  )
+
+  expect_equal(contents[[1]]@source@url, "https://prior.example")
+})
+
+# Token counting -----------------------------------------------------------
+
+test_that("can count tokens", {
+  vcr::local_cassette("anthropic-count-tokens")
+  test_token_count(chat_anthropic_test)
+})
+
+test_that("value_turn() handles empty content (#1070)", {
+  provider <- chat_anthropic_test()$get_provider()
+  result <- list(
+    content = list(),
+    stop_reason = "end_turn",
+    usage = list(input_tokens = 10, output_tokens = 2)
+  )
+
+  turn <- value_turn(provider, test_model("claude-sonnet-5"), result)
+  expect_equal(turn@contents, list())
 })

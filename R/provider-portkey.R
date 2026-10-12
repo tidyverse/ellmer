@@ -1,6 +1,8 @@
 #' Chat with a model hosted on PortkeyAI
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [PortkeyAI](https://portkey.ai/docs/product/ai-gateway/universal-api)
 #' provides an interface (AI Gateway) to connect through its Universal API to a
 #' variety of LLMs providers via a single endpoint.
@@ -19,6 +21,7 @@
 #'   if the model doesn't include a provider.
 #' @export
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -35,7 +38,8 @@ chat_portkey <- function(
   params = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   check_string(model)
   echo <- check_echo(echo)
@@ -53,8 +57,12 @@ chat_portkey <- function(
 
   # For backward compatibility
   if (!grepl("^@", model)) {
-    virtual_key <- virtual_key %||% key_get("PORTKEY_VIRTUAL_KEY")
-    model <- paste0("@", virtual_key, "/", model)
+    if (is.null(virtual_key) && key_exists("PORTKEY_VIRTUAL_KEY")) {
+      virtual_key <- key_get("PORTKEY_VIRTUAL_KEY")
+    }
+    if (!is.null(virtual_key)) {
+      model <- paste0("@", virtual_key, "/", model)
+    }
   }
 
   credentials <- as_credentials(
@@ -68,13 +76,17 @@ chat_portkey <- function(
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_portkey_test <- function(
@@ -121,11 +133,14 @@ models_portkey <- function(
 ) {
   provider <- ProviderPortkeyAI(
     name = "PortkeyAI",
-    model = "",
     base_url = base_url,
     credentials = function() api_key
   )
 
+  models_list(provider)
+}
+
+method(models_list, ProviderPortkeyAI) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
@@ -135,9 +150,8 @@ models_portkey <- function(
   id <- map_chr(json$data, "[[", "id")
   slug <- map_chr(json$data, "[[", "slug")
 
-  df <- data.frame(
+  data.frame(
     id = id,
     slug = slug
   )
-  df
 }

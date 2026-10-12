@@ -6,9 +6,13 @@
 
 ## revdepcheck results
 
-We checked 21 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 51 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 1 new problems
+ * We saw 1 new problem
  * We failed to check 0 packages
 
-GitAI fails because it uses ellmer internals, even so, we still sent them a PR to fix the problem: https://github.com/r-world-devs/GitAI/pull/114.
+### New problems
+
+* querychat
+  checking tests ... ERROR
+  Issue opened: https://github.com/posit-dev/querychat/issues/283

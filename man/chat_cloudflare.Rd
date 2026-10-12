@@ -55,7 +55,9 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
-\href{https://www.cloudflare.com/developer-platform/products/workers-ai/}{Cloudflare}
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
+\href{https://www.cloudflare.com/products/workers-ai/}{Cloudflare}
 Workers AI hosts a variety of open-source AI models. To use the Cloudflare
 API, you must have an Account ID and an Access Token, which you can obtain
 \href{https://developers.cloudflare.com/workers-ai/get-started/rest-api/}{by following these instructions}.
@@ -75,22 +77,24 @@ chat$chat("Tell me three jokes about statisticians")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

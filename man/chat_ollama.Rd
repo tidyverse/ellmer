@@ -22,8 +22,7 @@ models_ollama(base_url = "http://localhost:11434", credentials = NULL)
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{model}{The model to use for the chat.
 Use \code{models_ollama()} to see all options.}
@@ -61,6 +60,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 To use \code{chat_ollama()} first download and install
 \href{https://ollama.com}{Ollama}. Then install some models either from the
 command line (e.g. with \verb{ollama pull llama3.1}) or within R using
@@ -68,6 +69,25 @@ command line (e.g. with \verb{ollama pull llama3.1}) or within R using
 \code{ollamar::pull("llama3.1")}).
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
+\subsection{Thinking models}{
+
+Some Ollama models (e.g. qwen3) support extended reasoning or "thinking".
+When using these models, thinking content is automatically captured in
+the turn. You can control thinking with
+\code{reasoning_effort}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_ollama(
+  model = "qwen3:4b",
+  params = params(reasoning_effort = "none")
+)
+}\if{html}{\out{</div>}}
+
+Which values are supported depends on the model. For example, qwen3 only
+supports \code{"none"} (off) vs the default (on), while gpt-oss supports
+\code{"low"}, \code{"medium"}, and \code{"high"} but ignores \code{"none"}. See
+\url{https://docs.ollama.com/capabilities/thinking} for details.
+}
+
 \subsection{Known limitations}{
 \itemize{
 \item Tool calling is not supported with streaming (i.e. when \code{echo} is
@@ -87,22 +107,24 @@ chat$chat("Tell me three jokes about statisticians")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

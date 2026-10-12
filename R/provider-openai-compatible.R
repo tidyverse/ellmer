@@ -31,6 +31,13 @@ NULL
 #'   with [modifyList()].
 #' @param api_headers Named character vector of arbitrary extra headers appended
 #'   to every chat API call.
+#' @param strict If `TRUE`, use OpenAI's strict mode for tool definitions and
+#'   structured output. Only set this if the endpoint and model support it.
+#' @param preserve_thinking If `TRUE`, reasoning content returned by the model
+#'   is included when sending conversation history back to the API. If `FALSE`
+#'   (the default), reasoning content is still captured in the turn but dropped
+#'   from subsequent requests. Set to `TRUE` if your provider requires or
+#'   benefits from seeing prior reasoning in multi-turn conversations.
 #' @param echo One of the following options:
 #'   * `none`: don't emit any output (default when running in a function).
 #'   * `output`: echo text and tool-calling output as it streams in (default
@@ -60,6 +67,8 @@ chat_openai_compatible <- function(
   params = NULL,
   api_args = list(),
   api_headers = character(),
+  preserve_thinking = FALSE,
+  strict = FALSE,
   echo = c("none", "output", "all")
 ) {
   if (missing(base_url)) {
@@ -91,13 +100,22 @@ chat_openai_compatible <- function(
   provider <- ProviderOpenAICompatible(
     name = name,
     base_url = base_url,
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     extra_headers = api_headers,
-    credentials = credentials
+    credentials = credentials,
+    preserve_thinking = preserve_thinking,
+    strict = strict
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model_obj <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
+  Chat$new(
+    provider = provider,
+    model = model_obj,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_openai_compatible_test <- function(
@@ -118,6 +136,7 @@ chat_openai_compatible_test <- function(
     system_prompt = system_prompt,
     model = model,
     params = params,
+    strict = TRUE,
     ...,
     echo = echo
   )
@@ -126,7 +145,15 @@ chat_openai_compatible_test <- function(
 
 ProviderOpenAICompatible <- new_class(
   "ProviderOpenAICompatible",
-  parent = Provider
+  parent = Provider,
+  properties = list(
+    preserve_thinking = new_property(class_logical, default = FALSE),
+    # OpenAI's strict mode convention: every property is `required`, with
+    # optional ones made nullable, plus `strict: true` on tool definitions
+    # and structured outputs. Only correct when the backend actually
+    # implements strict mode; everything else uses standard JSON Schema.
+    strict = new_property(class_logical, default = FALSE)
+  )
 )
 
 openai_key_exists <- function() {
@@ -152,20 +179,22 @@ method(base_request_error, ProviderOpenAICompatible) <- function(
   provider,
   req
 ) {
-  req_error(req, body = function(resp) {
-    if (resp_content_type(resp) == "application/json") {
-      error <- resp_body_json(resp)$error
-      if (is_string(error)) {
-        error
-      } else if (is.list(error)) {
-        error$message
-      } else {
-        prettify(resp_body_string(resp))
-      }
-    } else if (resp_content_type(resp) == "text/plain") {
-      resp_body_string(resp)
+  req_error(req, body = openai_error_body)
+}
+
+openai_error_body <- function(resp) {
+  if (identical(resp_content_type(resp), "application/json")) {
+    error <- resp_body_json(resp)$error
+    if (is_string(error)) {
+      error
+    } else if (is.list(error)) {
+      error$message
+    } else {
+      prettify(resp_body_string(resp))
     }
-  })
+  } else if (identical(resp_content_type(resp), "text/plain")) {
+    resp_body_string(resp)
+  }
 }
 
 # Chat endpoint ----------------------------------------------------------------
@@ -177,32 +206,33 @@ method(chat_path, ProviderOpenAICompatible) <- function(provider) {
 # https://platform.openai.com/docs/api-reference/chat/create
 method(chat_body, ProviderOpenAICompatible) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
   type = NULL
 ) {
   messages <- compact(unlist(as_json(provider, turns), recursive = FALSE))
-  tools <- as_json(provider, unname(tools))
+  tools <- chat_body_tools(provider, tools)
 
   if (!is.null(type)) {
     response_format <- list(
       type = "json_schema",
-      json_schema = list(
+      json_schema = compact(list(
         name = "structured_data",
         schema = as_json(provider, type),
-        strict = TRUE
-      )
+        strict = if (provider@strict) TRUE
+      ))
     )
   } else {
     response_format <- NULL
   }
 
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
   compact(list2(
     messages = messages,
-    model = provider@model,
+    model = model@name,
     !!!params,
     stream = stream,
     stream_options = if (stream) list(include_usage = TRUE),
@@ -216,15 +246,15 @@ method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
   standardise_params(
     params,
     c(
-      temperature = "temperature",
-      top_p = "top_p",
       frequency_penalty = "frequency_penalty",
+      logprobs = "log_probs",
+      max_completion_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
       seed = "seed",
-      max_completion_tokens = "max_tokens",
-      logprobs = "log_probs",
-      top_logprobs = "top_k",
-      stop = "stop_sequences"
+      stop = "stop_sequences",
+      temperature = "temperature",
+      top_k = "top_k",
+      top_p = "top_p"
     )
   )
 }
@@ -238,12 +268,26 @@ method(stream_parse, ProviderOpenAICompatible) <- function(provider, event) {
 
   jsonlite::parse_json(event$data)
 }
-method(stream_text, ProviderOpenAICompatible) <- function(provider, event) {
+method(stream_content, ProviderOpenAICompatible) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (length(event$choices) == 0) {
-    NULL
-  } else {
-    event$choices[[1]]$delta[["content"]]
+    return(list())
   }
+  delta <- event$choices[[1]]$delta
+
+  reasoning <- delta[["reasoning"]] %||% delta[["reasoning_content"]]
+  if (!is.null(reasoning)) {
+    return(list(ContentThinking(reasoning)))
+  }
+
+  text <- delta[["content"]]
+  if (is.null(text)) {
+    return(list())
+  }
+  list(ContentText(text))
 }
 method(stream_merge_chunks, ProviderOpenAICompatible) <- function(
   provider,
@@ -263,13 +307,33 @@ method(value_tokens, ProviderOpenAICompatible) <- function(provider, json) {
 
   tokens(
     input = (usage$prompt_tokens %||% 0) - cached_tokens,
-    output = usage$completion_tokens,
+    output = usage$completion_tokens %||% 0,
     cached_input = cached_tokens
+  )
+}
+
+# https://platform.openai.com/docs/api-reference/chat/create
+method(value_finish_reason, ProviderOpenAICompatible) <- function(
+  provider,
+  result
+) {
+  reason <- result$choices[[1]]$finish_reason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    stop = "success",
+    tool_calls = "tool_use",
+    length = "max_tokens",
+    content_filter = "content_filter",
+    I(reason)
   )
 }
 
 method(value_turn, ProviderOpenAICompatible) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -280,6 +344,12 @@ method(value_turn, ProviderOpenAICompatible) <- function(
     message <- result$choices[[1]]$message
   }
 
+  thinking <- list()
+  reasoning <- message[["reasoning"]] %||% message[["reasoning_content"]]
+  if (is_string(reasoning) && nzchar(reasoning)) {
+    thinking <- list(ContentThinking(reasoning))
+  }
+
   if (has_type) {
     if (is_string(message$content)) {
       content <- list(ContentJson(string = message$content[[1]]))
@@ -287,7 +357,13 @@ method(value_turn, ProviderOpenAICompatible) <- function(
       content <- list(ContentJson(data = message$content))
     }
   } else {
-    content <- lapply(message$content, as_content)
+    # Some providers (e.g. Databricks) return content: "" instead of
+    # content: null for tool-only turns; treat empty strings as null
+    if (is_string(message$content) && !nzchar(message$content)) {
+      content <- list()
+    } else {
+      content <- lapply(message$content, as_content)
+    }
   }
   if (has_name(message, "tool_calls")) {
     calls <- lapply(message$tool_calls, function(call) {
@@ -297,17 +373,42 @@ method(value_turn, ProviderOpenAICompatible) <- function(
         jsonlite::parse_json(call$`function`$arguments),
         error = function(cnd) list()
       )
-      ContentToolRequest(name = name, arguments = args, id = call$id)
+      ContentToolRequest(
+        name = name,
+        arguments = args %||% list(),
+        id = call$id
+      )
     })
     content <- c(content, calls)
   }
 
+  content <- c(thinking, content)
+
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
-  AssistantTurn(content, json = result, tokens = unlist(tokens), cost = cost)
+  cost <- get_token_cost(provider@name, model@name, tokens)
+
+  AssistantTurn(
+    content,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
 }
 
 # ellmer -> OpenAI --------------------------------------------------------------
+
+# Most providers use "reasoning" but a subset use "reasoning_content" (#1004)
+reasoning_content_field <- function(provider) {
+  if (
+    S7_inherits(provider, ProviderLMStudio) ||
+      S7_inherits(provider, ProviderDeepSeek)
+  ) {
+    "reasoning_content"
+  } else {
+    "reasoning"
+  }
+}
 
 method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
   provider,
@@ -340,18 +441,38 @@ method(as_json, list(ProviderOpenAICompatible, Turn)) <- function(
 
     c(tools, user)
   } else if (is_assistant_turn(x)) {
-    # Tool requests come out of content and go into own argument
-    is_tool <- map_lgl(x@contents, is_tool_request)
-    content <- as_json(provider, x@contents[!is_tool], ...)
-    tool_calls <- as_json(provider, x@contents[is_tool], ...)
+    # Drop empty ContentText to avoid API errors from providers that reject
+    # empty text content blocks (e.g. Databricks returns content: "" for
+    # tool-only turns, then rejects it on replay)
+    is_empty_text <- map_lgl(x@contents, function(c) {
+      S7_inherits(c, ContentText) && !nzchar(c@text)
+    })
+    contents <- x@contents[!is_empty_text]
+    if (length(contents) == 0) {
+      return(NULL)
+    }
+    # Thinking and tool requests come out of content
+    is_thinking <- map_lgl(contents, S7_inherits, ContentThinking)
+    is_tool <- map_lgl(contents, is_tool_request)
+    other <- contents[!is_thinking & !is_tool]
+    content <- as_json(provider, other, ...)
+    tool_calls <- as_json(provider, contents[is_tool], ...)
 
-    list(
-      compact(list(
-        role = "assistant",
-        content = content,
-        tool_calls = tool_calls
-      ))
-    )
+    reasoning_content <- NULL
+    if (provider@preserve_thinking) {
+      thinking_texts <- map_chr(contents[is_thinking], function(c) c@thinking)
+      if (length(thinking_texts) > 0) {
+        reasoning_content <- paste0(thinking_texts, collapse = "")
+      }
+    }
+
+    result <- compact(list(
+      role = "assistant",
+      content = content,
+      tool_calls = tool_calls
+    ))
+    result[[reasoning_content_field(provider)]] <- reasoning_content
+    list(result)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -400,6 +521,36 @@ method(as_json, list(ProviderOpenAICompatible, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderOpenAICompatible, ContentUploaded)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (grepl("^image/", x@mime_type)) {
+    cli::cli_abort(
+      c(
+        "The Chat Completions API can't reference an uploaded image by id.",
+        i = "Send the image inline with {.fn content_image_file} instead."
+      )
+    )
+  }
+  list(type = "file", file = list(file_id = x@uri))
+}
+
+method(as_json, list(ProviderOpenAICompatible, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  list(
+    type = "file",
+    file = list(
+      filename = x@filename,
+      file_data = paste0("data:", x@mime_type, ";base64,", x@data)
+    )
+  )
+}
+
 method(as_json, list(ProviderOpenAICompatible, ContentToolRequest)) <- function(
   provider,
   x,
@@ -423,7 +574,7 @@ method(as_json, list(ProviderOpenAICompatible, ToolDef)) <- function(
     "function" = compact(list(
       name = x@name,
       description = x@description,
-      strict = TRUE,
+      strict = if (provider@strict) TRUE,
       parameters = as_json(provider, x@arguments, ...)
     ))
   )
@@ -435,6 +586,10 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
   x,
   ...
 ) {
+  if (!provider@strict) {
+    return(as_json(super(provider, Provider), x, ...))
+  }
+
   if (x@additional_properties) {
     cli::cli_abort("{.arg .additional_properties} not supported for OpenAI.")
   }
@@ -459,6 +614,28 @@ method(as_json, list(ProviderOpenAICompatible, TypeObject)) <- function(
   )
 }
 
+
+# Models -----------------------------------------------------------------------
+
+method(models_list, ProviderOpenAICompatible) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  created <- as.Date(.POSIXct(map_dbl(json$data, "[[", "created")))
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(
+    id = id,
+    created_at = created,
+    owned_by = owned_by
+  )
+  df <- cbind(df, match_prices(provider@name, df$id))
+  df[order(-xtfrm(df$created_at)), ]
+}
 
 # Batched requests -------------------------------------------------------------
 

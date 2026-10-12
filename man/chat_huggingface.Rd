@@ -12,7 +12,8 @@ chat_huggingface(
   model = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
 }
 \arguments{
@@ -27,7 +28,7 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
 If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
-\item{model}{The model to use for the chat (defaults to "meta-llama/Llama-3.1-8B-Instruct").
+\item{model}{The model to use for the chat (defaults to "Qwen/Qwen3-235B-A22B-Instruct-2507").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
@@ -46,11 +47,16 @@ Note this only affects the \code{chat()} method.}
 
 \item{api_headers}{Named character vector of arbitrary extra headers appended
 to every chat API call.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.}
 }
 \value{
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
+
 \href{https://huggingface.co/}{Hugging Face} hosts a variety of open-source
 and proprietary AI models available via their Inference API.
 To use the Hugging Face API, you must have an Access Token, which you can obtain
@@ -74,22 +80,24 @@ chat$chat("Tell me three jokes about statisticians")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_google_gemini}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_google_gemini]{chat_google_gemini()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

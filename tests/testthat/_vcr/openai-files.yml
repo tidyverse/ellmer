@@ -1,0 +1,349 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/files
+    body:
+      fields:
+        purpose: user_data
+        file:
+          path: apples.pdf
+          type: application/pdf
+          name: ~
+        expires_after[anchor]: created_at
+        expires_after[seconds]: '172800'
+  response:
+    status: 200
+    headers:
+      date: Tue, 06 Oct 2026 10:16:15 GMT
+      content-type: application/json
+      server: cloudflare
+      x-request-id: req_5fff1bbf233b4fd1a1f900b5c846fe27
+      openai-processing-ms: '283'
+      openai-version: '2020-10-01'
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      access-control-allow-origin: '*'
+      x-openai-proxy-wasm: v0.1
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=xGCXy5_RbHfYI4HgDc6zil5LZ9rhsJW6Lvl8vWKfLAY-1791281774.8191698-1.0.1.1-bsgkF5aKYqR7cK05WuSiKWkwKozLNqhHMFrFK5DtkozNsogfoC8ZI1.MG4gB09eQxxkIJLwfNqIdT9_Zo6wmJ64i2U6rAl7k3lqotaJ6ScUw5AluEYesspeKIzl.fE8y;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:15 GMT
+      access-control-expose-headers: CF-Ray
+      content-encoding: br
+      cf-ray: a463e8d49ec81ddf-LHR
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: |
+        {
+          "object": "file",
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
+          "purpose": "user_data",
+          "filename": "apples.pdf",
+          "bytes": 14560,
+          "created_at": 1791281775,
+          "expires_at": 1791454575,
+          "status": "processed",
+          "status_details": null
+        }
+  recorded_at: 2026-10-06 10:16:15
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the title of this document?"}]},{"type":"message","role":"user","content":[{"type":"input_file","file_id":"file-T8vg9LnkAo1Trf2TX2jsRL"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a463e8db2e331ddf-LHR
+      content-encoding: br
+      content-type: application/json
+      date: Tue, 06 Oct 2026 10:16:17 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '1059'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=uzek1Wpin1dgyq7oD01dE6OU84ceEmGYpll9is48dAg-1791281775.8707838-1.0.1.1-AZ0_KBdIiYNi0n2txd841p6pyAfO6RvPOownDVI103fdm12Cu0EeY816rqoaEf7viEZHzlKg_f_3saXfPfpzQSyt9vxjRRJcMFCJ.pvWN3xZobMdQae.c1H8ynuDp4G5;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:17 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '200000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '125071'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 22.478s
+      x-request-id: req_bf26e361335b4cfd98903b301dcb6d1e
+    body:
+      string: |-
+        {
+          "id": "resp_098dac5aace19bdd016ac4ca6ffab087d287bb1d2716c795c8",
+          "object": "response",
+          "created_at": 1791281776,
+          "status": "completed",
+          "access_programs": null,
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1791281776,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
+          "output": [
+            {
+              "id": "msg_098dac5aace19bdd016ac4ca70e6fc87d291af68ad7f1aeb87",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Apples are tasty"
+                }
+              ],
+              "phase": "final_answer",
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
+          "reasoning": {
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 0.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 0.98,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 81,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 8,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 89
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-10-06 10:16:17
+- request:
+    method: GET
+    uri: https://api.openai.com/v1/files
+  response:
+    status: 200
+    headers:
+      date: Tue, 06 Oct 2026 10:16:18 GMT
+      content-type: application/json
+      server: cloudflare
+      x-request-id: req_32d14df4917c4fb5aa34f2ae3ee8045c
+      openai-processing-ms: '46'
+      openai-version: '2020-10-01'
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      access-control-allow-origin: '*'
+      x-openai-proxy-wasm: v0.1
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=iAsC2ep7ShBPiYP2BYx5H916.MvPUk.Jj.hmXPsM.ZQ-1791281777.5087988-1.0.1.1-y90GrAl3wXsnCkImsTiu2AUNeBVSnSCdy8.1A9l5wHYCd3VMkuQ4Nkv6pltD5gUIV0sdKehaBm9R9P5xzKctGc53uJMher5XJL.6h5LhkXvqlDHQBAEE9iklWTCm.v8j;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
+      access-control-expose-headers: CF-Ray
+      content-encoding: br
+      cf-ray: a463e8e56f2d1ddf-LHR
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: |
+        {
+          "object": "list",
+          "data": [
+            {
+              "object": "file",
+              "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
+              "purpose": "user_data",
+              "filename": "apples.pdf",
+              "bytes": 14560,
+              "created_at": 1791281775,
+              "expires_at": 1791454575,
+              "status": "processed",
+              "status_details": null
+            }
+          ],
+          "has_more": false,
+          "first_id": "file-T8vg9LnkAo1Trf2TX2jsRL",
+          "last_id": "file-T8vg9LnkAo1Trf2TX2jsRL"
+        }
+  recorded_at: 2026-10-06 10:16:18
+- request:
+    method: GET
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL
+  response:
+    status: 200
+    headers:
+      date: Tue, 06 Oct 2026 10:16:18 GMT
+      content-type: application/json
+      server: cloudflare
+      x-request-id: req_cdfadb1e12a64eab82ef0bd65305beeb
+      openai-processing-ms: '47'
+      openai-version: '2020-10-01'
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      access-control-allow-origin: '*'
+      x-openai-proxy-wasm: v0.1
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=4UAFDI7LYLTASZgMwO64uiejnVH1rRHNHPZzTYvUsoQ-1791281778.295866-1.0.1.1-dNeu_VfJDdN5eFoFRrFUURflBazf1WFLkVYhDYlBfrWjxDJ_mGvaEJLEioBT0jLDQUdvS49MXXgO4RahmdD_iXxLxPRbc0H1Vvv7Kzdl6Qwr8TSUdDc9F94ronnMSoWt;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
+      access-control-expose-headers: CF-Ray
+      content-encoding: br
+      cf-ray: a463e8ea5f201ddf-LHR
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: |
+        {
+          "object": "file",
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
+          "purpose": "user_data",
+          "filename": "apples.pdf",
+          "bytes": 14560,
+          "created_at": 1791281775,
+          "expires_at": 1791454575,
+          "status": "processed",
+          "status_details": null
+        }
+  recorded_at: 2026-10-06 10:16:18
+- request:
+    method: GET
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL/content
+  response:
+    status: 400
+    headers:
+      date: Tue, 06 Oct 2026 10:16:18 GMT
+      content-type: application/json
+      content-length: '270'
+      server: cloudflare
+      access-control-allow-origin: '*'
+      x-request-id: req_4e7777f3c8ba49c6bd130382746012ac
+      openai-processing-ms: '228'
+      openai-version: '2020-10-01'
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      x-openai-proxy-wasm: v0.1
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=gwQZypdxeBYTrdNTGGn7KMA7CPnGn6xWDDXCKe_Z0vQ-1791281778.5630362-1.0.1.1-V0gP9RyBchtpXSTQh7ZdA_W9_pXgzogT5kUtm_8kF_xhP1v0qg9oS_g4lI9UtD4Q7RbCVuwEbeG5vlR.GwJCafxWA3UidqG8DBxvvb7FRDQrll.OO_CWN2Xb53Rsao7J;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
+      access-control-expose-headers: CF-Ray
+      cf-ray: a463e8ec0bfa1ddf-LHR
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: |
+        {
+          "error": {
+            "message": "Not allowed to download files of purpose: user_data",
+            "type": "invalid_request_error",
+            "param": null,
+            "code": null
+          },
+          "detail": {
+            "message": "Not allowed to download files of purpose: user_data",
+            "code": null
+          }
+        }
+  recorded_at: 2026-10-06 10:16:19
+- request:
+    method: DELETE
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL
+  response:
+    status: 200
+    headers:
+      date: Tue, 06 Oct 2026 10:16:19 GMT
+      content-type: application/json
+      server: cloudflare
+      x-request-id: req_8e429892c4214b52a8ae4f22cb1c92bd
+      openai-processing-ms: '129'
+      openai-version: '2020-10-01'
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      access-control-allow-origin: '*'
+      x-openai-proxy-wasm: v0.1
+      cf-cache-status: DYNAMIC
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      set-cookie: __cf_bm=bUW9AHVwucvUhI9Ve.dUGI0NtxRblG0wJMmCO2M_QzY-1791281779.0755198-1.0.1.1-RaXNHQkl1E8XKjc8.hFJtCrQmbugFtAj5kLxjg6GcOAt0SV01DVf6R3hk1Q_bUuE7JwHVPGPs7Iio6OLOrl0ZbyI8FuZcyU95GbSbSaMNDMVMKH3Ak7WM8EcuN_AaPfA;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:19 GMT
+      access-control-expose-headers: CF-Ray
+      content-encoding: br
+      cf-ray: a463e8ef3e911ddf-LHR
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: |
+        {
+          "object": "file",
+          "deleted": true,
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL"
+        }
+  recorded_at: 2026-10-06 10:16:19
+recorded_with: VCR-vcr/2.1.0

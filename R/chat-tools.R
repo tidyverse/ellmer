@@ -33,8 +33,12 @@ on_load({
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    otel_span = NULL,
+    tool_context = NULL
   ) {
+    tool_context <- tool_context %||% new_tool_context
+
     tool_requests <- extract_tool_requests(turn)
 
     for (request in tool_requests) {
@@ -51,7 +55,11 @@ on_load({
         next
       }
 
-      result <- invoke_tool(request)
+      result <- invoke_tool(
+        request,
+        otel_span = otel_span,
+        tool_context = tool_context
+      )
 
       if (promises::is.promise(result@value)) {
         cli::cli_abort(
@@ -74,12 +82,15 @@ on_load({
   # tasks should be run in parallel or sequentially.
   invoke_tools_async <- coro::generator(function(
     turn,
-    tools,
     echo = "none",
     on_tool_request = function(request) invisible(),
     on_tool_result = function(result) invisible(),
-    yield_request = FALSE
+    yield_request = FALSE,
+    otel_span = NULL,
+    tool_context = NULL
   ) {
+    tool_context <- tool_context %||% new_tool_context
+
     tool_requests <- extract_tool_requests(turn)
 
     invoke_tool_async_wrapper <- coro::async(function(request) {
@@ -94,7 +105,11 @@ on_load({
         return(rejected)
       }
 
-      result <- coro::await(invoke_tool_async(request))
+      result <- coro::await(invoke_tool_async(
+        request,
+        otel_span = otel_span,
+        tool_context = tool_context
+      ))
 
       maybe_echo_tool(result, echo = echo)
       on_tool_result(result)
@@ -139,12 +154,55 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
   } else if (is_tool_result(result)) {
     set_props(result, request = request)
   } else {
-    ContentToolResult(value = result, request = request)
+    ContentToolResult(value = normalize_tool_result(result), request = request)
   }
 }
 
+is_content_list <- function(x) {
+  is.list(x) && all(map_lgl(x, \(el) S7_inherits(el, Content)))
+}
+
+normalize_tool_result <- function(result) {
+  # NULL check must come before is.atomic(): is.atomic(NULL) is TRUE on R < 4.4
+  if (is.null(result) || inherits(result, "json")) {
+    return(result)
+  }
+  if (is.character(result)) {
+    return(paste(result, collapse = "\n"))
+  }
+  if (is.atomic(result)) {
+    return(to_json(result))
+  }
+
+  if (
+    promises::is.promise(result) ||
+      S7_inherits(result, Content) ||
+      is_content_list(result)
+  ) {
+    return(result)
+  }
+
+  lifecycle::deprecate_warn(
+    "0.5.0",
+    I("Automatic conversion of tool results to JSON"),
+    details = c(
+      paste0("The tool returned ", obj_type_friendly(result), ". "),
+      "Tool functions should return a string, a json object, a Content object, or a list of Content objects. ",
+      "Use `jsonlite::toJSON()` to convert complex objects to JSON before returning."
+    )
+  )
+  to_json(result)
+}
+
 # Also need to handle edge cases: https://platform.openai.com/docs/guides/function-calling/edge-cases
-invoke_tool <- function(request) {
+invoke_tool <- function(
+  request,
+  otel_span = NULL,
+  tool_context = new_tool_context
+) {
+  context <- tool_context(request)
+  local_tool_context(context)
+
   if (is.null(request@tool)) {
     return(new_tool_result(request, error = "Unknown tool"))
   }
@@ -155,19 +213,28 @@ invoke_tool <- function(request) {
     return(args)
   }
 
+  tool_span <- local_tool_otel_span(request, parent = otel_span)
+
   tryCatch(
     {
       result <- do.call(request@tool, args)
       new_tool_result(request, result)
     },
     error = function(e) {
+      record_tool_otel_span_error(tool_span, e)
       new_tool_result(request, error = e)
     }
   )
 }
 
 on_load(
-  invoke_tool_async <- coro::async(function(request) {
+  invoke_tool_async <- coro::async(function(
+    request,
+    otel_span = NULL,
+    tool_context = NULL
+  ) {
+    tool_context <- tool_context %||% new_tool_context
+
     if (is.null(request@tool)) {
       return(new_tool_result(request, error = "Unknown tool"))
     }
@@ -178,12 +245,16 @@ on_load(
       return(args)
     }
 
+    tool_span <- local_tool_otel_span(request, parent = otel_span)
+    context <- tool_context(request)
+
     tryCatch(
       {
-        result <- await(do.call(request@tool, args))
-        new_tool_result(request, result)
+        value <- await(with_tool_context(context, do.call(request@tool, args)))
+        new_tool_result(request, value)
       },
       error = function(e) {
+        record_tool_otel_span_error(tool_span, e)
         new_tool_result(request, error = e)
       }
     )

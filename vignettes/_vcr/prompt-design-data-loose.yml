@@ -3,64 +3,75 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
-        and no other commentary.\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  ¾
+        and no other commentary.\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  ¾
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
+        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: 999eec668b468784-DFW
-      content-encoding: gzip
+      cf-ray: a463e367cbae06aa-LHR
+      content-encoding: br
       content-type: application/json
-      date: Wed, 05 Nov 2025 19:58:04 GMT
-      openai-organization: posit-esfrkf
-      openai-processing-ms: '3676'
-      openai-project: proj_IeWhBnzvOO8wbVR5MdxnGXFq
+      date: Tue, 06 Oct 2026 10:12:36 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '3441'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie:
-      - __cf_bm=z9z66Rd56OPA18a2Ssy3K8qajtKjNabxaCkEo_1Prig-1762372684-1.0.1.1-szpsJ3NuJhUZlA9h.3M9c1spIgB2rPUkETQpX6A1GFH99h0wpisIk2uteIVpd829VPqYpEAQO1aMDsT.pL6o5u5zU1tLirpgE8NfP4Tb6qc;
-        path=/; expires=Wed, 05-Nov-25 20:28:04 GMT; domain=.api.openai.com; HttpOnly;
-        Secure; SameSite=None
-      - _cfuvid=A9Xx80MAr9h8QwlDwYFde9C.gZM3tRAE17FaZ05WaqE-1762372684463-0.0.1.1-604800000;
-        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      set-cookie: __cf_bm=5SeO4cUpmW326cs2kHmkBlnvAPrJWdcaBVYY5TXK9OA-1791281552.60697-1.0.1.1-Fq1XfKVSHPJ.kiqb_8zZZo.GuA9EVROxWLBz.BiicN4b35ruk8yhiwBOdHWseLLV9MLP7tGaCekhOfcWyNReGsr2YR1yfvjYZdNWhKd86I0XuDQsd0_Vuii9lUoOFuSB;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-envoy-upstream-service-time: '3682'
-      x-ratelimit-limit-requests: '10000'
-      x-ratelimit-limit-tokens: '30000000'
-      x-ratelimit-remaining-requests: '9999'
-      x-ratelimit-remaining-tokens: '29999832'
-      x-ratelimit-reset-requests: 6ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_7c3cc4797b6c4eddb2b69bb1809fe9a4
+      x-ratelimit-limit-requests: '500'
+      x-ratelimit-limit-tokens: '500000'
+      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-tokens: '499698'
+      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-tokens: 36ms
+      x-request-id: req_593b7513d02f4ae1ba5a836d48105bf3
     body:
       string: |-
         {
-          "id": "resp_03c1add1fb8a26bc01690bac48c8e4819396bdbc2dca36e970",
+          "id": "resp_07826829bd0673a5016ac4c990bd5087d2b5ee231b7c7f8511",
           "object": "response",
-          "created_at": 1762372680,
+          "created_at": 1791281552,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
+          "completed_at": 1791281556,
           "error": null,
+          "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.6-terra",
+          "moderation": null,
           "output": [
             {
-              "id": "msg_03c1add1fb8a26bc01690bac4972708193b66849647fe94b82",
+              "id": "rs_07826829bd0673a5016ac4c991460487d2bc1b71381fc67e1b",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqxMmUOxcHNllx0DMpAD6JIq8CA-hXUX73ciSfaUshyRpj9HhQisCimUM7mCJ-RWpubJjlrjV5QcMdb8d81m0_pTxMi45v3bO64VhfcwXv9aqnMBB1k5dszNqa19Qp-VEV65goTPP3LrTaUe-3cXrsCOPO7RouV_UYqrFiUTQ4i6O5B4JMLBMBc1Z9eTIPO0KAOHGifk8zKKQz7XcZde7NhUPHQuX_ZC6CPKHQWBTMa59Y_N4v1ve8xDCBI8iDj57oxNtwc3Hh1Fj5BQPVHTmgspKzp4LtF5anBlFn-mM3lIEnOpomLj6SMQ6O3CcLfg17uuZ_fF2zD3GCkVGREaktiE2x3kVLW9P7uk2j1BQanOsOLJi3P7Nbfb6-eopYVYTY3vpEANG5QR8CXoceamdACF4yDqSMY5p24ZqrJvjzuXj330X3dP3UUo2Xgl8_lEDM7pROi-1MlbazH3Dpue8mmq2YeBawMmrIl9q1xN_MW2c_lXf851NEi2VDPbYjUniO5whDdLCQsO0fsbqMNWrjy_-DtqXHWf2uWM2UCnyAGFXmKBsc3l1fbDT31Fl-Ps-Dxatr-gwseX2DvAW1gDYfDxsZSw-oOHkkZQxC4HEobjUdEqQL7xE8apH1mxNMoToZQLmpApKOFpddF0YDE-huS2fzuXTyoSbU0vD5ErJOUeuEXXp34NFP74ZuWhjIWSQBRo8hHTGmDzUKK8dwW7b8vwmdJLawnPAdaRRL1EtUxpv8X40BGPt0B5QOFVlAA135-mTcPtcdWB-Jl71i_uOQ1JQsRfvT-OaxxWcRpKcWsqX-_yO6xHvvNNf7NJDrd7D3pAtwgy4RYHYL16jfTM4aU8YXGIjTzn4KLBYJLHrnLYsQ0mu0DlEMLoAU_uIiG3SrwqK8P6cFQyKsvSjepIP36aDE1QqS4u2Ew-hKf37jgTQO2T9Nc2AbXEiCQGVJKBev5hSkSGUVF1Q8xj0FASk1aRWb4gou7MEEzXtmsflzW3kVeP3LjHToRupLcJRpYjscJTjoB_B3MURve1VBtuqRe3x2b12b62SOaec5L0cjhBZQVMAhRBQOsDpdnNkxIV8eGZuwTgvuNvgx154TuGUCcezk2JEH_PJCbOYy43aIwbCAB3z4YaLwVO0qy4Czggd3kr0yimpWWkJFUXRem_AgZzNNWYmoj6NO175qrNJEAyHnGH0p_4Q5Rm1eSZ7HfOwX75eWHjvjhccWAnevu8u2XuCjEuXx4g41balXsw1nwJyywYMfI8RVJn6vBUiXUmyncmV_hjYuC8uWGh3yGOiPzIGmxj7QBPaCjja3kP5zcKTtV-9qEZe-b_K-ua8hR8_Xq60ZgMdKowgAsY5F0sjBo1xgcw==",
+              "summary": []
+            },
+            {
+              "id": "msg_07826829bd0673a5016ac4c991ab7887d2998269a2c26d50b6",
               "type": "message",
               "status": "completed",
               "content": [
@@ -68,18 +79,22 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "```json\n[\n  {\n    \"name\": \"dark brown sugar\",\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 150,\n    \"metric_unit\": \"g\"\n  },\n  {\n    \"name\": \"eggs\",\n    \"quantity\": 2,\n    \"unit\": \"large\"\n  },\n  {\n    \"name\": \"sour cream\",\n    \"quantity\": 0.75,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 165,\n    \"metric_unit\": \"g\"\n  },\n  {\n    \"name\": \"unsalted butter\",\n    \"quantity\": 0.5,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 113,\n    \"metric_unit\": \"g\",\n    \"note\": \"melted\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"kosher salt\",\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"neutral oil\",\n    \"quantity\": 0.333,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 80,\n    \"metric_unit\": \"ml\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 1.5,\n    \"unit\": \"cup\",\n    \"metric_quantity\": 190,\n    \"metric_unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 1.5,\n    \"unit\": \"teaspoon\"\n  }\n]\n```"
+                  "text": "[\n  {\n    \"ingredient\": \"dark brown sugar\",\n    \"amount\": \"3/4\",\n    \"unit\": \"cup\",\n    \"weight\": {\n      \"amount\": 150,\n      \"unit\": \"g\"\n    }\n  },\n  {\n    \"ingredient\": \"eggs\",\n    \"amount\": 2,\n    \"unit\": \"large\"\n  },\n  {\n    \"ingredient\": \"sour cream\",\n    \"amount\": \"3/4\",\n    \"unit\": \"cup\",\n    \"weight\": {\n      \"amount\": 165,\n      \"unit\": \"g\"\n    }\n  },\n  {\n    \"ingredient\": \"unsalted butter\",\n    \"amount\": \"1/2\",\n    \"unit\": \"cup\",\n    \"weight\": {\n      \"amount\": 113,\n      \"unit\": \"g\"\n    },\n    \"preparation\": \"melted\"\n  },\n  {\n    \"ingredient\": \"vanilla extract\",\n    \"amount\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"ingredient\": \"kosher salt\",\n    \"amount\": \"3/4\",\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"ingredient\": \"neutral oil\",\n    \"amount\": \"1/3\",\n    \"unit\": \"cup\",\n    \"volume\": {\n      \"amount\": 80,\n      \"unit\": \"ml\"\n    }\n  },\n  {\n    \"ingredient\": \"all-purpose flour\",\n    \"amount\": \"1 1/2\",\n    \"unit\": \"cups\",\n    \"weight\": {\n      \"amount\": 190,\n      \"unit\": \"g\"\n    }\n  },\n  {\n    \"ingredient\": \"sugar\",\n    \"weight\": {\n      \"amount\": 150,\n      \"unit\": \"g\"\n    },\n    \"additional_amount\": {\n      \"amount\": \"1 1/2\",\n      \"unit\": \"teaspoons\"\n    }\n  }\n]"
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
           "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": null,
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "effort": null,
+            "context": "all_turns",
+            "effort": "medium",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -93,23 +108,42 @@ http_interactions:
             "verbosity": "medium"
           },
           "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 149,
+            "input_tokens": 148,
             "input_tokens_details": {
+              "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 382,
+            "output_tokens": 445,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 29
             },
-            "total_tokens": 531
+            "total_tokens": 593
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2025-11-05 19:58:04
-recorded_with: VCR-vcr/2.0.0
+  recorded_at: 2026-10-06 10:12:36
+recorded_with: VCR-vcr/2.1.0

@@ -13,9 +13,9 @@ contents_html(content, ...)
 contents_markdown(content, ...)
 }
 \arguments{
-\item{content}{The \link{Turn} or \link{Content} object to be converted into text.
-\code{contents_markdown()} also accepts \link{Chat} instances to turn the entire
-conversation history into markdown text.}
+\item{content}{The \link{Turn}, \link{Round}, or \link{Content} object to be converted into
+text. \code{contents_markdown()} also accepts \link{Chat} instances to turn the
+entire conversation history into markdown text.}
 
 \item{...}{Additional arguments passed to methods.}
 }
@@ -34,7 +34,7 @@ objects in the output.
 markdown and does not convert it) plus markdown representations of images
 and other content types.
 \item \code{contents_html()} returns the text content, converted from markdown to
-HTML with \code{\link[commonmark:commonmark]{commonmark::markdown_html()}}, plus HTML representations of
+HTML with \code{\link[commonmark:markdown_html]{commonmark::markdown_html()}}, plus HTML representations of
 images and other content types.
 }
 

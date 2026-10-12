@@ -5,6 +5,8 @@ NULL
 #' Chat with a model hosted by vLLM
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [vLLM](https://docs.vllm.ai/en/latest/) is an open source library that
 #' provides an efficient and convenient LLMs model server. You can use
 #' `chat_vllm()` to connect to endpoints powered by vLLM.
@@ -12,6 +14,7 @@ NULL
 #' Uses OpenAI compatible API via `chat_openai_compatible()`.
 #'
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`
@@ -32,7 +35,8 @@ chat_vllm <- function(
   api_key = NULL,
   credentials = NULL,
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   check_string(base_url)
 
@@ -59,13 +63,17 @@ chat_vllm <- function(
   provider <- ProviderVllm(
     name = "VLLM",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 chat_vllm_test <- function(..., echo = "none") {
@@ -83,18 +91,6 @@ ProviderVllm <- new_class(
   package = "ellmer",
 )
 
-# Just like OpenAI but no strict
-method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x, ...) {
-  list(
-    type = "function",
-    "function" = compact(list(
-      name = x@name,
-      description = x@description,
-      parameters = as_json(provider, x@arguments, ...)
-    ))
-  )
-}
-
 vllm_key <- function() {
   key_get("VLLM_API_KEY")
 }
@@ -109,16 +105,22 @@ models_vllm <- function(base_url, api_key = NULL, credentials = NULL) {
     api_key = api_key
   )
 
-  req <- request(base_url)
-  req <- req_auth_bearer_token(req, credentials())
+  provider <- ProviderVllm(
+    name = "VLLM",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
+method(models_list, ProviderVllm) <- function(provider) {
+  req <- base_request(provider)
   req <- req_url_path_append(req, "/v1/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
   data.frame(
     id = map_chr(json$data, "[[", "id")
-    # Not accurate?
-    # created = .POSIXct(map_dbl(json$data, "[[", "created")),
-    # owned_by = map_chr(json$data, "[[", "owned_by")
   )
 }

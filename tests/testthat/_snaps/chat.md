@@ -14,14 +14,100 @@
       Error in `chat$chat()`:
       ! `...` can only accept a single prompt.
 
+# streaming structured output rejects unsupported providers and types
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
+      collect_stream(chat, "Extract John, age 15", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-3-haiku-20240307".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = nested_additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with AWS/Bedrock model "us.anthropic.claude-haiku-4-5-20251001-v1:0".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-3-haiku-20240307")
+      collect_stream(chat, "Extract John, age 15", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-3-haiku-20240307".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      chat <- chat_anthropic_test(model = "claude-sonnet-5")
+      collect_stream(chat, "Extract John", type = nested_additional_props, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with Anthropic model "claude-sonnet-5".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
+---
+
+    Code
+      collect_stream(bedrock_chat, "Extract John", type = person, async = async)
+    Condition
+      Error:
+      ! Can't stream structured output with AWS/Bedrock model "us.anthropic.claude-haiku-4-5-20251001-v1:0".
+      i Streaming requires native structured output, but this provider and model fall back to tool calling.
+      i Use `$chat_structured()` instead.
+
 # has a basic print method
 
     Code
       chat
     Output
-      <Chat OpenAI/gpt-4.1-nano turns=3 input=10+5 output=5>
+      <Chat OpenAI/gpt-5.4-nano turns=3 input=10+5 output=5>
       -- system ----------------------------------------------------------------------
-      Be terse.
+      Be terse. Respond with only the answer.
       -- user ------------------------------------------------------------------------
       What's 1 + 1?
       What's 1 + 2?
@@ -29,6 +115,32 @@
       2
       
       3
+
+# print method shows interrupted for partial turns
+
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o turns=4 input=15000 output=500 cost=$0.20>
+      -- user ------------------------------------------------------------------------
+      Input 1
+      -- assistant [input=15000 output=500 cost=$0.20] -------------------------------
+      Output 1
+      -- user ------------------------------------------------------------------------
+      Input 2
+      -- assistant [interrupted] -----------------------------------------------------
+      Partial output...
+
+# print method shows custom reason for partial turns
+
+    Code
+      chat
+    Output
+      <Chat OpenAI/gpt-4o turns=2 input=0 output=0 cost=$0.00>
+      -- user ------------------------------------------------------------------------
+      Input 1
+      -- assistant [cancelled] -------------------------------------------------------
+      Partial output...
 
 # print method shows cumulative tokens & cost
 
@@ -55,4 +167,20 @@
         <dbl>  <dbl>        <dbl> <ellmr_dl> <chr>        
       1 15000    500            0 $0.20      Text[Input 1]
       2 30000   1000            0 $0.10      Text[Input 2]
+
+# stream() rejects non-controller object
+
+    Code
+      coro::collect(chat$stream("hi", controller = TRUE))
+    Condition
+      Error in `chat$stream()`:
+      ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
+
+# stream_async() rejects non-controller object
+
+    Code
+      sync(coro::async_collect(chat$stream_async("hi", controller = list())))
+    Condition
+      Error in `chat$stream_async()`:
+      ! `controller` must be an <ellmer_stream_controller> object created by `stream_controller()`.
 

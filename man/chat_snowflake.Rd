@@ -26,7 +26,7 @@ e.g. \code{"testorg-test_account"}. Defaults to the value of the
 \code{\link[httr2:req_headers]{httr2::req_headers()}}, a function that returns them when called, or
 \code{NULL}, the default, to use ambient credentials.}
 
-\item{model}{The model to use for the chat (defaults to "claude-3-7-sonnet").
+\item{model}{The model to use for the chat (defaults to "claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}
@@ -52,6 +52,8 @@ to every chat API call.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 The Snowflake provider allows you to interact with LLM models available
 through the \href{https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api}{Cortex LLM REST API}.
 \subsection{Authentication}{

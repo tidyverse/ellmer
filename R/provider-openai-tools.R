@@ -5,7 +5,7 @@
 #' behavior varies by model: non-reasoning models perform simple searches, while
 #' reasoning models can perform agentic, iterative searches.
 #'
-#' Learn more at <https://platform.openai.com/docs/guides/tools-web-search>
+#' Learn more at <https://developers.openai.com/api/docs/guides/tools-web-search>
 #'
 #' @param allowed_domains Character vector. Restrict searches to specific domains
 #'   (e.g., `c("nytimes.com", "bbc.com")`). Maximum 20 domains. URLs will be
@@ -45,5 +45,14 @@ openai_tool_web_search <- function(
     user_location = user_location,
     external_web_access = external_web_access
   ))
-  ToolBuiltIn("web_search", json)
+  ToolBuiltIn(
+    name = "web_search",
+    description = "Search the web for up-to-date information.",
+    annotations = tool_annotations(
+      title = "Web search",
+      read_only_hint = TRUE,
+      open_world_hint = TRUE
+    ),
+    json = json
+  )
 }

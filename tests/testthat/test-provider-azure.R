@@ -62,11 +62,10 @@ test_that("Azure request headers are generated correctly", {
   p <- ProviderAzureOpenAI(
     name = "Azure",
     base_url = base_url,
-    model = deployment_id,
     api_version = "2024-06-01",
     credentials = \() "key"
   )
-  req <- chat_request(p, FALSE, list(turn))
+  req <- chat_request(p, test_model(deployment_id), FALSE, list(turn))
   expect_snapshot(str(req_get_headers(req, "reveal")))
 })
 

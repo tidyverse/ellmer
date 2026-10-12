@@ -1,0 +1,2 @@
+# Sent verbatim in vcr cassette bodies, so must not be CRLF-converted on Windows
+tests/testthat/penguin_race.csv text eol=lf

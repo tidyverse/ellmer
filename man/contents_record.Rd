@@ -20,7 +20,8 @@ when the recorded objects include classes that extend \link{Turn} or
 \link{Content} but are not from the \pkg{ellmer} package itself.}
 }
 \description{
-These generic functions can be use to convert \link{Turn}/\link{Content} objects
+These generic functions can be use to convert \link{Turn}, \link{Content}, and
+\link{Source} objects
 into easily serializable representations (i.e. lists and atomic vectors).
 \itemize{
 \item \code{contents_record()} accepts a \link{Turn} or \link{Content} and return a simple list.

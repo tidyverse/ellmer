@@ -26,7 +26,7 @@ permission before accessing their current working directory. This happens
 directly in the tool function and is appropriate when you write the tool
 definition and know exactly how it will be called.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai(model = "gpt-4.1-nano")
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{chat <- chat_openai(model = "gpt-5-nano")
 
 list_files <- function() \{
   allow_read <- utils::askYesNo(
@@ -70,7 +70,7 @@ for consent before running \emph{any}  tool.
   "List files in the user's current directory"
 )
 
-chat <- chat_openai(model = "gpt-4.1-nano")
+chat <- chat_openai(model = "gpt-5-nano")
 chat$register_tool(packaged_list_files_tool)
 
 always_allowed <- c()
@@ -99,8 +99,8 @@ chat$chat("And again now?")
 }\if{html}{\out{</div>}}
 }
 \seealso{
-Other tool calling helpers: 
-\code{\link{tool}()},
-\code{\link{tool_annotations}()}
+Other tool calling helpers:
+\code{\link[=tool]{tool()}},
+\code{\link[=tool_annotations]{tool_annotations()}}
 }
 \concept{tool calling helpers}

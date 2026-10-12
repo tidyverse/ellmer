@@ -1,0 +1,237 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"What''s
+        the current date?"}]}],"systemInstruction":{"parts":{"text":""}},"model":"models/gemini-3.7-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '105'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:50 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=38
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 8,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 8
+            }
+          ]
+        }
+  recorded_at: 2026-09-03 05:36:50
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"What''s
+        the current date?"}]}],"systemInstruction":{"parts":{"text":"Answer succinctly"}},"model":"models/gemini-3.7-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '106'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:50 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=30
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 10,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 10
+            }
+          ]
+        }
+  recorded_at: 2026-09-03 05:36:50
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    body:
+      string: '{"contents":[{"role":"user","parts":[{"text":"What''s the current date?"}]}],"systemInstruction":{"parts":{"text":"Answer
+        succinctly"}},"generationConfig":{"temperature":0,"seed":1014}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '1283'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:52 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=1667
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-gemini-service-tier: standard
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Today is May 14, 2024.",
+                    "thoughtSignature": "EvEGCu4GARFNMg+pnPaYTij42xUHQ6aBKFC4XHBFvOijD+6yGBagwNoDDCggWvZfoJ6awxvMrHEpK4F2x7dsZ0jT0BCWsCAZSpmOYaRg1ZQb6z8kQQVDIQaT6yvW8YN9MVuamrAA/Kn0mNygNsyv8TUg3V7A4N5OH2H+o0lBgM7s0lIMTBEZTfI7s6CTAiZ6R+XurArzAvkGF1/6Z04UWz/bJTknwM5Ov7uV41cTLLVU+IPjnXMAmxV9b+J5c6HWZ9je0pdT/rw9IItYUQ3h/iNQ3ePETnVWl4MSYDt0Sj7kfj/2opMRsnNqnZwC/tk+rQ6THzQ0qrCntUdHZtnwdcpRjOi0sdfRWB2IvV+pjMsrNPDPzuutGPJMXzhH7amE4HHCC19BBfSRgDpGt3i3payJj5QUJQzNwo7ihLL4S9zstIEza7pKRCzZsnnq5N1tnmvOeaOimZxqVHDfdUlVc21Y8kNfB3DC5/BObGevNBkkYKu8qiSiMO/8w14tCNtND/IajTYc9LonfehvzWTaQHixYi/8SIFFILETNgHjOYwK3Jtw7Avq+0dzq2O4/y5ol7p1TKdX7dEo2lH40zgOSXbfKkAndvPQYYNzV3bZeiGajEnYNvGbsmQ0MVdrkHGYINNzdUFumIF0+1xAy7s6U12nEF993n6ju7pUaB5x5buukv8PUSsPdMy70yc26HTVWWAHYGmVzkAdwUROXxHsxKjd/2vLvXTyI7QtqKW09AVM7aBWMx5gYzVOkHAQ+/blcU7xOC/TbESww5xEVmOJryTQpDyLsIAz9zzkDwsiaa6VYE/FRmmiyfLRiHdAlNgicc9JvqKy3nDgEv/9LNBponF4GLvYG2Kc2GrDOK7nnyxramSSvDwvr7TVCHFez2dGTUZbcaLVj3H9zHC7ZVzZRsVT4UMJVhUjJ2BHB+qbSgqbZ1MPrMlVySpe4uLRjzrXu6WFi/QNg4W9on7EPNfimywR5CYA740Zvgq8CTCr6i9lY00XAM8WaeQ3MmgPkVN/cZt7b65126aJ+PL0VDLK/EUDSnZHVV9NYOnh5x6pUq4kQGEfkyhcTjihKSrjy4tWP0eTpdqV0VcBBuVfuRwoTZQmjvHyWWBx8ymJy1LYzt58S4eZlKOhvLKE60RJ+BT+GDeR61XSm8ujlB43xG8C1wqF+BE="
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 10,
+            "candidatesTokenCount": 13,
+            "totalTokenCount": 204,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 10
+              }
+            ],
+            "thoughtsTokenCount": 181,
+            "serviceTier": "standard"
+          },
+          "modelVersion": "gemini-3.7-flash",
+          "responseId": "cgeZapTXI6Wu28oPtaWruQo"
+        }
+  recorded_at: 2026-09-03 05:36:52
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"And
+        tomorrow?"}]}],"systemInstruction":{"parts":{"text":""}},"model":"models/gemini-3.7-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '105'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:52 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=37
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 4,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 4
+            }
+          ]
+        }
+  recorded_at: 2026-09-03 05:36:52
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"And
+        tomorrow?"}]}],"systemInstruction":{"parts":{"text":""}},"model":"models/gemini-3.7-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '105'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:52 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=40
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 4,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 4
+            }
+          ]
+        }
+  recorded_at: 2026-09-03 05:36:52
+- request:
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:countTokens
+    body:
+      string: '{"generateContentRequest":{"contents":[{"role":"user","parts":[{"text":"Apples
+        are tasty. By Hadley Wickham."}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"response_mime_type":"application/json","response_schema":{"type":"object","properties":{"title":{"type":"string","description":"Content
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"]}},"model":"models/gemini-3.7-flash"}}'
+  response:
+    status: 200
+    headers:
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding: gzip
+      content-length: '106'
+      content-type: application/json; charset=UTF-8
+      date: Thu, 03 Sep 2026 05:36:53 GMT
+      server: scaffolding on HTTPServer2
+      server-timing: gfet4t7; dur=49
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options: nosniff
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      string: |
+        {
+          "totalTokens": 11,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 11
+            }
+          ]
+        }
+  recorded_at: 2026-09-03 05:36:53
+recorded_with: VCR-vcr/2.1.0

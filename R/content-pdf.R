@@ -8,6 +8,11 @@
 #' Not all providers support PDF input, so check the documentation for the
 #' provider you are using.
 #'
+#' Both functions embed the PDF's contents in every request, so for a large
+#' PDF, or one you'll refer to across several turns, prefer
+#' `chat$file_upload()`. It uploads the file once and later turns reference
+#' it by id.
+#'
 #' @param path,url Path or URL to a PDF file.
 #' @return A `ContentPDF` object
 #' @export
@@ -31,14 +36,21 @@ content_pdf_url <- function(url) {
     parsed <- parse_data_url(url)
     ContentPDF(parsed$content_type, parsed$base64, unique_pdf_name())
   } else {
-    # TODO: need seperate ContentPDFRemote type so we can use file upload
-    # apis where they exist. Might need some kind of mutable state so can
-    # record point to uploaded file.
-    path <- tempfile(pattern = basename(url), fileext = ".pdf")
+    path <- tempfile(fileext = ".pdf")
     on.exit(unlink(path))
+    httr2::req_perform(httr2::request(url), path = path)
 
-    resp <- httr2::req_perform(httr2::request(url), path = path)
-    content_pdf_file(path)
+    filename <- basename(sub("[?#].*$", "", url))
+    if (!grepl("\\.pdf$", filename, ignore.case = TRUE)) {
+      filename <- unique_pdf_name()
+    }
+
+    ContentPDF(
+      type = "application/pdf",
+      data = base64_enc(path = path),
+      filename = filename,
+      url = url
+    )
   }
 }
 

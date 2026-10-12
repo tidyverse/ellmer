@@ -1,6 +1,7 @@
 .onLoad <- function(libname, pkgname) {
   run_on_load()
   S7::methods_register()
+  otel_cache_tracer()
 }
 
 # Work around S7 bug

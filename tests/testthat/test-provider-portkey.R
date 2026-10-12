@@ -27,7 +27,9 @@ test_that("can extract data", {
 
 test_that("can use images", {
   # Needs mini to get shape correct
-  chat_fun <- \(...) chat_portkey_test(model = "gpt-4.1-mini", ...)
+  chat_fun <- \(...) {
+    chat_portkey_test(model = "@open-ai-virtual-7f0dcd/gpt-4.1-mini", ...)
+  }
 
   test_images_inline(chat_fun)
   test_images_remote(chat_fun)
@@ -37,5 +39,16 @@ test_that("can use images", {
 
 test_that("virtual_key is deprecated", {
   expect_snapshot(chat <- chat_portkey(model = "def", virtual_key = "abc"))
-  expect_equal(chat$get_provider()@model, "@abc/def")
+  expect_equal(chat$get_model(), "@abc/def")
+})
+
+test_that("model without @ prefix works without virtual_key (#872)", {
+  withr::local_envvar(PORTKEY_VIRTUAL_KEY = NA)
+  chat <- chat_portkey(
+    model = "arn:aws:bedrock:us-east-1:123456:model/my-model"
+  )
+  expect_equal(
+    chat$get_model(),
+    "arn:aws:bedrock:us-east-1:123456:model/my-model"
+  )
 })

@@ -4,6 +4,8 @@ NULL
 #' Chat with a model hosted on DeepSeek
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' Sign up at <https://platform.deepseek.com>.
 #'
 #' Built on top of [chat_openai_compatible()].
@@ -19,7 +21,7 @@ NULL
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("DEEPSEEK_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default uses DeepSeek.
-#' @param model `r param_model("deepseek-chat")`
+#' @param model `r param_model("deepseek-v4-flash")`
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -37,7 +39,7 @@ chat_deepseek <- function(
   echo = NULL,
   api_headers = character()
 ) {
-  model <- set_default(model, "deepseek-chat")
+  model <- set_default(model, "deepseek-v4-flash")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -52,13 +54,17 @@ chat_deepseek <- function(
   provider <- ProviderDeepSeek(
     name = "DeepSeek",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderDeepSeek <- new_class(
@@ -77,8 +83,7 @@ method(chat_params, ProviderDeepSeek) <- function(provider, params) {
       stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
-      logprobs = "log_probs",
-      top_logprobs = "top_k"
+      logprobs = "log_probs"
     )
   )
 }
@@ -116,9 +121,10 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
     text <- detect(x@contents, S7_inherits, ContentText)
     tools <- keep(x@contents, is_tool_request)
 
+    content <- if (!is.null(text)) as_json(provider, text, ...)
     list(compact(list(
       role = "assistant",
-      content = as_json(provider, text, ...),
+      content = content,
       tool_calls = as_json(provider, tools, ...)
     )))
   } else {
@@ -127,3 +133,40 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
 }
 
 deepseek_key <- function() key_get("DEEPSEEK_API_KEY")
+
+#' @export
+#' @rdname chat_deepseek
+models_deepseek <- function(
+  base_url = "https://api.deepseek.com",
+  api_key = NULL,
+  credentials = NULL
+) {
+  credentials <- as_credentials(
+    "models_deepseek",
+    \() deepseek_key(),
+    credentials = credentials,
+    api_key = api_key
+  )
+
+  provider <- ProviderDeepSeek(
+    name = "DeepSeek",
+    base_url = base_url,
+    credentials = credentials
+  )
+
+  models_list(provider)
+}
+
+method(models_list, ProviderDeepSeek) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+
+  id <- map_chr(json$data, "[[", "id")
+  owned_by <- map_chr(json$data, "[[", "owned_by")
+
+  df <- data.frame(id = id, owned_by = owned_by)
+  cbind(df, match_prices(provider@name, df$id))
+}

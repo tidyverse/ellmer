@@ -76,6 +76,7 @@ parallel_chat <- function(
   my_parallel_turns <- function(conversations) {
     parallel_turns(
       provider = chat$get_provider(),
+      model = chat$get_model_object(),
       conversations = conversations,
       tools = chat$get_tools(),
       max_active = max_active,
@@ -102,9 +103,14 @@ parallel_chat <- function(
       assistant_turns[is_ok]
     )
 
-    tool_turns <- map(assistant_turns[is_ok], function(turn) {
-      turn <- match_tools(turn, tools = chat$get_tools())
-      tool_results <- coro::collect(invoke_tools(turn))
+    ok_idx <- which(is_ok)
+    tool_turns <- map(ok_idx, function(i) {
+      turn <- match_tools(assistant_turns[[i]], tools = chat$get_tools())
+      turns <- conversations[[i]]
+      tool_results <- coro::collect(invoke_tools(
+        turn,
+        tool_context = \(request) new_tool_context(request, turns)
+      ))
       tool_results_as_turn(tool_results)
     })
     needs_iter <- !map_lgl(tool_turns, is.null)
@@ -125,7 +131,7 @@ parallel_chat <- function(
   map(seq_along(conversations), function(i) {
     if (is_ok[[i]]) {
       turns <- conversations[[i]]
-      log_turns(chat$get_provider(), turns)
+      log_turns(chat$get_provider(), chat$get_model_object(), turns)
       chat$clone()$set_turns(turns)
     } else {
       assistant_turns[[i]]
@@ -198,6 +204,7 @@ parallel_chat_structured <- function(
 
   turns <- parallel_turns(
     provider = provider,
+    model = chat$get_model_object(),
     conversations = conversations,
     tools = chat$get_tools(),
     type = wrap_type_if_needed(type, needs_wrapper),
@@ -205,7 +212,7 @@ parallel_chat_structured <- function(
     rpm = rpm,
     on_error = on_error
   )
-  log_turns(provider, turns)
+  log_turns(provider, chat$get_model_object(), turns)
 
   multi_convert(
     provider,
@@ -304,6 +311,7 @@ turn_failed <- function(turn) {
 
 parallel_turns <- function(
   provider,
+  model,
   conversations,
   tools,
   type = NULL,
@@ -314,12 +322,14 @@ parallel_turns <- function(
   reqs <- map(conversations, function(turns) {
     chat_request(
       provider = provider,
+      model = model,
       turns = turns,
       type = type,
       tools = tools,
       stream = FALSE
     )
   })
+  reqs <- map(reqs, ellmer_req_connect_viewer)
   reqs <- map(reqs, function(req) {
     req_throttle(req, capacity = rpm, fill_time_s = 60)
   })
@@ -350,7 +360,7 @@ parallel_turns <- function(
       resp
     } else {
       json <- resp_body_json(resp)
-      turn <- value_turn(provider, json, has_type = !is.null(type))
+      turn <- value_turn(provider, model, json, has_type = !is.null(type))
       turn@duration <- resp_timing(resp)[["total"]] %||% NA_real_
       turn
     }

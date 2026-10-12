@@ -1,6 +1,8 @@
 #' Chat with a model hosted on Hugging Face Serverless Inference API
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' [Hugging Face](https://huggingface.co/) hosts a variety of open-source
 #' and proprietary AI models available via their Inference API.
 #' To use the Hugging Face API, you must have an Access Token, which you can obtain
@@ -17,11 +19,12 @@
 #'   carefully choose the model.
 #'
 #' @family chatbots
-#' @param model `r param_model("meta-llama/Llama-3.1-8B-Instruct")`
+#' @param model `r param_model("Qwen/Qwen3-235B-A22B-Instruct-2507")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("HUGGINGFACE_API_KEY")`
 #' @export
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
 #' @examples
 #' \dontrun{
@@ -36,9 +39,10 @@ chat_huggingface <- function(
   model = NULL,
   api_args = list(),
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
-  model <- set_default(model, "meta-llama/Llama-3.1-8B-Instruct")
+  model <- set_default(model, "Qwen/Qwen3-235B-A22B-Instruct-2507")
   echo <- check_echo(echo)
   params <- params %||% params()
 
@@ -55,13 +59,17 @@ chat_huggingface <- function(
   provider <- ProviderHuggingFace(
     name = "HuggingFace",
     base_url = base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderHuggingFace <- new_class(
@@ -75,7 +83,7 @@ chat_huggingface_test <- function(
   model = NULL,
   echo = "none"
 ) {
-  model <- model %||% "meta-llama/Llama-3.1-8B-Instruct"
+  model <- model %||% "Qwen/Qwen3-235B-A22B-Instruct-2507"
   chat_huggingface(model = model, ..., echo = echo)
 }
 

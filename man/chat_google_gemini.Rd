@@ -20,8 +20,8 @@ chat_google_gemini(
 )
 
 chat_google_vertex(
-  location,
-  project_id,
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
   system_prompt = NULL,
   model = NULL,
   params = NULL,
@@ -36,20 +36,23 @@ models_google_gemini(
   credentials = NULL
 )
 
-models_google_vertex(location, project_id, credentials = NULL)
+models_google_vertex(
+  location = Sys.getenv("GOOGLE_CLOUD_LOCATION"),
+  project_id = Sys.getenv("GOOGLE_CLOUD_PROJECT"),
+  credentials = NULL
+)
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
 
-\item{base_url}{The base URL to the endpoint; the default is OpenAI's
-public API.}
+\item{base_url}{The base URL to the API endpoint.}
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
 \item{credentials}{A function that returns a list of authentication headers
 or \code{NULL}, the default, to use ambient credentials. See above for details.}
 
-\item{model}{The model to use for the chat (defaults to "gemini-2.5-flash").
+\item{model}{The model to use for the chat (defaults to "gemini-3.7-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_google_gemini()} to see all options.}
 
@@ -81,6 +84,8 @@ Note this only affects the \code{chat()} method.}
 A \link{Chat} object.
 }
 \description{
+\ifelse{html}{\figure{support-official.svg}{options: alt='[Official supported provider]'}}{\strong{[Official supported provider]}}
+
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.
@@ -90,8 +95,8 @@ Use \code{\link[=google_upload]{google_upload()}} to upload files (PDFs, images,
 
 These functions try a number of authentication strategies, in this order:
 \itemize{
-\item An API key set in the \code{GOOGLE_API_KEY} env var, or,
-for \code{chat_google_gemini()} only, \code{GEMINI_API_KEY}.
+\item An API key set in the \code{GOOGLE_API_KEY} or \code{GEMINI_API_KEY} env var
+(Gemini only).
 \item Google's default application credentials, if the \pkg{gargle} package
 is installed.
 \item Viewer-based credentials on Posit Connect, if the \pkg{connectcreds}
@@ -110,22 +115,24 @@ chat$chat("Tell me three jokes about statisticians")
 }
 }
 \seealso{
-Other chatbots: 
-\code{\link{chat_anthropic}()},
-\code{\link{chat_aws_bedrock}()},
-\code{\link{chat_azure_openai}()},
-\code{\link{chat_cloudflare}()},
-\code{\link{chat_databricks}()},
-\code{\link{chat_deepseek}()},
-\code{\link{chat_github}()},
-\code{\link{chat_groq}()},
-\code{\link{chat_huggingface}()},
-\code{\link{chat_mistral}()},
-\code{\link{chat_ollama}()},
-\code{\link{chat_openai}()},
-\code{\link{chat_openai_compatible}()},
-\code{\link{chat_openrouter}()},
-\code{\link{chat_perplexity}()},
-\code{\link{chat_portkey}()}
+Other chatbots:
+\code{\link[=chat_anthropic]{chat_anthropic()}},
+\code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
+\code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cloudflare]{chat_cloudflare()}},
+\code{\link[=chat_databricks]{chat_databricks()}},
+\code{\link[=chat_deepseek]{chat_deepseek()}},
+\code{\link[=chat_github]{chat_github()}},
+\code{\link[=chat_groq]{chat_groq()}},
+\code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_lmstudio]{chat_lmstudio()}},
+\code{\link[=chat_mistral]{chat_mistral()}},
+\code{\link[=chat_ollama]{chat_ollama()}},
+\code{\link[=chat_openai]{chat_openai()}},
+\code{\link[=chat_openai_compatible]{chat_openai_compatible()}},
+\code{\link[=chat_openrouter]{chat_openrouter()}},
+\code{\link[=chat_perplexity]{chat_perplexity()}},
+\code{\link[=chat_portkey]{chat_portkey()}},
+\code{\link[=chat_posit]{chat_posit()}}
 }
 \concept{chatbots}

@@ -2,7 +2,7 @@ You have a single purpose: take the documentation for an R function and turn it 
 
 * The first argument, which should be unnamed, is the function.
 * The second argument, `name`, is the name of the function as a string.
-* The third argument, `description`, is a brief description of the function.
+* The third argument, `description`, is a brief description of the function, in the same language as the provided documentation.
 * The fourth argument, `arguments`, is a named list that describes the types of each argument.
   It should have one element for each argument to the function. The name of the element should be the name of the argument, and the value of the element should be a type specification, as described below.
 
@@ -10,7 +10,7 @@ You have a single purpose: take the documentation for an R function and turn it 
 
 There are four basic types that represent scalars: `type_string()`, `type_number()`, `type_integer()` and `type_boolean()`. These can be combined with `type_array()` to represent vectors, e.g. `type_array(type_string())` for a character vector, `type_array(type_boolean())` for a logical vector and `type_array(type_number())` for a numeric vector.
 
-The first argument to each `type_` function is the `description`. It should include a 1-2 sentence description of the argument.
+The first argument to each `type_` function is the `description`. It should include a 1-2 sentence description of the argument, in the same language as the provided documentation.
 
 Any arguments that don't use one of these basic class should be given type `NULL`, indicating that it can't be easily used by the LLM.
 

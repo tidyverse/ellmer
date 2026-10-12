@@ -1,4 +1,6 @@
 #' @include provider.R
+#' @include provider-claude.R
+#' @include provider-openai.R
 #' @include content.R
 #' @include turns.R
 #' @include tools-def.R
@@ -7,40 +9,128 @@ NULL
 #' Chat with an AWS bedrock model
 #'
 #' @description
+#' `r support_badge("official")`
+#'
 #' [AWS Bedrock](https://aws.amazon.com/bedrock/) provides a number of
 #' language models, including those from Anthropic's
-#' [Claude](https://aws.amazon.com/bedrock/claude/), using the Bedrock
-#' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html).
+#' [Claude](https://aws.amazon.com/bedrock/claude/). Most are served through
+#' the Bedrock
+#' [Converse API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html),
+#' with some only available through the Anthropic Messages or OpenAI Responses
+#' APIs; see the `api` argument for details.
+#'
+#' ## APIs and endpoints
+#'
+#' Bedrock serves models from two endpoints, and `api` selects which one to use
+#' and which request format to send:
+#'
+#' * `"converse"` uses the Converse API on the `bedrock-runtime` endpoint. This
+#'   reaches the great majority of Bedrock models, and is what ellmer has always
+#'   used.
+#' * `"messages"` uses the Anthropic Messages API on the `bedrock-mantle`
+#'   endpoint. Only Claude models are available here, but it includes some (like
+#'   Claude Mythos) that Converse does not serve at all.
+#' * `"responses"` uses the OpenAI Responses API on the `bedrock-mantle`
+#'   endpoint. This reaches OpenAI and xAI models that Converse can't serve,
+#'   typically newer models that Converse hasn't picked up yet. Note that mantle
+#'   serves newer models from `/openai/v1` and older open-weight models like
+#'   gpt-oss from `/v1`; ellmer uses the former, so reaching the latter needs
+#'   an explicit `base_url`. They're all available through `"converse"` anyway.
+#'
+#' By default ellmer picks the API from `model`, using `"converse"` whenever
+#' it can serve the model and for any model ellmer doesn't recognize. Set `api`
+#' explicitly to override this.
+#'
+#' The set of models that need mantle shrinks over time as AWS adds them to
+#' Converse, so a model that needs `"responses"` today may route to
+#' `"converse"` in a later ellmer release. Note also that Converse usually
+#' needs an inference profile ID (`"us.openai.gpt-5.6-sol"`) while mantle wants
+#' the bare model ID (`"openai.gpt-5.6-sol"`); ellmer strips the prefix for
+#' mantle, so the inference profile ID works with either and is the safer
+#' choice.
+#'
+#' Note that the two endpoints have separate token quotas, so moving a model
+#' from one to the other changes which quota it consumes.
 #'
 #' ## Authentication
 #'
-#' Authentication is handled through \{paws.common\}, so if authentication
-#' does not work for you automatically, you'll need to follow the advice
-#' at <https://www.paws-r-sdk.com/#credentials>. In particular, if your
-#' org uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+#' `chat_aws_bedrock()` uses \{paws.common\} to resolve credentials,
+#' trying the following strategies in order:
+#'
+#' - A bearer token set in the `AWS_BEARER_TOKEN_BEDROCK` or
+#'   `AWS_BEARER_TOKEN` environment variable. This is used by enterprise
+#'   API gateways that issue API keys instead of IAM credentials. See the
+#'   [AWS documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys-use.html)
+#'   for details.
+#' - Standard IAM credentials resolved from environment variables, AWS
+#'   config files, SSO, or instance metadata. See
+#'   <https://www.paws-r-sdk.com/#credentials> for details. If your org
+#'   uses AWS SSO, you'll need to run `aws sso login` at the terminal.
+#'
+#' ## Prompt caching
+#'
+#' Bedrock supports
+#' [prompt caching](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html)
+#' via cache checkpoints. When caching is enabled, ellmer places cache
+#' checkpoints on the system prompt and the last turn, so that the
+#' conversation history is cached across turns.
+#'
+#' By default (`cache = "auto"`), caching is enabled for models known to
+#' support it (Anthropic Claude and Amazon Nova) and disabled for all other
+#' models. You can also set `cache` to `"5m"` or `"1h"` to force a specific
+#' TTL, or `"none"` to disable caching entirely. Note that individual models
+#' may have minimum input token thresholds before caching takes effect.
+#'
+#' Note that [token_usage()] does not currently reflect the cost of writing
+#' to the cache, which is priced at a premium over regular input tokens.
+#' Cache read savings are reported correctly.
 #'
 #' @param profile AWS profile to use.
-#' @param model `r param_model("anthropic.claude-sonnet-4-5-20250929-v1:0", "models_aws_bedrock")`.
+#' @param api Which Bedrock API to use: `"converse"`, `"messages"`, or
+#'   `"responses"`. The default, `NULL`, picks the API from `model`, falling
+#'   back to `"converse"` for unrecognized models.
+#'
+#'   See details below.
+#' @param cache How long to cache inputs? The default, `"auto"`, enables
+#'   caching with a 5-minute TTL for models known to support it (Anthropic
+#'   Claude and Amazon Nova) and disables caching for all other models.
+#'   Set to `"5m"` or `"1h"` to force caching on, or `"none"` to disable it.
+#'
+#'   Not supported when `api = "responses"`, which caches automatically.
+#'
+#'   See details below.
+#' @param model `r param_model("us.anthropic.claude-sonnet-5", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-sonnet-4-5-20250929-v1:0"`.
+#'   `model="us.anthropic.claude-sonnet-5"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
-#'   of every chat API call. Some useful arguments include:
+#'   of every chat API call. Use `params` for common parameters. Model-specific
+#'   inference parameters can be provided using the
+#'   `additionalModelRequestFields` field (`api = "converse"` only), for example
+#'   to enable thinking effort in Anthropic Claude models:
 #'
 #'   ```R
 #'   api_args = list(
-#'     inferenceConfig = list(
-#'       maxTokens = 100,
-#'       temperature = 0.7,
-#'       topP = 0.9,
-#'       topK = 20
+#'     additionalModelRequestFields = list(
+#'       thinking = list(type = "enabled", budget_tokens = 4000)
 #'     )
 #'   )
 #'   ```
+#'
+#'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
+#'   for more details.
+#' @param base_url The base URL to the endpoint; the default is the standard
+#'   endpoint for the selected `api` and your region, matching the official
+#'   SDKs' endpoint override environment variables:
+#'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
+#'   `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
+#'   (which append their API-specific path to the override).
+#'   `models_aws_bedrock()` talks to a different AWS service, so it honors
+#'   `AWS_ENDPOINT_URL_BEDROCK` instead.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -55,7 +145,9 @@ chat_aws_bedrock <- function(
   system_prompt = NULL,
   base_url = NULL,
   model = NULL,
+  api = NULL,
   profile = NULL,
+  cache = c("auto", "5m", "1h", "none"),
   params = NULL,
   api_args = list(),
   api_headers = character(),
@@ -63,38 +155,135 @@ chat_aws_bedrock <- function(
 ) {
   check_installed("paws.common", "AWS authentication")
   check_string(base_url, allow_null = TRUE)
-  base_url <- base_url %||%
-    \(x) sprintf("https://bedrock-runtime.%s.amazonaws.com", x)
+  check_string(model, allow_null = TRUE)
   echo <- check_echo(echo)
 
   params <- params %||% params()
+  model <- set_default(model, "us.anthropic.claude-sonnet-5")
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
     model = model,
+    api = api,
     profile = profile,
-    params = params,
-    extra_args = api_args,
+    cache = cache,
     extra_headers = api_headers
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  if (!S7_inherits(provider, ProviderAWSBedrock)) {
+    model <- aws_strip_region_prefix(model)
+  }
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 
 #' @export
 #' @rdname chat_aws_bedrock
-models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
+models_aws_bedrock <- function(profile = NULL, base_url = NULL, api = NULL) {
   check_string(base_url, allow_null = TRUE)
-  base_url <- base_url %||% \(x) sprintf("https://bedrock.%s.amazonaws.com", x)
 
   provider <- provider_aws_bedrock(
     base_url = base_url,
     model = "",
-    profile = profile,
+    api = api,
+    profile = profile
   )
+  models_list(provider)
+}
+
+chat_aws_bedrock_test <- function(
+  ...,
+  model = "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+  params = NULL,
+  echo = "none"
+) {
+  params <- params %||% params()
+  params$temperature <- params$temperature %||% 0
+
+  chat_aws_bedrock(model = model, params = params, ..., echo = echo)
+}
+
+provider_aws_bedrock <- function(
+  base_url = NULL,
+  model = NULL,
+  api = NULL,
+  profile = NULL,
+  cache = "auto",
+  extra_headers = character(),
+  error_call = caller_env()
+) {
+  # The model determines the API, not the other way around
+  api <- api %||% aws_bedrock_api(model)
+  api <- arg_match(api, aws_bedrock_apis(), error_call = error_call)
+
+  creds_cache <- aws_creds_cache(profile)
+  credentials <- paws_credentials(profile, cache = creds_cache)
+  region <- credentials$region
+
+  base_url <- base_url %||% aws_bedrock_base_url(api, region)
+
+  # Each API expresses caching differently, or not at all
+  api_args <- switch(
+    api,
+    converse = list(
+      cache_point = as_bedrock_cache_point(cache, model %||% "")
+    ),
+    messages = list(cache = as_bedrock_message_cache(cache)),
+    responses = {
+      check_bedrock_no_cache(cache, error_call = error_call)
+      list(strict = TRUE)
+    }
+  )
+
+  provider <- get(aws_bedrock_class(api))
+  inject(provider(
+    name = "AWS/Bedrock",
+    base_url = base_url,
+    profile = profile,
+    region = region,
+    creds_cache = creds_cache,
+    extra_headers = extra_headers,
+    !!!api_args
+  ))
+}
+
+aws_bedrock_props <- list(
+  profile = prop_string(allow_null = TRUE),
+  region = prop_string(),
+  creds_cache = class_list
+)
+
+ProviderAWSBedrock <- new_class(
+  "ProviderAWSBedrock",
+  parent = Provider,
+  properties = c(aws_bedrock_props, list(cache_point = prop_string()))
+)
+
+ProviderAWSBedrockMessages <- new_class(
+  "ProviderAWSBedrockMessages",
+  parent = ProviderAnthropic,
+  properties = aws_bedrock_props
+)
+
+ProviderAWSBedrockResponses <- new_class(
+  "ProviderAWSBedrockResponses",
+  parent = ProviderOpenAI,
+  properties = aws_bedrock_props
+)
+
+method(models_list, ProviderAWSBedrock) <- function(provider) {
+  provider@base_url <- aws_bedrock_models_url(
+    provider@base_url,
+    provider@region
+  )
+
   req <- base_request(provider)
   req <- req_url_path_append(req, "foundation-models")
-
   resp <- req_perform(req)
   json <- resp_body_json(resp)
   models <- json$modelSummaries
@@ -104,71 +293,141 @@ models_aws_bedrock <- function(profile = NULL, base_url = NULL) {
     name = map_chr(models, "[[", "modelName"),
     provider = map_chr(models, "[[", "providerName")
   )
-  df <- cbind(df, match_prices("AWS/Bedrock", df$id))
-  df
+  cbind(df, match_prices("AWS/Bedrock", df$id))
 }
-
-provider_aws_bedrock <- function(
-  base_url,
-  model = "",
-  profile = NULL,
-  params = list(),
-  extra_args = list(),
-  extra_headers = character()
-) {
-  cache <- aws_creds_cache(profile)
-  credentials <- paws_credentials(profile, cache = cache)
-
-  if (is.function(base_url)) {
-    base_url <- base_url(credentials$region)
-  }
-
-  model <- set_default(model, "anthropic.claude-sonnet-4-5-20250929-v1:0")
-
-  ProviderAWSBedrock(
-    name = "AWS/Bedrock",
-    base_url = base_url,
-    model = model,
-    profile = profile,
-    region = credentials$region,
-    cache = cache,
-    params = params,
-    extra_args = extra_args,
-    extra_headers = extra_headers
-  )
-}
-
-ProviderAWSBedrock <- new_class(
-  "ProviderAWSBedrock",
-  parent = Provider,
-  properties = list(
-    profile = prop_string(allow_null = TRUE),
-    region = prop_string(),
-    cache = class_list
-  )
-)
 
 method(base_request, ProviderAWSBedrock) <- function(provider) {
-  creds <- paws_credentials(provider@profile, provider@cache)
-
-  req <- request(provider@base_url)
-  req <- req_auth_aws_v4(
-    req,
-    aws_access_key_id = creds$access_key_id,
-    aws_secret_access_key = creds$secret_access_key,
-    aws_session_token = creds$session_token
-  )
-  req <- ellmer_req_robustify(req)
-  req <- ellmer_req_user_agent(req)
-  req <- base_request_error(provider, req)
-  req
+  aws_base_request(provider, request(provider@base_url))
 }
 
 method(base_request_error, ProviderAWSBedrock) <- function(provider, req) {
   req_error(req, body = function(resp) {
-    body <- resp_body_json(resp)
-    body$Message %||% body$message
+    msg <- aws_error_body(resp)
+
+    # Models we don't know about are sent to converse, so a model that only
+    # exists on mantle fails here with a misleading error.
+    if (grepl("model identifier is invalid", msg %||% "")) {
+      msg <- c(
+        msg,
+        i = paste0(
+          "If this model is only available on the bedrock-mantle endpoint, ",
+          "set `api` to \"messages\" or \"responses\"."
+        )
+      )
+    } else if (grepl("inference profile", msg %||% "")) {
+      # Converse needs an inference profile ID for many models, but the bare
+      # model ID is what users see on mantle and in the AWS console.
+      msg <- c(
+        msg,
+        i = paste0(
+          "Try adding a region prefix to the model ID, ",
+          "e.g. \"us.\" or \"global.\"."
+        )
+      )
+    }
+    msg
   })
+}
+
+# The mantle endpoint speaks the Anthropic and OpenAI request formats, but
+# errors raised before the request reaches the model (bad signature, expired
+# credentials, throttling) still come back AWS-shaped, so we try both.
+method(base_request, ProviderAWSBedrockMessages) <- function(provider) {
+  req <- request(provider@base_url)
+  # <https://docs.aws.amazon.com/bedrock/latest/userguide/inference-messages-api.html>
+  req <- req_headers(req, `anthropic-version` = "2023-06-01")
+  if (length(provider@beta_headers) > 0) {
+    req <- req_headers(req, `anthropic-beta` = provider@beta_headers)
+  }
+  aws_base_request(provider, req)
+}
+
+method(base_request_error, ProviderAWSBedrockMessages) <- function(
+  provider,
+  req
+) {
+  req_error(req, body = \(resp) {
+    aws_error_body(resp) %||% anthropic_error_body(resp)
+  })
+}
+
+method(base_request, ProviderAWSBedrockResponses) <- function(provider) {
+  aws_base_request(provider, request(provider@base_url))
+}
+
+method(models_list, ProviderAWSBedrockMessages) <- function(provider) {
+  aws_mantle_models(provider)
+}
+
+method(models_list, ProviderAWSBedrockResponses) <- function(provider) {
+  aws_mantle_models(provider)
+}
+
+method(has_batch_support, ProviderAWSBedrockMessages) <- function(provider) {
+  FALSE
+}
+
+method(has_batch_support, ProviderAWSBedrockResponses) <- function(provider) {
+  FALSE
+}
+
+method(count_tokens, ProviderAWSBedrockMessages) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  count_tokens(super(provider, Provider), model, ...)
+}
+
+method(count_tokens, ProviderAWSBedrockResponses) <- function(
+  provider,
+  model,
+  ...,
+  system_prompt = NULL,
+  tools = list(),
+  type = NULL
+) {
+  count_tokens(super(provider, Provider), model, ...)
+}
+
+method(base_request_error, ProviderAWSBedrockResponses) <- function(
+  provider,
+  req
+) {
+  req_error(req, body = \(resp) {
+    aws_error_body(resp) %||% openai_error_body(resp)
+  })
+}
+
+# Mantle can't fetch URLs, so always send the bytes we already downloaded
+method(as_json, list(ProviderAWSBedrockMessages, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderAnthropic), x, ...)
+}
+
+method(as_json, list(ProviderAWSBedrockResponses, ContentPDF)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderOpenAI), x, ...)
+}
+
+method(as_json, list(ProviderAWSBedrockResponses, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  x@url <- NULL
+  as_json(super(provider, ProviderOpenAI), x, ...)
 }
 
 method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
@@ -186,26 +445,32 @@ method(chat_params, ProviderAWSBedrock) <- function(provider, params) {
 
 method(chat_request, ProviderAWSBedrock) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
   type = NULL
 ) {
   req <- base_request(provider)
+  suffix <- if (stream) "converse-stream" else "converse"
   req <- req_url_path_append(
     req,
-    "model",
-    provider@model,
-    if (stream) "converse-stream" else "converse"
+    paste0("model/", curl::curl_escape(model@name), "/", suffix)
   )
 
   if (length(turns) >= 1 && is_system_turn(turns[[1]])) {
-    system <- list(list(text = turns[[1]]@text))
+    system <- c(
+      list(list(text = turns[[1]]@text)),
+      bedrock_cache_point(provider)
+    )
   } else {
     system <- NULL
   }
 
-  messages <- compact(as_json(provider, turns))
+  is_last <- seq_along(turns) == length(turns)
+  messages <- compact(map2(turns, is_last, function(turn, is_last) {
+    as_json(provider, turn, is_last = is_last)
+  }))
 
   if (!is.null(type)) {
     tool_def <- ToolDef(
@@ -216,22 +481,21 @@ method(chat_request, ProviderAWSBedrock) <- function(
     )
     tools[[tool_def@name]] <- tool_def
     tool_choice <- list(tool = list(name = tool_def@name))
-    stream <- FALSE
   } else {
     tool_choice <- NULL
   }
 
   if (length(tools) > 0) {
-    tools <- as_json(provider, unname(tools))
+    tools <- chat_body_tools(provider, tools)
     toolConfig <- compact(list(tools = tools, tool_choice = tool_choice))
   } else {
     toolConfig <- NULL
   }
 
   # Merge params into inferenceConfig, giving precedence to manual api_args
-  params <- chat_params(provider, provider@params)
+  params <- chat_params(provider, model@params)
 
-  extra_args <- provider@extra_args
+  extra_args <- model@extra_args
   extra_args$inferenceConfig <- modify_list(params, extra_args$inferenceConfig)
 
   # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
@@ -266,10 +530,19 @@ method(stream_parse, ProviderAWSBedrock) <- function(provider, event) {
   body
 }
 
-method(stream_text, ProviderAWSBedrock) <- function(provider, event) {
+method(stream_content, ProviderAWSBedrock) <- function(
+  provider,
+  event,
+  completion = NULL
+) {
   if (event$event_type == "contentBlockDelta") {
-    event$delta$text
+    text <- event$delta$text
+    if (is.null(text)) {
+      return(list())
+    }
+    return(list(ContentText(text)))
   }
+  list()
 }
 
 method(stream_merge_chunks, ProviderAWSBedrock) <- function(
@@ -284,14 +557,26 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
   } else if (chunk$event_type == "contentBlockStart") {
     result$content[[i]] <- list(toolUse = chunk$start$toolUse)
   } else if (chunk$event_type == "contentBlockDelta") {
+    if (i > length(result$content)) {
+      result$content[[i]] <- list()
+    }
     if (has_name(chunk$delta, "text")) {
-      if (i > length(result$content)) {
-        result$content[[i]] <- list(text = chunk$delta$text)
-      } else {
-        paste(result$content[[i]]$text) <- chunk$delta$text
-      }
+      paste(result$content[[i]]$text) <- chunk$delta$text
     } else if (has_name(chunk$delta, "toolUse")) {
       paste(result$content[[i]]$toolUse$input) <- chunk$delta$toolUse$input
+    } else if (has_name(chunk$delta, "reasoningContent")) {
+      if (is.null(result$content[[i]]$reasoningContent)) {
+        result$content[[i]]$reasoningContent <- list(reasoningText = list())
+      }
+      # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ReasoningContentBlockDelta.html
+      delta <- chunk$delta$reasoningContent
+      if (has_name(delta, "text")) {
+        paste(result$content[[i]]$reasoningContent$reasoningText$text) <-
+          delta$text
+      } else if (has_name(delta, "signature")) {
+        result$content[[i]]$reasoningContent$reasoningText$signature <-
+          delta$signature
+      }
     } else {
       cli::cli_abort(
         "Unknown chunk type {names(chunk$delta)}",
@@ -312,7 +597,8 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
     result <- list(
       output = list(
         message = result
-      )
+      ),
+      stopReason = chunk$stopReason
     )
   } else if (chunk$event_type == "metadata") {
     result$usage <- chunk$usage
@@ -325,14 +611,36 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
 }
 
 method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
+  usage <- json$usage
   tokens(
-    input = json$usage$inputTokens,
-    output = json$usage$outputTokens,
+    input = usage$inputTokens %||% 0,
+    output = usage$outputTokens %||% 0,
+    cached_input = usage$cacheReadInputTokens %||% 0
+  )
+}
+
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+method(value_finish_reason, ProviderAWSBedrock) <- function(provider, result) {
+  reason <- result$stopReason
+  if (is.null(reason)) {
+    return(NA_character_)
+  }
+  switch(
+    reason,
+    end_turn = "success",
+    tool_use = "tool_use",
+    max_tokens = "max_tokens",
+    model_context_window_exceeded = "context_window",
+    stop_sequence = "stop_sequence",
+    guardrail_intervened = ,
+    content_filtered = "content_filter",
+    I(reason)
   )
 }
 
 method(value_turn, ProviderAWSBedrock) <- function(
   provider,
+  model,
   result,
   has_type = FALSE
 ) {
@@ -349,6 +657,13 @@ method(value_turn, ProviderAWSBedrock) <- function(
           id = content$toolUse$toolUseId
         )
       }
+    } else if (has_name(content, "reasoningContent")) {
+      ContentThinking(
+        content$reasoningContent$reasoningText$text %||% "",
+        extra = list(
+          signature = content$reasoningContent$reasoningText$signature
+        )
+      )
     } else {
       cli::cli_abort(
         "Unknown content type {.str {names(content)}}.",
@@ -358,23 +673,54 @@ method(value_turn, ProviderAWSBedrock) <- function(
   })
 
   tokens <- value_tokens(provider, result)
-  cost <- get_token_cost(provider, tokens)
-  AssistantTurn(contents, json = result, tokens = unlist(tokens), cost = cost)
+  cost <- get_token_cost(provider@name, model@name, tokens)
+
+  AssistantTurn(
+    contents,
+    json = result,
+    tokens = unlist(tokens),
+    cost = cost,
+    finish_reason = value_finish_reason(provider, result)
+  )
 }
 
 # ellmer -> Bedrock -------------------------------------------------------------
 
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ContentBlock.html
-method(as_json, list(ProviderAWSBedrock, Turn)) <- function(provider, x, ...) {
+method(as_json, list(ProviderAWSBedrock, Turn)) <- function(
+  provider,
+  x,
+  ...,
+  is_last = FALSE
+) {
   if (is_system_turn(x)) {
-    # bedrock passes system prompt as separate arg
     NULL
   } else if (is_user_turn(x) || is_assistant_turn(x)) {
     x <- turn_contents_expand(x)
-    list(
-      role = x@role,
-      content = as_json(provider, x@contents, ...)
-    )
+    content <- as_json(provider, x@contents, ...)
+    if (length(content) == 0) {
+      if (!is_assistant_turn(x)) {
+        return()
+      }
+      # Dropping empty assistant turns confuses the model, so send a
+      # placeholder instead (#711, #1070)
+      content <- list(list(text = "[empty string]"))
+    }
+
+    if (is_last) {
+      cache_point <- bedrock_cache_point(provider)
+      if (length(cache_point) > 0 && length(content) > 0) {
+        # Bedrock 400s when a cachePoint block immediately follows a
+        # document block, so pad with a text block
+        # (https://github.com/aws/aws-sdk-java-v2/issues/6277)
+        if (identical(names(content[[length(content)]]), "document")) {
+          content <- c(content, list(list(text = " ")))
+        }
+      }
+      content <- c(content, cache_point)
+    }
+
+    list(role = x@role, content = content)
   } else {
     cli::cli_abort("Unknown role {x@role}", .internal = TRUE)
   }
@@ -441,6 +787,37 @@ method(as_json, list(ProviderAWSBedrock, ContentPDF)) <- function(
   )
 }
 
+method(as_json, list(ProviderAWSBedrock, ContentDocument)) <- function(
+  provider,
+  x,
+  ...
+) {
+  # The Converse API takes a format keyword rather than a MIME type
+  format <- switch(
+    x@mime_type,
+    "text/plain" = "txt",
+    "text/csv" = "csv",
+    "text/markdown" = "md",
+    "text/html" = "html",
+    "application/msword" = "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "docx",
+    "application/vnd.ms-excel" = "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = "xlsx",
+    cli::cli_abort(c(
+      "Bedrock doesn't support {.str {x@mime_type}} documents.",
+      i = "Convert the document to plain text or PDF first."
+    ))
+  )
+
+  list(
+    document = list(
+      name = bedrock_document_name(),
+      format = format,
+      source = list(bytes = x@data)
+    )
+  )
+}
+
 # https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolUseBlock.html
 method(as_json, list(ProviderAWSBedrock, ContentToolRequest)) <- function(
   provider,
@@ -485,7 +862,202 @@ method(as_json, list(ProviderAWSBedrock, ToolDef)) <- function(
   )
 }
 
+method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
+  provider,
+  x,
+  ...
+) {
+  if (identical(x@thinking, "")) {
+    return()
+  }
+
+  list(
+    reasoningContent = list(
+      reasoningText = list(
+        text = x@thinking,
+        signature = x@extra$signature
+      )
+    )
+  )
+}
+
 # Helpers ----------------------------------------------------------------
+
+aws_base_request <- function(provider, req) {
+  creds <- paws_credentials(provider@profile, provider@creds_cache)
+
+  if (nzchar(creds$access_token)) {
+    req <- req_auth_bearer_token(req, creds$access_token)
+  } else {
+    # Both endpoints sign as the "bedrock" service. httr2 can infer the service
+    # and region from the hostname, but only by accident for bedrock-mantle, so
+    # we're explicit.
+    req <- req_auth_aws_v4(
+      req,
+      aws_access_key_id = creds$access_key_id,
+      aws_secret_access_key = creds$secret_access_key,
+      aws_session_token = creds$session_token,
+      aws_service = "bedrock",
+      aws_region = provider@region
+    )
+  }
+  req <- ellmer_req_robustify(req)
+  req <- ellmer_req_user_agent(req)
+  base_request_error(provider, req)
+}
+
+# Whichever API you chat with, mantle lists every model it serves at one
+# OpenAI-shaped /v1/models, and AWS warns that only the id is reliable.
+# https://docs.aws.amazon.com/bedrock/latest/userguide/models-get-info.html
+aws_mantle_models <- function(provider) {
+  provider@base_url <- sprintf(
+    "https://bedrock-mantle.%s.api.aws/v1",
+    provider@region
+  )
+
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+
+  df <- data.frame(id = map_chr(json$data, "[[", "id"))
+  cbind(df, match_prices(provider@name, df$id))
+}
+
+aws_error_body <- function(resp) {
+  # resp_content_type() is NA when the response has no content type at all
+  if (!identical(resp_content_type(resp), "application/json")) {
+    return(NULL)
+  }
+  body <- resp_body_json(resp)
+  body$Message %||% body$message
+}
+
+# Most models are only available via Converse, so it's the fallback for
+# anything we don't recognize: `aws_bedrock_apis` only lists models that
+# Converse can't serve. Model ids can also carry a cross-region inference
+# prefix, which we strip before looking them up.
+aws_bedrock_api <- function(model) {
+  if (is.null(model) || !nzchar(model)) {
+    return("converse")
+  }
+  api <- unname(aws_bedrock_model_apis[aws_strip_region_prefix(model)])
+  if (is.na(api)) "converse" else api
+}
+
+# Converse needs the cross-region inference prefix on model ids; mantle
+# rejects it.
+aws_strip_region_prefix <- function(model) {
+  sub("^(us|eu|apac|au|jp|ca|global)\\.", "", model)
+}
+
+aws_bedrock_apis <- function() {
+  c("converse", "messages", "responses")
+}
+
+aws_bedrock_class <- function(api) {
+  switch(
+    api,
+    converse = "ProviderAWSBedrock",
+    messages = "ProviderAWSBedrockMessages",
+    responses = "ProviderAWSBedrockResponses"
+  )
+}
+
+
+aws_bedrock_base_url <- function(api, region) {
+  if (api == "converse") {
+    return(aws_endpoint_url(
+      "AWS_ENDPOINT_URL_BEDROCK_RUNTIME",
+      sprintf("https://bedrock-runtime.%s.amazonaws.com", region)
+    ))
+  }
+
+  mantle <- aws_endpoint_url(
+    "AWS_ENDPOINT_URL_BEDROCK_MANTLE",
+    sprintf("https://bedrock-mantle.%s.api.aws", region)
+  )
+  switch(
+    api,
+    messages = paste0(mantle, "/anthropic/v1"),
+    # Mantle has two OpenAI-compatible paths: newer models are served from
+    # /openai/v1 and older open-weight models (like gpt-oss) from /v1. They are
+    # disjoint, not aliases. Everything we route here is on /openai/v1, since
+    # the /v1 models are all reachable through converse anyway.
+    responses = paste0(mantle, "/openai/v1")
+  )
+}
+
+# ListFoundationModels uses the control-plane endpoint (bedrock.*) not the
+# data-plane endpoint (bedrock-runtime.*) used for inference, so it honors
+# AWS_ENDPOINT_URL_BEDROCK but, like the official SDKs, deliberately ignores
+# AWS_ENDPOINT_URL_BEDROCK_RUNTIME.
+# https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html
+aws_bedrock_models_url <- function(base_url, region) {
+  runtime_override <- aws_endpoint_url("AWS_ENDPOINT_URL_BEDROCK_RUNTIME", "")
+  aws_endpoint_url(
+    "AWS_ENDPOINT_URL_BEDROCK",
+    if (identical(base_url, runtime_override)) {
+      sprintf("https://bedrock.%s.amazonaws.com", region)
+    } else {
+      sub("bedrock-runtime", "bedrock", base_url, fixed = TRUE)
+    }
+  )
+}
+
+aws_endpoint_url <- function(var, default) {
+  url <- Sys.getenv(var)
+  if (identical(url, "")) {
+    default
+  } else {
+    sub("/+$", "", url)
+  }
+}
+
+# The Responses API caches automatically, so there's nothing for us to control.
+check_bedrock_no_cache <- function(cache, error_call = caller_env()) {
+  if (length(cache) == 1 && !identical(cache, "auto")) {
+    cli::cli_abort(
+      c(
+        "{.arg cache} is not supported when {.code api = \"responses\"}.",
+        i = "The Responses API caches prompts automatically."
+      ),
+      call = error_call
+    )
+  }
+  invisible()
+}
+
+# The Messages API caches via Anthropic's cache_control blocks, which don't
+# have an "auto" equivalent; Claude models all support caching.
+as_bedrock_message_cache <- function(cache) {
+  cache <- arg_match(cache, values = c("auto", "5m", "1h", "none"))
+  if (cache == "auto") "5m" else cache
+}
+
+as_bedrock_cache_point <- function(cache_point, model) {
+  cache_point <- arg_match(
+    cache_point,
+    values = c("auto", "5m", "1h", "none")
+  )
+  if (cache_point != "auto") {
+    return(cache_point)
+  }
+  supports_caching <-
+    grepl("(^|\\.)anthropic\\.", model) || grepl("(^|\\.)amazon\\.nova", model)
+  if (supports_caching) "5m" else "none"
+}
+
+bedrock_cache_point <- function(provider) {
+  if (provider@cache_point == "none") {
+    return(list())
+  }
+  cp <- list(type = "default")
+  if (provider@cache_point != "5m") {
+    cp$ttl <- provider@cache_point
+  }
+  list(list(cachePoint = cp))
+}
 
 paws_credentials <- function(
   profile,
@@ -511,7 +1083,7 @@ paws_credentials <- function(
 
 # Wrapper for paws.common::locate_credentials() so we can mock it in tests.
 locate_aws_credentials <- function(profile) {
-  paws.common::locate_credentials(profile)
+  paws.common::locate_credentials(profile, signing_name = "bedrock")
 }
 
 aws_creds_cache <- function(profile) {

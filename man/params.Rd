@@ -39,7 +39,7 @@ params(
 \item{stop_sequences}{A character vector of tokens to stop generation on.}
 
 \item{reasoning_effort, reasoning_tokens}{How much effort to spend thinking?
-\code{ressoning_effort} is a string, like "low", "medium", "high".
+\code{reasoning_effort} is a string, like "low", "medium", "high".
 \code{reasoning_tokens} is an integer, giving a maximum token budget.
 Each provider only takes one of these two parameters.}
 

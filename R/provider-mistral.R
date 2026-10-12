@@ -1,6 +1,8 @@
 #' Chat with a model hosted on Mistral's La Platforme
 #'
 #' @description
+#' `r support_badge("community")`
+#'
 #' Get your API key from <https://console.mistral.ai/api-keys>.
 #'
 #' Built on top of [chat_openai_compatible()].
@@ -46,13 +48,17 @@ chat_mistral <- function(
   provider <- ProviderMistral(
     name = "Mistral",
     base_url = mistral_base_url,
-    model = model,
-    params = params,
-    extra_args = api_args,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  model <- Model(name = model, params = params, extra_args = api_args)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 mistral_base_url <- "https://api.mistral.ai/v1/"
@@ -96,6 +102,7 @@ method(base_request, ProviderMistral) <- function(provider) {
 
 method(chat_body, ProviderMistral) <- function(
   provider,
+  model,
   stream = TRUE,
   turns = list(),
   tools = list(),
@@ -103,6 +110,7 @@ method(chat_body, ProviderMistral) <- function(
 ) {
   body <- chat_body(
     super(provider, ProviderOpenAICompatible),
+    model = model,
     stream = stream,
     turns = turns,
     tools = tools,
@@ -142,11 +150,14 @@ mistral_key <- function() {
 models_mistral <- function(api_key = mistral_key()) {
   provider <- ProviderMistral(
     name = "Mistral",
-    model = "",
     base_url = mistral_base_url,
     credentials = function() api_key
   )
 
+  models_list(provider)
+}
+
+method(models_list, ProviderMistral) <- function(provider) {
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
