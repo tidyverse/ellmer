@@ -438,12 +438,23 @@ elapsed_secs <- function(start) {
   as.numeric(Sys.time() - start, units = "secs")
 }
 
-record_chat_otel_span_status <- function(span, provider, model, result, start) {
+# Records a completed model request. A user-cancelled stream is still a
+# completed request (tokens and response id are known), but is reported with
+# an error status and `error_type = "cancelled"` on the span and the duration
+# metric, matching the `error` finish reason set on the partial turn.
+record_chat_otel_span_status <- function(
+  span,
+  provider,
+  model,
+  result,
+  start,
+  error_type = NULL
+) {
   attributes <- otel_metric_attributes(provider, model, result)
   otel_record_histogram(
     "gen_ai.client.inference.duration",
     elapsed_secs(start),
-    attributes
+    c(attributes, "error.type" = error_type)
   )
 
   tokens <- value_tokens(provider, result)
@@ -497,7 +508,12 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
   }
-  span$set_status("ok")
+  if (is.null(error_type)) {
+    span$set_status("ok")
+  } else {
+    span$set_status("error")
+    span$set_attribute("error.type", error_type)
+  }
 }
 
 # Sets the `gen_ai.request.*` attributes once the provider has built the
@@ -521,18 +537,50 @@ otel_error_type <- function(error) {
 # is `NULL` once the duration has already been recorded for this request.
 record_chat_otel_span_error <- function(span, provider, model, error, start) {
   if (!is.null(start)) {
-    attributes <- otel_metric_attributes(provider, model)
-    attributes[["error.type"]] <- otel_error_type(error)
-    otel_record_histogram(
-      "gen_ai.client.inference.duration",
-      elapsed_secs(start),
-      attributes
+    record_chat_otel_duration_error(
+      provider,
+      model,
+      otel_error_type(error),
+      start
     )
   }
   record_otel_span_error(span, error)
   if (!is.null(span) && span_recording(span)) {
     span$set_attribute("gen_ai.response.finish_reasons", "error")
   }
+}
+
+record_chat_otel_duration_error <- function(
+  provider,
+  model,
+  error_type,
+  start
+) {
+  attributes <- otel_metric_attributes(provider, model)
+  attributes[["error.type"]] <- error_type
+  otel_record_histogram(
+    "gen_ai.client.inference.duration",
+    elapsed_secs(start),
+    attributes
+  )
+}
+
+# Records a model request that was unwound before it was recorded as a
+# success or an error, e.g. by a keyboard interrupt. Runs from `defer()`,
+# mirroring how `TurnAccumulator$finalize_turn()` marks the partial turn as
+# "interrupted" from `on.exit()`. `start` is `NULL` once the request has been
+# recorded by another path.
+record_chat_otel_span_interrupted <- function(span, provider, model, start) {
+  if (is.null(start)) {
+    return()
+  }
+  record_chat_otel_duration_error(provider, model, "interrupted", start)
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  span$set_status("error")
+  span$set_attribute("error.type", "interrupted")
+  span$set_attribute("gen_ai.response.finish_reasons", "error")
 }
 
 # Convert a single Content into a GenAI semconv "part", a named list emitted
@@ -667,7 +715,11 @@ new_agent_otel_tally <- function() {
     inference_calls = 0L,
     tool_calls = 0L,
     tokens = c(0, 0, 0),
-    error = NULL
+    # `error.type` for the invocation: an error class or "cancelled". An
+    # invocation that ends without completing or setting an error type was
+    # interrupted.
+    error_type = NULL,
+    completed = FALSE
   )
 }
 
@@ -690,7 +742,7 @@ tally_agent_otel_turn <- function(tally, turn) {
 record_agent_otel <- function(span, provider, model, tally) {
   attributes <- otel_metric_attributes(provider, model)
   attributes[["gen_ai.operation.name"]] <- "invoke_agent"
-  error_type <- if (!is.null(tally$error)) otel_error_type(tally$error)
+  error_type <- tally$error_type %||% if (!tally$completed) "interrupted"
   values <- list(
     "gen_ai.invoke_agent.duration" = elapsed_secs(tally$start),
     "gen_ai.invoke_agent.inference_calls" = tally$inference_calls,
@@ -726,7 +778,15 @@ record_agent_otel <- function(span, provider, model, tally) {
   }
 }
 
-record_tool_otel_duration <- function(request, start, result) {
+record_tool_otel_result <- function(request, start, result) {
+  record_tool_otel_duration(
+    request,
+    start,
+    if (tool_errored(result)) tool_error_type(result)
+  )
+}
+
+record_tool_otel_duration <- function(request, start, error_type = NULL) {
   otel_record_histogram(
     "gen_ai.execute_tool.duration",
     elapsed_secs(start),
@@ -734,9 +794,24 @@ record_tool_otel_duration <- function(request, start, result) {
       "gen_ai.operation.name" = "execute_tool",
       "gen_ai.tool.name" = request@tool@name,
       "gen_ai.tool.type" = "function",
-      "error.type" = if (tool_errored(result)) tool_error_type(result)
+      "error.type" = error_type
     )
   )
+}
+
+# The tool counterpart of `record_chat_otel_span_interrupted()`: runs from
+# `defer()` and records the call only if it was unwound before
+# `record_tool_otel_result()` cleared `start`.
+record_tool_otel_interrupted <- function(span, request, start) {
+  if (is.null(start)) {
+    return()
+  }
+  record_tool_otel_duration(request, start, "interrupted")
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  span$set_status("error")
+  span$set_attribute("error.type", "interrupted")
 }
 
 tool_error_type <- function(result) {
