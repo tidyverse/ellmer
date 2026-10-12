@@ -116,7 +116,6 @@ Collate:
     'provider-google-upload.R'
     'provider-groq.R'
     'provider-huggingface.R'
-    'provider-llamacpp.R'
     'provider-lmstudio.R'
     'provider-mistral.R'
     'provider-ollama.R'
