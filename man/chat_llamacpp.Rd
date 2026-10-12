@@ -92,7 +92,7 @@ chat$chat("Tell me three jokes about statisticians")
 chat <- chat_llamacpp(model = "llama-3.2-3b")
 
 # Use an Ollama model with llama.cpp
-# (find models with ollama_model_paths())
+# (find local GGUF files with list_llamacpp_models())
 # ./llama-server -m ~/.ollama/models/blobs/sha256-abc123...
 }
 }
