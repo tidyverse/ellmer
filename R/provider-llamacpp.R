@@ -99,22 +99,26 @@ chat_llamacpp <- function(
   provider <- ProviderLlamaCpp(
     name = "LlamaCpp",
     base_url = file.path(base_url, "v1"),
-    model = model,
-    params = params %||% params(),
-    extra_args = api_args,
     credentials = credentials,
     extra_headers = api_headers
   )
+  model <- Model(
+    name = model,
+    params = params %||% params(),
+    extra_args = api_args
+  )
 
-  Chat$new(provider = provider, system_prompt = system_prompt, echo = echo)
+  Chat$new(
+    provider = provider,
+    model = model,
+    system_prompt = system_prompt,
+    echo = echo
+  )
 }
 
 ProviderLlamaCpp <- new_class(
   "ProviderLlamaCpp",
-  parent = ProviderOpenAICompatible,
-  properties = list(
-    model = prop_string()
-  )
+  parent = ProviderOpenAICompatible
 )
 
 llamacpp_credentials <- function(credentials = NULL, api_key = NULL) {
