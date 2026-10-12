@@ -50,7 +50,7 @@
 #' chat <- chat_llamacpp(model = "llama-3.2-3b")
 #'
 #' # Use an Ollama model with llama.cpp
-#' # (find models with ollama_model_paths())
+#' # (find local GGUF files with list_llamacpp_models())
 #' # ./llama-server -m ~/.ollama/models/blobs/sha256-abc123...
 #' }
 chat_llamacpp <- function(
@@ -243,31 +243,112 @@ has_llamacpp <- function(
 }
 
 
-#' Find GGUF model files from Ollama installation
+#' List GGUF models available on this machine
 #'
 #' @description
-#' Helper function to locate GGUF model files from a local Ollama installation.
-#' This allows you to reuse Ollama models with llama.cpp without downloading
-#' them twice.
+#' Scans the machine for GGUF model files that can be loaded by llama.cpp
+#' (`./llama-server -m /path/to/model.gguf`). Files are identified by their
+#' GGUF magic bytes, so files without a `.gguf` extension are found too --
+#' including Ollama's blob store, letting you reuse already-downloaded Ollama
+#' models without duplicating storage.
 #'
-#' Ollama stores model files in `~/.ollama/models/blobs/` (or
-#' `%USERPROFILE%\.ollama\models\blobs\` on Windows) as SHA256-named files.
-#' Not all blobs are GGUF files - some are manifests or configs.
+#' By default the scan covers:
+#' * Ollama's blob store (`~/.ollama/models/blobs/`, or
+#'   `%USERPROFILE%\\.ollama\\models\\blobs\\` on Windows, or
+#'   `$OLLAMA_MODELS/blobs` when that variable is set),
+#' * the llama.cpp download cache (`~/.cache/llama.cpp/`),
+#' * `~/models/`,
+#' * any extra directories passed via `dirs`.
 #'
-#' @param ollama_dir Path to Ollama's model directory. If `NULL`, uses the
-#'   default location for your OS.
-#' @return A data frame with columns `path` (full path to GGUF file) and
-#'   `size` (file size in bytes), or an empty data frame if no files found.
+#' This is the llama.cpp analogue of [models_ollama()]: it tells you what you
+#' *could* load, while `models_llamacpp()` tells you what the server *has*
+#' loaded.
+#'
+#' @param dirs Additional directories to scan (in addition to the defaults).
+#'   Non-existent directories are silently skipped.
+#' @param recursive Scan directories recursively. Defaults to `TRUE`.
+#' @returns A data frame with columns `name` (file name), `path` (full path,
+#'   ready to pass to `./llama-server -m`), and `size` (file size in bytes).
+#'   An empty data frame when nothing is found.
 #' @export
 #' @examples
 #' \dontrun{
-#' # Find Ollama GGUF files
-#' gguf_files <- ollama_model_paths()
+#' list_llamacpp_models()
 #'
-#' # Start llama.cpp with an Ollama model
-#' # ./llama-server -m ~/.ollama/models/blobs/sha256-abc123...
+#' # start the server with one of the results
+#' # ./llama-server -m /path/to/model.gguf
 #' }
-ollama_model_paths <- function(ollama_dir = NULL) {
-  # TODO, automatically find ollama_dir
-  paste0(ollama_dir, ollamar::list_models()$name)
+list_llamacpp_models <- function(dirs = NULL, recursive = TRUE) {
+  scan_dirs <- llamacpp_default_dirs(dirs)
+  if (length(scan_dirs) == 0L) {
+    return(llamacpp_empty_models())
+  }
+
+  files <- unlist(
+    lapply(scan_dirs, function(d) {
+      list.files(d, full.names = TRUE, recursive = recursive, all.files = FALSE)
+    }),
+    use.names = FALSE
+  )
+  files <- files[!dir.exists(files)]
+  is_gguf <- vapply(files, llamacpp_is_gguf, logical(1), USE.NAMES = FALSE)
+  files <- files[is_gguf]
+
+  if (length(files) == 0L) {
+    return(llamacpp_empty_models())
+  }
+
+  info <- file.info(files)
+  df <- data.frame(
+    name = basename(files),
+    path = files,
+    size = info$size,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  df[order(df$name), , drop = FALSE]
+}
+
+# Default directories to scan for GGUF files
+llamacpp_default_dirs <- function(dirs = NULL) {
+  home <- Sys.getenv("HOME", "~")
+  if (identical(.Platform$OS.type, "windows")) {
+    home <- Sys.getenv("USERPROFILE", home)
+  }
+
+  ollama_models <- Sys.getenv("OLLAMA_MODELS", "")
+  if (!nzchar(ollama_models)) {
+    ollama_models <- file.path(home, ".ollama", "models")
+  }
+
+  candidates <- c(
+    file.path(ollama_models, "blobs"),
+    file.path(home, ".cache", "llama.cpp"),
+    file.path(home, "models"),
+    dirs
+  )
+  unique(candidates[dir.exists(candidates)])
+}
+
+# Check GGUF magic bytes (first 4 bytes are "GGUF")
+llamacpp_is_gguf <- function(path) {
+  con <- tryCatch(
+    suppressWarnings(file(path, "rb")),
+    error = function(e) NULL
+  )
+  if (is.null(con)) {
+    return(FALSE)
+  }
+  on.exit(tryCatch(close(con), error = function(e) NULL), add = TRUE)
+  magic <- tryCatch(readBin(con, "raw", n = 4L), error = function(e) raw(0))
+  length(magic) == 4L && all(magic == charToRaw("GGUF"))
+}
+
+llamacpp_empty_models <- function() {
+  data.frame(
+    name = character(0),
+    path = character(0),
+    size = numeric(0),
+    stringsAsFactors = FALSE
+  )
 }
