@@ -1093,9 +1093,9 @@ Chat <- R6::R6Class(
                   last_chunk_time
                 )
               }
-              # Taken as soon as the chunk is received, before its contents
-              # are yielded, so consecutive timestamps measure the interval
-              # between chunk arrivals.
+              # Taken after the chunk is merged but before its contents are
+              # yielded; consecutive timestamps give the interval between
+              # chunk arrivals, including any consumer time between pulls.
               last_chunk_time <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)
@@ -1322,9 +1322,9 @@ Chat <- R6::R6Class(
                   last_chunk_time
                 )
               }
-              # Taken as soon as the chunk is received, before its contents
-              # are yielded, so consecutive timestamps measure the interval
-              # between chunk arrivals.
+              # Taken after the chunk is merged but before its contents are
+              # yielded; consecutive timestamps give the interval between
+              # chunk arrivals, including any consumer time between pulls.
               last_chunk_time <- Sys.time()
               for (content in contents) {
                 text <- content_text(content)

@@ -367,6 +367,43 @@ test_that("time to first chunk is recorded on the first streamed chunk", {
   )
 })
 
+test_that("time per output chunk is recorded for asynchronous streams", {
+  skip_if_not_installed("otelsdk")
+
+  make_response <- function() {
+    coro::generator(function() {
+      yield(list(type = "chunk"))
+      yield(list(type = "chunk"))
+      yield(list(type = "chunk"))
+    })()
+  }
+  n <- 0
+  local_mocked_bindings(
+    chat_perform = function(...) make_response(),
+    stream_merge_chunks = function(provider, result, chunk) list(),
+    stream_content = function(provider, event, completion) {
+      n <<- n + 1
+      switch(n, list(ContentText("")), list(ContentText("hi")), list())
+    },
+    value_finish_reason = function(provider, result) "success",
+    value_turn = function(provider, model, result, has_type = FALSE) {
+      AssistantTurn(list(ContentText("hi")), tokens = c(0, 0, 0), cost = 0)
+    }
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider("Test"), model = test_model("test-model"))
+    sync(coro::async_collect(chat$stream_async("hi")))
+  })
+
+  # Three chunks: one time to first chunk, two inter-chunk intervals.
+  points <- otel_metric_points(recorded$metrics)
+  chunk_point <- points[["gen_ai.client.inference.time_per_output_chunk"]][[1L]]
+  expect_equal(chunk_point$count, 2L)
+  ttft_point <- points[["gen_ai.client.inference.time_to_first_chunk"]][[1L]]
+  expect_equal(ttft_point$count, 1L)
+})
+
 test_that("token usage and operation duration are recorded as metrics", {
   skip_if_not_installed("otelsdk")
 
@@ -377,6 +414,7 @@ test_that("token usage and operation duration are recorded as metrics", {
     value_tokens = function(provider, result) {
       list(input = 3, cached_input = 1, output = 5)
     },
+    value_reasoning_tokens = function(provider, result) 2,
     value_turn = function(provider, model, result, has_type = FALSE) {
       AssistantTurn(
         list(ContentText("hi")),
@@ -410,6 +448,7 @@ test_that("token usage and operation duration are recorded as metrics", {
       "gen_ai.client.inference.usage.input_tokens",
       "gen_ai.client.inference.usage.output_tokens",
       "gen_ai.client.inference.usage.cache_read.input_tokens",
+      "gen_ai.client.inference.usage.reasoning.output_tokens",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
       "gen_ai.invoke_agent.tool_calls"
@@ -432,6 +471,12 @@ test_that("token usage and operation duration are recorded as metrics", {
       1L
     ]]$value,
     1
+  )
+  expect_equal(
+    points[["gen_ai.client.inference.usage.reasoning.output_tokens"]][[
+      1L
+    ]]$value,
+    2
   )
   expect_equal(points[["gen_ai.client.inference.duration"]][[1L]]$count, 1L)
   expect_equal(points[["gen_ai.invoke_agent.inference_calls"]][[1L]]$sum, 1)
