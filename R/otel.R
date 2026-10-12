@@ -6,7 +6,7 @@ local_chat_otel_span <- NULL
 local_tool_otel_span <- NULL
 local_agent_otel_span <- NULL
 otel_record_histogram <- NULL
-otel_add_counter <- NULL
+otel_record_counter <- NULL
 
 # Histograms from the GenAI semantic conventions for metrics. The
 # `gen_ai.client.inference.*` instruments are defined by the client inference
@@ -194,7 +194,7 @@ local({
 
   otel_capture_content_enabled <<- function() otel_capture_content
 
-  otel_add_counter <<- function(name, value, attributes) {
+  otel_record_counter <<- function(name, value, attributes) {
     if (!otel_is_measuring) {
       return()
     }
@@ -470,7 +470,7 @@ record_chat_otel_span_status <- function(span, provider, model, result, start) {
     )
     usage_attributes <- c(attributes, "gen_ai.token.modality" = "unknown")
     for (name in names(usage)[usage > 0L]) {
-      otel_add_counter(name, usage[[name]], usage_attributes)
+      otel_record_counter(name, usage[[name]], usage_attributes)
     }
   }
 
