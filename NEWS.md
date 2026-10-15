@@ -4,6 +4,7 @@
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
 * `chat_cloudflare()` now uses its `account` argument to build the API URL. Previously it always read `CLOUDFLARE_ACCOUNT_ID`, ignoring any `account` you passed in. It also no longer errors when streaming a response that is only a number, which Cloudflare sends as a JSON number instead of a string (#1164).
 * `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
+* `chat_openrouter()` can now log in with your OpenRouter account from the browser when `OPENROUTER_API_KEY` is not set (@thisisnic, #1172).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).
 
