@@ -123,6 +123,8 @@ reference:
 
 news:
   releases:
+  - text: "Version 0.5.0"
+    href: https://opensource.posit.co/blog/2026-09-14_ellmer-0-5-0/
   - text: "Version 0.4.0"
     href: https://tidyverse.org/blog/2025/11/ellmer-0-4-0/
   - text: "Version 0.3.0"
