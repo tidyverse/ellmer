@@ -234,3 +234,7 @@ ellmer comes with a bunch of vignettes to help you learn more:
 - Learn about streaming and async APIs in `vignette("streaming-async")`.
 - Learn tips for programming with ellmer, including inside your own
   package, in `vignette("programming")`.
+
+## Privacy
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
