@@ -637,6 +637,48 @@ test_that("interrupted requests are recorded on spans and metrics", {
   }
 })
 
+test_that("interrupting a stream consumer is recorded when the loop closes", {
+  skip_if_not_installed("otelsdk")
+
+  local_mocked_bindings(
+    chat_perform = function(...) {
+      coro::generator(function() {
+        yield(list(type = "partial"))
+        yield(list(type = "partial"))
+      })()
+    },
+    stream_merge_chunks = function(provider, result, chunk) chunk,
+    stream_content = function(provider, event, completion) {
+      list(ContentText("partial"))
+    }
+  )
+
+  recorded <- with_otel_record({
+    chat <- Chat$new(test_provider(), model = test_model())
+    tryCatch(
+      coro::loop(
+        for (chunk in chat$stream("hi")) {
+          rlang::interrupt()
+        }
+      ),
+      interrupt = function(e) NULL
+    )
+  })
+
+  for (span in recorded$traces[c("invoke_agent", "chat ")]) {
+    expect_equal(span$status, "error")
+    expect_equal(span$attributes[["error.type"]], "interrupted")
+  }
+
+  points <- otel_metric_points(recorded$metrics)
+  for (name in c(
+    "gen_ai.client.inference.duration",
+    "gen_ai.invoke_agent.duration"
+  )) {
+    expect_equal(points[[name]][[1L]]$attributes[["error.type"]], "interrupted")
+  }
+})
+
 test_that("request params are recorded as gen_ai.request.* attributes", {
   skip_if_not_installed("otelsdk")
 
