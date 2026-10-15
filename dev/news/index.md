@@ -31,6 +31,12 @@
   partial (interrupted) assistant turn
   ([@taekop](https://github.com/taekop),
   [\#1131](https://github.com/tidyverse/ellmer/issues/1131)).
+- [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md)
+  now uses its `account` argument to build the API URL. Previously it
+  always read `CLOUDFLARE_ACCOUNT_ID`, ignoring any `account` you passed
+  in. It also no longer errors when streaming a response that is only a
+  number, which Cloudflare sends as a JSON number instead of a string
+  ([\#1164](https://github.com/tidyverse/ellmer/issues/1164)).
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   now sends `type = "message"` on every input item to the Responses API,
   so OpenAI-compatible servers that require it (e.g. llama.cpp) no
