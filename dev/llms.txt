@@ -270,6 +270,10 @@ ellmer comes with a bunch of vignettes to help you learn more:
   package, in
   [`vignette("programming")`](https://ellmer.tidyverse.org/dev/articles/programming.md).
 
+## Privacy
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+
 # Package index
 
 ## Chatbots

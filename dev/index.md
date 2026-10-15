@@ -269,3 +269,7 @@ ellmer comes with a bunch of vignettes to help you learn more:
 - Learn tips for programming with ellmer, including inside your own
   package, in
   [`vignette("programming")`](https://ellmer.tidyverse.org/dev/articles/programming.md).
+
+## Privacy
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
