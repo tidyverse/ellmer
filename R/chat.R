@@ -1146,7 +1146,7 @@ Chat <- R6::R6Class(
               request_start,
               error_type = if (controller$cancelled) "cancelled"
             )
-            request_start <- NULL # duration recorded; skip in error handler
+            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
@@ -1162,7 +1162,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
-            request_start <- NULL # duration recorded; skip in error handler
+            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
 
@@ -1384,7 +1384,7 @@ Chat <- R6::R6Class(
               request_start,
               error_type = if (controller$cancelled) "cancelled"
             )
-            request_start <- NULL # duration recorded; skip in error handler
+            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
@@ -1401,7 +1401,7 @@ Chat <- R6::R6Class(
               result,
               request_start
             )
-            request_start <- NULL # duration recorded; skip in error handler
+            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
 
