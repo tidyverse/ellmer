@@ -50,6 +50,15 @@
   the `gen_ai.response.time_to_first_chunk` attribute on the
   OpenTelemetry `chat` span ([@schloerke](https://github.com/schloerke),
   [\#1142](https://github.com/tidyverse/ellmer/issues/1142)).
+- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  and
+  [`batch_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  now warn instead of silently ignoring `include_tokens` and
+  `include_cost` when the result isn’t a data frame, e.g. because `type`
+  is a top-level
+  [`type_array()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
+  or `convert = FALSE` ([@taekop](https://github.com/taekop),
+  [\#1129](https://github.com/tidyverse/ellmer/issues/1129)).
 
 ## ellmer 0.5.0
 
