@@ -15,6 +15,7 @@ chat_openai_compatible(
   api_args = list(),
   api_headers = character(),
   preserve_thinking = FALSE,
+  strict = FALSE,
   echo = c("none", "output", "all")
 )
 }
@@ -48,6 +49,9 @@ is included when sending conversation history back to the API. If \code{FALSE}
 (the default), reasoning content is still captured in the turn but dropped
 from subsequent requests. Set to \code{TRUE} if your provider requires or
 benefits from seeing prior reasoning in multi-turn conversations.}
+
+\item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
+structured output. Only set this if the endpoint and model support it.}
 
 \item{echo}{One of the following options:
 \itemize{

@@ -3,9 +3,9 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Which
-        penguin won the race? Answer with just the penguin''s name."}]},{"role":"user","content":[{"type":"input_file","filename":"penguin_race.csv","file_data":"data:text/csv;base64,cGVuZ3VpbixyYWNlX3RpbWVfc2Vjb25kcwpXYWRkbGVzd29ydGgsNDMuMgpGbGlwcGVyIE1jR2VlLDM4LjcKVHVyYm8gVHV4ZWRvLDMxLjkKQ2FwdGFpbiBCbHViYmVyLDQ1LjEKU2lyIFNsaWRlc2Fsb3QsMzYuNAo="}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Which
+        penguin won the race? Answer with just the penguin''s name."}]},{"type":"message","role":"user","content":[{"type":"input_file","filename":"penguin_race.csv","file_data":"data:text/csv;base64,cGVuZ3VpbixyYWNlX3RpbWVfc2Vjb25kcwpXYWRkbGVzd29ydGgsNDMuMgpGbGlwcGVyIE1jR2VlLDM4LjcKVHVyYm8gVHV4ZWRvLDMxLjkKQ2FwdGFpbiBCbHViYmVyLDQ1LjEKU2lyIFNsaWRlc2Fsb3QsMzYuNAo="}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -15,39 +15,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2e193f44ff6b10d-MAN
+      cf-ray: a463e8f1ce9c1ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Thu, 20 Aug 2026 12:59:57 GMT
+      date: Tue, 06 Oct 2026 10:16:22 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2139'
+      openai-processing-ms: '2800'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=8v5z8jrh7F6kLnBTF2Z1kfcvdm3eaNUrTvQQFpGQy_4-1787230794.922312-1.0.1.1-PQTocpLSxpLFZCwAT2JsTjeKQo76NoELW6R490iXmZIPynVa7RYSToud8J.K9mp4ANgpF4mPA0VyIsj7GaZXeM01IVLT1LSABq7qaIC6fUHSFcZOKCYEZJsiJL.ajm1.;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Thu,
-        20 Aug 2026 13:29:57 GMT
+      set-cookie: __cf_bm=7r1ukhb6I2_2AsIsWi6mLjCYCyCcglrY689Mb7PJSbw-1791281779.4865608-1.0.1.1-AIXuaMNN23xwYBzac5xGIRrAFSgjBMWAw1JeMt5YInUd01FwPsvPvqWrhhTarN00qvS2le62G5Zqx1P2LHJU7K7vimE8uEsYAy47HvoV9JCaUPw3XprjA6f9Fim1p7mi;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:22 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-remaining-tokens: '143469'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_3db7f44210454632b781fde9ec41a060
+      x-ratelimit-reset-tokens: 16.959s
+      x-request-id: req_7870bad7a04048748bb7e46cc991f9d4
     body:
       string: |-
         {
-          "id": "resp_015e3b9ab4193a45016a86fa4b01e8819db82cb4c2176f91c1",
+          "id": "resp_03eaa9f3cbec105c016ac4ca73a02c87d284c58d9deeb32e39",
           "object": "response",
-          "created_at": 1787230796,
+          "created_at": 1791281781,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1787230797,
+          "completed_at": 1791281782,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +59,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_015e3b9ab4193a45016a86fa4d0b28819d924a8dc9d61d9ca0",
+              "id": "msg_03eaa9f3cbec105c016ac4ca7647b887d289f234735b9b10f9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -132,5 +133,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-20 12:59:57
+  recorded_at: 2026-10-06 10:16:22
 recorded_with: VCR-vcr/2.1.0

@@ -311,7 +311,7 @@ method(stream_content, ProviderGoogleGemini) <- function(
   candidate <- event$candidates[[1]]
   parts <- candidate$content$parts %||% list()
   part_contents <- list_c(lapply(parts, function(part) {
-    if (isTRUE(part$thought) && !is.null(part$text)) {
+    if (isTRUE(part[["thought"]]) && !is.null(part$text)) {
       list(ContentThinking(part$text))
     } else if (!is.null(part$text)) {
       list(ContentText(part$text))
@@ -404,7 +404,7 @@ method(value_turn, ProviderGoogleGemini) <- function(
   message <- candidate$content
 
   contents <- lapply(message$parts, function(content) {
-    if (isTRUE(content$thought) && has_name(content, "text")) {
+    if (isTRUE(content[["thought"]]) && has_name(content, "text")) {
       ContentThinking(content$text)
     } else if (has_name(content, "text")) {
       if (has_type) {

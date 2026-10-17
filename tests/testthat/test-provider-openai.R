@@ -113,6 +113,7 @@ test_that("documents and pdfs with a url are passed through as file_url", {
   expect_equal(
     as_json(provider, doc_url),
     list(
+      type = "message",
       role = "user",
       content = list(list(
         type = "input_file",
@@ -130,12 +131,30 @@ test_that("documents and pdfs with a url are passed through as file_url", {
   expect_equal(
     as_json(provider, pdf_url),
     list(
+      type = "message",
       role = "user",
       content = list(list(
         type = "input_file",
         file_url = "https://example.com/x.pdf"
       ))
     )
+  )
+})
+
+test_that("as_json() marks message items with type = 'message' (#1153)", {
+  provider <- chat_openai_test()$get_provider()
+
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "user")$type,
+    "message"
+  )
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "assistant")$type,
+    "message"
+  )
+  expect_equal(
+    as_json(provider, ContentText("Hi"), role = "system")$type,
+    "message"
   )
 })
 
@@ -411,11 +430,48 @@ test_that("can count tokens", {
   test_token_count(chat_openai_test)
 })
 
+test_that("tools and structured output include `strict` only when strict", {
+  tool_def <- tool(
+    function(x, y = 1) x + y,
+    "Add numbers",
+    arguments = list(
+      x = type_number("First"),
+      y = type_number("Second", required = FALSE)
+    )
+  )
+  type <- type_object(x = type_number())
+
+  non_strict <- ProviderOpenAI(name = "", base_url = "")
+  body <- chat_body(
+    non_strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_null(body$text$format$strict)
+  expect_null(body$tools[[1]]$strict)
+  expect_equal(unlist(body$tools[[1]]$parameters$required), "x")
+
+  strict <- ProviderOpenAI(name = "", base_url = "", strict = TRUE)
+  body <- chat_body(
+    strict,
+    test_model(),
+    turns = list(),
+    tools = list(tool_def),
+    type = type
+  )
+  expect_true(body$text$format$strict)
+  expect_true(body$tools[[1]]$strict)
+  expect_equal(unlist(body$tools[[1]]$parameters$required), c("x", "y"))
+})
+
 test_that("as_json() serializes uploaded file references", {
   provider <- chat_openai_test()$get_provider()
   expect_equal(
     as_json(provider, ContentUploaded("file-1", "application/pdf")),
     list(
+      type = "message",
       role = "user",
       content = list(list(type = "input_file", file_id = "file-1"))
     )
@@ -423,6 +479,7 @@ test_that("as_json() serializes uploaded file references", {
   expect_equal(
     as_json(provider, ContentUploaded("file-1", "image/png")),
     list(
+      type = "message",
       role = "user",
       content = list(
         list(type = "input_image", file_id = "file-1", detail = "auto")

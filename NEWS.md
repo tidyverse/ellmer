@@ -1,6 +1,13 @@
 # ellmer (development version)
 
 * The OpenTelemetry `gen_ai.input.messages` attribute is no longer dropped when a tool result returns a `Content` object, such as an image (@taekop, #1145).
+* OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
+* `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
+* `chat_cloudflare()` now uses its `account` argument to build the API URL. Previously it always read `CLOUDFLARE_ACCOUNT_ID`, ignoring any `account` you passed in. It also no longer errors when streaming a response that is only a number, which Cloudflare sends as a JSON number instead of a string (#1164).
+* `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
+* `live_browser()` works again with shinychat >= 0.5.0 (#1167).
+* Streamed responses now record the time to first token (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).
+* `parallel_chat_structured()` and `batch_chat_structured()` now warn instead of silently ignoring `include_tokens` and `include_cost` when the result isn't a data frame, e.g. because `type` is a top-level `type_array()` or `convert = FALSE` (@taekop, #1129).
 
 # ellmer 0.5.0
 

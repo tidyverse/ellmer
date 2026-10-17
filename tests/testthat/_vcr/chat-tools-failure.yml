@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         are Joe, Hadley, Simon, and Tom''s favorite colors?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -17,39 +17,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250ac5688ec0f91-EWR
+      cf-ray: a463de41fafc0038-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:55:59 GMT
+      date: Tue, 06 Oct 2026 10:09:03 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '897'
+      openai-processing-ms: '1151'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=Y0mq35DCHzdm_3_KtwVNA20Q89nPOlN2VNclXSdi2uw-1785711358.4814062-1.0.1.1-6000m7RC9VboXfkgVOo0urnw5n.76J9eawuDD89PhGbFVNAotXnXfZBw1qFN2kr7ddGwEms9g_f9VueFB592GVKuhYsFX59vcUgfYNQqf8nE0d3chutIvSMKLi_nsUiy;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:25:59 GMT
+      set-cookie: __cf_bm=NUpVUlaBXbHnt9e3mYuqwWZYM7CgQzAYTM_NNT_vEw4-1791281341.7518148-1.0.1.1-Gd60G4PK1dbdqN.n9M1hpAnz3H.5t28KaHNu5BRw8tj6_5cc4SzrbyP5zPEVXdGPwc6MhDY.hg7KCB.HBeahqammYsjJC6tMo5w0vMVNB49RAvbYrDz4OamB1A0fx_tv;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:39:03 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '494'
       x-ratelimit-remaining-tokens: '200000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 720ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6484af42ae454e88bcf65b599230a5aa
+      x-request-id: req_380ab9701dc44802a1f76d5d91d6189e
     body:
       string: |-
         {
-          "id": "resp_0475ee0ebd08dac4016a6fcafe8da0819689dd4bbb676bfce7",
+          "id": "resp_0f1e0d9a47b8fd07016ac4c8bde27887d2947fc416dcbde977",
           "object": "response",
-          "created_at": 1785711358,
+          "created_at": 1791281341,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785711359,
+          "completed_at": 1791281342,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -60,35 +61,35 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_0475ee0ebd08dac4016a6fcaff58f08196a9d75a837401bc8f",
+              "id": "fc_0f1e0d9a47b8fd07016ac4c8bef04487d28633f19cd60baa3e",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Joe\"}",
-              "call_id": "call_ZKpE9cLEooAwr3QpvySlB0oO",
+              "call_id": "call_lfkbUmmuYJM2HkNJAHGUzxhL",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_0475ee0ebd08dac4016a6fcaff5900819686516132e1dca09b",
+              "id": "fc_0f1e0d9a47b8fd07016ac4c8bef05c87d2b5b5d5a7f7c3136e",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Hadley\"}",
-              "call_id": "call_dZM4Yn9mfPTm36LUiUkvgGuo",
+              "call_id": "call_5X784ZFiMj0oObTCVUGys8cN",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_0475ee0ebd08dac4016a6fcaff590c81969100853bdc96925c",
+              "id": "fc_0f1e0d9a47b8fd07016ac4c8bef06887d292236b55e3dcbe72",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Simon\"}",
-              "call_id": "call_uSrJoBfkvgt5g6X6I8fzm6Pb",
+              "call_id": "call_iSdFs6kqBVRwPuEkgZHZJTBb",
               "name": "user_favorite_color"
             },
             {
-              "id": "fc_0475ee0ebd08dac4016a6fcaff59148196ae60331f1a17c69f",
+              "id": "fc_0f1e0d9a47b8fd07016ac4c8bef07087d28d543b514310b178",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"user\":\"Tom\"}",
-              "call_id": "call_Iw3Kig3rh0dF41yT6bl89JV1",
+              "call_id": "call_FCoDyu5xTBh3yOHdusESrJmk",
               "name": "user_favorite_color"
             }
           ],
@@ -173,17 +174,17 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:55:59
+  recorded_at: 2026-10-06 10:09:03
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"What
-        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff58f08196a9d75a837401bc8f","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff5900819686516132e1dca09b","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff590c81969100853bdc96925c","name":"user_favorite_color","arguments":"{\"user\":\"Simon\"}"},{"type":"function_call","call_id":"fc_0475ee0ebd08dac4016a6fcaff59148196ae60331f1a17c69f","name":"user_favorite_color","arguments":"{\"user\":\"Tom\"}"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff58f08196a9d75a837401bc8f","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff5900819686516132e1dca09b","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff590c81969100853bdc96925c","output":"Tool
-        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0475ee0ebd08dac4016a6fcaff59148196ae60331f1a17c69f","output":"Tool
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        are Joe, Hadley, Simon, and Tom''s favorite colors?"}]},{"type":"function_call","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef04487d28633f19cd60baa3e","name":"user_favorite_color","arguments":"{\"user\":\"Joe\"}"},{"type":"function_call","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef05c87d2b5b5d5a7f7c3136e","name":"user_favorite_color","arguments":"{\"user\":\"Hadley\"}"},{"type":"function_call","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef06887d292236b55e3dcbe72","name":"user_favorite_color","arguments":"{\"user\":\"Simon\"}"},{"type":"function_call","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef07087d28d543b514310b178","name":"user_favorite_color","arguments":"{\"user\":\"Tom\"}"},{"type":"function_call_output","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef04487d28633f19cd60baa3e","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef05c87d2b5b5d5a7f7c3136e","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef06887d292236b55e3dcbe72","output":"Tool
+        calling failed with error User denied tool request"},{"type":"function_call_output","call_id":"fc_0f1e0d9a47b8fd07016ac4c8bef07087d28d543b514310b178","output":"Tool
         calling failed with error User denied tool request"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"user_favorite_color","description":"Find
         out a user''s favorite color","strict":true,"parameters":{"type":"object","description":"","properties":{"user":{"type":"string","description":"User''s
         name"}},"required":["user"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -196,39 +197,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250ac5edf6c0f91-EWR
+      cf-ray: a463de4cbfe50038-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:56:00 GMT
+      date: Tue, 06 Oct 2026 10:09:04 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '641'
+      openai-processing-ms: '565'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=EYh4kEdic.10G81Lz4ERzsNbChrAB6p.k8hWOkFCqhE-1785711359.820386-1.0.1.1-BdSm.._JoVfm4bbF08q115nJ0VwJv5eiZ.cf05QMNbPdUy6hU3MJZVEo0UOKWvXOPKPYGbOExViwfWk1oYyt0cXlQtr0W6A697N5JhW8ouJ6vAT.YqkeWVmFehrjg.BT;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:26:00 GMT
+      set-cookie: __cf_bm=o_ymVrvdTDzzIBC1ymUe81JFP_ZWlPL8wQWCHaLJQi0-1791281343.4754982-1.0.1.1-HhRpEHtb6LaSctWBS2V7OgsVBnz6Hrv4gkYufr2i4zCD7Aen53jKNWmMKpyCAm0txIrAHVwDhCsBhNGQmBI4IhOCz6NzpVIalGwoDljmCHB.T_Wvwwj7CUys2l2skMWA;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:39:04 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '497'
       x-ratelimit-remaining-tokens: '200000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 335ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_ed1d0b02d2cf48f88b32292d8770d181
+      x-request-id: req_44668fc9ea9947c5bd334809834eebf4
     body:
       string: |-
         {
-          "id": "resp_0a31d11da943606e016a6fcaffe2908193959c9fac6042562a",
+          "id": "resp_0628f0b0144b0427016ac4c8bf96f087d29d53e9b85a587efd",
           "object": "response",
-          "created_at": 1785711359,
+          "created_at": 1791281343,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785711360,
+          "completed_at": 1791281344,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -239,7 +241,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0a31d11da943606e016a6fcb002dac8193b3a7e87e0d7e3425",
+              "id": "msg_0628f0b0144b0427016ac4c8bff03087d2880557c9d2f8e6d4",
               "type": "message",
               "status": "completed",
               "content": [
@@ -335,5 +337,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:56:00
+  recorded_at: 2026-10-06 10:09:04
 recorded_with: VCR-vcr/2.1.0

@@ -77,7 +77,8 @@ chat_lmstudio <- function(
     name = "LM Studio",
     base_url = file.path(base_url, "v1"),
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
 

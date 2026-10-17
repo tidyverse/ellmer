@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Who
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Who
         created R?"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -14,39 +14,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508e899f19e351-EWR
+      cf-ray: a463e2b83c4d7796-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:35:38 GMT
+      date: Tue, 06 Oct 2026 10:12:05 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '795'
+      openai-processing-ms: '1196'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=L811PUXCtKTwwpZgugn6mpZ4Mt5fZ2FV_bY2AwqPLnM-1785710137.854804-1.0.1.1-lhFbjpBvVbyDHJHOWfeO_uuiKIl22cucr27SA30SxHWADkqLBytT1AUeanCT0Te6JjjqDggyvuHj6LntRG9EwOpha1eBdoQSfMdumC100tLWYrWzd88W.mgtI5TbrG_A;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:05:38 GMT
+      set-cookie: __cf_bm=lXmHNRAtu_EFMVBPUjYmuBgTd8hn5.p7B0eeKHJxexU-1791281524.521544-1.0.1.1-xFDPgA.9zxGA_qSoZZa5VptbTGic.XpwvREPUGjB6MJ0kIEgYRM6kUJUnFBgZVj9QFX4WQORLLNTG4VZuo8geZQzOR.Y_Y_zOvIQ_yQCsscJpF6mS5pEFJRsdsUZnbLk;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:05 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29944'
+      x-ratelimit-remaining-tokens: '29933'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 112ms
-      x-request-id: req_7d2a13a54ca64955a71c4a2a36746cf2
+      x-ratelimit-reset-tokens: 134ms
+      x-request-id: req_c7008843ad2545d9a7108c2208673bcb
     body:
       string: |-
         {
-          "id": "resp_0d4bfe66fb46046d016a6fc63a07fc81978c5c19c75e1b3b8a",
+          "id": "resp_0ede2780f6d6773a016ac4c974ae0c87d2911c62a96d93876d",
           "object": "response",
-          "created_at": 1785710138,
+          "created_at": 1791281524,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710138,
+          "completed_at": 1791281525,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0d4bfe66fb46046d016a6fc63a4db081979d1cb3e527cb6e62",
+              "id": "msg_0ede2780f6d6773a016ac4c974fc6087d295270c8da31c9a96",
               "type": "message",
               "status": "completed",
               "content": [
@@ -65,7 +66,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "**R** was created by **Ross Ihaka** and **Robert Gentleman** at the **University of Auckland, New Zealand**. The project began in **1992**, and the first version was released in **1995**. Today, R is developed and maintained by the **R Core Team**, a group of statisticians and computational scientists from around the world."
+                  "text": "The programming language **R** was created by **Ross Ihaka** and **Robert Gentleman**. They began developing it in **1992** at the University of Auckland, New Zealand. The name \"R\" is partially derived from the first letters of their names, **R**oss and **R**obert, and also as a play on the name of the S language, which influenced the creation of R."
                 }
               ],
               "role": "assistant"
@@ -120,14 +121,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 75,
+            "output_tokens": 86,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 86
+            "total_tokens": 97
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:35:38
+  recorded_at: 2026-10-06 10:12:06
 recorded_with: VCR-vcr/2.1.0

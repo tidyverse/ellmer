@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
         and no other commentary.\n \n  Here are some examples of the sort of output
@@ -11,7 +11,7 @@ http_interactions:
         brown sugar\", \"quantity\": 150, \"unit\": \"g\"}\n\n  ⅓ cup (80ml) neutral
         oil\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"}\n\n  2
         t ground cinnamon\n  {\"name\": \"ground cinnamon\", \"quantity\": 2, \"unit\":
-        \"teaspoon\"}\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  ¾
+        \"teaspoon\"}\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  ¾
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
@@ -25,39 +25,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508aae2ffa8574-EWR
+      cf-ray: a463e381ae8106aa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:02 GMT
+      date: Tue, 06 Oct 2026 10:12:39 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2676'
+      openai-processing-ms: '2175'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=IYHNuLHhjQ3CWOhsOAt9HlNIO3P2ZvHGeRxf07UswUw-1785709979.863923-1.0.1.1-lAjE5gySKR3f0CdTrr_vzivTWAVS.T3XPubaubqqAlnMhmqjpdRr7gIHujJx3rpu_MtO5922FZfesXxplblyAwsaNGiL.phRbVpZqvBKm6EkPF0Nm0whx4R.CV_FYC_G;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:02 GMT
+      set-cookie: __cf_bm=RRGzNBCiKDRTDRMzxhNO1zo.QJiDrotNKs.Ae6MuWeQ-1791281556.7442691-1.0.1.1-Aa5.ypeJszy2Ts6QY97uc.27ipUHkDPDfIuFSduvzrRWIldsVvG_El2OpRwFgh1pYjC7BuoPSrvVN2SYAcXhEmz8QzxFx0G8aMw9moP.Mp4H2sRzvj.n.CJlQk.7KXAs;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:39 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499812'
+      x-ratelimit-remaining-tokens: '499567'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 22ms
-      x-request-id: req_c0a8c7aa9b1a40449f5c68f4f4e7fd2f
+      x-ratelimit-reset-tokens: 51ms
+      x-request-id: req_92c0498652fd42bfbb77de78ac6b010e
     body:
       string: |-
         {
-          "id": "resp_09bb8aaf89cd5da7016a6fc59becd08197bcbef0d71926925c",
+          "id": "resp_086d54b7be3bd9d7016ac4c994dd5487d29cbe5531c2bd2b00",
           "object": "response",
-          "created_at": 1785709979,
+          "created_at": 1791281556,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709982,
+          "completed_at": 1791281558,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -68,14 +69,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_09bb8aaf89cd5da7016a6fc59c590c8197be069732276de46e",
-              "type": "reasoning",
-              "content": [],
-              "encrypted_content": "gAAAAABqb8We8_4DM_x3Awuh0l6jhmel5H4Vl_V7iBSXYs6uOnl_qDRZWVKkc5h0EbIxJ9gLueYns881UhrWQcmVnUagNr1Gjpag670bKQ2eeyU6j-IVkXgOXKL20sVaVQUY3nBH_T1yqZFjkjwgulYyOSka4xnBBMHpb8ohOeRnaBOgXFvHh9LicQxO0ImiOYxTTBCyjT-gkPpGhWZ44Sb3eTtf7tUht5gF5f3VfkFgG6gWpaGDtRmyS7FEimvXjnxponyBMsJAf6sxdUhDxfmtawIRFfs7HfHpCNkCYq29_CyMp-3czqqTIWQekeHPtsErE15j5OnF1qVyOTf7TVVzQYW3nUdmPVpCrQs-vC8In-gX7a2MxR3DYaO22p_SwEoPypgscgt0ddEBgkTHvuZaXHdtETGKbIIKOizPTcZqZ78lyVouQBbMnhJer6RVFaduS_b9Aem0uFihNS_FU-UKRNzytLK8lSGCGBAIPme5baUBlex1kRXl9_F9K3ZV4dbBDQtE7QL3EfO8-HgovkmLJe9juiPVw99ABJH5-o6c_sP3RJhsZOxVHvuyt_UMgPUgqt8LY3lrZW8vFTyw-Cs2kZ4c7S6yruYRe7IWGYVGeH8t2sZpicUnpJj_uN8PV5vOIDrqHlgS2hBLqQvOwHQSEm_MwFUaZxguJAEm8HwW7UzAJXbec1J5ID-rgsdjSgYm-SdkOt4ZX5vgO2H-q9U3A1QSylkuveGj4ivSY6qjXP3qkJ71SqT-XrJC5kP7OK18bqUs-y-OIQSFNumltnGIzX3hn5RVUBLs5KXlZmJo0_Z5vYusqtXkbkSY_iKhYfBX7e7NvPO73p7aipzrf20Op5FazrlcjY8yHPAPbSKTBTp7eujR72wdtQpsTNkCRbLem4OtsJv-rHCQOuiBU2uN_SkkE9bHAGxekixJ1bh4GkfcPmB3Qh0UiPo84j5F1d2khjzZoDbVExdOFJcOu76BKARLxw84nhbeNpe7-cYKQPVIsDtBa2E5AWGf-6W0fXxdcuntv8NHfEnrZJWv8eR6Qr4NCeAvTc6GALa4Wv5xT3ct35kP_qBYLhg__cEMkn383NNWwIBToxdJj3fpJnvjAMJCl1A08WrJROgGyzczXy_kiuQ8y0SEBCG4BNC1l76L40P9q7Oiir-y_6Sn8Ibrp7R6f7WMY-5KrENHaYdTbjlCtwuLkppwlh8MYn7FEZwk1PWCCsZDyKCBXaJPviHQBdXcF437Aw==",
-              "summary": []
-            },
-            {
-              "id": "msg_09bb8aaf89cd5da7016a6fc59d18fc8197968893fc423be139",
+              "id": "msg_086d54b7be3bd9d7016ac4c995662087d29aae93b97d697c5e",
               "type": "message",
               "status": "completed",
               "content": [
@@ -83,7 +77,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[\n  {\n    \"name\": \"dark brown sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"eggs\",\n    \"quantity\": 2,\n    \"unit\": \"large\"\n  },\n  {\n    \"name\": \"sour cream\",\n    \"quantity\": 165,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"unsalted butter, melted\",\n    \"quantity\": 113,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"kosher salt\",\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"neutral oil\",\n    \"quantity\": 80,\n    \"unit\": \"ml\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 190,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\",\n    \"additional_quantity\": 1.5,\n    \"additional_unit\": \"teaspoon\"\n  }\n]"
+                  "text": "[\n  {\n    \"name\": \"dark brown sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"large eggs\",\n    \"quantity\": 2,\n    \"unit\": \"whole\"\n  },\n  {\n    \"name\": \"sour cream\",\n    \"quantity\": 165,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"unsalted butter, melted\",\n    \"quantity\": 113,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"kosher salt\",\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"neutral oil\",\n    \"quantity\": 80,\n    \"unit\": \"ml\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 190,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\",\n    \"additional_quantity\": 1.5,\n    \"additional_unit\": \"teaspoon\"\n  }\n]"
                 }
               ],
               "phase": "final_answer",
@@ -140,14 +134,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 331,
+            "output_tokens": 274,
             "output_tokens_details": {
-              "reasoning_tokens": 55
+              "reasoning_tokens": 0
             },
-            "total_tokens": 588
+            "total_tokens": 531
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:02
+  recorded_at: 2026-10-06 10:12:39
 recorded_with: VCR-vcr/2.1.0

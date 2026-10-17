@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Tell
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Tell
         me a funny joke"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250814e6a9dae4c-EWR
+      cf-ray: a463e5af1b6bbeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:36 GMT
+      date: Tue, 06 Oct 2026 10:14:06 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '640'
+      openai-processing-ms: '602'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=WJa0Kj6ksF6jtoz2Yawppi7LGJKNna1GdzpHS6GT2x0-1785709595.902503-1.0.1.1-Tqj3vzhtgEq535EUrZDs5i8UFYxPxjerBPv0538QqL6HlSVFnDsm3Xg3nqhiiTO5mUGmrQixZjHsD50Y3248MelM_QHarRCMPSYxs9U77MAxe7RYthiqhSfswtogCDqn;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:36 GMT
+      set-cookie: __cf_bm=z8j1wnGg3cSo11Ub4vBYK3BwbYPppXwENyVm68ADitA-1791281645.935244-1.0.1.1-gWKkzogsEHemjnyAEI7O1qPvnCjXz2b1tcgVkJluPGYBab856PHNhtl_fKP41r.4GLLnCj3JfA3BmWzUEMVfD_LlwFT9V4e6XwIFfKtQcUhXg5sUQ6Ho2jAns.GaAKpP;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:06 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,19 +34,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fdaf7eaef79f4238aa9c2416dd1774c1
+      x-request-id: req_14d6ea8e5832464fbad7d325f111c1dd
     body:
       string: |-
         {
-          "id": "resp_0b99381fcbdf9585016a6fc41c14088193894cafd47c88512b",
+          "id": "resp_0b22bfd9d4b9697e016ac4c9ee165887d299467cc74650e1b3",
           "object": "response",
-          "created_at": 1785709596,
+          "created_at": 1791281646,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709596,
+          "completed_at": 1791281646,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0b99381fcbdf9585016a6fc41c7ac48193863d3044a038c12a",
+              "id": "msg_0b22bfd9d4b9697e016ac4c9ee756487d2836f9be6a08e1cef",
               "type": "message",
               "status": "completed",
               "content": [
@@ -131,5 +132,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:36
+  recorded_at: 2026-10-06 10:14:06
 recorded_with: VCR-vcr/2.1.0

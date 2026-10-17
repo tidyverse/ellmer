@@ -291,6 +291,13 @@ multi_convert <- function(
         if (turn_failed(turn)) 0 else turn@cost
       })
     }
+  } else if (include_tokens || include_cost) {
+    args <- c("include_tokens", "include_cost")[c(include_tokens, include_cost)]
+    cli::cli_warn(c(
+      "Can't add token or cost columns to a result that isn't a data frame.",
+      "!" = "Ignoring {.arg {args}}.",
+      "i" = "Use {.fn type_object} for {.arg type} and {.code convert = TRUE} to get a data frame."
+    ))
   }
   out
 }

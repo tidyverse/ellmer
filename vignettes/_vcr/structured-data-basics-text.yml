@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"My
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"My
         name is Susan and I''m 13 years old"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508b3bfc0ecdf0-EWR
+      cf-ray: a463e3dd19e2a430-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:23 GMT
+      date: Tue, 06 Oct 2026 10:12:53 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '682'
+      openai-processing-ms: '1822'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=.duGop7NRcHr6Y4fVZBc2ZiG6SOGSKLg8aJ2pNyLX0Y-1785710002.5611448-1.0.1.1-XoN4dCIPUlH4YVgfZb3og2sA29abKo1sLIPaswRzdYJYMMP4DIUlRRG3qN2ejD9ujdadwQLvLqVPCDhLTUW3khb1NHEjbR1zkwqEN10X4WTJ.bfcqBwIfwXK6rTi3ZB2;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:23 GMT
+      set-cookie: __cf_bm=iPzI1KmMoSbJ.CMQ.9ZRmIEJ34350xWWxp9O3wOD3SE-1791281571.3794868-1.0.1.1-D0mCWfC4xcPEfX3V9reO64T4nxx8QeMhX8ZmmQ0FIHqgJnx43dWPxmgsanVroaM9X4O5qrL8AUBKBJCQGH084MtW.JGx6_Ll3LUMy409FkcgM6k5VTNzJ3GILLIpVJv2;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:53 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,19 +34,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a6d133f7206745ca94acec24df412ab2
+      x-request-id: req_c18d32a42a134e589bf71131d8bdc91f
     body:
       string: |-
         {
-          "id": "resp_02ad35a1f31e7b61016a6fc5b2a1308195b05b57d56b09bab0",
+          "id": "resp_00853f2fc7180501016ac4c9a37cbc87d2af613e2a18e0afc0",
           "object": "response",
-          "created_at": 1785710002,
+          "created_at": 1791281571,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710003,
+          "completed_at": 1791281573,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_02ad35a1f31e7b61016a6fc5b326cc8195a5c47761f2e440b9",
+              "id": "msg_00853f2fc7180501016ac4c9a5000887d2af278d1337abee19",
               "type": "message",
               "status": "completed",
               "content": [
@@ -153,5 +154,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:23
+  recorded_at: 2026-10-06 10:12:53
 recorded_with: VCR-vcr/2.1.0

@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
         and no other commentary.\n\n\n\n  * If an ingredient has both weight and volume,
@@ -12,7 +12,7 @@ http_interactions:
         ingredient only lists a volume, extract that.\n\n  2 t ground cinnamon\n  ⅓
         cup (80ml) neutral oil\n  [\n    {\"name\": \"ground cinnamon\", \"quantity\":
         2, \"unit\": \"teaspoon\"},\n    {\"name\": \"neutral oil\", \"quantity\":
-        80, \"unit\": \"ml\"}\n  ]\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  ¾
+        80, \"unit\": \"ml\"}\n  ]\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  ¾
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
@@ -28,18 +28,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508ac2587d8574-EWR
+      cf-ray: a463e3940d8206aa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:04 GMT
+      date: Tue, 06 Oct 2026 10:12:41 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1332'
+      openai-processing-ms: '1893'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=1E22FnHFaAoS6zJ.8xGSZoX06vEGT6E0JRs5NSwsyR4-1785709983.0940485-1.0.1.1-tR4PKQiGqqdD0DKeMn9wcTp6HVX6dXzc673pNGlTD4zzZRGgGpehUtXdyRmyrSgEmeey37hDJs3qmuecXXfPlOIr8T41E55mAd9PDqzWinovjhmMCgsAvb7nW4dNT9cL;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:04 GMT
+      set-cookie: __cf_bm=_HzxyzbFaPm5RtjIo2VLa9JJZ6wDeNPYbvpzFMPGuaU-1791281559.6816342-1.0.1.1-USCS7wY7n45YXqAF_OV9OgGJts5pw95BjcqhEXd9aSenW6yGYasPlWqPhPPbPCRsJUgwLfy.Z9wsIZ9wBhxnd2jYm_.cotQcuGYMbAX97CZ3k.w4HX.AVeLOL6dVJI3F;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:41 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -48,19 +48,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '499982'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 2ms
-      x-request-id: req_2d84660cc20f46788071fc30523dbaf9
+      x-request-id: req_69690c20df254542a7c63355d33d51b7
     body:
       string: |-
         {
-          "id": "resp_0fd78133e4a20e87016a6fc59f27488197bf5456dccbd67636",
+          "id": "resp_0bb007d45e909d28016ac4c997cd3087d29befe38c27cd6264",
           "object": "response",
-          "created_at": 1785709983,
+          "created_at": 1791281559,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709984,
+          "completed_at": 1791281561,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -71,7 +72,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0fd78133e4a20e87016a6fc59f98708197828868e4ca00c71b",
+              "id": "msg_0bb007d45e909d28016ac4c9986b2487d28814e4d1fc7a8bb1",
               "type": "message",
               "status": "completed",
               "content": [
@@ -79,7 +80,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"large\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}"
                 }
               ],
               "phase": "final_answer",
@@ -186,5 +187,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:04
+  recorded_at: 2026-10-06 10:12:41
 recorded_with: VCR-vcr/2.1.0

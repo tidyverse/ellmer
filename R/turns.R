@@ -355,6 +355,12 @@ turn_contents_preview <- function(turn) {
   paste(contents, collapse = ", ")
 }
 
+last_user_turn_idx <- function(turns) {
+  idx <- cummax(seq_along(turns) * map_lgl(turns, is_user_turn))
+  idx[idx == 0] <- NA
+  idx
+}
+
 check_finish_reason <- function(finish_reason, signal = c("error", "warn")) {
   signal <- arg_match(signal)
   signal_fn <- switch(signal, error = cli::cli_abort, warn = cli::cli_warn)

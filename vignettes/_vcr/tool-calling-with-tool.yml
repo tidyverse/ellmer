@@ -3,10 +3,10 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
         Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
+        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -19,18 +19,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508b49ee88f02b-EWR
+      cf-ray: a463e5667c49ef1b-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:25 GMT
+      date: Tue, 06 Oct 2026 10:13:55 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '782'
+      openai-processing-ms: '986'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=HkTQCUfioSYV9ywSaOSLitUOvtAu3k4.M6F8BQQ.WRA-1785710004.7863224-1.0.1.1-TIleGMbmTsh.IUEFf0omYpIuUjaaVISh9DcdqD.KSSBtgjfPl0VNKXuSsDZhqTHQ0Y3VT9krRGuLHoEc2BtO9Jd3fnEK4nSHZrpn13rlNC3K3Kig7n5smVZw9xvOY8BM;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:25 GMT
+      set-cookie: __cf_bm=mMdlgrSrgDOg1xpavTK8YXmmOd203Iliovgi2LFc4uU-1791281634.3179467-1.0.1.1-Bs70aKJn4k0C5hmpKgCQv4BcvlsNCPiFV3c1i6jor0Aggmdr8bP_6v0Rgu3Iwq3vFjtsg6xaWvmFNWcfz_.r4MUevWP7HHcUUny9G2.k83I0ma0fKKwAwh.q2imua.b9;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:55 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -39,19 +39,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '29667'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 666ms
-      x-request-id: req_a0509c6fc2e44fd5b4229bbbddba8a7c
+      x-request-id: req_2dc96a123f6c4b499d97a7886d497d2a
     body:
       string: |-
         {
-          "id": "resp_0f19f871ea49202b016a6fc5b4d6b4819693c0b32fc45707b0",
+          "id": "resp_0ee12848637802f1016ac4c9e2709887d2910f28024e156e38",
           "object": "response",
-          "created_at": 1785710004,
+          "created_at": 1791281634,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710005,
+          "completed_at": 1791281635,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -62,11 +63,11 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613",
+              "id": "fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"tz\":\"UTC\"}",
-              "call_id": "call_0z9WAMYXU6i51GClcONgzpy3",
+              "call_id": "call_afC9mNylq9JTRZYgwxx2Frh4",
               "name": "get_current_time"
             }
           ],
@@ -153,16 +154,16 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:25
+  recorded_at: 2026-10-06 10:13:55
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"role":"assistant","content":[{"type":"output_text","text":"Neil
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
         Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613","name":"get_current_time","arguments":"{\"tz\":\"UTC\"}"},{"type":"function_call_output","call_id":"fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613","output":"2025-06-25
+        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
+        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d","name":"get_current_time","arguments":"{\"tz\":\"UTC\"}"},{"type":"function_call_output","call_id":"fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d","output":"2025-06-25
         16:53:23 UTC"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -175,39 +176,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508b513c43f02b-EWR
+      cf-ray: a463e571384eef1b-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:26 GMT
+      date: Tue, 06 Oct 2026 10:13:57 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '941'
+      openai-processing-ms: '1441'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=BfiES_3OusGXlDauZ6p4eNAjhQD3eL9u55X7bJjJnes-1785710005.9582312-1.0.1.1-4mUXqR9cMNG5X6ZoWvYEcLMlZGvPadie2jJyPLhj8YyuHSKiXiyPRdkA2Zbhe.BEA7stUi4xT1fWYeGYFLdz0_z6LEtzhBYZizG5DPpxbFgssDv6qD9xWMpuN5YixYUx;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:26 GMT
+      set-cookie: __cf_bm=e1QkCnqwxVfB0tVM9G8az2v1ohxbr55fVo6W4qOIYpQ-1791281636.0327842-1.0.1.1-wwvBLPU7ux4VKMzsoFlUoNQmE.0Y16YJKzuD941CY_Dx5h1WRcHryMeEx29Kpm8IcAceOIeEvt2FlU60A23FSdBOZAizhc32RNJ1qGBrErFK51O3E.NjS1q8g8xfyzx3;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:57 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '30000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29632'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 736ms
-      x-request-id: req_48f7a550c14d47659c180f4193d367a8
+      x-ratelimit-remaining-requests: '498'
+      x-ratelimit-remaining-tokens: '29284'
+      x-ratelimit-reset-requests: 240ms
+      x-ratelimit-reset-tokens: 1.432s
+      x-request-id: req_27dfca2a03204979bddb211b4895c53e
     body:
       string: |-
         {
-          "id": "resp_01fcb30161f8b939016a6fc5b6044c8195aec5bf73bb25a9e9",
+          "id": "resp_07f3e7be59431ff8016ac4c9e429a487d2a76c693f5af8efe9",
           "object": "response",
-          "created_at": 1785710006,
+          "created_at": 1791281636,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710006,
+          "completed_at": 1791281637,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -218,7 +220,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_01fcb30161f8b939016a6fc5b6afe081958431b00fac90c610",
+              "id": "msg_07f3e7be59431ff8016ac4c9e52ddc87d291d8eb762436d9f7",
               "type": "message",
               "status": "completed",
               "content": [
@@ -226,7 +228,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of June 25, 2025, that was almost 56 years ago."
+                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of now, that was almost 56 years ago."
                 }
               ],
               "role": "assistant"
@@ -306,14 +308,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 36,
+            "output_tokens": 30,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 187
+            "total_tokens": 181
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:26
+  recorded_at: 2026-10-06 10:13:57
 recorded_with: VCR-vcr/2.1.0
