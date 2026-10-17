@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- The OpenTelemetry `gen_ai.input.messages` attribute is no longer
+  dropped when a tool result returns a `Content` object, such as an
+  image ([@taekop](https://github.com/taekop),
+  [\#1145](https://github.com/tidyverse/ellmer/issues/1145)).
 - OpenAI-compatible providers, including
   [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md),
   [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md),
