@@ -67,10 +67,9 @@ local({
         )
       }
       if (length(turns)) {
-        # Tool result values are typed `class_any`, so tools can return objects
-        # (environments, R6, external pointers) that `jsonlite::toJSON` rejects.
-        # Skip emission rather than break the chat; the provider's tool_string
-        # path will surface a descriptive error.
+        # Tool results are normalized at invoke time, so every value should be
+        # encodable by the time it gets here. Still, telemetry must never break
+        # the chat, so skip emission rather than error.
         tryCatch(
           {
             msgs <- lapply(turns, as_otel_message)
