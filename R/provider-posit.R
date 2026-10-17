@@ -198,6 +198,7 @@ method(provider_set_model, ProviderPositAnthropic) <- function(provider, name) {
       base_url = paste0(posit_gateway_url(provider@base_url), "/openai/v1"),
       extra_headers = provider@extra_headers,
       credentials = provider@credentials,
+      strict = startsWith(name, "openai/"),
       cache = provider@cache
     )
   }
@@ -220,6 +221,7 @@ method(provider_set_model, ProviderPositOpenAI) <- function(provider, name) {
       cache = provider@cache
     )
   } else {
+    provider@strict <- startsWith(name, "openai/")
     provider
   }
 }

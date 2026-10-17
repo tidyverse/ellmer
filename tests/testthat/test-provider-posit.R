@@ -40,6 +40,18 @@ test_that("set_model() keeps the same provider within a family", {
   expect_equal(cache_chat$get_provider()@cache, "none")
 })
 
+test_that("set_model() derives strict mode from the new model", {
+  chat <- chat_posit(model = "claude-sonnet-4-6")
+  chat$set_model("openai/gpt-5")
+  expect_true(chat$get_provider()@strict)
+
+  chat$set_model("google/gemma-4-26B-A4B-it")
+  expect_false(chat$get_provider()@strict)
+
+  chat$set_model("openai/gpt-5")
+  expect_true(chat$get_provider()@strict)
+})
+
 test_that("set_model() carries over credentials and headers", {
   headers <- c("X-Test" = "yes")
   credentials <- function() list(Authorization = "Bearer test")
