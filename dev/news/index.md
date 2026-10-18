@@ -63,6 +63,10 @@
   [`type_array()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
   or `convert = FALSE` ([@taekop](https://github.com/taekop),
   [\#1129](https://github.com/tidyverse/ellmer/issues/1129)).
+- [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
+  now forwards `detail` to OpenAI and OpenAI-compatible providers,
+  including for data URLs ([@kbenoit](https://github.com/kbenoit),
+  [\#1132](https://github.com/tidyverse/ellmer/issues/1132)).
 
 ## ellmer 0.5.0
 

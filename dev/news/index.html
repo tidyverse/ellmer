@@ -68,6 +68,8 @@
 <li>Streamed responses now record the time to first token (in seconds) as the <code>gen_ai.response.time_to_first_chunk</code> attribute on the OpenTelemetry <code>chat</code> span (<a href="https://github.com/schloerke" class="external-link">@schloerke</a>, <a href="https://github.com/tidyverse/ellmer/issues/1142" class="external-link">#1142</a>).</li>
 <li>
 <code><a href="../reference/parallel_chat.html">parallel_chat_structured()</a></code> and <code><a href="../reference/batch_chat.html">batch_chat_structured()</a></code> now warn instead of silently ignoring <code>include_tokens</code> and <code>include_cost</code> when the result isn’t a data frame, e.g. because <code>type</code> is a top-level <code><a href="../reference/type_boolean.html">type_array()</a></code> or <code>convert = FALSE</code> (<a href="https://github.com/taekop" class="external-link">@taekop</a>, <a href="https://github.com/tidyverse/ellmer/issues/1129" class="external-link">#1129</a>).</li>
+<li>
+<code><a href="../reference/content_image_url.html">content_image_url()</a></code> now forwards <code>detail</code> to OpenAI and OpenAI-compatible providers, including for data URLs (<a href="https://github.com/kbenoit" class="external-link">@kbenoit</a>, <a href="https://github.com/tidyverse/ellmer/issues/1132" class="external-link">#1132</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="ellmer-050">ellmer 0.5.0<a class="anchor" aria-label="anchor" href="#ellmer-050"></a></h2><p class="text-muted">CRAN release: 2026-09-04</p>
