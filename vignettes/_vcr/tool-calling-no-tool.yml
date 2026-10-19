@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"How
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
         long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508b402bcbf02b-EWR
+      cf-ray: a463e5597af5ef1b-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:24 GMT
+      date: Tue, 06 Oct 2026 10:13:53 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '972'
+      openai-processing-ms: '1085'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=4ik05yhM98dpCBGZtmq8DY8hSje4wLIUnNBuLZ6IOro-1785710003.2314725-1.0.1.1-JDvbMy40jOIkXdslTRD04gkweCFyypOSSKSVCTGYXdtrd3QSiTq6JNLy8QdQQV4QCzvX3CaFymm5QbBpibS2XYqL8cipGUd.nNLBOihmiKtys.TOWiMXXujGaDeQVfLk;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:24 GMT
+      set-cookie: __cf_bm=PEre2rYRckRxL37b86C56.ApPUlGeZWLqsxpINtMIcA-1791281632.2387788-1.0.1.1-HArkDyBzBCoO2Ie4p_5c73ns2WWyLXQHOoBJtQw38fF.MnSFYttlLjzwbUsT6h_2a5w70Fk0Pb3jdmYSWIjldLEVE8u6ABg.XJKqbWMyqITuO3jUp0ZIUdlHlD.RPHtK;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:53 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,19 +34,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '29962'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 76ms
-      x-request-id: req_e4648d21fc6e42fc8840ff5dc2110ede
+      x-request-id: req_2a56ff92da8340d0af8da79b8b3598a9
     body:
       string: |-
         {
-          "id": "resp_07cafa100d7f846a016a6fc5b34dfc8197871650fcc943ffc2",
+          "id": "resp_0163e148d91b142f016ac4c9e05e5487d289a63e8235e6d46c",
           "object": "response",
-          "created_at": 1785710003,
+          "created_at": 1791281632,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710004,
+          "completed_at": 1791281633,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_07cafa100d7f846a016a6fc5b3fee08197bd3be80dca2c647c",
+              "id": "msg_0163e148d91b142f016ac4c9e12c4887d29c0daaa24acd4c93",
               "type": "message",
               "status": "completed",
               "content": [
@@ -129,5 +130,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:24
+  recorded_at: 2026-10-06 10:13:53
 recorded_with: VCR-vcr/2.1.0

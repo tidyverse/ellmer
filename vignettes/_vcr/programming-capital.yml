@@ -3,9 +3,9 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"role":"user","content":[{"type":"input_text","text":"What''s the
-        capital of France"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the capital of France"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -15,39 +15,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508cf3ebac0866-EWR
+      cf-ray: a463e3298c8b001d-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:34:33 GMT
+      date: Tue, 06 Oct 2026 10:12:23 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '411'
+      openai-processing-ms: '1071'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=C4ufllATuv0Vgr6vIaU4qY8NibBNHC06jPdWlLXPtHE-1785710072.9410625-1.0.1.1-GajojQjOFUehsshfZV0KxxgjfNTX3jBXffN8GJL4WSRXQFtzdqhSydH.wlYvkcKVieXJ6ALH7dK0Hne7Pk8z4mNMBZ.P7DCJDj5jaUmRkV6m.AMeEa1IBZBzK4tRyE7k;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:04:33 GMT
+      set-cookie: __cf_bm=yVbCodM3kd1OXScRc7bzBN37uNpSwgoJwiZ1iEedADs-1791281542.6487544-1.0.1.1-IHcSJdylq0MlCdDUd2cVzNmVhHqw1mAtjj_0RUWA5jjjCJaOwimO1HmhxKhTfymFmq5T7LZC96Fc6hTWPtlBSksQS0hGx1.OrE0uEjdKlxKItlYdJD5nwsLvOFFMT8be;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:23 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199963'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 11ms
-      x-request-id: req_32b603fadbff443da041f40e84fa225d
+      x-ratelimit-remaining-requests: '498'
+      x-ratelimit-remaining-tokens: '199922'
+      x-ratelimit-reset-requests: 240ms
+      x-ratelimit-reset-tokens: 23ms
+      x-request-id: req_3dce61005936404aaf3d7e525ab8af6a
     body:
       string: |-
         {
-          "id": "resp_09920b58e33c2e65016a6fc5f900f08195a8ac39755dba0485",
+          "id": "resp_0db22947abf30819016ac4c9871b4887d28e7ac848c9e34585",
           "object": "response",
-          "created_at": 1785710073,
+          "created_at": 1791281543,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710073,
+          "completed_at": 1791281543,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +59,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_09920b58e33c2e65016a6fc5f9579081959cde03dc5498eb64",
+              "id": "msg_0db22947abf30819016ac4c987c0e087d284fa6dbf993802a1",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,7 +67,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Paris."
+                  "text": "Paris"
                 }
               ],
               "role": "assistant"
@@ -121,14 +122,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 3,
+            "output_tokens": 2,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 21
+            "total_tokens": 20
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:34:33
+  recorded_at: 2026-10-06 10:12:23
 recorded_with: VCR-vcr/2.1.0

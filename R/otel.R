@@ -67,10 +67,9 @@ local({
         )
       }
       if (length(turns)) {
-        # Tool result values are typed `class_any`, so tools can return objects
-        # (environments, R6, external pointers) that `jsonlite::toJSON` rejects.
-        # Skip emission rather than break the chat; the provider's tool_string
-        # path will surface a descriptive error.
+        # Tool results are normalized at invoke time, so every value should be
+        # encodable by the time it gets here. Still, telemetry must never break
+        # the chat, so skip emission rather than error.
         tryCatch(
           {
             msgs <- lapply(turns, as_otel_message)
@@ -248,6 +247,13 @@ tool_otel_response <- function(content) {
     # JSON string itself as a quoted string under `auto_unbox = TRUE`.
     return(jsonlite::fromJSON(value, simplifyVector = FALSE))
   }
+  # `Content` values (e.g. an image) aren't JSON-serializable as-is (#1145).
+  if (S7_inherits(value, Content)) {
+    return(as_otel_part(value))
+  }
+  if (is_content_list(value)) {
+    return(lapply(value, as_otel_part))
+  }
   value
 }
 
@@ -272,6 +278,18 @@ otel_chat_input <- function(private, user_turn) {
   list(
     turns = c(history, list(user_turn)),
     system_prompt = sys_turn
+  )
+}
+
+# Records the time to first token (in seconds) on the chat span as the
+# `gen_ai.response.time_to_first_chunk` semconv attribute.
+record_chat_otel_span_ttft_attr <- function(span, start) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  span$set_attribute(
+    "gen_ai.response.time_to_first_chunk",
+    as.numeric(Sys.time() - start, units = "secs")
   )
 }
 

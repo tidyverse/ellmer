@@ -14,11 +14,11 @@ http_interactions:
   response:
     status: 200
     headers:
-      date: Wed, 02 Sep 2026 10:36:23 GMT
+      date: Tue, 06 Oct 2026 10:16:15 GMT
       content-type: application/json
       server: cloudflare
-      x-request-id: req_b0e71646d34c409e8b256729b20d041d
-      openai-processing-ms: '252'
+      x-request-id: req_5fff1bbf233b4fd1a1f900b5c846fe27
+      openai-processing-ms: '283'
       openai-version: '2020-10-01'
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
@@ -27,34 +27,34 @@ http_interactions:
       cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      set-cookie: __cf_bm=jdJnr9va9Srhq0ofrI6.v.k0m1PApmwpCcf2RRyYsCs-1788345382.6037982-1.0.1.1-rpHbWVPkW_zU.HZHMafviPFKg264RARinw47I9tCy6vdjz1aznCSkgV.gpZd8a621gVgGMLdOCDmO9xVex_lt4uELO9bv1rJlcD.IowBdf0GQR4XW7LJG90.5Iwu5chl;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:23 GMT
+      set-cookie: __cf_bm=xGCXy5_RbHfYI4HgDc6zil5LZ9rhsJW6Lvl8vWKfLAY-1791281774.8191698-1.0.1.1-bsgkF5aKYqR7cK05WuSiKWkwKozLNqhHMFrFK5DtkozNsogfoC8ZI1.MG4gB09eQxxkIJLwfNqIdT9_Zo6wmJ64i2U6rAl7k3lqotaJ6ScUw5AluEYesspeKIzl.fE8y;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:15 GMT
       access-control-expose-headers: CF-Ray
       content-encoding: br
-      cf-ray: a34bdf914c09dc35-LHR
+      cf-ray: a463e8d49ec81ddf-LHR
       alt-svc: h3=":443"; ma=86400
     body:
       string: |
         {
           "object": "file",
-          "id": "file-DJW1unxwToJWiWCLRsUhEw",
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
           "purpose": "user_data",
           "filename": "apples.pdf",
           "bytes": 14560,
-          "created_at": 1788345383,
-          "expires_at": 1788518183,
+          "created_at": 1791281775,
+          "expires_at": 1791454575,
           "status": "processed",
           "status_details": null
         }
-  recorded_at: 2026-09-02 10:36:23
+  recorded_at: 2026-10-06 10:16:15
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the title of this document?"}]},{"role":"user","content":[{"type":"input_file","file_id":"file-DJW1unxwToJWiWCLRsUhEw"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the title of this document?"}]},{"type":"message","role":"user","content":[{"type":"input_file","file_id":"file-T8vg9LnkAo1Trf2TX2jsRL"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
@@ -64,39 +64,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a34bdf983aaedc35-LHR
+      cf-ray: a463e8db2e331ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Wed, 02 Sep 2026 10:36:25 GMT
+      date: Tue, 06 Oct 2026 10:16:17 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1530'
+      openai-processing-ms: '1059'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=udMJxoIfpMX0RYJIOofZUYmzBNEGL2uOA6Kf3NTy3fY-1788345383.7112432-1.0.1.1-4zpGbe9XcqKD4u6d5a9PhhXdiFGHA2iTMDdwHUP45vaevO3rOt1OOYS6sgfHsP2Qn99WVDEBmpgKqYfLmAvHIHvZa4aVhF.SaDfIh7OlFp_LMApNKiUMVkDPpEVPTNXI;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:25 GMT
+      set-cookie: __cf_bm=uzek1Wpin1dgyq7oD01dE6OU84ceEmGYpll9is48dAg-1791281775.8707838-1.0.1.1-AZ0_KBdIiYNi0n2txd841p6pyAfO6RvPOownDVI103fdm12Cu0EeY816rqoaEf7viEZHzlKg_f_3saXfPfpzQSyt9vxjRRJcMFCJ.pvWN3xZobMdQae.c1H8ynuDp4G5;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:17 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '200000'
+      x-ratelimit-remaining-tokens: '125071'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 0s
-      x-request-id: req_26c2a76879c44b98ac2025164398c904
+      x-ratelimit-reset-tokens: 22.478s
+      x-request-id: req_bf26e361335b4cfd98903b301dcb6d1e
     body:
       string: |-
         {
-          "id": "resp_003389130b0dc0aa016a97fc27cf1087d28ca54bdbb4abf0f4",
+          "id": "resp_098dac5aace19bdd016ac4ca6ffab087d287bb1d2716c795c8",
           "object": "response",
-          "created_at": 1788345384,
+          "created_at": 1791281776,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1788345385,
+          "completed_at": 1791281776,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -107,7 +108,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_003389130b0dc0aa016a97fc292e1487d2ab0439b3857f1f6d",
+              "id": "msg_098dac5aace19bdd016ac4ca70e6fc87d291af68ad7f1aeb87",
               "type": "message",
               "status": "completed",
               "content": [
@@ -181,18 +182,18 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-09-02 10:36:25
+  recorded_at: 2026-10-06 10:16:17
 - request:
     method: GET
     uri: https://api.openai.com/v1/files
   response:
     status: 200
     headers:
-      date: Wed, 02 Sep 2026 10:36:26 GMT
+      date: Tue, 06 Oct 2026 10:16:18 GMT
       content-type: application/json
       server: cloudflare
-      x-request-id: req_39985c0a4ae7429da645118b928fde2d
-      openai-processing-ms: '40'
+      x-request-id: req_32d14df4917c4fb5aa34f2ae3ee8045c
+      openai-processing-ms: '46'
       openai-version: '2020-10-01'
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
@@ -201,12 +202,12 @@ http_interactions:
       cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      set-cookie: __cf_bm=T1rfPy6CFIlLoy.V_NfEnYHdwNVj0Me4weJPvAtxLEI-1788345385.9079921-1.0.1.1-Ut6n3.IwhWqPOBikMkec1Jzs5ZrLAa.zjE6uyT_yutetdxG4j7f3d6HqUxXFr01sgYKhFu8fiY2VRnmH1TRbwOsxmBnDG8FeOjcMRob1VYoLulfncH7Cy57uo30vXjpV;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:26 GMT
+      set-cookie: __cf_bm=iAsC2ep7ShBPiYP2BYx5H916.MvPUk.Jj.hmXPsM.ZQ-1791281777.5087988-1.0.1.1-y90GrAl3wXsnCkImsTiu2AUNeBVSnSCdy8.1A9l5wHYCd3VMkuQ4Nkv6pltD5gUIV0sdKehaBm9R9P5xzKctGc53uJMher5XJL.6h5LhkXvqlDHQBAEE9iklWTCm.v8j;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
       access-control-expose-headers: CF-Ray
       content-encoding: br
-      cf-ray: a34bdfa5ed34dc35-LHR
+      cf-ray: a463e8e56f2d1ddf-LHR
       alt-svc: h3=":443"; ma=86400
     body:
       string: |
@@ -215,120 +216,32 @@ http_interactions:
           "data": [
             {
               "object": "file",
-              "id": "file-DJW1unxwToJWiWCLRsUhEw",
+              "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
               "purpose": "user_data",
               "filename": "apples.pdf",
               "bytes": 14560,
-              "created_at": 1788345383,
-              "expires_at": 1788518183,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-4kWJvxGMsS25RAGV6oiUnA",
-              "purpose": "batch_output",
-              "filename": "batch_6a785e35cffc8190b98a8dea695204bf_output.jsonl",
-              "bytes": 8352,
-              "created_at": 1786273615,
-              "expires_at": 1788865615,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-Ve7Y64t4uAmTpFLSt9Xsy5",
-              "purpose": "batch",
-              "filename": "file3ea242ca9b04",
-              "bytes": 2571,
-              "created_at": 1786273333,
-              "expires_at": 1788865333,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-98isXNqLUsPsf9yU5QNTs5",
-              "purpose": "batch_output",
-              "filename": "batch_6a785cb9125c8190a1c0760567c14847_output.jsonl",
-              "bytes": 7308,
-              "created_at": 1786273331,
-              "expires_at": 1788865331,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-FVwQxBHDub9hsqr1HsWA6V",
-              "purpose": "batch",
-              "filename": "file3ea2413b361ea",
-              "bytes": 1611,
-              "created_at": 1786272952,
-              "expires_at": 1788864952,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-QbndFdw2iHyBEuEHhs3ze1",
-              "purpose": "batch_output",
-              "filename": "batch_6a78580f13ac819098b27bb15041f77a_output.jsonl",
-              "bytes": 8352,
-              "created_at": 1786271834,
-              "expires_at": 1788863834,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-5PzVE2R1JVhjPt5Mp7f2Kw",
-              "purpose": "batch",
-              "filename": "file3ea241f1e5917",
-              "bytes": 2571,
-              "created_at": 1786271758,
-              "expires_at": 1788863758,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-9X6atQDJNFzKqZNB8dP4eM",
-              "purpose": "batch_output",
-              "filename": "batch_6a78577923a88190b2113f019ad6fc33_output.jsonl",
-              "bytes": 7308,
-              "created_at": 1786271756,
-              "expires_at": 1788863756,
-              "status": "processed",
-              "status_details": null
-            },
-            {
-              "object": "file",
-              "id": "file-JrQAn2x3YVjZ2ykUKVDmta",
-              "purpose": "batch",
-              "filename": "file3ea244a42b2a6",
-              "bytes": 1611,
-              "created_at": 1786271608,
-              "expires_at": 1788863608,
+              "created_at": 1791281775,
+              "expires_at": 1791454575,
               "status": "processed",
               "status_details": null
             }
           ],
           "has_more": false,
-          "first_id": "file-DJW1unxwToJWiWCLRsUhEw",
-          "last_id": "file-JrQAn2x3YVjZ2ykUKVDmta"
+          "first_id": "file-T8vg9LnkAo1Trf2TX2jsRL",
+          "last_id": "file-T8vg9LnkAo1Trf2TX2jsRL"
         }
-  recorded_at: 2026-09-02 10:36:26
+  recorded_at: 2026-10-06 10:16:18
 - request:
     method: GET
-    uri: https://api.openai.com/v1/files/file-DJW1unxwToJWiWCLRsUhEw
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL
   response:
     status: 200
     headers:
-      date: Wed, 02 Sep 2026 10:36:26 GMT
+      date: Tue, 06 Oct 2026 10:16:18 GMT
       content-type: application/json
       server: cloudflare
-      x-request-id: req_fb1fd401826542c38d9d09be4db1b588
-      openai-processing-ms: '44'
+      x-request-id: req_cdfadb1e12a64eab82ef0bd65305beeb
+      openai-processing-ms: '47'
       openai-version: '2020-10-01'
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
@@ -337,40 +250,40 @@ http_interactions:
       cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      set-cookie: __cf_bm=MNsvgcTFH3jmjCVMpRmvBOhUmCOnS_D4iE24YtEmI3U-1788345386.6921732-1.0.1.1-Hk3fJEpbrL6HFzsZqOlCurTzU2k0qN59MdHrnrGBzsz9Vq5wcSI63eEMuLCke54BNtXaqwYorVBXBq3U71.HtTS1UCeI73uEzDiJLtO384806Xo.5Qv5MO5npNcLW8XN;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:26 GMT
+      set-cookie: __cf_bm=4UAFDI7LYLTASZgMwO64uiejnVH1rRHNHPZzTYvUsoQ-1791281778.295866-1.0.1.1-dNeu_VfJDdN5eFoFRrFUURflBazf1WFLkVYhDYlBfrWjxDJ_mGvaEJLEioBT0jLDQUdvS49MXXgO4RahmdD_iXxLxPRbc0H1Vvv7Kzdl6Qwr8TSUdDc9F94ronnMSoWt;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
       access-control-expose-headers: CF-Ray
       content-encoding: br
-      cf-ray: a34bdfaada6cdc35-LHR
+      cf-ray: a463e8ea5f201ddf-LHR
       alt-svc: h3=":443"; ma=86400
     body:
       string: |
         {
           "object": "file",
-          "id": "file-DJW1unxwToJWiWCLRsUhEw",
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL",
           "purpose": "user_data",
           "filename": "apples.pdf",
           "bytes": 14560,
-          "created_at": 1788345383,
-          "expires_at": 1788518183,
+          "created_at": 1791281775,
+          "expires_at": 1791454575,
           "status": "processed",
           "status_details": null
         }
-  recorded_at: 2026-09-02 10:36:26
+  recorded_at: 2026-10-06 10:16:18
 - request:
     method: GET
-    uri: https://api.openai.com/v1/files/file-DJW1unxwToJWiWCLRsUhEw/content
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL/content
   response:
     status: 400
     headers:
-      date: Wed, 02 Sep 2026 10:36:27 GMT
+      date: Tue, 06 Oct 2026 10:16:18 GMT
       content-type: application/json
       content-length: '270'
       server: cloudflare
       access-control-allow-origin: '*'
-      x-request-id: req_bf915f66fbdf41ffa566aceff71c9b82
-      openai-processing-ms: '248'
+      x-request-id: req_4e7777f3c8ba49c6bd130382746012ac
+      openai-processing-ms: '228'
       openai-version: '2020-10-01'
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
@@ -378,11 +291,11 @@ http_interactions:
       cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      set-cookie: __cf_bm=Yr7nB4AsHKmHt2Sajsv4TuHTJgGeO1eOtZjJahal_jY-1788345387.0383105-1.0.1.1-1fLNnD67t4ESg4UFvyfeoA.aVSNn1A8dQnf7acefEk2G.UjV2ZUsinjGdpiPpi2JLe0MJPWYfNOBBes6.DdeArQXzxjaitlMYP7YjoLUSMIce8sBAmbEoLFEmPpKkUQS;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:27 GMT
+      set-cookie: __cf_bm=gwQZypdxeBYTrdNTGGn7KMA7CPnGn6xWDDXCKe_Z0vQ-1791281778.5630362-1.0.1.1-V0gP9RyBchtpXSTQh7ZdA_W9_pXgzogT5kUtm_8kF_xhP1v0qg9oS_g4lI9UtD4Q7RbCVuwEbeG5vlR.GwJCafxWA3UidqG8DBxvvb7FRDQrll.OO_CWN2Xb53Rsao7J;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:18 GMT
       access-control-expose-headers: CF-Ray
-      cf-ray: a34bdfacf938dc35-LHR
+      cf-ray: a463e8ec0bfa1ddf-LHR
       alt-svc: h3=":443"; ma=86400
     body:
       string: |
@@ -398,18 +311,18 @@ http_interactions:
             "code": null
           }
         }
-  recorded_at: 2026-09-02 10:36:27
+  recorded_at: 2026-10-06 10:16:19
 - request:
     method: DELETE
-    uri: https://api.openai.com/v1/files/file-DJW1unxwToJWiWCLRsUhEw
+    uri: https://api.openai.com/v1/files/file-T8vg9LnkAo1Trf2TX2jsRL
   response:
     status: 200
     headers:
-      date: Wed, 02 Sep 2026 10:36:27 GMT
+      date: Tue, 06 Oct 2026 10:16:19 GMT
       content-type: application/json
       server: cloudflare
-      x-request-id: req_802b4a006eaa45d79ceff3ce1ef4d083
-      openai-processing-ms: '121'
+      x-request-id: req_8e429892c4214b52a8ae4f22cb1c92bd
+      openai-processing-ms: '129'
       openai-version: '2020-10-01'
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
@@ -418,19 +331,19 @@ http_interactions:
       cf-cache-status: DYNAMIC
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      set-cookie: __cf_bm=Njh9Vz0OxuqHMhpZR6aywABbhIleoXxL0jQZFQ5W5zs-1788345387.5135765-1.0.1.1-Vflucc0tzOuCn2F_0ZBZ6kvtd9EXqpyzqm7LEzpbacwM7X2AOt2Gn9fgbVMSXIHg4hZpcA77ecrObu29jkAXdkt7oYNGY0YQhkdX3QB_k0FFRgRm_pdui9C_63kMUnlt;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Wed,
-        02 Sep 2026 11:06:27 GMT
+      set-cookie: __cf_bm=bUW9AHVwucvUhI9Ve.dUGI0NtxRblG0wJMmCO2M_QzY-1791281779.0755198-1.0.1.1-RaXNHQkl1E8XKjc8.hFJtCrQmbugFtAj5kLxjg6GcOAt0SV01DVf6R3hk1Q_bUuE7JwHVPGPs7Iio6OLOrl0ZbyI8FuZcyU95GbSbSaMNDMVMKH3Ak7WM8EcuN_AaPfA;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:19 GMT
       access-control-expose-headers: CF-Ray
       content-encoding: br
-      cf-ray: a34bdfaffb8bdc35-LHR
+      cf-ray: a463e8ef3e911ddf-LHR
       alt-svc: h3=":443"; ma=86400
     body:
       string: |
         {
           "object": "file",
           "deleted": true,
-          "id": "file-DJW1unxwToJWiWCLRsUhEw"
+          "id": "file-T8vg9LnkAo1Trf2TX2jsRL"
         }
-  recorded_at: 2026-09-02 10:36:27
+  recorded_at: 2026-10-06 10:16:19
 recorded_with: VCR-vcr/2.1.0

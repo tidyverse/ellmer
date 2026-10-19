@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the current date in Y-M-D format?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -17,39 +17,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa046eb91914-EWR
+      cf-ray: a463e83adeb91ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:29 GMT
+      date: Tue, 06 Oct 2026 10:15:50 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '513'
+      openai-processing-ms: '460'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=cc69M7csagV5gAvhu8L9dM.60G62c7OgRLCASg9oI7w-1785693568.7109525-1.0.1.1-j6zF8HWezslTPZ_dnGKbT3I0_NRmxU3CfuXQGErw_BXGuMH1SJcy_46HrigpjSq9CLuou137Eqf2CQCAGkEFB9kHeFu35Ngo8pD1FOQ2GBHquhxXx7wyGF23LZZDb6Zv;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:29 GMT
+      set-cookie: __cf_bm=vQCfPYm7agOc_yvwzQaGvm6VnRrkXJGv5P8sbmoMlTA-1791281750.2176588-1.0.1.1-hdqchFLSO7YPQOoxcrVSA6itWfojBVw.P_UrO4aYm_QPld08BIR3xvSo7gAE9iHMhfEDp8l_5.Yt0umB8ICUJ1L3QiCUNB8Xi.lg0sweTuwKbWITaJQa6e1Pa4BlAvRm;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:45:50 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '200000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6b6c4340064d4fbbb77db848f0be9dea
+      x-request-id: req_103d5f0011e244b49ab3a2eeb180ef4b
     body:
       string: |-
         {
-          "id": "resp_07e02ee31bd73194016a6f8580c0cc81a2ae60e2e2cf241a92",
+          "id": "resp_0e9f6b39767db96b016ac4ca56530487d287ba8de6ef7b843a",
           "object": "response",
-          "created_at": 1785693568,
+          "created_at": 1791281750,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693569,
+          "completed_at": 1791281750,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -60,11 +61,11 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6",
+              "id": "fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_4VLzPVTu1kO7Fskl93LBryYq",
+              "call_id": "call_vY6Y4zd1yrZNzqhnbqopYRaQ",
               "name": "current_date"
             }
           ],
@@ -156,14 +157,14 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:29
+  recorded_at: 2026-10-06 10:15:50
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","output":"2024-01-01"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -175,18 +176,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa09cd221914-EWR
+      cf-ray: a463e8413d441ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:32 GMT
+      date: Tue, 06 Oct 2026 10:15:52 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2556'
+      openai-processing-ms: '677'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=_3JAj.StXiJMb0nFAModBr72_reGxPkertW97zbxZfw-1785693569.5699189-1.0.1.1-17pQ8dG4HW17mV63p5t7ybGr1GJHuduOe8OFHeguieMm1MQI0rKWSF.bjU5yd6BGy79FuU.tlEZGCytI07zk4aVIl1fM9RX2rFfsrSyKtfMafFp2UlGxPicDfT2Hm0j_;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:32 GMT
+      set-cookie: __cf_bm=9pq54.5Wr6DZyIM4wYJyWpgIJQOO0RXJ.2dNRxSwUZ0-1791281751.2358353-1.0.1.1-Vyy374pvwz6cdnpwQhl8ieh.Y3PW7K6pLSv9K36ILSo0ruedCjE_hPTMMbLSiZZDjFOFHcN8fPC8faqhiFJ7GwhLn0yBme4SqD.cqg2cEkOmRDj3s.pbvbJNk8hf25dA;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:45:52 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -195,19 +196,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '200000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_30d865435aed4eb8acf40301c34af13a
+      x-request-id: req_55ff562094a447b1960c5503a9daca71
     body:
       string: |-
         {
-          "id": "resp_05e9e5f4d7f825a0016a6f85819d38819d98942288af18f32f",
+          "id": "resp_0286c6c496a5cfae016ac4ca5758c887d29d8a9f07a19096b5",
           "object": "response",
-          "created_at": 1785693569,
+          "created_at": 1791281751,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693572,
+          "completed_at": 1791281751,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -218,7 +220,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_05e9e5f4d7f825a0016a6f8581e900819d85321c378b88d8cb",
+              "id": "msg_0286c6c496a5cfae016ac4ca57b39087d28c5dfbdf85187187",
               "type": "message",
               "status": "completed",
               "content": [
@@ -321,15 +323,15 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:32
+  recorded_at: 2026-10-06 10:15:52
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
-        is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","output":"2024-01-01"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It
+        is 2024-01-01."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
         month is it? Provide the full name"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -342,39 +344,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa1ae8b61914-EWR
+      cf-ray: a463e8483f501ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:33 GMT
+      date: Tue, 06 Oct 2026 10:15:53 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '872'
+      openai-processing-ms: '540'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=DjL9E9RA2id8VOUBZK5mQma5rLsrMcdCSelDPMEqFbo-1785693572.307673-1.0.1.1-5D.RFgj3BniarznaDWmC6io.lPON86UDT9xf_fo6bB9VOqM_eZSqq2MXoZ6ju7OsnWTARqvXFhcCwFRxVjOMotgc4flK4jAQub2t2W7_bBDuDiARp7WjUk30grNvcfrM;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:33 GMT
+      set-cookie: __cf_bm=wAmAWB_DHrPEAE3Bw4u2b9MOOxSQVAigz.DZBUC4V4k-1791281752.353221-1.0.1.1-FMkNIPUNWWR3zwNWZHZniVgcrzT.x0p.w6qIJa8LJWghpY7BxtFf2WxYmAio1vF51_MGQqld19_iUBqzUrxkOsVS.3KVcK4pSP4jfnbc0I3hNiCcla5pXdionjWSIhRr;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:45:53 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '200000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_911858ec9b664aa698a34126f8705751
+      x-request-id: req_6079b94ce9c44bab83cce20acdc6d7d6
     body:
       string: |-
         {
-          "id": "resp_03185aed14e5c547016a6f85845f2481a1b5359a175b9bd3f6",
+          "id": "resp_05d7de57cf36afe8016ac4ca58781c87d2af303c40c612bea9",
           "object": "response",
-          "created_at": 1785693572,
+          "created_at": 1791281752,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693573,
+          "completed_at": 1791281752,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -385,11 +388,11 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f",
+              "id": "fc_05d7de57cf36afe8016ac4ca58e72487d2b914484108af214f",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_BCvFVNBw4MMOEJ3ls6KaCx20",
+              "call_id": "call_Ugy8o4p7qaQui0H0BLYc15jD",
               "name": "current_month"
             }
           ],
@@ -481,16 +484,16 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:33
+  recorded_at: 2026-10-06 10:15:53
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Always
-        use a tool to answer. Reply with ''It is ____.''."}]},{"role":"user","content":[{"type":"input_text","text":"What''s
-        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_07e02ee31bd73194016a6f858124a481a280ec4ef80f2a0bc6","output":"2024-01-01"},{"role":"assistant","content":[{"type":"output_text","text":"It
-        is 2024-01-01."}]},{"role":"user","content":[{"type":"input_text","text":"What
-        month is it? Provide the full name"}]},{"type":"function_call","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_03185aed14e5c547016a6f85850b2c81a1924c6e37021e6e0f","output":"February"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Always
+        use a tool to answer. Reply with ''It is ____.''."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the current date in Y-M-D format?"}]},{"type":"function_call","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","name":"current_date","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0e9f6b39767db96b016ac4ca56ae3487d286ac521cf8f9004a","output":"2024-01-01"},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"It
+        is 2024-01-01."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        month is it? Provide the full name"}]},{"type":"function_call","call_id":"fc_05d7de57cf36afe8016ac4ca58e72487d2b914484108af214f","name":"current_month","arguments":"{}"},{"type":"function_call_output","call_id":"fc_05d7de57cf36afe8016ac4ca58e72487d2b914484108af214f","output":"February"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}},{"type":"function","name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -502,39 +505,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a24efa227bb01914-EWR
+      cf-ray: a463e84f29cf1ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 17:59:36 GMT
+      date: Tue, 06 Oct 2026 10:15:54 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2753'
+      openai-processing-ms: '634'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=Z.qG81vYPurqWmgCr7ZGds2afZnHfACNZjwsSNkiPv8-1785693573.51361-1.0.1.1-NgyXFG_hQtAjWQhi69dzIJrVGvqeCJ2W47MhcigZR10vh2CbcyNM.tB38hO3vUJ9lSX5QJQzg16VP3tGRc3Jt4c7z1xHjYA5C8qENlpVux6fDcWmeetK4WGIB4VpwyV2;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 18:29:36 GMT
+      set-cookie: __cf_bm=SwQKE6mi6uQ9eP5EVN4L9dkepzpDL6hV6nEAfy_0I1A-1791281753.4644294-1.0.1.1-TISnKhjggiYQ1cWh3psd1CJGWEjvZE09dQBl6Z2Yy7m_9Sf8H1wE18Rzy6t.fE6r9Kk5Bc9j1gQsx.HClBB1SzxwGtZrwpVMFbv8AJfyCbejm8tjUJmkd7QtErxRfHPw;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:45:54 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '497'
       x-ratelimit-remaining-tokens: '200000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 360ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_982344a500b047abb697f40bc76b0875
+      x-request-id: req_eb65b07e839d4709b01e710d95bbe9c6
     body:
       string: |-
         {
-          "id": "resp_01eaf567e5d3322f016a6f85858ec88191b41f0d50535bf7ce",
+          "id": "resp_0bf1f46f6b709f9b016ac4ca59927087d2965d9939653ff763",
           "object": "response",
-          "created_at": 1785693573,
+          "created_at": 1791281753,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785693576,
+          "completed_at": 1791281754,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -545,7 +549,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_01eaf567e5d3322f016a6f8587da188191a571523f060a47b3",
+              "id": "msg_0bf1f46f6b709f9b016ac4ca5a14bc87d2ab73bee6aa4ddbe9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -648,5 +652,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 17:59:36
+  recorded_at: 2026-10-06 10:15:54
 recorded_with: VCR-vcr/2.1.0

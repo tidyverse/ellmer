@@ -967,6 +967,12 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
     return()
   }
 
+  if (is.null(x@extra$signature) || !nzchar(x@extra$signature)) {
+    # Unsigned thinking blocks are rejected by the Anthropic API, so replay
+    # thinking from other providers as plain text.
+    return(as_json(provider, ContentText(format(x)), ...))
+  }
+
   list(
     type = "thinking",
     thinking = x@thinking,
@@ -1145,7 +1151,9 @@ cache_control <- function(provider) {
 has_claude_structured_output <- function(model) {
   # Matches Claude 4.5+ models, including major versions 5 and later.
   # The name segment is restricted to [a-z] so that version-first names
-  # (claude-3-5-sonnet-*, claude-4-sonnet-*) don't match.
+  # (claude-3-5-sonnet-*, claude-4-sonnet-*) don't match. The pattern isn't
+  # anchored to the start so that Bedrock ids (anthropic.claude-*,
+  # us.anthropic.claude-*) match too.
   # https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-  grepl("^claude-[a-z]+-(4-[5-9]|[5-9]|[1-9]\\d)(-|$)", model)
+  grepl("claude-[a-z]+-(4-[5-9]|[5-9]|[1-9]\\d)(-|$)", model)
 }

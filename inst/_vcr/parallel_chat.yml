@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of Canada?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -14,18 +14,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250819fa9f3ae4c-EWR
+      cf-ray: a463e6434ebbbeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:49 GMT
+      date: Tue, 06 Oct 2026 10:14:30 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '792'
+      openai-processing-ms: '854'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=G2VMGdW_I4GglR2Yd0xYI85Qgyxo7QBVU21Vw5AZjG0-1785709608.9092855-1.0.1.1-xm0lqvZRvhebXuBfGwrH9JrXqqSny0yBo8Ml_0yxmapbRJAb0boWb8zLMbBMucAj1FQFCqCBouMZ_RyHPMWOLw1gF_mX3CjkqSDENDj3_7G7TcZfyBorohSKvSfSwXZD;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:49 GMT
+      set-cookie: __cf_bm=mtGPabZ1y_YuGiP5egUfh7nzf5O7DOqGNi5agSy4y_w-1791281669.6464803-1.0.1.1-LpB8MEZIHmfUl3XqsO7uaBEu_KePv1urPOFnASbWTSw2fNUTUp_n_V4RB9LbpllyDRfY_pUrOr39ycKafIgyeJpDzqeAhhcDVeqU4mV3AL.Kpg3vEbCtfDm00NL7_rPH;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:30 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -34,19 +34,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_fec76f92ddce4ac6bf7d897404b6a695
+      x-request-id: req_748a904715ea40199f9c53d95ef1dcd5
     body:
       string: |-
         {
-          "id": "resp_0c09186607719481016a6fc428f7b48194906400cf2f571d30",
+          "id": "resp_0afd6b312fb15cf8016ac4ca05c53087d285fc6f732c638e16",
           "object": "response",
-          "created_at": 1785709609,
+          "created_at": 1791281669,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709609,
+          "completed_at": 1791281670,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -57,7 +58,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0c09186607719481016a6fc4296ea0819483be77c9281fa42e",
+              "id": "msg_0afd6b312fb15cf8016ac4ca06532087d28bbd464593650f60",
               "type": "message",
               "status": "completed",
               "content": [
@@ -65,7 +66,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The capital of Canada is Ottawa, Ontario."
+                  "text": "The capital of Canada is Ottawa."
                 }
               ],
               "phase": "final_answer",
@@ -122,21 +123,21 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 13,
+            "output_tokens": 11,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 25
+            "total_tokens": 23
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:49
+  recorded_at: 2026-10-06 10:14:30
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of New Zealand?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -147,39 +148,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081a548c2ae4c-EWR
+      cf-ray: a463e64a0d1fbeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:50 GMT
+      date: Tue, 06 Oct 2026 10:14:31 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '822'
+      openai-processing-ms: '839'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=hKSScu.p5lBYzVZhJDlqdprZJImO6mmtKnI01Fdik74-1785709609.807943-1.0.1.1-6KcFUBw_UwQihf864drXYVDgAY7XmBPPBg613JceSZy9VPteGUmySaS2azXVhh8KVDhdGRhR_OX8nnUx0cIY85oylwOkugXJHIL6hWPiZJHlR89qV76.i_IJKz3Lg8Oc;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:50 GMT
+      set-cookie: __cf_bm=kkRuuVrCWHESe0Mq1aPbC.8i_PCH5a2BqrqGGd_NVms-1791281670.725976-1.0.1.1-eX5JY_J.fAYistctghEXZMuYEY9tYpRqqN.Bfyt_atL.MuW7p3PTWWtPgHcOA6PEvpCBoAR2VeRzYBauWrMoj.IvkyiUsdEOyyNr8H6X_9TvuB7pxAWgEg0SEzSkHm7e;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:31 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_16d306c52e4a48ce9dfa53c9c3ea5fd5
+      x-request-id: req_86e4a0822e5642819e1c4f7843633f93
     body:
       string: |-
         {
-          "id": "resp_0fc57a161756eb37016a6fc429ddf0819580aba569c5cfc4d1",
+          "id": "resp_0183ad2b8299b00e016ac4ca06d9a887d281668ec0d25694af",
           "object": "response",
-          "created_at": 1785709609,
+          "created_at": 1791281670,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709610,
+          "completed_at": 1791281671,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -190,7 +192,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0fc57a161756eb37016a6fc42a5ac48195b2da393bb764f36d",
+              "id": "msg_0183ad2b8299b00e016ac4ca07703487d28a402368b75a7e65",
               "type": "message",
               "status": "completed",
               "content": [
@@ -264,12 +266,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:50
+  recorded_at: 2026-10-06 10:14:31
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of Jamaica?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -280,39 +282,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081ab29f2ae4c-EWR
+      cf-ray: a463e650bb90beaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:51 GMT
+      date: Tue, 06 Oct 2026 10:14:32 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '984'
+      openai-processing-ms: '825'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=wHD.gQyYa.UkfKUUhY9SRUtBIITB0IAPMjdKIr9StFg-1785709610.750427-1.0.1.1-dlE5L7uio.ZXRs2jCYbHd7WSYIiosyq9hYBU4xA2vAmVTXCML469RCz4XdLIBZgKM7ghXuKFBme.eHu1dq2QqWMeO.rtIru5xEh7pcg6FSp_8KR6zHq2nxTLfkDlYVHD;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:51 GMT
+      set-cookie: __cf_bm=LivsBRmc_gBT01W_uZsJwJTNKQ3BD6263rww16ftGYc-1791281671.796607-1.0.1.1-vqGJKXwaxk5dIYbNfANfruabA3oQKYFb5oWrYvi7gjREmtiYPzEfCQfxsZLxctpDxS1rHWLOACAOQd6sMHFEWHlRdOMUSjZOZDdU2NG8xRFj.4IxWu6wYGMf9XuNlEmz;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:32 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '497'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 360ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6af405f453c246e99f0c5742f29ba568
+      x-request-id: req_f79c5aac8f444e33bbf64c919d73adaa
     body:
       string: |-
         {
-          "id": "resp_0cbfb767af6e84df016a6fc42ad0248190b5f6e7b86bb3132e",
+          "id": "resp_08529e6164f3feb6016ac4ca07edd887d2b01c3a25a98a1e97",
           "object": "response",
-          "created_at": 1785709610,
+          "created_at": 1791281671,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709611,
+          "completed_at": 1791281672,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -323,7 +326,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0cbfb767af6e84df016a6fc42b6ad881909ed69d8a5667eb6c",
+              "id": "msg_08529e6164f3feb6016ac4ca08658487d29584523452a5d512",
               "type": "message",
               "status": "completed",
               "content": [
@@ -331,7 +334,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The capital of Jamaica is Kingston."
+                  "text": "Kingston."
                 }
               ],
               "phase": "final_answer",
@@ -388,21 +391,21 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 11,
+            "output_tokens": 7,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 23
+            "total_tokens": 19
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:51
+  recorded_at: 2026-10-06 10:14:32
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"What''s
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
         the capital of United States?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -413,39 +416,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081b23acfae4c-EWR
+      cf-ray: a463e6575a2dbeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:54 GMT
+      date: Tue, 06 Oct 2026 10:14:34 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2360'
+      openai-processing-ms: '996'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=cYKne8DLLrf5iTtaqcpOlyvlMvU7_mfKX2eVcYISLjc-1785709611.8731725-1.0.1.1-2AKcUPaLxWNyjttFx2cX3IavsZOM7AvNN4kI3t5rTYW_QmnpKlBcLt2_ibpzaBBOgGubmZYB.ZXCwewTX77f7eVig887M1fNUD9.LB28T5yaK8KfhyEkdfBL.2KL15AV;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:54 GMT
+      set-cookie: __cf_bm=biXuDfZPkXjqhXCsDDcdiO_TO6eA.X49gCE8raH50r0-1791281672.8578544-1.0.1.1-NbWRzeVRYtscQ5iwAvnpLmrlrkAIwALRtd6CAECWuCX7YmNqD7iWqtOOmgZiV.oKtsqAwXoZztMVhLDvIzNjBpf1JFRB94NVOVkwsAwSMozYb0ZHjkU.YvM2vXqPJ7ZW;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:34 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '497'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 244ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_5a31b968483d41b28bef0347eca13280
+      x-request-id: req_17817042514040fcba69e63658d8caa3
     body:
       string: |-
         {
-          "id": "resp_068d2d04551f47be016a6fc42c0fa88197b3734c13b944d270",
+          "id": "resp_0864c543e0adac11016ac4ca09050087d2a92f2b14945a9c2c",
           "object": "response",
-          "created_at": 1785709612,
+          "created_at": 1791281673,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709614,
+          "completed_at": 1791281673,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -456,7 +460,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_068d2d04551f47be016a6fc42dc12c8197ab2ebb537d01be26",
+              "id": "msg_0864c543e0adac11016ac4ca098c3087d2b1958f9798513074",
               "type": "message",
               "status": "completed",
               "content": [
@@ -530,12 +534,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:54
+  recorded_at: 2026-10-06 10:14:34
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"I
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"I
         go by Alex. 42 years on this planet and counting."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -546,39 +550,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081c40ba4ae4c-EWR
+      cf-ray: a463e6614a95beaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:55 GMT
+      date: Tue, 06 Oct 2026 10:14:35 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '615'
+      openai-processing-ms: '798'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=1QeErZTqeGr0N8sBvOMSmzFb6kYev1fXWflWv6vP9e4-1785709614.7279968-1.0.1.1-hffIFfFjcNkMaV0V63q1ImicckOXjRjNSDvkEdT.s0ks19cy82VtmdG.dc_BLykHnkpAlwns0zrspZBhFqs8TpBCMtPOu3uuVqwdLPfzKNbg00TspSoCyB_qalPuCm2I;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:55 GMT
+      set-cookie: __cf_bm=kHKQkEyUwajizjB.2L3uRO8_5qPK4PFfMfQ9XpqABkU-1791281674.451067-1.0.1.1-Lavfjo9CuFKP0Zyu.JDR4NNHlIpOzlQiRi5B0PtZWMzzNr9rF3gMSkDxz10btHEB5TBb.XPRVo9WXjBJ7U.QQCDGxf2.nNdfSL1o0CDvYcQqjpjeD04yA2rihsOPbM7H;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:35 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_447b2303573744ecbc2d93dc0e88a290
+      x-request-id: req_15deb685adfe4a57a3bbc0aab38140a1
     body:
       string: |-
         {
-          "id": "resp_0e8ba6fe0ec55057016a6fc42ecb9c8196bf285af75add3b4b",
+          "id": "resp_07fcad65d25382af016ac4ca0a9d5087d28b8638716a188ce5",
           "object": "response",
-          "created_at": 1785709614,
+          "created_at": 1791281674,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709615,
+          "completed_at": 1791281675,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -589,7 +594,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0e8ba6fe0ec55057016a6fc42f36dc8196a127b0864d23020b",
+              "id": "msg_07fcad65d25382af016ac4ca0b3a9487d292551d5d1dc3368e",
               "type": "message",
               "status": "completed",
               "content": [
@@ -685,12 +690,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:55
+  recorded_at: 2026-10-06 10:14:35
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Pleased
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Pleased
         to meet you! I''m Jamal, age 27."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -701,39 +706,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081c88e35ae4c-EWR
+      cf-ray: a463e667b809beaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:56 GMT
+      date: Tue, 06 Oct 2026 10:14:36 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '747'
+      openai-processing-ms: '961'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=_nvZG_v.mZGIMOuoCPpkCqumGLRm_y.p0fdBKWinYHo-1785709615.4468799-1.0.1.1-pMzqIxBYkXiipHfIxzjXbvBv22BHODBqkc3qRLjcXSE7kMk.jIQkBEXrijEGBxWeEFvgotBzp7mG6zQKChg2A5s.fDBYjcqgzph67YdREZ4gi4i.2QDsiwys92xHJR3V;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:56 GMT
+      set-cookie: __cf_bm=8aKFP415K9yMXJeTgP8IeDXf1I7CtssZsxyTGw2HvIE-1791281675.4792888-1.0.1.1-MQoLPAVTtvKvU5lL5lOGHrCYBjK1VrK93m2tmKRCLGDe6GtvUYG5LdpKu9naMKwilanXxoW5F4IjAHUWfT1QhwxG7itSk3V.E5WUgq2tx4Irzso41nAbOMReifuYXw_U;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:36 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '497'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 360ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_16c017360ac54eeb96b9e6a3412354e3
+      x-request-id: req_dfd0e1a014044f61a387b3ff70d80aee
     body:
       string: |-
         {
-          "id": "resp_022b911785fd5f86016a6fc42f82cc8194880116d1dc53b115",
+          "id": "resp_0e4281f786c77c6c016ac4ca0b9f4487d2ae418b2b924a2e2c",
           "object": "response",
-          "created_at": 1785709615,
+          "created_at": 1791281675,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709616,
+          "completed_at": 1791281676,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -744,7 +750,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_022b911785fd5f86016a6fc4300c14819483d0d39fcfec4775",
+              "id": "msg_0e4281f786c77c6c016ac4ca0c411487d2b2e59b43de798b8b",
               "type": "message",
               "status": "completed",
               "content": [
@@ -840,12 +846,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:56
+  recorded_at: 2026-10-06 10:14:36
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"They
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"They
         call me Li Wei. Nineteen years young."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -856,18 +862,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081cebb89ae4c-EWR
+      cf-ray: a463e66f7f29beaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:57 GMT
+      date: Tue, 06 Oct 2026 10:14:38 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1206'
+      openai-processing-ms: '1366'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=Nglr74K.KfRsU0gkUxGoe35L1zhCX3DaNLlgvHBYXq4-1785709616.4316874-1.0.1.1-Jlis.bcmrgFYINQz0mFmzOt1Etp9IDXavCF5N6DUathz_qZ.HW6tFohoj3nkc_qJcnke2FhyDGeml.f6zwxbynpmY8VagkidC.loEQB5M176SaCL1raCDTgtKc.S.5k9;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:57 GMT
+      set-cookie: __cf_bm=vKBCdjGjsvlf8HD_29NCmBGAsqrfZjcmWZ3kRFv1vY8-1791281676.7202878-1.0.1.1-owoIrb615EFfOo.Gz4uX93KSSxvZZpLoBXC3qUDWHDAqjpbhMBBeGZ1bAy_ZueSf682O9B5TiJBInVRa.zEergoziXyeE03sEAZGsnIyFUPLmu5gxUzIOqiP4nZulsvc;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:38 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -876,19 +882,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_88f938c250cb4714ae345dff42d37f6b
+      x-request-id: req_58ad873054474e45a386d1415ad5b7a1
     body:
       string: |-
         {
-          "id": "resp_00115fb42d11dd0c016a6fc4307ec881968aa203c921b9e14a",
+          "id": "resp_0189024470c99f5d016ac4ca0cd86c87d2a5af608e8e3da915",
           "object": "response",
-          "created_at": 1785709616,
+          "created_at": 1791281676,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709617,
+          "completed_at": 1791281678,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -899,14 +906,14 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_00115fb42d11dd0c016a6fc430f7388196bdaf49c349415ff8",
+              "id": "rs_0189024470c99f5d016ac4ca0d6e1087d2b88abd7b086a4dfc",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqb8QxdDMH7i8dpM2GlrVYdhW6aOvetYJ5wv0ksqbpBiTbDhJzvGzFqfr0nEDMOx5tIZi2nDH8P6Eglf7_XfV8Uw9kyeLi4mqL61M5L-nGnrDjE3DsJ_slBN7L6Pm41GIFWucPUcg9gzoeqpkslDaZvrJf52Hik-XAJutNwQC-_QwdcS_bLBaoNW_9vfihrnvZIb4n7hmd4Fg3ln2g3vyz8kFxAZBSJmH6PYUxVoKfRm9e4oumA7vWLqOndL63m7QSpj9xs5zdh5YjchRGXej0Wc0_9UzBnSi9Re3GYRsvZDpFeZmm39RGDcNpdiNOFMxsZIlPz8cpR8lKk-p46DiSm0VgXIZfcp5ZwECF2tD3Gc0G79q3cxjOo9WPw0zAsT7frU5iBXP9SUXAmm79-lvgljgOrYyLATlh4vMDDq8yhUGUnX1vHRTkaVPb_foTt7Ebk7KNG8dJ4N6lnOMSYj2h2tVXOOdKvJmBp3o0HanQrRi18obc8yghttFLwj8y93e9O1WkMW3EvpboAr8FhtSeFEVa2nz7lLq65lWg7tTkCkbtNA9cJ5EFiC96j0p8V9PziAxwEIe3oUBdnv4yLx3V-56MAnQCGZnzsEYAB1J0L6G7_LCrZDm9E-XB3zf9ViJWwuWBLoj3rrZTQQCPbzlw9sDRzH1jpiPJbeNl8R8aJb4CCjYtbVcNJHb6Q4LoBj0VkDMmeAqdSRX3lBfTRSG0-MTfaqhKawLFLlmF5LPHe7ufJqHmpidSTSGBvTC6KxUS2vt8kLXxaYqxOpHZ0rg9XvWMcOAdifBcCsKThp_gm0ORwSl4G1P0E45D7RKBLuVIRn2KihWitgzaNBhKOINmkaUzE27z5H9w_IT7RDaG66RsVuPrmKe7HdYCLK3qW96Z106FlhIvYpGDUfh-D1xGHMA5jF9ZbAbbaCV2TsOnY-iNLGKxqc4Xykfjmy7ZxeqirauEbngc8KwT55YlhUi41GsOGQxNNCrL2lCB34fjZJ5StiSa_KuKvJYZLYoE-50wl1Bm3TwNFXRJ9CTN8h8ctKUVxBE17Dfy6y8PjbNFLUcwyii7VHib3k4uP4kUqsnv60QOVxj3vd_R63toTZIHcKDEd94xKoRbbM7g_uyiqvjDPPe57DylKVyKw7ZvftrOjWzMw8-kcn0QY7vkIcxrmWdVQw==",
+              "encrypted_content": "gAAAAABqxMoOXcBAQrS688W82FeuBd-HP5n9leErCur_m3uv_G4kmI3q2ELQgtK825sGe0IPjcXY0SfPgwOT8izxpYsCUSpT0uATen4AkDVSU7cjCayvppovGPKSr9w-OpkpY9JwVNPkMgNw9oDStyExQo2Zhg_xwTU9fzKueeYXyZycsQaSkRwSibVdfKe8Yeg4KvJvyjQsKcd-qsiHcogdVW_vAUNWhIMzDiUfq06VHWM7jq7XhTjRM58EHyBr7SeO_GrEJ20sIYeBR2BtpReiQBk2FPJAwDpOMxxtY4eHunr3viaCxq1Odcpkl5m6N5oWD52ClzYsUdkOdu_xlfPBGN7hELmLavIU0EsQm7qP1BriTPLfSf1awenDP42298YYkwco7DhMF95bhOzVExwwkI5X--oq92e-IyLLZhcCcEnwP6XmTBIY6mmRo5XG3k3QWsm57sfpriWXYSKEyVKnvh8B0z_EvHk7L0xlSr2t5ObzBPquB1yKeaAvTqvQxyS34I3_ppFSqGpu793zHsQIIAdudGXSLvB5sugms0UjqfVGLVm3SopAWAEjFlnSXYlxv6XReAqnPqSxoIX4gHb2_KtAeFCDJ-cgj-bGzzhmL_OPqqUKMo3DLxvoiavYKqGhrMBMOzOZ1hXc7881UcHOK5MxKIihS7XhgQ6FEE9AzwwDwCWumyMO0TBL0TomuwOtL1K4AJ3BYaWrjSGbpiCX0HNJCLSzALumfAVII1SgEL0Q8hbwWMU3pbb1_dASlo-dU8vVrE0yxkIGGDNieEsU0T-CBfJocvFAl3tWGu-6wUAL4rKuCWQIetE5unl4RjO4Fka6sRjdXsyHANzgSTiRDnSB9Yu82B-kmvLvoKJzJAtR_J3Vk_UgmC4nAYU1zQk_aughdGMDXIVRTpK7ax0pgx6f8rwx2myhxBUP21yS9UiuGjMTuvraEna4qmxzOj5yE1jXl8p_1HT_4iHIbqk2pEEmJKZJt6P5XC5jagsRClmNUD8vjzWXkjmZhvcUnxExZxjN3lsYmvr3nAGgRq3FejgMKc-SuW6HTPaPhpwnQPrhpZ8T_lAvzgUCraifF_yxSoR_yMRP99pCJBgd7Oam_U3X3SA5ZVeZVXZxqcfv-p0dTrRjSmGks3_1arulFqaP5DHanVu9SFt7LBWHnXbw_fBrmBkKYWu290YPAPfZZrkfD-qX_MGAmp6B0pFH86i6lwv2ytnTxyiYRjJ88rZxChCs826i068sk2h4dQeBXMkpjeKIKe7HBi82gpGibFQGK64kycDYB-SqjTHDok7GgDq_OMzE4QqfeclFmCJuelX2Vho7oAyB85ZSRjJFfTF_4HqW_SMR",
               "summary": []
             },
             {
-              "id": "msg_00115fb42d11dd0c016a6fc4318b0c8196b20a37ec04a452bc",
+              "id": "msg_0189024470c99f5d016ac4ca0de77887d28c2f9edac26170eb",
               "type": "message",
               "status": "completed",
               "content": [
@@ -993,21 +1000,21 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 61,
+            "output_tokens": 46,
             "output_tokens_details": {
-              "reasoning_tokens": 41
+              "reasoning_tokens": 26
             },
-            "total_tokens": 117
+            "total_tokens": 102
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:57
+  recorded_at: 2026-10-06 10:14:38
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Fatima
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Fatima
         here. Just celebrated my 35th birthday last week."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1018,39 +1025,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081d76e9aae4c-EWR
+      cf-ray: a463e67968aebeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:58 GMT
+      date: Tue, 06 Oct 2026 10:14:39 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '849'
+      openai-processing-ms: '811'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=lruAYMa3L_xfu_6CEoOSnDzApCGwsJryxP_8ZRUXvbg-1785709617.829583-1.0.1.1-6WbUdCJ5CPywVJsZzGdkzJPINc77WorI_wJ9nd.kvOgdZu5jI0i0hZR1H8ezdeiG1Pex1l_b5Clm1qLLBrMXUkuju_.9n_ufhWFN6cVOV1_Iw1SzyOPVNTL5AXu9ijIs;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:58 GMT
+      set-cookie: __cf_bm=FfzcVOxt7EDwvwa0HWqLg7F5XPds0eVCTwXKWB.0sow-1791281678.3099196-1.0.1.1-X4qRyFlNy2RQtv2pcsavMe.pmzTrLQXWawadxBY54ZtFMsRMUS6dKE1HO24wcvl0quzgdfMT48OVHFwDMHg2bvHsdbeEbn4vcoEqfzP9QeVAneD.re8CHoCVEy1znO.r;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:39 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a73cb1dc72a842c8a6579dc4a4fb02be
+      x-request-id: req_02094e20831f4f5ca4c203275258fdb7
     body:
       string: |-
         {
-          "id": "resp_052baf3cd1bc8888016a6fc431e55c81949e344a2539bcbfca",
+          "id": "resp_03e8d8b39996e207016ac4ca0e6e8087d2ba21fa6f39444299",
           "object": "response",
-          "created_at": 1785709617,
+          "created_at": 1791281678,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709618,
+          "completed_at": 1791281679,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -1061,7 +1069,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_052baf3cd1bc8888016a6fc43288f0819488f2a989af02fe48",
+              "id": "msg_03e8d8b39996e207016ac4ca0f0fb887d2bc04962857fc2fcc",
               "type": "message",
               "status": "completed",
               "content": [
@@ -1157,12 +1165,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:58
+  recorded_at: 2026-10-06 10:14:39
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"The
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"The
         name''s Robert - 51 years old and proud of it."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1173,18 +1181,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081ddee03ae4c-EWR
+      cf-ray: a463e6804ec7beaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:26:59 GMT
+      date: Tue, 06 Oct 2026 10:14:40 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '773'
+      openai-processing-ms: '811'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=aKEnS_LFRSaEz1P7_WHQWwJNAEHO1UxgZN3_ftR4QEQ-1785709618.8636496-1.0.1.1-95amGESAl_yGqW5Zc4zv_83XjNzP2vzxQ96X7_zD.8ic5XFQHoD0P3dqO5llskHhHzCpr4y9hkRBH7RH_7SYNjV757XRUgwGRNxCbwfOby8q1c5ZKG22QlzJMVkrYbXe;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:56:59 GMT
+      set-cookie: __cf_bm=K6Dc4opU8iGnap2I8Q6yb5svoXYAOhMP.kO_DFDB0DM-1791281679.4028418-1.0.1.1-wZoUfFm1WuogqNv05RGu6DxwVmmmGUyysSR.G36DuqINiv0193_EkNJbxGU6_jSXJN6.IoWni2i99JwZ1TIPC5LDc7s9HjemcLz1wgpNBnk1LAY_ghfuHMp9UvrP0fgD;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:40 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -1193,19 +1201,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '500000'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_f15d066a63ef4692a7e82adf15168764
+      x-request-id: req_b56a1483826c43328de069cb7b311d88
     body:
       string: |-
         {
-          "id": "resp_09cd5ade809e455d016a6fc432ebfc81949cf7219aac0304ee",
+          "id": "resp_0cf8ebcd05435391016ac4ca0fb31c87d2aa98cc8a6901015b",
           "object": "response",
-          "created_at": 1785709618,
+          "created_at": 1791281679,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709619,
+          "completed_at": 1791281680,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -1216,7 +1225,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_09cd5ade809e455d016a6fc4337d8c819484c629a1b6c79f7a",
+              "id": "msg_0cf8ebcd05435391016ac4ca10461c87d2a54a597be9f019f6",
               "type": "message",
               "status": "completed",
               "content": [
@@ -1312,12 +1321,12 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:26:59
+  recorded_at: 2026-10-06 10:14:40
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Kwame
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Kwame
         here - just hit the big 5-0 this year."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"number","description":""}},"required":["name","age"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
@@ -1328,39 +1337,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a25081e39ab0ae4c-EWR
+      cf-ray: a463e6880c8bbeaa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:27:00 GMT
+      date: Tue, 06 Oct 2026 10:14:41 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '785'
+      openai-processing-ms: '716'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=3zeaQIZubP6ic8YpsQRZdhHci.pkLPGWtXuRmH7wwts-1785709619.7789645-1.0.1.1-Scw0mRoLmegXOJUWVJOTT3C9YPtqPEm9xPsCXIcjAYX41ECutT5F3EfQbEKG11n7oLp0vBV1H3QLWtZM0qdZpIowp9UP04JHuxOZJIrrkxgEwuE.qXYbNhhS9MN2LDxo;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 22:57:00 GMT
+      set-cookie: __cf_bm=RXZ1QbQXL.icagdLHplh74s5wqHQe1gSC23xODliL_U-1791281680.6479795-1.0.1.1-OOgwrte4MMw4xdZ5fUvfHxN_tL0JxqHrJbq8tlZSkhkIqMaZ3z35G9go8XDdkfr9TnGbNMYdD_4HIO8TDm3FV.STO9aTdFW88udD1NinZSB7uxXx7JfLQa4AW9x3rJN0;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:44:41 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_d200c2351b80477390e5941ce0b0ddc1
+      x-request-id: req_6cc310f4b1b2484ea8b67782bddde70d
     body:
       string: |-
         {
-          "id": "resp_0c9ae7d0716e8d6e016a6fc433d5f481978360f896d53bc942",
+          "id": "resp_00da57a23a7b97f5016ac4ca10c4e887d2bfb40774fe3a878d",
           "object": "response",
-          "created_at": 1785709619,
+          "created_at": 1791281680,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709620,
+          "completed_at": 1791281681,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -1371,7 +1381,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0c9ae7d0716e8d6e016a6fc4346b0c8197a49a83af366495db",
+              "id": "msg_00da57a23a7b97f5016ac4ca11524887d284e99312a5e3c3d4",
               "type": "message",
               "status": "completed",
               "content": [
@@ -1467,5 +1477,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:27:00
+  recorded_at: 2026-10-06 10:14:41
 recorded_with: VCR-vcr/2.1.0

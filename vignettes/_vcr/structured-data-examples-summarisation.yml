@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"Policy\n\nThird-party
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Policy\n\nThird-party
         testing as a key ingredient of AI policy\n\nMar 25, 2024●18 min read\n\n\n\nWe
         believe that the AI sector needs effective third-party testing for frontier
         AI systems. Developing a testing regime and associated policy interventions
@@ -317,39 +317,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508be16e67cdf0-EWR
+      cf-ray: a463e4f19a60a430-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:52 GMT
+      date: Tue, 06 Oct 2026 10:13:39 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '3758'
+      openai-processing-ms: '4029'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=5pG7_AV1POkKzazTw7Msw.LDVOnFtNEyKrpRlBa_xw8-1785710029.0227249-1.0.1.1-y0_0VP3J7M8H0iQsuQIUHsgvYGJIAEJi6K_u94qsRDI81VxdFvi1Sm2FwP33Lwm0rV4qNv6ZxMkQ2cdfoAZ8T7ZL.lorIkUbN902KsQ5UhdsQSKvitKDopdcKwEMzWxa;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:52 GMT
+      set-cookie: __cf_bm=jUKO6yFiiIS16Wt70uT6x0GCaMhj7VrdIelQF3oS3bg-1791281615.6208549-1.0.1.1-yz3Gf2dEr7FnoYUo1XmIDV8hmkS0rK87P7pKYY74VSNHaArMLRLCac.k0fmKTleiWE.XFvXd95TTNWmLKz.z8UWxHbCcyE53.nOWwedmORWnijr8RwKaHzqfgDSxFl3b;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:39 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499826'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 20ms
-      x-request-id: req_4755977f337a4e5d838d1aca4803f62e
+      x-ratelimit-remaining-requests: '498'
+      x-ratelimit-remaining-tokens: '499838'
+      x-ratelimit-reset-requests: 240ms
+      x-ratelimit-reset-tokens: 19ms
+      x-request-id: req_ee11acb7c4a1419abf69fc12f72f3544
     body:
       string: |-
         {
-          "id": "resp_009635beba94824f016a6fc5cd215c819788686b1da0896a6a",
+          "id": "resp_07395bcd22bd8e2d016ac4c9cfbd1887d29f2dd843deb158fe",
           "object": "response",
-          "created_at": 1785710029,
+          "created_at": 1791281615,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710032,
+          "completed_at": 1791281619,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -360,7 +361,14 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_009635beba94824f016a6fc5cdc6ac8197a2d55ead0a9e68e3",
+              "id": "rs_07395bcd22bd8e2d016ac4c9d050d087d2ba7fc2a8a1cb686c",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABqxMnTmVEpZFDVYtMaI9Tsp2xtU-vbnWjPbc_f7mt3r_2AexEDffwhABSWV2Qxsx71aDc98lBo3pghmm9fJKi8RnsvnbeOjfOZSUEzHY1n27RbAX2TN08GX25ExKoWaexz6ty5hxzCyqtYwJHbx4xN94AgQcvLOWk1KeypbQxWRF_1HLkDFoAf4_Q3P8qVxH_YApdASTW8y_nRJzo302GB2rSCRKnhCnzXbZy3fFA4lN5-lraeo60VuKQ9ZIoNW3A8R-AOUev1cteI2ethvoMV2FYuxuzcXaWT6k88eoTRFsYj61SdTWD-cbiM3cme5ot5JoqlW0E-4YqXRlahpES0gCcCvPvBFooFfK3-zJ8evA_UJKDsbpKA9WRo91gxB1uHzrDdpIdP-94OA0pIU3V8CbjAZbpw--Wd5lxnZ5n-rFlLq1ZbMY83AnyQKv42BH-xL0yH-BymDAFnWAshqNBF35pk9W1-5Ag7iVdo_616Wqs6rPBd3Mcmfwoal_NGrQqCLo7M-burrCpQm29D6cVwitM2h3fy6yRhHrlhXa1_6Pr3wSMs-h91iIFpTt2uFjVEV0phC5qJKCE5zc8HnJUsMAglRNdGlqF6Dg6-1Zai0qXJQZqrdfe947Zc_i0uEumaUF2OEh82I_CHL5rRqxmYv8doxz5MAUC4cDBQDtpZWIF53Rv4wKPlzWmg7NxhWsT2US86kDBzdxnpqL7ykoS-5ztKabDZwfrWxh0c6K9-JXU5OehUA4KfCtE88lJcqa4zPIDTg5prh1OR9vPNwfjViAMxGqwhr3rdwZwi8hK3scURWizgYo-g_6UgLaP2XG9eHgD4uRn27krVxpi3r4jN3Az7So9Q8Mb8Ws5mwrwY1FMy7lVt-dZMmRbYabNCfAZS95SOKYmkrJz8rKGzBsf6o6ciZKwfS05OKLb-3y2WjDd4V1RpRSAgS73KkPVUPy0RvFr7BlAxftDKbq8Gf3l0tcoW7ScLXkoAfXK5EyDM0d3KANPVnV24AxtrKLXnSIoIHl0U_QcwPi4ytSMbkQxqDsiFcq_KoYnmXmVwIGENKz8lXAo63GA0Sr7_WQGQ-Di1rBOSTbGxRTKzi5IADlFZknxSNd4mnmxZ1flGzMVoZe_J7PfvodD1RfYDOHJDwcELCa-yjoAsAGVZx8fhuwG4B5D8Kiu3mBqRGqy6_q4wbKvdEGwvVTV4Iss_epi8efmJcgHrQve022tgkuQh9K7KSB1HpzBZlbwn9rCnodF32OvdMORuY3wfw6gizAO0O9nhAhdikNn4NlTpD08ozQBtRNIAy8DjCwryjoYAuYODkjM3CGs=",
+              "summary": []
+            },
+            {
+              "id": "msg_07395bcd22bd8e2d016ac4c9d0875887d2b77ba9bde31c0366",
               "type": "message",
               "status": "completed",
               "content": [
@@ -368,7 +376,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"third-party AI testing\",\"frontier AI safety\",\"AI evaluations\",\"Responsible Scaling Policy\",\"national security\",\"AI governance\",\"open-source AI models\",\"regulatory capture\"],\"summary\":\"Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted third-party testing regime. Because general-purpose models can be adapted to many downstream uses, they may create risks involving election integrity, discrimination, cyberattacks, bioweapons, and unintended autonomous behavior that sector-specific regulation alone cannot adequately address. Anthropic proposes a two-stage approach: broad, rapid automated evaluations designed to avoid missed risks, followed by deeper expert-led testing when concerns are identified. Testing should apply only to a narrow class of the most computationally intensive frontier systems, minimizing burdens on smaller developers.\\n\\nThe article calls for an ecosystem of private auditors, universities, and government agencies to develop and administer evaluations, with governments funding capacity at institutions such as NIST and national AI research infrastructure. Anthropic presents its Responsible Scaling Policy as an early prototype but says voluntary company self-governance is insufficient. It also argues that shared evaluation standards could help international coordination and reduce regulatory capture. On open models, it supports openness for most current systems but contends that future models with demonstrable severe misuse potential may require controlled release, hardened safeguards, or limits on fine-tuning\u2014decisions that should rely on legitimate independent testing rather than AI companies alone.\",\"coherence\":91,\"persuasion\":0.78}"
+                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"frontier AI safety\",\"third-party AI testing\",\"AI evaluations\",\"Responsible Scaling Policy\",\"AI regulation\",\"national security risks\",\"open-source AI models\",\"regulatory capture\"],\"summary\":\"Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party testing and oversight regime. Because such systems can be adapted to many uses and may create risks including election interference, discrimination, cyberattacks, bioweapon assistance, and unintended autonomous behavior, self-governance by individual companies is insufficient. The proposed regime would combine trusted tests, independent auditors, government capacity, academic participation, and a two-stage process of broad automated screening followed by expert-led evaluation where concerns arise.\\n\\nThe article advocates initially applying requirements only to the most computationally intensive frontier models, both to minimize compliance burdens and to avoid disadvantaging smaller developers. It calls for government investment in institutions and infrastructure such as NIST, AI Safety Institutes, research clouds, and national-security evaluation capacity. It also contends that credible third-party testing can inform policy on open model releases, reduce the likelihood of harmful incidents and reactive regulation, and help limit regulatory capture\u2014though it acknowledges uncertainty about future risks and the need to iteratively prototype and refine standards.\",\"coherence\":91,\"persuasion\":0.78}"
                 }
               ],
               "phase": "final_answer",
@@ -463,17 +471,17 @@ http_interactions:
           "usage": {
             "input_tokens": 4334,
             "input_tokens_details": {
-              "cache_write_tokens": 0,
-              "cached_tokens": 4331
+              "cache_write_tokens": 4331,
+              "cached_tokens": 0
             },
-            "output_tokens": 317,
+            "output_tokens": 305,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 23
             },
-            "total_tokens": 4651
+            "total_tokens": 4639
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:52
+  recorded_at: 2026-10-06 10:13:39
 recorded_with: VCR-vcr/2.1.0

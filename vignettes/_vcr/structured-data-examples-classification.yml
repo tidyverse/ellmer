@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"The
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"The
         new quantum computing breakthrough could revolutionize the tech industry."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"Array
         of classification results. The scores should sum to 1.","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         category name","enum":["Politics","Sports","Technology","Entertainment","Business","Other"]},"score":{"type":"number","description":"The
@@ -17,39 +17,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508c0f4c3acdf0-EWR
+      cf-ray: a463e5242d66a430-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:59 GMT
+      date: Tue, 06 Oct 2026 10:13:45 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '3082'
+      openai-processing-ms: '1532'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=3Xi7mKkphNfaUFy4vcwMoH_3YqqbvFSwQrGdMfvGy.Q-1785710036.3680232-1.0.1.1-DuKxB39L3A7R__qqULb4uKz8fcRtA9TS6ouEZ0GgY3CsRWNZ_0ARmFglT.TwTsqGZPPh3TPMVa48IVvu2biUtPHmF2VXUo.RkM6_g92R3_dYgclA5iAVW6dssW6UR9QB;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:59 GMT
+      set-cookie: __cf_bm=i1Y6jC_UMsVL1HxImUXVpsUwJ8.atWZyUnrHHvvzBbo-1791281623.709613-1.0.1.1-b.k5Nye.lGmy50EsziGPpf7DwUZQAN55G2T29LSaR9dw1_PD8MTm1IC.qNv2dCSK9SLxUQRqmDIq_NjrmlT2bII.YvKMOpGXyKk1JDAbLCItnnfGYqxZPaHOPvKDAv_d;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:45 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
+      x-ratelimit-remaining-requests: '498'
       x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-reset-requests: 240ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_f29b1acf29984473a5b21a8269e27459
+      x-request-id: req_0c9b3e6b4c2141fd9083b352a3b8ee3e
     body:
       string: |-
         {
-          "id": "resp_0fe7ccbc60dd3b52016a6fc5d47db88195a6967b3c61a4e707",
+          "id": "resp_06724aea2450cc7c016ac4c9d7d45887d2b4a711349a917763",
           "object": "response",
-          "created_at": 1785710036,
+          "created_at": 1791281623,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710039,
+          "completed_at": 1791281625,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -60,14 +61,14 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_0fe7ccbc60dd3b52016a6fc5d4fc0c8195806c33cf0b336228",
+              "id": "rs_06724aea2450cc7c016ac4c9d863b087d2863399ad17bc67d4",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqb8XXUx_R1AVTMu8bV51tH1TS83eapwu6haNxEfMKFr7vo_jUftZCxWx2dOyrd67Sw95KhBZwsUCLrVsHcVSMjGD-Moo4CCvdpoGj1kg1Kue5txxtP3LCc9fEh61XYAgjqu5ThGqSCS2rRrf9xlxRDkrmvZCG0mGUfY6KYzCIRw2oMIc7ldBMuAAOtc9vZEuZB6XwtyVaHKxnJOFURPcxnh0ac7-KRFLceHBT6E4BVUALip_OqYvZUVK5tLBcc0-II6YG41tXFbUZlGBm1qxgniotdc0TwDunoW7xmrYEdVayWJ9hKsnGfv2ZVETQZY3DFoL66St1-mHnQmAvAzG1xjquBp2igFcDoZ-Em1WrhXGxsl6MnfSAq23fWtzFkfX2wQpAcqZPNeYp77N7kxaTnbF2Vbnilh9rmd_HrxZd_VNW9ASC2i4bE3_tXWy-hAhq5l2dxjxQ-rzIJHo08OquozMP26HGpaE302B7HDrszq-56SJ1fI83MHZcaKrPmwIjQPHYWxwGnL8Yd7NNXQi0nOfnBsKgZ-TIoqn7Y2zm3HJpNbCj2OqIB3yTtkp27BKdVAFt8nFLPGbR5BI-XfSLVq5LizdRBdEkc9DiPBmXrwPw-hmZRR482smwOcWuaVMkRe8r4Ss0MfJh92ZVM3GDp5MzpDwd5YLMR9O5em_YOmQuYuoIi8AwWg3ydyv7T8DJSY93IE4eeCTnmskBRrnP6RwyQphscJ0OPEK7HotHMP0nXnm1Lc-TSv0AVzG1R4lXh2QnFptQl4t_mwawaPSaw-rXCP9CLY7-my3sdTRJ7Iv2Zq_iPr16pOY7xF8yUn1tktR5cc-09EvXA2TlJT7HDNAPsxisBaj8WtnaFZXc2ExLZnbULf0tonpR_n5yZ_Ju6WLAm1G3kBJIJZxeS7oAr0l-dqoL3DILmBYV_v3D6ZkJPgNTdLAuga6A4oPtgK-yRc-LgliNlGy9NOZ8uVbK4vVQHskAr_SyrqU22EWXHZw2sLJPpgXxJaslLUQ66wsU7Pk_wPps7WQKgN-3PUV3KGKi2g==",
+              "encrypted_content": "gAAAAABqxMnZAp4uoGE-a_XmMdfCgLBPuzVkrWHivQDiU8vxpB_v-vQd1fwODnqo7s4pWmLT081Z76wPjsjSYyyAnMesW9CBSVPAml3uPEXBCNriqIM20LIgeo8dKQHJKgRyg56Ul7J59G1dHg1zvwzJf_C8-ZcLilerkjI2NsCG4KOfAfb_EqJ3sqFvkd8B2_AZpyw2WXdd3Cyv7o10MXzQwLGLWXq5lOdcyz5bGKC5LHWY69kLzoqZgAit0VAYTW0fswdPliKNMo177rbrKb7-iIP-ONmyzswJdumsjzVRYKIuZoFwjbF51oOBAPiNjFx1hC1UingesPS5nGQt_GrT18ANkWh42h7_Zyol56wijwTQfMhYWawWt86IvL__E6JN1zObRj0sKHBRPzIqbhq7wtGBL4lcZqkfmIyA-KKG-rMt4ucoBDnaSAHKVDSJocoqc3D4vDkRqL_8aY3aTo_o6zVtuJUcmnRlSQXxueKdKAaJv4Pod9ODhg7y0vAm4L-InCzeK_25l0FhrsxPYfw4RjcU7SsPO_N3Wf3mBZDw_r0NW6iMHcSA-6bZ6i4ZvRTct9vuw6mFz_k9Bj23x2pWKvcJKvUlgPpivjjWJ9qx9wkimfjm8mdGGYrgEU_SmeovqsbMr2HPHkdtlkWajMaJtCwTcO-ekcxNjWuxWOkQucCFQxerBDvEzTUEnNYPzR9TkA0WQmX2wYXn6__XPHxxAc3FjnOs8o2Lwu4StdvepHWMpcYs-WE_MoccCr58OYyFYJ6IJCZqbCB74woA2utsqkNGXYMPY6b5hkiCOaK0hp8SPKuqvzUcx1no2JnBN_CEBBxO6vardl0s3uuAARW2AqRi6TqsV_JjwAQaDCrjxNBgE5C3d2VSieSpk30MvJwT3hmN_BPGiY56KMzI8UTqmP9AWvf-Bbl617LVeomXyNQOoxj9-4oNciyzeGK-GyChyv1ox8qK3J99kvAbOh8Lwo5yWI3dHc2fQJaHGIR7C8mgYwEGE3sNBBhomdwa5BC8TuK-qQSKX8A6P-DpEa15jY7MmD2H8kZVpoReOTHe19NcTKLDSTiavHNyosPoN458mc_onbl5UVQcxmSpQC8N8Ib1U3Izmxw_ksDGIjZcgs-hWUifU7Y1QtGAtFtfR5EeMn4U71ooYtrDdeFl9ZiiV3fea-Kqu-97OSV0Nzk11eV5w7K5IjZu2Bp2JbPRpYCCpHq9B-yJHY7uDKZF30pkrNFV6eUMWpdRSGDzkn-u6RytZftlMZo=",
               "summary": []
             },
             {
-              "id": "msg_0fe7ccbc60dd3b52016a6fc5d55f7481959f2ac2bb0b91ee2c",
+              "id": "msg_06724aea2450cc7c016ac4c9d8973487d2a02914f51ed90a5d",
               "type": "message",
               "status": "completed",
               "content": [
@@ -75,7 +76,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"Technology\",\"score\":0.98},{\"name\":\"Business\",\"score\":0.01},{\"name\":\"Other\",\"score\":0.01}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"Politics\",\"score\":0.01},{\"name\":\"Sports\",\"score\":0},{\"name\":\"Technology\",\"score\":0.97},{\"name\":\"Entertainment\",\"score\":0},{\"name\":\"Business\",\"score\":0.02},{\"name\":\"Other\",\"score\":0}]}"
                 }
               ],
               "phase": "final_answer",
@@ -176,14 +177,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 73,
+            "output_tokens": 84,
             "output_tokens_details": {
-              "reasoning_tokens": 28
+              "reasoning_tokens": 15
             },
-            "total_tokens": 196
+            "total_tokens": 207
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:59
+  recorded_at: 2026-10-06 10:13:45
 recorded_with: VCR-vcr/2.1.0

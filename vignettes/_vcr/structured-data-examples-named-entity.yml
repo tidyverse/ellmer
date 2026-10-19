@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"user","content":[{"type":"input_text","text":"\n  John
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
         week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
@@ -18,39 +18,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508bfacb44cdf0-EWR
+      cf-ray: a463e50e1a83a430-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:55 GMT
+      date: Tue, 06 Oct 2026 10:13:41 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1978'
+      openai-processing-ms: '1619'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=rMu9IvXRzV31cw2SrKPPpq_nnCQIE3zQOMVPa7i.j_s-1785710033.0891454-1.0.1.1-yx0BF8kRWwo154pFwgTeAjyi_3nZwEEoAlGl3GiN8gr_F9ucG2ZnmppNens2OsV8RBYdt0V3e9Euii9ivoEWLq6eQvl8UP.UTvgk77nbI_3alCwZTS4SlCAWN3aYNk.j;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:55 GMT
+      set-cookie: __cf_bm=06GKwsbE9PygdNyriQGjMe16u.9yqXLb3ZrXjZvknFA-1791281620.180289-1.0.1.1-SwTZkbQ87LEqPpFQ.IrkzgTG6HjpJYdaSqcT0o4zmhQaNQlmt8x89Kx0qxqVCw9x_MqSq.j7dCgn1V780Go.e0nCi.1aPeVhffDTwqVm7Cuepm6JhhdyTFuPoYx2CAMv;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:43:41 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499959'
+      x-ratelimit-remaining-tokens: '499835'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 4ms
-      x-request-id: req_0ed3e0c5f11f4695a3dfecb184c34c10
+      x-ratelimit-reset-tokens: 19ms
+      x-request-id: req_23425547e1be46d4bf90438cc9a5cc5d
     body:
       string: |-
         {
-          "id": "resp_071bdf5cce0f2d37016a6fc5d12be88194852aa9daa330f7e5",
+          "id": "resp_045d8d8990790b09016ac4c9d44bb487d2a3e74fa27f1c72f3",
           "object": "response",
-          "created_at": 1785710033,
+          "created_at": 1791281620,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785710035,
+          "completed_at": 1791281621,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -61,14 +62,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_071bdf5cce0f2d37016a6fc5d1b2dc8194819f13b21f56493c",
-              "type": "reasoning",
-              "content": [],
-              "encrypted_content": "gAAAAABqb8XT46zOUJdAJtAdmp_JoHdDH2rG1O0mLR2J3lxEs4raWi7Teh5vcUfY-qqfSnPtX-Jio_3EOGxEiE4iuxR8g4WUu06gf0pcbAVSDZApsqKx9sv5Dux6in1zoEi0dEpOrmmLHMitD8ZNpdOfz1r2sybnMvU59_kbzQlqV_U42dv130FqbzhZ7jA7lId4h9H1r1rSNEGyo76uox64mFI4yqoQJuh9BrAXBpIvHfi9-WTi_rNqsZVKLlhbqevpLwVdz3cul49oqRvMd9PpnTwwaakF1CVRxveyND-pl1lnS9CnlXKgPx8NDHgcJ2zOCWPElLzsHZQ2MD7dQha-zH3VRr8NXRyKeAuQstuuFUaU7H8JRgycut8AZiMCyRIiy2RhmejdryHlC9yXc-KGZnWtBVAqYgT_3BiBumW2JxwcSksRc9vHoxzaObOlztwmn4pmskMr9GE2FyUTBRTRe1Y337HXELbTpKU6rwzQIENV405Jo_2-IWFXISUXnKREzohsS9x2SdYQXNW1vC7wkSs-wyKhfmTs_lZFbIey4VIRSHEpUcJpUz14Zrk3sWsXUGzUO3OHdNdQiNTTOfbRWLWIenprkyVu8P7-BZhzGDsz0vF2SpZFCRXoPctI98Tz43q1APWKKL6qKQ97SNL5TPpjrd0pAE0fSfnByt-6odjXQH-lS8ywlT1xejwayiMeqOES_c99FPLcybgEy3czeTWIWEAHyiPhBmb5LF5VRCtq6-XLTFjFLvIoKJf_v9TE7Jemn8Le5MVSTLUZ7q8P_zNSwYapSkCExHwun-pzjrxf1BQzWPS1O188MBin-_NAwHXK0V3cUTcWWacZS6H8eFhzICu9VkqdYwHEw0XWQdvK2m2-qDoHmEi0Vd0lfqX_JnA744DGJHWJpISwE2IP9BrAdtJFKKrp2MKAxdlJz286dbWk4e9ml3v_ZcTByjyLvHJk9gSmPoc5Qil5WlJ5KqwhluKhI6hB7EpRGUtaAL3aqrEr0KbUfDsE2-gkZ8WImpvrKaLyD4-79s_cQUzDsHDuz1AYpp7X8-ZWjFi5eSnEh0ezn1InaaHEsaKlx0zdBoWWTTnu",
-              "summary": []
-            },
-            {
-              "id": "msg_071bdf5cce0f2d37016a6fc5d1f02c8194807b084abf8c2844",
+              "id": "msg_045d8d8990790b09016ac4c9d4d25c87d28776aaaca914314f",
               "type": "message",
               "status": "completed",
               "content": [
@@ -76,7 +70,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah is the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"He met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"John met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah is identified as the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"John met with Sarah last week in San Francisco.\"}]}"
                 }
               ],
               "phase": "final_answer",
@@ -179,14 +173,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 184,
+            "output_tokens": 146,
             "output_tokens_details": {
-              "reasoning_tokens": 30
+              "reasoning_tokens": 0
             },
-            "total_tokens": 312
+            "total_tokens": 274
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:54
+  recorded_at: 2026-10-06 10:13:41
 recorded_with: VCR-vcr/2.1.0

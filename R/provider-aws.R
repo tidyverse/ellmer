@@ -228,7 +228,7 @@ provider_aws_bedrock <- function(
   base_url <- base_url %||% aws_bedrock_base_url(api, region)
 
   # Each API expresses caching differently, or not at all
-  cache_args <- switch(
+  api_args <- switch(
     api,
     converse = list(
       cache_point = as_bedrock_cache_point(cache, model %||% "")
@@ -236,7 +236,7 @@ provider_aws_bedrock <- function(
     messages = list(cache = as_bedrock_message_cache(cache)),
     responses = {
       check_bedrock_no_cache(cache, error_call = error_call)
-      list()
+      list(strict = TRUE)
     }
   )
 
@@ -248,7 +248,7 @@ provider_aws_bedrock <- function(
     region = region,
     creds_cache = creds_cache,
     extra_headers = extra_headers,
-    !!!cache_args
+    !!!api_args
   ))
 }
 
@@ -869,6 +869,12 @@ method(as_json, list(ProviderAWSBedrock, ContentThinking)) <- function(
 ) {
   if (identical(x@thinking, "")) {
     return()
+  }
+
+  if (is.null(x@extra$signature) || !nzchar(x@extra$signature)) {
+    # Unsigned thinking blocks are rejected by Bedrock, so replay thinking
+    # from other providers as plain text.
+    return(as_json(provider, ContentText(format(x)), ...))
   }
 
   list(

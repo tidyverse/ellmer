@@ -3,8 +3,8 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"Be
-        terse. Respond with only the answer."}]},{"role":"user","content":[{"type":"input_text","text":"Tell
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse. Respond with only the answer."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Tell
         me a joke"}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"store":false,"service_tier":"priority"}'
   response:
     status: 200
@@ -15,18 +15,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250f2224ed8c427-EWR
+      cf-ray: a463e91b3cc61ddf-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 23:43:37 GMT
+      date: Tue, 06 Oct 2026 10:16:26 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '322'
+      openai-processing-ms: '583'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=YF5My8.yxysdnnD5df4z7ysJfXBMQ_egAfRQdIK0pQk-1785714217.3256307-1.0.1.1-6L3IfOrggRyu972IUmiZzYJCAhZYCI12_C9J7cBC8S9qbNwWRnET0s1yT3AtP.vf1x6hkM7yu5gMUlEQ9cKS67h8aicij1_4YJWbttNXNLM8ucmRhOggRYCNd.vMvgGg;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
-        03 Aug 2026 00:13:37 GMT
+      set-cookie: __cf_bm=R0DQN.vV5feG0WlJpmCbbJhhCSZql5kOfqbgXwb3p7U-1791281786.1148386-1.0.1.1-BN1ujy9Ixy.urqzBF6qQOcjZ0izaM509xQ59qwtIisQZ2yCVf_rK9uK.i5zCkq.kaHexG5onNaiPNoEgOJtAsL8HjjcFZy_TEBvOsGAKyHgbVgl3hcobxabzvj5W3tb9;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:46:26 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
@@ -35,19 +35,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '199957'
       x-ratelimit-reset-requests: 120ms
       x-ratelimit-reset-tokens: 12ms
-      x-request-id: req_4fad02402eaf4bbf86fb8512e2f2c810
+      x-request-id: req_edf5b4928b8244818f3f6e15cef23825
     body:
       string: |-
         {
-          "id": "resp_0d181c8e2c1854bb016a6fd62963e881968d373bbf095ed072",
+          "id": "resp_0e85cefb3d08caab016ac4ca7a394c87d2bed7331ae358ac79",
           "object": "response",
-          "created_at": 1785714217,
+          "created_at": 1791281786,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785714217,
+          "completed_at": 1791281786,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -58,7 +59,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0d181c8e2c1854bb016a6fd6299dc48196bc892b3eb85f297f",
+              "id": "msg_0e85cefb3d08caab016ac4ca7a9f2087d2a35043845f30ffe6",
               "type": "message",
               "status": "completed",
               "content": [
@@ -130,5 +131,5 @@ http_interactions:
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 23:43:37
+  recorded_at: 2026-10-06 10:16:26
 recorded_with: VCR-vcr/2.1.0

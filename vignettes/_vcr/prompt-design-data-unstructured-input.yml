@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"role":"system","content":[{"type":"input_text","text":"\n  You''re
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"\n  You''re
         an expert baker who also loves JSON. I am going to give you a list of\n  ingredients
         and your job is to return nicely structured JSON. Just return the\n  JSON
         and no other commentary.\n\n\n\n  * If an ingredient has both weight and volume,
@@ -13,7 +13,7 @@ http_interactions:
         extract that.\n\n    2 t ground cinnamon\n    ⅓ cup (80ml) neutral oil\n    [\n      {\"name\":
         \"ground cinnamon\", \"quantity\": 2, \"unit\": \"teaspoon\", \"input\": \"2
         t ground cinnamon\"},\n      {\"name\": \"neutral oil\", \"quantity\": 80,
-        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"}]},{"role":"user","content":[{"type":"input_text","text":"\n  In
+        \"unit\": \"ml\", \"input\": \"⅓ cup (80ml) neutral oil\"}\n    ]\n"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  In
         a large bowl, cream together one cup of softened unsalted butter and a\n  quarter
         cup of white sugar until smooth. Beat in an egg and 1 teaspoon of\n  vanilla
         extract. Gradually stir in 2 cups of all-purpose flour until the\n  dough
@@ -31,39 +31,40 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2508acc9d708574-EWR
+      cf-ray: a463e3a3eb0706aa-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:33:07 GMT
+      date: Tue, 06 Oct 2026 10:12:45 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2951'
+      openai-processing-ms: '2919'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=y75wntJEbihTl9wyTymfqb01LgLklsKCwqSVhokUuXY-1785709984.737923-1.0.1.1-rk8G5RPozi_cUpH4fZG2MYNTfEPStiE5y39dZpgIT.48VH9XQLZAQDcZZeZNNLFYrG0pt.x8.FSvDPQHrwC486ssEqtlfHrBrOYC0osoug1irE.XEdeXQCG8EWtLh7ir;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:03:07 GMT
+      set-cookie: __cf_bm=ulJ1fzDEDICzhLnxd8i4K.J0t36Xxgksm01S1.RPZt0-1791281562.225469-1.0.1.1-SYqoXfl2BzyYzTR_5K3RKiTlcYFs8jBrneTrMUj8TeqzejQfIHtACrS0njelAKEmAzCSQkOFPo5bFjvpg2f06PJLohs97XQuz6b.N5ssDW45Lyr_W9cCjDxb2LuN5eU9;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
+        06 Oct 2026 10:42:45 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '500'
       x-ratelimit-limit-tokens: '500000'
       x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499824'
+      x-ratelimit-remaining-tokens: '499842'
       x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 21ms
-      x-request-id: req_63837f857b00400ca0971d05e9ea888c
+      x-ratelimit-reset-tokens: 18ms
+      x-request-id: req_b0a3be2011184adca96a56f9c711b980
     body:
       string: |-
         {
-          "id": "resp_0ff8672dfb8107ba016a6fc5a0cb288195aaf2ef157628285f",
+          "id": "resp_0943af62751a73e5016ac4c99a548887d2a2527a359c8f906d",
           "object": "response",
-          "created_at": 1785709984,
+          "created_at": 1791281562,
           "status": "completed",
+          "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1785709987,
+          "completed_at": 1791281565,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -74,14 +75,14 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "rs_0ff8672dfb8107ba016a6fc5a131688195a5d365fac40f4bf3",
+              "id": "rs_0943af62751a73e5016ac4c99ad76087d2857f6e098b86676b",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqb8WjsDIsRjkRuFZb1SKX2gt8AyS8dD-uBI3UfjjXzfYHEqNBJdsFs7x0y7fa6V3MHjYsYJIdfmcgJ2tgI7Na7eKh1VPc29w1ZEXX4Pe4CKJuz4IQIGv63oLZoLDWp8eP2jyaBWcdrTlM5oaGXXN9a0mrv0kc7tyDB4KsogvpcTiPrlaPNalXgjqITIgYizWnp3rqsmibkGHXYVrsiOgFuc7sCJoyctq8-Goggm-XxpIFstmn48LUXZ8vgrMhMyXvxKYo4CWuPYVnIZ_fnwKn7z7jSS2mhUpTRo3whs3nGR7RZRmofrPowAPzXUGMCsGjCofY9zC1kYpeVjLgdO8xn4-Nf_yUKPuxJCQbnIb40eAHosizW-4CnA-HClk14Qr18JFkIrsA4vN9_B5bEodhyYncYKjw1K4G4P2kExn_juiRkncTC_OurYNJ0OiJz3w-yxg6K5Fwo3n85AEpHq2b6wM1VoZIyriPURBAx2QUlu4mykGMZ-uSl90aVmcQLrZHcot9jExwUvapP6vy51rtneNvp0KWydGfZrQYNBqMGzolfaUcOsMnFkPnkAMOw9pJKY_1x5aQmw6XLVCk-daEJogeHt3se0tht9Rd4xGcCKOlwf6YlGag03Sai_au53GL76oZ4yjoOrKjV7hnktb4rhA5cqw56T41CEprnPPjdwgGYMGgkAd3ceYD_sqBYkoDWpckD-4BLSSxotiN4jS7sYckVm8uKR8Yrx0alhvAVL7lK8C106f06d3_P5irkbMM-saOUy9NNYsSiVjGyg1eR2O-YwGnj7oa8nN6IppmXbwgzfyuIIa-0TpsQmhBU3_WB7fl4KQBRwiL3vc5lSkhUbZvw9wu7Y4Ipx4x3gX4vC-fqmYUVYgtpivYzdjGegJQz6I_oI7WmMGauvfQDD9MpV-MXd10-rX2EJrnR-HAqDldGocZw4A9t-kzPljbcisTJbo8ssPjMWN_9mDb6n2n0TXapItWEZjh_zl3ogpOCFplragQ9XoqcGpX1loqF9r4pI2vpdrv-OcfWGqp0tD8nKSDz6QO22HONfHOBN-uPR-nEA8WAjMMO6AncKAbsddzPuMeV2FGXniroTsQOHz-lzWZYFiCnlMSMvCjMb55llfTyVJVosM7CKIVt70Ao18RZvn3RrSLqR1AlYSNG5vqC8g1kqrVewXc9KziejR9gaWWGSZoR6EDMUIFMy5qMEGt3duYZs8novJ18b7Dz6d5ajyzzH2dDypnEBZYOt7sTgbPYyzFY4Begu3ntDl-baYXnlGydLYdwdj7rUZ4ioxV91I-vLZhUec4iKrZmtv72l1VdMUOtU2QqL6-d6NjRay0B30gDc7Y5HhYMnLT4m4kB9WDsg==",
+              "encrypted_content": "gAAAAABqxMmd6faYwrd6EfrFGlldBRs4J0rUXsDxBpDxZ9M6M7gd3-5crS4QGp1opv9yAjPBGhcV1hP6YftEOF4BxDmM4W3BggXx56g33gr0HiD0tBW_QCQSzWWKkqcN5bSHJRX-LYYlBMCVb6rbJ9ctHzbqoXbbYXLxpQ-BBSCzvcbUVeXSQbDoEAF3YvMQx5w18P8DkeHnt33O1jl1OFFhRAn7i331lGagveRwSpGKCRlM9lOvFX8WQM8WXZbNjCeyVi2HANWFQKh5O6uWxoP6WWSBFFrOcMpNZVemAvmdDN9mY7pFxqcB1_D3BFmKOJ4WkN5Eptg31TkzfalXFHQb6akSIiMvl16r5zxMI40YnF7K-dvnGFeZMbVm0Vm74HeJt043c35MsJmlAeCRlMinTmAsxv9X08tcoQV88F5vRR4NhFXpwB2HlNC1yKeDGmmKlUsP_1iOB6wuklkAb-z2A3RhZA0hgLiOk_j0sc-TXU7bfc8P09802NbOdvzMD49SmOq1QL4TxdAgHIDOnTWeYgwOh3uAfmp_E908NzlMYJyKJREn2XRfVzV4UfspRaw0bWbKD8ve747P-HwWzyExh6bvGY4xo6zmDHM1Zk4lrfN3q2R1rkLucxLivTBmQEj1NRpdv-wTyWvKkDnb8jcFnEmTQ3jbomTP8HaPkDMx5icNq8YBlo2m-tbr49hg6O1VgtswYHrTeIu9UuPG1hPHFCQ6HK_XSIvLjhDrGSwLdiU02PucsRtrhSgqraHnxUgX6CV71b1GB3Txj1ox7pBe5joOHSPPV4m_RXOO5HwHMl0W7qB3v4SwFRMFra8khkXk_H5iUGkLhBn-AuMl90c7ROVZwOZD9AHgelP9u_GmkhA4QbbeFejsFI5OYpZjP1VoacnXuB-i_nHgQgqEzAAJ-gbFbUIVbxNlbo1ISdJhs7cjdsmnA2YdV7x5DS7r2pkSiyCg2eLRVtX6v5N5cT0sLYi4J9iG-1DBYyTDUmQRKdlkO9tn8mm3fXOFkXwrTuKzINXg_gqiRee3dokK9YPf4ace6umbdG8dlCRvc_4fQWrG26AkXkUZHThdDwM96HC76IIJQxpZUnC1Ybl1GRrS6oh_mgOt49X_sVgK9G2ZKFkZauGYB0_9925Cvl1UT5bb3KKa8yyPalcBX05CJeoQvJpGfNaUIdVd2PvT2PwNH7HY-EDVzLQWDe-RZQQ8l2P_A3E8YtI9Ye5VzJJuxqlThsCPnRK7JVpxljG_K1fF7X-r27Wq8f4sfGMNqH6o7jh94ZvKyriUrT-p57rQyvpd0B0hH0vv1NZz8jf_nAgQ6ZFiDgtuFbGAzd8XMdeowfBJuuWfj94vC3oqVGmWAocixcaH3chSk7-58Ld4W-FSkXoEIRcD-P86sKii9BNknOHpk7gHof_C0Oj820zSOcxe70ZAC895PlvgBJFZSiIv1JgwD-UIWtD0BMBeO1OOd5PI6K0PCCu9ROtHiqElbq6EtrOFfn1zXnpgXlHREqZ26iVHtjfHzmE=",
               "summary": []
             },
             {
-              "id": "msg_0ff8672dfb8107ba016a6fc5a23ea081959c78d96e4f322013",
+              "id": "msg_0943af62751a73e5016ac4c99b925087d2ad885b583cdc1e51",
               "type": "message",
               "status": "completed",
               "content": [
@@ -146,14 +147,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 319,
+            "output_tokens": 301,
             "output_tokens_details": {
-              "reasoning_tokens": 74
+              "reasoning_tokens": 56
             },
-            "total_tokens": 684
+            "total_tokens": 666
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-08-02 22:33:07
+  recorded_at: 2026-10-06 10:12:45
 recorded_with: VCR-vcr/2.1.0

@@ -14,6 +14,7 @@ NULL
 #' Uses OpenAI compatible API via `chat_openai_compatible()`.
 #'
 #' @inheritParams chat_openai
+#' @inheritParams chat_openai_compatible
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("VLLM_API_KEY")`
 #' @param model `r param_model(NULL, "vllm")`
@@ -34,7 +35,8 @@ chat_vllm <- function(
   api_key = NULL,
   credentials = NULL,
   echo = NULL,
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 ) {
   check_string(base_url)
 
@@ -62,7 +64,8 @@ chat_vllm <- function(
     name = "VLLM",
     base_url = base_url,
     credentials = credentials,
-    extra_headers = api_headers
+    extra_headers = api_headers,
+    strict = strict
   )
   model <- Model(name = model, params = params, extra_args = api_args)
   Chat$new(
@@ -87,18 +90,6 @@ ProviderVllm <- new_class(
   parent = ProviderOpenAICompatible,
   package = "ellmer",
 )
-
-# Just like OpenAI but no strict
-method(as_json, list(ProviderVllm, ToolDef)) <- function(provider, x, ...) {
-  list(
-    type = "function",
-    "function" = compact(list(
-      name = x@name,
-      description = x@description,
-      parameters = as_json(provider, x@arguments, ...)
-    ))
-  )
-}
 
 vllm_key <- function() {
   key_get("VLLM_API_KEY")
