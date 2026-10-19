@@ -59,12 +59,7 @@ connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to
 in flight requests to finish, then return.
 \item \code{"continue"}: keep going, performing every request.
 \item \code{"stop"}: stop processing and throw an error.
-}
-
-This controls request execution only. For \code{parallel_chat_structured()},
-incomplete responses and extraction failures are handled after requests
-complete: they produce a warning and missing values regardless of
-\code{on_error}.}
+}}
 
 \item{type}{A type specification for the extracted data. Should be
 created with a \code{\link[=type_boolean]{type_()}} function.}
@@ -92,16 +87,9 @@ prompt. Requests that weren't succesful get an \code{NA}.
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 be a tibble with one row for each prompt, and one column for each
-property. If the output is a data frame, and any prompt failed to produce
-usable data, an \code{.error} column will be added with the error objects. A
-prompt fails if its request errored, if the provider reported an incomplete
-response (e.g. it hit the \code{max_tokens} limit or was filtered), or if no
-structured data could be extracted from the response. In each case the row
-itself is filled in with missing values. Entries in \code{.error} are \code{NULL}
-for successful responses and requests that were not performed.
-
-Error metadata is only attached to data-frame outputs. With \code{convert = FALSE}
-or a type that produces a non-data-frame result, no \code{.error} column is added.
+property. If the output is a data frame, and some requests error or return
+an incomplete or unparseable response, an \code{.error} column will be added with
+the error objects.
 }
 \description{
 If you have multiple prompts, you can submit them in parallel. This is

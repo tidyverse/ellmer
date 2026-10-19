@@ -28,11 +28,6 @@
 #'      in flight requests to finish, then return.
 #'   * `"continue"`: keep going, performing every request.
 #'   * `"stop"`: stop processing and throw an error.
-#'
-#'   This controls request execution only. For `parallel_chat_structured()`,
-#'   incomplete responses and extraction failures are handled after requests
-#'   complete: they produce a warning and missing values regardless of
-#'   `on_error`.
 #' @returns
 #' For `parallel_chat()`, a list with one element for each prompt. Each element
 #' is either a [Chat] object (if successful), a `NULL` (if the request wasn't
@@ -44,16 +39,9 @@
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
 #' be a tibble with one row for each prompt, and one column for each
-#' property. If the output is a data frame, and any prompt failed to produce
-#' usable data, an `.error` column will be added with the error objects. A
-#' prompt fails if its request errored, if the provider reported an incomplete
-#' response (e.g. it hit the `max_tokens` limit or was filtered), or if no
-#' structured data could be extracted from the response. In each case the row
-#' itself is filled in with missing values. Entries in `.error` are `NULL`
-#' for successful responses and requests that were not performed.
-#'
-#' Error metadata is only attached to data-frame outputs. With `convert = FALSE`
-#' or a type that produces a non-data-frame result, no `.error` column is added.
+#' property. If the output is a data frame, and some requests error or return
+#' an incomplete or unparseable response, an `.error` column will be added with
+#' the error objects.
 #' @export
 #' @examples
 #' \dontshow{ellmer:::vcr_example_start("parallel_chat")}
@@ -273,7 +261,7 @@ multi_convert <- function(
     }
   })
 
-  # Failed requests are already reported by parallel_turns() and batch_chat()
+  # Request failures aren't included here, as parallel_turns() warns about them
   is_err <- map_lgl(rows, \(x) !x$request_failed && !is.null(x$error))
   n_error <- sum(is_err)
   if (n_error > 0) {

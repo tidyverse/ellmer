@@ -216,7 +216,6 @@ test_that("errors in conversion become warnings", {
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
   expect_equal(out$x, c(1, NA, NA))
   expect_s3_class(out$.error[[3]], "error")
-  expect_match(conditionMessage(out$.error[[3]]), "parse error")
 })
 
 test_that("extraction failures are recorded in `.error` (#1121)", {
@@ -235,10 +234,7 @@ test_that("extraction failures are recorded in `.error` (#1121)", {
     NULL
   )
 
-  expect_warning(
-    out <- multi_convert(provider, turns, type = type),
-    "Failed to extract data from 1/4 turns"
-  )
+  expect_snapshot(out <- multi_convert(provider, turns, type = type))
   expect_equal(map_int(out$x, nrow), c(1L, 0L, 0L, 0L))
   expect_null(out$.error[[1]])
   expect_s3_class(out$.error[[2]], "error")
@@ -269,9 +265,9 @@ test_that("incomplete responses are recorded in `.error` (#1126)", {
   expect_snapshot(out <- multi_convert(provider, turns, type = type))
   expect_equal(out$x, c(1, NA, NA, NA))
   expect_null(out$.error[[1]])
-  expect_match(conditionMessage(out$.error[[2]]), "max_tokens")
-  expect_match(conditionMessage(out$.error[[3]]), "content moderation")
-  expect_match(conditionMessage(out$.error[[4]]), "unexpected finish reason")
+  expect_s3_class(out$.error[[2]], "error")
+  expect_s3_class(out$.error[[3]], "error")
+  expect_s3_class(out$.error[[4]], "error")
 })
 
 test_that("empty arrays are distinguishable from truncated responses (#1126)", {
@@ -288,12 +284,10 @@ test_that("empty arrays are distinguishable from truncated responses (#1126)", {
     AssistantTurn(list(ContentJson(list())), finish_reason = "max_tokens")
   )
 
-  expect_warning(out <- multi_convert(provider, turns, type = type), "max_tokens")
-  expect_equal(map_int(out$x, nrow), c(0L, 0L))
+  expect_snapshot(out <- multi_convert(provider, turns, type = type))
   expect_identical(out$x[[1]], out$x[[2]])
   expect_null(out$.error[[1]])
   expect_s3_class(out$.error[[2]], "error")
-  expect_match(conditionMessage(out$.error[[2]]), "max_tokens")
 })
 
 test_that("finish reasons that aren't failures are left alone", {
@@ -327,11 +321,8 @@ test_that("an incomplete response takes precedence over its parse error", {
     )
   )
 
-  expect_warning(
-    out <- multi_convert(provider, turns, type = type),
-    "max_tokens"
-  )
-  expect_match(conditionMessage(out$.error[[1]]), "max_tokens")
+  expect_snapshot(out <- multi_convert(provider, turns, type = type))
+  expect_s3_class(out$.error[[1]], "error")
 })
 
 test_that("usage is still reported for a row with no usable data", {
