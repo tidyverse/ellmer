@@ -279,16 +279,16 @@ Chat <- R6::R6Class(
       new_tokens + last$input + last$output + last$cached_input
     },
 
-    #' @description The size of the current model's context window, in tokens,
-    #'   as reported by the provider. Compare it to the input tokens in
-    #'   `$get_tokens()` to see how much of the window a conversation has used.
+    #' @description The current model's maximum context length, in tokens, as
+    #'   reported by the provider. Compare it to the input tokens in
+    #'   `$get_tokens()` to see how much of it a conversation has used.
     #'
     #'   This requires a request to the provider's model listing endpoint, so
     #'   the result is cached for the rest of the session.
     #' @return A single integer, or `NA` if the provider doesn't list models
-    #'   or doesn't report a window for this one.
-    get_context_window = function() {
-      model_context_window(private$provider, private$model@name)
+    #'   or doesn't report a maximum context length for this one.
+    get_max_context_length = function() {
+      model_max_context_length(private$provider, private$model@name)
     },
 
     #' @description

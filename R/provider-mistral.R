@@ -172,7 +172,7 @@ method(models_list, ProviderMistral) <- function(provider) {
     id = id,
     name = display_name,
     created_at = created_at,
-    context_window = map_token_limit(json$data, "max_context_length")
+    max_context_length = map_token_limit(json$data, "max_context_length")
   )
   df <- cbind(df, match_prices("Mistral", df$id))
   df

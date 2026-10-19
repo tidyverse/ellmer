@@ -156,7 +156,7 @@ test_that("only openai/ models use strict mode", {
   expect_equal(gemma$get_provider()@strict, FALSE)
 })
 
-test_that("model listing reports the context window", {
+test_that("model listing reports the max context length", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -173,7 +173,7 @@ test_that("model listing reports the context window", {
   })
 
   models <- models_posit(credentials = \() "")
-  expect_equal(models$context_window, c(1000000L, NA_integer_))
+  expect_equal(models$max_context_length, c(1000000L, NA_integer_))
 })
 
 # Checking the cache before calling models_posit() keeps an unauthenticated

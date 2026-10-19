@@ -170,7 +170,7 @@ method(models_list, ProviderDeepSeek) <- function(provider) {
   df <- data.frame(
     id = id,
     owned_by = owned_by,
-    context_window = rep(NA_integer_, length(id))
+    max_context_length = rep(NA_integer_, length(id))
   )
   cbind(df, match_prices(provider@name, df$id))
 }

@@ -1,8 +1,8 @@
 test_that("can list models", {
-  test_models(models_groq, has_context_window = TRUE)
+  test_models(models_groq, has_max_context_length = TRUE)
 })
 
-test_that("model listing reports the context window when present", {
+test_that("model listing reports the max context length when present", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -20,7 +20,7 @@ test_that("model listing reports the context window when present", {
   })
 
   models <- models_groq(credentials = \() "")
-  expect_equal(models$context_window, c(8192L, NA_integer_))
+  expect_equal(models$max_context_length, c(8192L, NA_integer_))
 })
 
 # Common provider interface -----------------------------------------------

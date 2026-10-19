@@ -117,8 +117,8 @@ test_that("can set model", {
   expect_equal(chat$get_model(), "def")
 })
 
-test_that("can get the model's context window", {
-  local_context_windows()
+test_that("can get the model's max context length", {
+  local_max_context_lengths()
   local_mocked_responses(function(req) {
     response_json(
       body = list(data = list(list(id = "qwen3", max_model_len = 40960)))
@@ -133,7 +133,7 @@ test_that("can get the model's context window", {
     model = test_model("qwen3")
   )
 
-  expect_equal(chat$get_context_window(), 40960L)
+  expect_equal(chat$get_max_context_length(), 40960L)
 })
 
 test_that("setting turns usually preserves, but can set system prompt", {

@@ -122,6 +122,6 @@ method(models_list, ProviderVllm) <- function(provider) {
 
   data.frame(
     id = map_chr(json$data, "[[", "id"),
-    context_window = map_token_limit(json$data, "max_model_len")
+    max_context_length = map_token_limit(json$data, "max_model_len")
   )
 }

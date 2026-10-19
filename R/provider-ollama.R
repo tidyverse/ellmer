@@ -229,7 +229,7 @@ method(models_list, ProviderOllama) <- function(provider) {
     created_at = modified_at,
     size = size,
     capabilities = map_chr(details, \(x) paste(x$capabilities, collapse = ",")),
-    context_window = map_int(details, ollama_context_length)
+    max_context_length = map_int(details, ollama_context_length)
   )
   df[order(-xtfrm(df$created_at)), ]
 }

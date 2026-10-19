@@ -239,24 +239,24 @@ test_document_local <- function(chat_fun) {
 
 # Models ------------------------------------------------------------------
 
-test_models <- function(models_fun, has_context_window = FALSE) {
+test_models <- function(models_fun, has_max_context_length = FALSE) {
   models <- models_fun()
   expect_gt(nrow(models), 0)
   expect_s3_class(models, "data.frame")
-  expect_contains(names(models), c("id", "context_window"))
-  expect_type(models$context_window, "integer")
+  expect_contains(names(models), c("id", "max_context_length"))
+  expect_type(models$max_context_length, "integer")
 
-  if (has_context_window) {
-    expect_gt(sum(!is.na(models$context_window)), 0)
+  if (has_max_context_length) {
+    expect_gt(sum(!is.na(models$max_context_length)), 0)
   }
 
   invisible(models)
 }
 
-local_context_windows <- function(frame = parent.frame()) {
-  old <- the$context_windows
-  the$context_windows <- new_environment()
-  defer(the$context_windows <- old, envir = frame)
+local_max_context_lengths <- function(frame = parent.frame()) {
+  old <- the$max_context_lengths
+  the$max_context_lengths <- new_environment()
+  defer(the$max_context_lengths <- old, envir = frame)
 }
 
 local_ollama_cache <- function(frame = parent.frame()) {

@@ -1191,7 +1191,7 @@ method(models_list, ProviderGoogleGemini) <- function(provider) {
 
   df <- data.frame(
     id = name,
-    context_window = map_token_limit(models, "inputTokenLimit")
+    max_context_length = map_token_limit(models, "inputTokenLimit")
   )
   df <- cbind(df, match_prices(provider@name, df$id))
   df <- df[can_generate, ]
