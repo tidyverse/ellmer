@@ -19,10 +19,10 @@ test_that("can handle errors", {
 })
 
 test_that("can list models", {
-  test_models(models_google_gemini, has_context_window = TRUE)
+  test_models(models_google_gemini, has_max_context_length = TRUE)
 })
 
-test_that("vertex model listing keeps generative models but reports no window", {
+test_that("vertex model listing keeps generative models but reports no max context length", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -52,10 +52,10 @@ test_that("vertex model listing keeps generative models but reports no window", 
     credentials = \() ""
   )
   expect_equal(models$id, "gemini-2.5-flash")
-  expect_equal(models$context_window, NA_integer_)
+  expect_equal(models$max_context_length, NA_integer_)
 })
 
-test_that("model listing reports the context window", {
+test_that("model listing reports the max context length", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -75,7 +75,7 @@ test_that("model listing reports the context window", {
   })
 
   models <- models_google_gemini(credentials = \() "")
-  expect_equal(models$context_window, c(1048576L, NA_integer_))
+  expect_equal(models$max_context_length, c(1048576L, NA_integer_))
 })
 
 # Common provider interface -----------------------------------------------

@@ -43,17 +43,17 @@ test_that("Provider print omits deprecated properties", {
   expect_snapshot(print(test_provider()))
 })
 
-test_that("model_context_window() is NA when the provider can't list models", {
-  local_context_windows()
+test_that("model_max_context_length() is NA when the provider can't list models", {
+  local_max_context_lengths()
   provider <- Provider(
     name = "test",
     base_url = "https://example.com"
   )
-  expect_equal(model_context_window(provider, "model"), NA_integer_)
+  expect_equal(model_max_context_length(provider, "model"), NA_integer_)
 })
 
-test_that("model_context_window() is NA when the listing reports no window", {
-  local_context_windows()
+test_that("model_max_context_length() is NA when the listing reports none", {
+  local_max_context_lengths()
   local_mocked_responses(function(req) {
     response_json(body = list(data = list(list(id = "qwen3"))))
   })
@@ -62,12 +62,12 @@ test_that("model_context_window() is NA when the listing reports no window", {
     base_url = "https://example.com",
     credentials = \() ""
   )
-  expect_equal(model_context_window(provider, "qwen3"), NA_integer_)
-  expect_equal(model_context_window(provider, "not-a-model"), NA_integer_)
+  expect_equal(model_max_context_length(provider, "qwen3"), NA_integer_)
+  expect_equal(model_max_context_length(provider, "not-a-model"), NA_integer_)
 })
 
-test_that("model_context_window() only requests the model listing once", {
-  local_context_windows()
+test_that("model_max_context_length() only requests the model listing once", {
+  local_max_context_lengths()
   requests <- 0
   local_mocked_responses(function(req) {
     requests <<- requests + 1
@@ -81,7 +81,7 @@ test_that("model_context_window() only requests the model listing once", {
     credentials = \() ""
   )
 
-  expect_equal(model_context_window(provider, "qwen3"), 40960L)
-  expect_equal(model_context_window(provider, "qwen3"), 40960L)
+  expect_equal(model_max_context_length(provider, "qwen3"), 40960L)
+  expect_equal(model_max_context_length(provider, "qwen3"), 40960L)
   expect_equal(requests, 1)
 })

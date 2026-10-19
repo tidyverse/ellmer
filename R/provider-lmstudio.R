@@ -177,7 +177,7 @@ method(models_list, ProviderLMStudio) <- function(provider) {
 
   data.frame(
     id = id,
-    context_window = lmstudio_context_windows(
+    max_context_length = lmstudio_max_context_lengths(
       base_url,
       id,
       provider@credentials
@@ -185,7 +185,7 @@ method(models_list, ProviderLMStudio) <- function(provider) {
   )
 }
 
-lmstudio_context_windows <- function(
+lmstudio_max_context_lengths <- function(
   base_url,
   ids,
   credentials = lmstudio_credentials()
@@ -197,8 +197,8 @@ lmstudio_context_windows <- function(
   json <- tryCatch(resp_body_json(req_perform(req)), error = function(cnd) NULL)
 
   keys <- map_chr(json$models, \(model) model[["key"]] %||% NA_character_)
-  windows <- map_token_limit(json$models, "max_context_length")
-  windows[match(ids, keys)]
+  limits <- map_token_limit(json$models, "max_context_length")
+  limits[match(ids, keys)]
 }
 
 has_lmstudio <- function(

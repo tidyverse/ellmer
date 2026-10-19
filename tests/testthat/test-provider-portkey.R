@@ -60,5 +60,5 @@ test_that("model listing survives an empty catalogue", {
 
   models <- models_portkey(api_key = "key")
   expect_equal(nrow(models), 0)
-  expect_type(models$context_window, "integer")
+  expect_type(models$max_context_length, "integer")
 })

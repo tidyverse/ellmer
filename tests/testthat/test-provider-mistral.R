@@ -19,10 +19,10 @@ test_that("can handle errors", {
 })
 
 test_that("can list models", {
-  test_models(models_mistral, has_context_window = TRUE)
+  test_models(models_mistral, has_max_context_length = TRUE)
 })
 
-test_that("model listing reports the context window", {
+test_that("model listing reports the max context length", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -40,7 +40,7 @@ test_that("model listing reports the context window", {
   })
 
   models <- models_mistral(api_key = "")
-  expect_equal(models$context_window, c(131072L, NA_integer_))
+  expect_equal(models$max_context_length, c(131072L, NA_integer_))
 })
 
 # Common provider interface -----------------------------------------------

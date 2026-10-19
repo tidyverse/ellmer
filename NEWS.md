@@ -1,7 +1,7 @@
 # ellmer (development version)
 
-* `Chat` gains a `$get_context_window()` method that reports how many tokens the current model's context window holds, so you can tell how much of it `$get_tokens()` has used (@nbenn, #1083).
-* `models_anthropic()`, `models_google_gemini()`, `models_groq()`, `models_lmstudio()`, `models_mistral()`, `models_ollama()`, `models_posit()`, and `models_vllm()` gain a `context_window` column reporting how many tokens the model accepts, as does any other OpenAI-compatible endpoint that reports `context_window`. Every other `models_*()` function gains the column too, filled with `NA` where the provider doesn't report one (@nbenn, #1083).
+* `Chat` gains a `$get_max_context_length()` method that reports the current model's maximum context length in tokens, so you can tell how much of it `$get_tokens()` has used (@nbenn, #1083).
+* `models_anthropic()`, `models_google_gemini()`, `models_groq()`, `models_lmstudio()`, `models_mistral()`, `models_ollama()`, `models_posit()`, and `models_vllm()` gain a `max_context_length` column reporting how many tokens the model accepts, as does any other OpenAI-compatible endpoint that reports `context_window`. Every other `models_*()` function gains the column too, filled with `NA` where the provider doesn't report one (@nbenn, #1083).
 * `models_aws_bedrock()` with `api = "messages"` or `api = "responses"` now lists models from `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat requests (@karawoo, #1205).
 * `models_mistral()` no longer errors on R 4.2 and earlier, where `as.POSIXct()` on a numeric requires an explicit `origin` (@nbenn, #1083).
 

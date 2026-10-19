@@ -16,11 +16,11 @@ test_that("can make simple streaming request", {
 test_that("can list models", {
   test_models(
     \(...) models_vllm("https://llm.nrp-nautilus.io/"),
-    has_context_window = TRUE
+    has_max_context_length = TRUE
   )
 })
 
-test_that("model listing reports the context window", {
+test_that("model listing reports the max context length", {
   local_mocked_responses(function(req) {
     response_json(
       body = list(
@@ -33,5 +33,5 @@ test_that("model listing reports the context window", {
   })
 
   models <- models_vllm("https://example.com", credentials = \() "")
-  expect_equal(models$context_window, c(40960L, NA_integer_))
+  expect_equal(models$max_context_length, c(40960L, NA_integer_))
 })

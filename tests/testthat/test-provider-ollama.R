@@ -15,10 +15,10 @@ test_that("can make simple streaming request", {
 
 test_that("can list models", {
   skip_if_no_ollama()
-  test_models(models_ollama, has_context_window = TRUE)
+  test_models(models_ollama, has_max_context_length = TRUE)
 })
 
-test_that("model listing reports capabilities and the context window", {
+test_that("model listing reports capabilities and the max context length", {
   local_ollama_cache()
   local_mocked_responses(function(req) {
     if (grepl("api/tags", req$url)) {
@@ -49,7 +49,7 @@ test_that("model listing reports capabilities and the context window", {
   models <- models_ollama(credentials = \() "")
   expect_equal(models$id, "gpt-oss:20b")
   expect_equal(models$capabilities, "completion,tools")
-  expect_equal(models$context_window, 131072L)
+  expect_equal(models$max_context_length, 131072L)
 })
 
 test_that("context length is read from the architecture-specific field", {
