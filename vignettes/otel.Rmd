@@ -65,26 +65,26 @@ Each call to `$chat()`, `$stream()`, or their async versions creates this tree o
 
 ```
 invoke_agent
-├── chat claude-sonnet-4-5
+├── chat claude-sonnet-5
 │   └── POST                       (from httr2)
 ├── execute_tool get_weather
-└── chat claude-sonnet-4-5
+└── chat claude-sonnet-5
     └── POST
 ```
 
 * `invoke_agent` covers the whole call, including every round of tool calls. It records the total tokens, the number of model requests (`gen_ai.invoke_agent.inference_calls`), and the number of tool calls (`gen_ai.invoke_agent.tool_calls`).
 
-* `chat {model}` covers one request to the model. It records the provider (`gen_ai.provider.name`), the model you asked for and the model that answered, the parameters you set with `params()` (`gen_ai.request.*`), token use (`gen_ai.usage.*`, including cached and reasoning tokens when the provider reports them), the finish reason, and, for streams, the time to the first chunk.
+* `chat {model}` covers one request to the model. It records the provider (`gen_ai.provider.name`), the model you asked for and the model that answered, the parameters you set with `params()` (`gen_ai.request.*`), token use (`gen_ai.usage.*`, including cached and reasoning tokens when the provider reports them), the finish reason, and, for streams, the time to the first chunk. Input tokens (`gen_ai.usage.input_tokens`) include cached input tokens, here and on `invoke_agent`.
 
-* `execute_tool {name}` covers one tool call. It records the tool's name, description, and call id.
+* `execute_tool {name}` covers one tool call. It records the tool's name, description, and call id, but not its arguments or result (see [Record prompts and responses](#record-prompts-and-responses)).
 
 * `POST` comes from httr2, which ellmer uses to talk to the model. It records the HTTP details, like the URL and status code.
 
-When something fails, the span that failed gets an error status, an `error.type`, and (for R errors) an exception event. The `invoke_agent` span gets the same status and error type. A stream that you cancel with `stream_controller()` has `error.type = "cancelled"`, and a request that stops early, like after a keyboard interrupt, has `error.type = "interrupted"`.
+When something fails, the span that failed gets an error status, an `error.type`, and (for R errors) an exception event. A failed tool call only marks its `execute_tool` span: ellmer sends the error back to the model and the chat goes on, so `invoke_agent` can still end without an error. When a failure stops the whole call, like a failed model request, `invoke_agent` gets the same error status and type. A stream that you cancel with `stream_controller()` has `error.type = "cancelled"`, and a call that stops early, like after a keyboard interrupt, has `error.type = "interrupted"`.
 
 ### Metrics
 
-When `OTEL_METRICS_EXPORTER` is set, ellmer records these metrics. Each is tagged with the operation, provider, and model, so you can split them up in your tool.
+When `OTEL_METRICS_EXPORTER` is set, ellmer records these metrics. Model and agent metrics are tagged with the operation, provider, and model, and tool metrics with the tool name, so you can split them up in your tool.
 
 | Metric | What it measures |
 |--------|------------------|
@@ -107,7 +107,7 @@ By default, ellmer does not record the text of your prompts, the model's answers
 OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true
 ```
 
-Then each `chat` span also records the system prompt (`gen_ai.system_instructions`), the conversation sent to the model (`gen_ai.input.messages`), the model's answer (`gen_ai.output.messages`), and the tools it could call (`gen_ai.tool.definitions`).
+Then each `chat` span also records the system prompt (`gen_ai.system_instructions`), the conversation sent to the model (`gen_ai.input.messages`), the model's answer (`gen_ai.output.messages`), and the tools it could call (`gen_ai.tool.definitions`). Tool arguments and results are recorded only as part of these messages: the model's tool requests are in `gen_ai.output.messages`, and the results are in the next `chat` span's `gen_ai.input.messages`. The `execute_tool` spans never record them.
 
 Before you turn this on, check that your observability tool's access and retention settings are right for this data. ellmer does not shorten long conversations, so a very long chat can make a span larger than some tools accept.
 
@@ -135,20 +135,18 @@ answer_question <- function(chat, question) {
 }
 ```
 
-Now `answer_question` is the parent of ellmer's `invoke_agent` span. Shiny and other packages that use otel record their own spans too, so ellmer's spans can appear inside a full trace of your app.
+Now `answer_question` is the parent of ellmer's `invoke_agent` span. This only works for `$chat()`: `start_local_active_span()` ends the span when the function returns, which is before `$chat_async()` or `$stream_async()` finish. For async calls, use `promises::with_otel_span()`, which ends the span when the promise resolves:
 
-## Claude API tracing
-
-The Claude API can send its own spans to your observability tool. You turn this on in the Claude Console; see [Set up OpenTelemetry with the Claude API](https://platform.claude.com/docs/en/manage-claude/opentelemetry/api). These spans show what happens inside the API, like each model run and each server tool use, such as web search.
-
-httr2 sends a `traceparent` header with each request, so when you use `chat_anthropic()` the API's spans join your trace under httr2's `POST` span:
-
-```
-invoke_agent
-└── chat claude-sonnet-4-5
-    └── POST                       (from httr2)
-        └── anthropic.messages.create   (from the Claude API)
-            └── anthropic.model_request
+```{r}
+answer_question_async <- function(chat, question) {
+  promises::with_otel_promise_domain(
+    promises::with_otel_span(
+      "answer_question",
+      chat$chat_async(question),
+      tracer = otel::get_tracer("my-app")
+    )
+  )
+}
 ```
 
-Both ellmer's `chat` span and the API's `anthropic.messages.create` span record the request's token use. When you add up tokens, use only one of the two, or you'll count each token twice. The API's spans have `service.name` set to `claude-platform`, which makes them easy to filter.
+See `?promises::with_otel_span` for details. Shiny and other packages that use otel record their own spans too, so ellmer's spans can appear inside a full trace of your app.
