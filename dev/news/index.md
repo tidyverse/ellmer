@@ -50,10 +50,69 @@
 - [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
   works again with shinychat \>= 0.5.0
   ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).
-- Streamed responses now record the time to first token (in seconds) as
+- Streamed responses now record the time to first chunk (in seconds) as
   the `gen_ai.response.time_to_first_chunk` attribute on the
   OpenTelemetry `chat` span ([@schloerke](https://github.com/schloerke),
   [\#1142](https://github.com/tidyverse/ellmer/issues/1142)).
+- ellmer now records OpenTelemetry metrics following the GenAI semantic
+  conventions whenever a meter is active:
+  `gen_ai.client.inference.duration`,
+  `gen_ai.client.inference.time_to_first_chunk`,
+  `gen_ai.client.inference.operation.input_tokens`,
+  `gen_ai.client.inference.operation.output_tokens`,
+  `gen_ai.execute_tool.duration`, `gen_ai.invoke_agent.duration`,
+  `gen_ai.invoke_agent.inference_calls`, and
+  `gen_ai.invoke_agent.tool_calls`
+  ([@schloerke](https://github.com/schloerke),
+  [\#1143](https://github.com/tidyverse/ellmer/issues/1143)).
+- The OpenTelemetry `invoke_agent` span now records total token usage
+  across the tool loop, along with its duration, inference call count,
+  and tool call count as `gen_ai.invoke_agent.*` attributes. Both it and
+  the `chat` span record
+  [`params()`](https://ellmer.tidyverse.org/dev/reference/params.md) as
+  `gen_ai.request.*` attributes, and `gen_ai.provider.name` now uses the
+  semantic convention identifiers (e.g. `aws.bedrock`, `gcp.gemini`) for
+  built-in providers ([@schloerke](https://github.com/schloerke),
+  [\#1143](https://github.com/tidyverse/ellmer/issues/1143)).
+- The OpenTelemetry `chat` span now records `gen_ai.request.stream` for
+  streamed requests, `gen_ai.response.finish_reasons`, and
+  `gen_ai.usage.cache_read.input_tokens`. Failed model requests now set
+  an error status and `error.type` on the `chat` and `invoke_agent`
+  spans and on the `gen_ai.client.inference.duration` and
+  `gen_ai.invoke_agent.duration` metrics
+  ([@schloerke](https://github.com/schloerke),
+  [\#1147](https://github.com/tidyverse/ellmer/issues/1147)).
+- The OpenTelemetry `chat` span now records `server.address` and
+  `server.port`, `gen_ai.output.type` for structured output requests,
+  `gen_ai.request.reasoning.level` from `params(reasoning_effort)`
+  (`gen_ai.request.*` attributes now omit parameters the provider
+  ignores, and the tool definitions include the private tool Claude and
+  Bedrock use for tool-based structured output),
+  `gen_ai.usage.reasoning.output_tokens` for providers that report it
+  (currently OpenAI), and, when
+  `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` is set,
+  `gen_ai.tool.definitions` ([@schloerke](https://github.com/schloerke),
+  [\#1148](https://github.com/tidyverse/ellmer/issues/1148)).
+- ellmer now also records the GenAI token usage counters
+  (`gen_ai.client.inference.usage.input_tokens`,
+  `gen_ai.client.inference.usage.output_tokens`,
+  `gen_ai.client.inference.usage.cache_read.input_tokens`, and
+  `gen_ai.client.inference.usage.reasoning.output_tokens`) and the
+  `gen_ai.client.inference.time_per_output_chunk` histogram for streamed
+  responses ([@schloerke](https://github.com/schloerke),
+  [\#1174](https://github.com/tidyverse/ellmer/issues/1174)).
+- Requests that don’t complete now set an error status on the
+  OpenTelemetry `chat`, `invoke_agent`, and `execute_tool` spans and on
+  the `gen_ai.client.inference.duration`,
+  `gen_ai.invoke_agent.duration`, and `gen_ai.execute_tool.duration`
+  metrics, with `error.type = "cancelled"` for streams cancelled through
+  a
+  [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
+  and `error.type = "interrupted"` for requests unwound by, e.g., a
+  keyboard interrupt. `gen_ai.response.finish_reasons` reports the same
+  `cancelled` or `interrupted` value
+  ([@schloerke](https://github.com/schloerke),
+  [\#1175](https://github.com/tidyverse/ellmer/issues/1175)).
 - [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
   and
   [`batch_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
