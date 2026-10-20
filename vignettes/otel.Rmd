@@ -1,0 +1,154 @@
+---
+title: "Monitoring with OpenTelemetry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Monitoring with OpenTelemetry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+[OpenTelemetry](https://opentelemetry.io/) is an open standard for recording what a program does, so you can see it later in an observability tool like Grafana, Honeycomb, Datadog, Langfuse, or Logfire. ellmer records two kinds of data:
+
+* **Traces** show each step of a chat as a tree of timed *spans*: the call to `$chat()`, each request to the model, and each tool call.
+* **Metrics** add up numbers across many chats, like request duration and token use.
+
+ellmer follows the OpenTelemetry [semantic conventions for generative AI](https://github.com/open-telemetry/semantic-conventions-genai), so tools that understand those conventions can show ellmer's data without extra setup. This article shows you how to turn it on, what ellmer records, and how to connect it to the rest of your app.
+
+## Turn it on
+
+ellmer uses the [otel](https://otel.r-lib.org) package to record data and the [otelsdk](https://otelsdk.r-lib.org) package to send it. Install both:
+
+```{r}
+install.packages(c("otel", "otelsdk"))
+```
+
+Then tell otel where to send data using environment variables. Set them before R starts, for example in your `.Renviron` (`usethis::edit_r_environ()` will open it for you). To try things out, print spans to the console:
+
+```
+OTEL_TRACES_EXPORTER=console
+```
+
+To send traces and metrics to an observability tool, use the OpenTelemetry Protocol (OTLP) and point it at your tool or at an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/):
+
+```
+OTEL_TRACES_EXPORTER=otlp
+OTEL_METRICS_EXPORTER=otlp
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+OTEL_SERVICE_NAME=my-app
+```
+
+Your tool's docs will tell you which endpoint and headers to use. If no exporter is set, ellmer records nothing and the cost is close to zero. See `?otel::environmentvariables` for all the options, including `OTEL_R_SUPPRESS_SCOPES` to turn off data from one package (e.g. `OTEL_R_SUPPRESS_SCOPES=ellmer`).
+
+Now use ellmer as you normally would:
+
+```{r}
+library(ellmer)
+
+chat <- chat_anthropic()
+chat$chat("What's the capital of France?")
+```
+
+## What ellmer records
+
+### Spans
+
+Each call to `$chat()`, `$stream()`, or their async versions creates this tree of spans:
+
+```
+invoke_agent
+├── chat claude-sonnet-4-5
+│   └── POST                       (from httr2)
+├── execute_tool get_weather
+└── chat claude-sonnet-4-5
+    └── POST
+```
+
+* `invoke_agent` covers the whole call, including every round of tool calls. It records the total tokens, the number of model requests (`gen_ai.invoke_agent.inference_calls`), and the number of tool calls (`gen_ai.invoke_agent.tool_calls`).
+
+* `chat {model}` covers one request to the model. It records the provider (`gen_ai.provider.name`), the model you asked for and the model that answered, the parameters you set with `params()` (`gen_ai.request.*`), token use (`gen_ai.usage.*`, including cached and reasoning tokens when the provider reports them), the finish reason, and, for streams, the time to the first chunk.
+
+* `execute_tool {name}` covers one tool call. It records the tool's name, description, and call id.
+
+* `POST` comes from httr2, which ellmer uses to talk to the model. It records the HTTP details, like the URL and status code.
+
+When something fails, the span that failed gets an error status, an `error.type`, and (for R errors) an exception event. The `invoke_agent` span gets the same status and error type. A stream that you cancel with `stream_controller()` has `error.type = "cancelled"`, and a request that stops early, like after a keyboard interrupt, has `error.type = "interrupted"`.
+
+### Metrics
+
+When `OTEL_METRICS_EXPORTER` is set, ellmer records these metrics. Each is tagged with the operation, provider, and model, so you can split them up in your tool.
+
+| Metric | What it measures |
+|--------|------------------|
+| `gen_ai.client.inference.duration` | Time for each model request |
+| `gen_ai.client.inference.time_to_first_chunk` | Time until a stream sends its first chunk |
+| `gen_ai.client.inference.time_per_output_chunk` | Time between later chunks of a stream |
+| `gen_ai.client.inference.operation.input_tokens` | Input tokens per request |
+| `gen_ai.client.inference.operation.output_tokens` | Output tokens per request |
+| `gen_ai.client.inference.usage.*` | Running totals of input, output, cached, and reasoning tokens |
+| `gen_ai.execute_tool.duration` | Time for each tool call |
+| `gen_ai.invoke_agent.duration` | Time for each `$chat()` call, including tool calls |
+| `gen_ai.invoke_agent.inference_calls` | Model requests per `$chat()` call |
+| `gen_ai.invoke_agent.tool_calls` | Tool calls per `$chat()` call |
+
+## Record prompts and responses
+
+By default, ellmer does not record the text of your prompts, the model's answers, or tool arguments and results, because they may hold private data. To record them, set:
+
+```
+OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true
+```
+
+Then each `chat` span also records the system prompt (`gen_ai.system_instructions`), the conversation sent to the model (`gen_ai.input.messages`), the model's answer (`gen_ai.output.messages`), and the tools it could call (`gen_ai.tool.definitions`).
+
+Before you turn this on, check that your observability tool's access and retention settings are right for this data. ellmer does not shorten long conversations, so a very long chat can make a span larger than some tools accept.
+
+## Group a conversation
+
+Each request to the model is its own `chat` span. To tell your observability tool that several of them belong to one conversation, set a conversation id:
+
+```{r}
+chat <- chat_anthropic()
+chat$conversation_id <- "user-42-session-7"
+chat$chat("Hi!")
+chat$chat("What did I just say?")
+```
+
+ellmer records the id as `gen_ai.conversation.id` on the `invoke_agent` and `chat` spans. Many tools use it to show a conversation as one thread. Don't put private data in the id; it's recorded even when message content isn't.
+
+## Add your own spans
+
+ellmer's spans become children of whatever span is active when you call it. So to group them under a step in your own app, such as one request to your API or one button click in a Shiny app, start your own span around the call:
+
+```{r}
+answer_question <- function(chat, question) {
+  otel::start_local_active_span("answer_question")
+  chat$chat(question)
+}
+```
+
+Now `answer_question` is the parent of ellmer's `invoke_agent` span. Shiny and other packages that use otel record their own spans too, so ellmer's spans can appear inside a full trace of your app.
+
+## Claude API tracing
+
+The Claude API can send its own spans to your observability tool. You turn this on in the Claude Console; see [Set up OpenTelemetry with the Claude API](https://platform.claude.com/docs/en/manage-claude/opentelemetry/api). These spans show what happens inside the API, like each model run and each server tool use, such as web search.
+
+httr2 sends a `traceparent` header with each request, so when you use `chat_anthropic()` the API's spans join your trace under httr2's `POST` span:
+
+```
+invoke_agent
+└── chat claude-sonnet-4-5
+    └── POST                       (from httr2)
+        └── anthropic.messages.create   (from the Claude API)
+            └── anthropic.model_request
+```
+
+Both ellmer's `chat` span and the API's `anthropic.messages.create` span record the request's token use. When you add up tokens, use only one of the two, or you'll count each token twice. The API's spans have `service.name` set to `claude-platform`, which makes them easy to filter.
