@@ -285,6 +285,20 @@ method(value_reasoning_tokens, Provider) <- function(provider, json) {
   NULL
 }
 
+# Number of input tokens written to the prompt cache, or NULL if the provider
+# does not report them. Used for the gen_ai.usage.cache_write.input_tokens
+# span attribute.
+value_cache_write_tokens <- new_generic(
+  "value_cache_write_tokens",
+  "provider",
+  function(provider, json) {
+    S7_dispatch()
+  }
+)
+method(value_cache_write_tokens, Provider) <- function(provider, json) {
+  NULL
+}
+
 value_finish_reason <- new_generic(
   "value_finish_reason",
   "provider",
