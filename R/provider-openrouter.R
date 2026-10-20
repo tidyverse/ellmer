@@ -20,6 +20,16 @@ NULL
 #' @inheritParams chat_openai
 #' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
+#' @section Cost reporting:
+#' The cost of each turn is the charge OpenRouter reports in its `usage.cost`
+#' response field, not an estimate computed from token rates. See the
+#' [OpenRouter usage accounting documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
+#' If OpenRouter doesn't report a valid cost, the turn's cost is `NA`, i.e. unknown.
+#' Costs surface in [token_usage()] and the `Chat` methods `get_cost()` and
+#' `get_tokens()`. An unknown turn cost also makes the cumulative chat cost and
+#' that model's session cost unknown; known individual turn costs remain
+#' available. With your own provider key, the reported charge is what
+#' OpenRouter bills you, which may not match the upstream provider's bill.
 #' @examples
 #' \dontrun{
 #' chat <- chat_openrouter()
@@ -117,12 +127,25 @@ method(value_turn, ProviderOpenRouter) <- function(
   # https://openrouter.ai/docs/errors
   check_openrouter_error(result$error)
 
-  value_turn(
+  turn <- value_turn(
     super(provider, ProviderOpenAICompatible),
     model = model,
     result = result,
     has_type = has_type
   )
+
+  # Reported charges take precedence over static token-rate estimates.
+  turn@cost <- openrouter_actual_cost(result$usage$cost)
+
+  turn
+}
+
+openrouter_actual_cost <- function(cost) {
+  if (is.numeric(cost) && length(cost) == 1 && is.finite(cost)) {
+    dollars(cost)
+  } else {
+    dollars(NA_real_)
+  }
 }
 
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
