@@ -62,6 +62,15 @@ Sign up at \url{https://openrouter.ai}.
 Support for features depends on the underlying model that you use; see
 \url{https://openrouter.ai/models} for details.
 }
+\details{
+The cost of each turn is the actual charge OpenRouter reports for that
+request, not an estimate computed from token rates. If OpenRouter doesn't
+report a cost, the turn's cost is \code{NA}, i.e. unknown. Costs surface in
+\code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and \code{get_tokens()}.
+Note that when you bring your own provider key, the reported charge is
+what OpenRouter bills you, which may not match what the upstream provider
+bills you directly.
+}
 \examples{
 \dontrun{
 chat <- chat_openrouter()

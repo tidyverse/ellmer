@@ -14,6 +14,14 @@ Call this function to find out the cumulative number of tokens that you
 have sent and recieved in the current session. The price will be shown
 if known.
 }
+\details{
+Most providers' costs are estimated from the static token rates bundled
+with ellmer. OpenRouter is the exception: its price is the actual charge
+OpenRouter reports for each request, so it reflects your account's real
+charges rather than a token-rate estimate. Unknown costs (including any
+OpenRouter request that doesn't report a charge) are \code{NA} rather than
+zero.
+}
 \examples{
 token_usage()
 }
