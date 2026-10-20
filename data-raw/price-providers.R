@@ -1,9 +1,5 @@
-# Sourceable validation seam shared by data-raw/prices.R and
-# tests/testthat/test-prices-data.R. Sourcing this file only defines objects;
-# it performs no network access. The expected provider set is supplied by the
-# caller: data-raw/prices.R derives it from the maintained litellm lookup plus
-# the hand-maintained Posit pricing; tests assert an explicit independent
-# contract.
+# Kept separate so package tests can source the provider validator directly
+# without running the network-dependent price updater.
 
 validate_price_providers <- function(prices, expected) {
   force(expected)
