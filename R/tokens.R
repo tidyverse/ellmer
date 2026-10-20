@@ -97,12 +97,14 @@ local_tokens <- function(frame = parent.frame()) {
 #' have sent and recieved in the current session. The price will be shown
 #' if known.
 #'
-#' Most providers' costs are estimated from the static token rates bundled
-#' with ellmer. OpenRouter is the exception: its price is the actual charge
+#' Most providers' costs are estimated from published token rates.
+#' OpenRouter is the exception: its price is the actual charge
 #' OpenRouter reports for each request, so it reflects your account's real
 #' charges rather than a token-rate estimate. Unknown costs (including any
 #' OpenRouter request that doesn't report a charge) are `NA` rather than
-#' zero.
+#' zero. An unknown charge makes the cumulative total for that provider and
+#' model unknown, while known individual turn costs remain available through
+#' the chat object's `get_tokens()` method.
 #'
 #' @export
 #' @return A data frame

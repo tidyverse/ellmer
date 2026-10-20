@@ -25,6 +25,8 @@ NULL
 #' request, not an estimate computed from token rates. If OpenRouter doesn't
 #' report a cost, the turn's cost is `NA`, i.e. unknown. Costs surface in
 #' [token_usage()] and the `Chat` methods `get_cost()` and `get_tokens()`.
+#' An unknown turn cost also makes the cumulative chat cost and that model's
+#' session cost unknown; known individual turn costs remain available.
 #' Note that when you bring your own provider key, the reported charge is
 #' what OpenRouter bills you, which may not match what the upstream provider
 #' bills you directly.
@@ -132,11 +134,7 @@ method(value_turn, ProviderOpenRouter) <- function(
     has_type = has_type
   )
 
-  # OpenRouter reports the actual charge for the completed request in
-  # usage$cost (#1189). Actual charges always take precedence over the
-  # static price table, which can only approximate what OpenRouter bills.
-  # A missing or malformed cost must not break an otherwise valid
-  # completion, so it becomes an unknown cost.
+  # Reported charges take precedence over static token-rate estimates.
   turn@cost <- openrouter_actual_cost(result$usage$cost)
 
   turn

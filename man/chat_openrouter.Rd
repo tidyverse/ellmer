@@ -67,6 +67,8 @@ The cost of each turn is the actual charge OpenRouter reports for that
 request, not an estimate computed from token rates. If OpenRouter doesn't
 report a cost, the turn's cost is \code{NA}, i.e. unknown. Costs surface in
 \code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and \code{get_tokens()}.
+An unknown turn cost also makes the cumulative chat cost and that model's
+session cost unknown; known individual turn costs remain available.
 Note that when you bring your own provider key, the reported charge is
 what OpenRouter bills you, which may not match what the upstream provider
 bills you directly.

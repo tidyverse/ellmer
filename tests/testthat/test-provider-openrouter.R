@@ -58,8 +58,11 @@ openrouter_test_provider <- function() {
 # Deliberately extreme static prices for an "OpenRouter" row: any leak of
 # the static estimate into a turn's cost would be unmistakable (these tokens
 # would cost $0.02, not the reported charge).
-local_openrouter_static_prices <- function(model = "openrouter/test-model") {
-  cache_path <- local_prices_cache()
+local_openrouter_static_prices <- function(
+  model = "openrouter/test-model",
+  frame = parent.frame()
+) {
+  cache_path <- local_prices_cache(frame = frame)
   write_prices_cache(
     cache_path,
     data.frame(
@@ -175,6 +178,15 @@ local_mocked_openrouter_perform <- function(
 test_that("value_turn() prefers reported cost over conflicting static prices", {
   local_openrouter_static_prices()
 
+  expect_equal(
+    get_token_cost(
+      "OpenRouter",
+      "openrouter/test-model",
+      tokens(input = 10, output = 5)
+    ),
+    dollars(0.02)
+  )
+
   provider <- openrouter_test_provider()
   model <- test_model("openrouter/test-model")
 
@@ -193,7 +205,6 @@ test_that("value_turn() preserves zero and high-precision costs", {
 
   zero <- value_turn(provider, model, openrouter_value_result(cost = 0))
   expect_equal(unclass(zero@cost), 0)
-  expect_false(is.na(zero@cost))
 
   tiny <- value_turn(
     provider,
@@ -205,6 +216,15 @@ test_that("value_turn() preserves zero and high-precision costs", {
 
 test_that("value_turn() reports unknown cost when usage or cost is missing", {
   local_openrouter_static_prices()
+
+  expect_equal(
+    get_token_cost(
+      "OpenRouter",
+      "openrouter/test-model",
+      tokens(input = 10, output = 5)
+    ),
+    dollars(0.02)
+  )
 
   provider <- openrouter_test_provider()
   model <- test_model("openrouter/test-model")
@@ -226,7 +246,7 @@ test_that("value_turn() reports unknown cost when usage or cost is missing", {
   )
 
   for (turn in list(no_usage, no_cost, null_cost)) {
-    expect_true(is.na(turn@cost))
+    expect_equal(unclass(turn@cost), NA_real_)
     expect_equal(turn@text, "hi")
   }
 })
@@ -246,7 +266,7 @@ test_that("value_turn() treats invalid costs as unknown but keeps the turn", {
 
   for (result in invalid) {
     turn <- value_turn(provider, model, result)
-    expect_true(is.na(turn@cost))
+    expect_equal(unclass(turn@cost), NA_real_)
     expect_equal(turn@text, "hi")
   }
 })
@@ -413,6 +433,6 @@ test_that("completed turns log actual charges for token_usage()", {
   )
   chat$chat("and again")
 
-  expect_true(is.na(token_usage()$price))
-  expect_true(is.na(chat$get_cost()))
+  expect_equal(token_usage()$price, NA_real_)
+  expect_equal(unclass(chat$get_cost()), NA_real_)
 })
