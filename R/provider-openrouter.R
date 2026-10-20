@@ -20,6 +20,14 @@ NULL
 #' @inheritParams chat_openai
 #' @inheritParams chat_openai_compatible
 #' @inherit chat_openai return
+#' @details
+#' The cost of each turn is the actual charge OpenRouter reports for that
+#' request, not an estimate computed from token rates. If OpenRouter doesn't
+#' report a cost, the turn's cost is `NA`, i.e. unknown. Costs surface in
+#' [token_usage()] and the `Chat` methods `get_cost()` and `get_tokens()`.
+#' Note that when you bring your own provider key, the reported charge is
+#' what OpenRouter bills you, which may not match what the upstream provider
+#' bills you directly.
 #' @examples
 #' \dontrun{
 #' chat <- chat_openrouter()
@@ -117,12 +125,29 @@ method(value_turn, ProviderOpenRouter) <- function(
   # https://openrouter.ai/docs/errors
   check_openrouter_error(result$error)
 
-  value_turn(
+  turn <- value_turn(
     super(provider, ProviderOpenAICompatible),
     model = model,
     result = result,
     has_type = has_type
   )
+
+  # OpenRouter reports the actual charge for the completed request in
+  # usage$cost (#1189). Actual charges always take precedence over the
+  # static price table, which can only approximate what OpenRouter bills.
+  # A missing or malformed cost must not break an otherwise valid
+  # completion, so it becomes an unknown cost.
+  turn@cost <- openrouter_actual_cost(result$usage$cost)
+
+  turn
+}
+
+openrouter_actual_cost <- function(cost) {
+  if (is.numeric(cost) && length(cost) == 1 && is.finite(cost)) {
+    dollars(cost)
+  } else {
+    dollars(NA_real_)
+  }
 }
 
 method(stream_parse, ProviderOpenRouter) <- function(provider, event) {
