@@ -695,12 +695,13 @@ record_chat_otel_span_output <- function(span, turn) {
   if (!S7_inherits(turn, AssistantTurn)) {
     return()
   }
-  # Per semconv, a cancelled or interrupted stream reports an `error` finish
-  # reason rather than omitting it. The convention types this as `string[]`,
-  # but otel can't record a length-1 vector as an array, so a single finish
-  # reason is exported as a scalar. See r-lib/otel#48.
+  # A partial turn only reaches here when the stream was cancelled; it reports
+  # a `cancelled` finish reason, matching `interrupted` from
+  # `record_chat_otel_span_interrupted()`. The convention types this as
+  # `string[]`, but otel can't record a length-1 vector as an array, so a
+  # single finish reason is exported as a scalar. See r-lib/otel#48.
   if (is_partial_turn(turn)) {
-    span$set_attribute("gen_ai.response.finish_reasons", "error")
+    span$set_attribute("gen_ai.response.finish_reasons", "cancelled")
   } else if (!is.na(turn@finish_reason)) {
     span$set_attribute("gen_ai.response.finish_reasons", turn@finish_reason)
   }

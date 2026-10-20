@@ -566,7 +566,7 @@ test_that("duration is recorded once when parsing fails after the response", {
   expect_equal(recorded$traces[["chat "]]$status, "error")
 })
 
-test_that("cancelled streams record an error finish reason", {
+test_that("cancelled streams record a cancelled finish reason", {
   skip_if_not_installed("otelsdk")
 
   controller <- stream_controller()
@@ -591,7 +591,7 @@ test_that("cancelled streams record an error finish reason", {
 
   expect_equal(
     recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
-    "error"
+    "cancelled"
   )
   for (span in recorded$traces[c("invoke_agent", "chat ")]) {
     expect_equal(span$status, "error")
