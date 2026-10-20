@@ -12,6 +12,22 @@ NULL
 #' <https://openrouter.ai/models> for details. Use [models_openrouter()]
 #' to list the available models along with their advertised token prices.
 #'
+#' @section Cost reporting:
+#' OpenRouter's reported request cost is used when available, including zero.
+#' If no valid charge is reported, ellmer estimates from advertised token
+#' rates when both prompt and completion counts and the required rates are
+#' available. Otherwise, the cost is unknown (`NA`), not zero.
+#'
+#' Estimates cover token rates only and may differ from the final routed
+#' charge. Rates are cached for the session and may become stale. The first
+#' fallback lookup is synchronous and may pause even an asynchronous chat. See
+#' the [OpenRouter usage accounting documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
+#'
+#' An unknown turn cost makes cumulative chat and model totals unknown, while
+#' known individual turn costs remain available. With a provider key configured
+#' in OpenRouter (BYOK), the reported cost is OpenRouter's charge; the provider
+#' may bill you separately.
+#'
 #' @export
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
@@ -27,28 +43,7 @@ NULL
 #'   million tokens. An `NA` price means that specific rate is unknown, e.g.
 #'   because the model's cost is set by the underlying provider at request
 #'   time; genuinely free models report `0`.
-#' @section Cost reporting:
-#' OpenRouter's valid charge in `usage.cost` is used as the turn cost, rather
-#' than an estimate computed from token rates. See the
-#' [OpenRouter usage accounting documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
-#' When no valid charge is reported, the cost is estimated from the rates the
-#' model advertises on OpenRouter's public models endpoint
-#' (`https://openrouter.ai/api/v1/models`). This lookup uses neither your chat
-#' credentials nor headers. The first eligible turn makes the lookup
-#' synchronously, so even an asynchronous chat can block for up to five
-#' seconds (less with a shorter caller timeout). It tries once and gives up
-#' quietly on errors, leaving the cost unknown. The rate table is fetched
-#' lazily at most once per R session, including failed fetches, and reused for
-#' later turns, so estimates can be stale and aren't guaranteed to match routed
-#' charges. Estimates are token-only: conditional pricing overrides, cache
-#' writes, and non-token fees (images, web search, and similar) aren't modeled.
-#' Estimation requires both prompt and completion token counts and rates for
-#' the token categories used; otherwise the cost is `NA`, i.e. unknown. Costs
-#' surface in [token_usage()] and the `Chat` methods `get_cost()` and
-#' `get_tokens()`. An unknown turn cost also makes the cumulative chat cost and
-#' that model's session cost unknown; known individual turn costs remain
-#' available. With your own provider key, the reported charge is what
-#' OpenRouter bills you, which may not match the upstream provider's bill.
+
 #' @examples
 #' \dontrun{
 #' chat <- chat_openrouter()
@@ -335,9 +330,13 @@ method(models_list, ProviderOpenRouter) <- function(provider) {
 
   df <- data.frame(
     id = map_chr(models, \(x) x$id %||% NA_character_),
-    created_at = as.Date(.POSIXct(map_dbl(models, \(x) {
-      x$created %||% NA_real_
-    }))),
+    created_at = as.Date(
+      .POSIXct(
+        map_dbl(models, \(x) {
+          x$created %||% NA_real_
+        })
+      )
+    ),
     name = map_chr(models, \(x) x$name %||% NA_character_),
     context_length = map_int(models, \(x) {
       as.integer(x$context_length %||% NA_integer_)
