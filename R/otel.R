@@ -171,14 +171,16 @@ local({
     if (!requireNamespace("otel", quietly = TRUE)) {
       return()
     }
-    otel_tracer <<- otel::get_tracer(otel_tracer_name)
+    # With no name, otel uses `otel_tracer_name` and records "ellmer" as the
+    # package, so `OTEL_R_SUPPRESS_SCOPES` can match ellmer (r-lib/otel#50).
+    otel_tracer <<- otel::get_tracer()
     otel_is_tracing <<- tracer_enabled(otel_tracer)
     otel_capture_content <<- {
       val <- Sys.getenv("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT")
       tolower(val) %in% c("true", "1")
     }
 
-    otel_meter <- otel::get_meter(otel_tracer_name)
+    otel_meter <- otel::get_meter()
     otel_is_measuring <<- otel::is_measuring_enabled(otel_meter)
     otel_histograms <<- if (otel_is_measuring) {
       imap(otel_histogram_specs, function(spec, name) {

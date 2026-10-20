@@ -1079,3 +1079,18 @@ test_that("interrupted tool calls are recorded on the span and metric", {
   expect_equal(points[[1L]]$count, 2L)
   expect_equal(points[[1L]]$attributes[["error.type"]], "interrupted")
 })
+
+test_that("OTEL_R_SUPPRESS_SCOPES turns off ellmer's spans", {
+  skip_if_not_installed("otelsdk")
+  # Both names are needed until r-lib/otel#50 is fixed.
+  withr::local_envvar(
+    OTEL_R_SUPPRESS_SCOPES = "ellmer,co.posit.r-package.ellmer"
+  )
+
+  spans <- with_otel_record({
+    local({
+      local_chat_otel_span(test_provider(), test_model())
+    })
+  })[["traces"]]
+  expect_length(spans, 0)
+})

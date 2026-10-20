@@ -127,3 +127,4 @@
     Condition
       Error:
       ! Pricing data from GitHub has unexpected column types.
+
