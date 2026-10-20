@@ -62,7 +62,6 @@ provider_lookup <- tribble(
 
   "gemini",                    "Google/Gemini",
   "vertex_ai-language-models", "Google/Vertex",
-  "openrouter",                "OpenRouter",
   "azure",                     "Azure/OpenAI",
   "bedrock",                   "AWS/Bedrock",
   "bedrock_converse",          "AWS/Bedrock",
@@ -116,12 +115,17 @@ cli::cli_progress_done()
 
 # --- sanity checks -----------------------------------------------------------
 
+source("data-raw/price-providers.R")
+
 cli::cli_alert_info("Rows: {nrow(prices)}")
 cli::cli_alert_info("Providers: {n_distinct(prices$provider)}")
 
 stopifnot(
-  "Expected at least 1000 rows" = nrow(prices) >= 1000,
-  "Expected 10 providers" = n_distinct(prices$provider) >= 10
+  "Expected at least 1000 rows" = nrow(prices) >= 1000
+)
+validate_price_providers(
+  prices,
+  expected = unique(c(provider_lookup$provider, "Posit"))
 )
 
 # --- snapshot metadata -------------------------------------------------------

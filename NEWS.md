@@ -15,6 +15,7 @@
 * ellmer now also records the GenAI token usage counters (`gen_ai.client.inference.usage.input_tokens`, `gen_ai.client.inference.usage.output_tokens`, `gen_ai.client.inference.usage.cache_read.input_tokens`, and `gen_ai.client.inference.usage.reasoning.output_tokens`) and the `gen_ai.client.inference.time_per_output_chunk` histogram for streamed responses (@schloerke, #1174).
 * Requests that don't complete now set an error status on the OpenTelemetry `chat`, `invoke_agent`, and `execute_tool` spans and on the `gen_ai.client.inference.duration`, `gen_ai.invoke_agent.duration`, and `gen_ai.execute_tool.duration` metrics, with `error.type = "cancelled"` for streams cancelled through a `stream_controller()` and `error.type = "interrupted"` for requests unwound by, e.g., a keyboard interrupt. `gen_ai.response.finish_reasons` reports the same `cancelled` or `interrupted` value (@schloerke, #1175).
 * `parallel_chat_structured()` and `batch_chat_structured()` now warn instead of silently ignoring `include_tokens` and `include_cost` when the result isn't a data frame, e.g. because `type` is a top-level `type_array()` or `convert = FALSE` (@taekop, #1129).
+* Static OpenRouter pricing rows have been removed from ellmer's pricing snapshot. Existing price caches remain readable, but refreshing them with `models_update_prices()` no longer supplies snapshot-backed OpenRouter cost estimates (#1189).
 * `content_image_url()` now forwards `detail` to OpenAI and OpenAI-compatible providers, including for data URLs (@kbenoit, #1132).
 
 # ellmer 0.5.0
