@@ -894,6 +894,109 @@ test_that("a failed table fetch is latched and attempted only once", {
   expect_equal(state$fetches, 1L)
 })
 
+test_that("fallback lookup is bounded by scoped timeout and retry options", {
+  observed <- new.env(parent = emptyenv())
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      observed$timeout <- getOption("ellmer_timeout_s")
+      observed$tries <- getOption("ellmer_max_tries")
+      rlang::abort("Failed to connect to OpenRouter")
+    }
+  )
+
+  withr::local_options(
+    ellmer_timeout_s = 600,
+    ellmer_max_tries = 5
+  )
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+  turn <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(turn@cost), NA_real_)
+
+  # Inherited long/retrying transport is capped inside the fallback...
+  expect_equal(observed$timeout, 5)
+  expect_equal(observed$tries, 1)
+
+  # ...and caller settings are restored afterwards
+  expect_equal(getOption("ellmer_timeout_s"), 600)
+  expect_equal(getOption("ellmer_max_tries"), 5)
+})
+
+test_that("a shorter caller timeout stays shorter inside the fallback", {
+  observed <- new.env(parent = emptyenv())
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      observed$timeout <- getOption("ellmer_timeout_s")
+      rlang::abort("Failed to connect to OpenRouter")
+    }
+  )
+
+  withr::local_options(
+    ellmer_timeout_s = 2,
+    ellmer_max_tries = 5
+  )
+
+  provider <- openrouter_test_provider()
+  turn <- value_turn(
+    provider,
+    test_model("deepseek/deepseek-v4.1-flash-1017"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(turn@cost), NA_real_)
+
+  expect_equal(observed$timeout, 2)
+  expect_equal(getOption("ellmer_timeout_s"), 2)
+  expect_equal(getOption("ellmer_max_tries"), 5)
+})
+
+test_that("cached lookups don't reset options and direct calls see caller values", {
+  observed <- new.env(parent = emptyenv())
+  observed$fetches <- 0L
+  state <- local_openrouter_models()
+  table <- models_openrouter()
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      observed$fetches <- observed$fetches + 1L
+      observed$timeout <- getOption("ellmer_timeout_s")
+      observed$tries <- getOption("ellmer_max_tries")
+      table
+    }
+  )
+
+  withr::local_options(ellmer_timeout_s = 600, ellmer_max_tries = 5)
+
+  # Direct discovery observes the caller's unbounded settings
+  expect_equal(nrow(models_openrouter()), 5)
+  expect_equal(observed$timeout, 600)
+  expect_equal(observed$tries, 5)
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+  args <- openrouter_value_result(include_cost = FALSE)
+
+  # First (latching) fallback lookup sees the bounded options...
+  first <- value_turn(provider, model, args)
+  expect_equal(unclass(first@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(observed$fetches, 2L)
+  expect_equal(observed$timeout, 5)
+  expect_equal(observed$tries, 1)
+
+  # ...later cached turns don't re-enter the lookup or touch options
+  value_turn(provider, model, args)
+  value_turn(provider, test_model("mistral/mistral-small-latest"), args)
+  expect_equal(observed$fetches, 2L)
+  expect_equal(getOption("ellmer_timeout_s"), 600)
+  expect_equal(getOption("ellmer_max_tries"), 5)
+})
+
 test_that("estimates follow advertised rate availability", {
   state <- local_openrouter_fallback_cache()
 

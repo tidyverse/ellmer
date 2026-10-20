@@ -82,18 +82,21 @@ The cost of each turn is the valid charge OpenRouter reports in \code{usage.cost
 not an estimate computed from token rates. See the
 \href{https://openrouter.ai/docs/cookbook/administration/usage-accounting}{OpenRouter usage accounting documentation}.
 When no valid charge is reported, the turn's cost is estimated from the
-rates the model advertises on OpenRouter's public models endpoint. The rate
-table is fetched lazily, at most once per R session (failed fetches
-included), and reused for later turns, so estimates can be stale and aren't
-guaranteed to match routed charges. Estimates require both prompt and
-completion token counts and rates for the token categories used; otherwise
-the cost is \code{NA}, i.e. unknown. Costs surface in
-\code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and
+rates the model advertises on OpenRouter's public models endpoint
+(\verb{https://openrouter.ai/api/v1/models}). This lookup uses neither your chat
+credentials nor headers. It tries once with a short timeout and fails
+quietly, leaving the cost unknown. The rate table is fetched lazily, at most
+once per R session (including failed fetches), and reused for later turns,
+so estimates can be stale and aren't guaranteed to match routed charges.
+Estimates are token-only: conditional pricing overrides, cache writes, and
+non-token fees (images, web search, and similar) aren't modeled. Estimation
+requires both prompt and completion token counts and known rates for the
+token categories used; otherwise the cost is \code{NA}, i.e. unknown. Costs
+surface in \code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and
 \code{get_tokens()}. An unknown turn cost also makes the cumulative chat cost and
 that model's session cost unknown; known individual turn costs remain
 available. With your own provider key, the reported charge is what
 OpenRouter bills you, which may not match the upstream provider's bill.
-}
 }
 
 \examples{

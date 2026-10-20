@@ -32,17 +32,21 @@ NULL
 #' not an estimate computed from token rates. See the
 #' [OpenRouter usage accounting documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
 #' When no valid charge is reported, the turn's cost is estimated from the
-#' rates the model advertises on OpenRouter's public models endpoint. The rate
-#' table is fetched lazily, at most once per R session (failed fetches
-#' included), and reused for later turns, so estimates can be stale and aren't
-#' guaranteed to match routed charges. Estimates require both prompt and
-#' completion token counts and rates for the token categories used; otherwise
-#' the cost is `NA`, i.e. unknown. Costs surface in [token_usage()] and the
-#' `Chat` methods `get_cost()` and `get_tokens()`. An unknown turn cost also
-#' makes the cumulative chat cost and that model's session cost unknown; known
-#' individual turn costs remain available. With your own provider key, the
-#' reported charge is what OpenRouter bills you, which may not match the
-#' upstream provider's bill.
+#' rates the model advertises on OpenRouter's public models endpoint
+#' (`https://openrouter.ai/api/v1/models`). This lookup uses neither your chat
+#' credentials nor headers. It tries once with a short timeout and fails
+#' quietly, leaving the cost unknown. The rate table is fetched lazily, at most
+#' once per R session (including failed fetches), and reused for later turns,
+#' so estimates can be stale and aren't guaranteed to match routed charges.
+#' Estimates are token-only: conditional pricing overrides, cache writes, and
+#' non-token fees (images, web search, and similar) aren't modeled. Estimation
+#' requires both prompt and completion token counts and known rates for the
+#' token categories used; otherwise the cost is `NA`, i.e. unknown. Costs
+#' surface in [token_usage()] and the `Chat` methods `get_cost()` and
+#' `get_tokens()`. An unknown turn cost also makes the cumulative chat cost and
+#' that model's session cost unknown; known individual turn costs remain
+#' available. With your own provider key, the reported charge is what
+#' OpenRouter bills you, which may not match the upstream provider's bill.
 #' @examples
 #' \dontrun{
 #' chat <- chat_openrouter()
@@ -198,6 +202,14 @@ openrouter_models_cache_factory <- function() {
   function() {
     if (!loaded) {
       loaded <<- TRUE
+      # The fallback runs after a completed reply, so an inherited long or
+      # retrying transport could hang it: bound this lookup to at most five
+      # seconds and one attempt (a shorter caller timeout stays shorter).
+      # Scoped to this call, whatever its outcome.
+      rlang::local_options(
+        ellmer_timeout_s = min(getOption("ellmer_timeout_s", 5), 5),
+        ellmer_max_tries = 1
+      )
       models <<- tryCatch(models_openrouter(), error = function(cnd) NULL)
     }
     models
