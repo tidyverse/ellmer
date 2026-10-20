@@ -625,7 +625,7 @@ test_that("interrupted requests are recorded on spans and metrics", {
   }
   expect_equal(
     recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
-    "error"
+    "interrupted"
   )
 
   points <- otel_metric_points(recorded$metrics)
@@ -669,6 +669,10 @@ test_that("interrupting a stream consumer is recorded when the loop closes", {
     expect_equal(span$status, "error")
     expect_equal(span$attributes[["error.type"]], "interrupted")
   }
+  expect_equal(
+    recorded$traces[["chat "]]$attributes[["gen_ai.response.finish_reasons"]],
+    "interrupted"
+  )
 
   points <- otel_metric_points(recorded$metrics)
   for (name in c(

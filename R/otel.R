@@ -579,7 +579,7 @@ record_chat_otel_span_interrupted <- function(span, provider, model, start) {
   }
   span$set_status("error")
   span$set_attribute("error.type", "interrupted")
-  span$set_attribute("gen_ai.response.finish_reasons", "error")
+  span$set_attribute("gen_ai.response.finish_reasons", "interrupted")
 }
 
 # Convert a single Content into a GenAI semconv "part", a named list emitted
