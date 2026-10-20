@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-openrouter.R
 \name{chat_openrouter}
 \alias{chat_openrouter}
+\alias{models_openrouter}
 \title{Chat with one of the many models hosted on OpenRouter}
 \usage{
 chat_openrouter(
@@ -15,6 +16,8 @@ chat_openrouter(
   api_headers = character(),
   strict = FALSE
 )
+
+models_openrouter(base_url = "https://openrouter.ai/api/v1")
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -50,9 +53,19 @@ to every chat API call.}
 
 \item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
 structured output. Only set this if the endpoint and model support it.}
+
+\item{base_url}{The base URL of the OpenRouter API. The \verb{/models}
+endpoint used by \code{models_openrouter()} is public, so no credentials
+are required.}
 }
 \value{
-A \link{Chat} object.
+\code{chat_openrouter()} returns a \link{Chat} object. \code{models_openrouter()}
+returns a data frame with one row per model, with its \code{id}, \code{created_at},
+human-readable \code{name}, and \code{context_length}, plus the \code{cached_input},
+\code{input}, and \code{output} prices OpenRouter advertises, in US dollars per
+million tokens. An \code{NA} price means that specific rate is unknown, e.g.
+because the model's cost is set by the underlying provider at request
+time; genuinely free models report \code{0}.
 }
 \description{
 \ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
@@ -60,7 +73,8 @@ A \link{Chat} object.
 Sign up at \url{https://openrouter.ai}.
 
 Support for features depends on the underlying model that you use; see
-\url{https://openrouter.ai/models} for details.
+\url{https://openrouter.ai/models} for details. Use \code{\link[=models_openrouter]{models_openrouter()}}
+to list the available models along with their advertised token prices.
 }
 \section{Cost reporting}{
 

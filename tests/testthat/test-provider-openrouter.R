@@ -436,3 +436,275 @@ test_that("completed turns log actual charges for token_usage()", {
   expect_equal(token_usage()$price, NA_real_)
   expect_equal(unclass(chat$get_cost()), NA_real_)
 })
+
+# Models ------------------------------------------------------------------
+
+# The first two entries are extracted from the public response of
+# https://openrouter.ai/api/v1/models; the remaining entries are minimal
+# edge cases: a router-priced model ("-1" sentinel), a model without a
+# cache-read rate, and a free model with a null completion rate.
+openrouter_models_fixture <- '{
+  "data": [
+    {
+      "id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "created": 1792379569,
+      "context_length": 1000000,
+      "pricing": {"prompt": "0", "completion": "0"}
+    },
+    {
+      "id": "deepseek/deepseek-v4.1-flash-1017",
+      "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+      "created": 1792225624,
+      "context_length": 1048576,
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006",
+        "input_cache_read": "0.000000003"
+      }
+    },
+    {
+      "id": "openai/gpt-router-5",
+      "name": "OpenAI: GPT Router 5 (dynamic pricing)",
+      "created": 1791200000,
+      "context_length": 400000,
+      "pricing": {"prompt": "-1", "completion": "-1"}
+    },
+    {
+      "id": "mistral/mistral-small-latest",
+      "name": "Mistral: Mistral Small (latest)",
+      "created": 1791300000,
+      "context_length": 128000,
+      "pricing": {"prompt": "0.000002", "completion": "0.000006"}
+    },
+    {
+      "id": "meta/llama-4-scout:free",
+      "name": "Meta: Llama 4 Scout (free)",
+      "created": 1791400000,
+      "context_length": 163840,
+      "pricing": {"prompt": "0", "completion": null, "input_cache_read": "0"}
+    }
+  ]
+}'
+
+local_openrouter_models <- function(
+  body = openrouter_models_fixture,
+  frame = parent.frame()
+) {
+  state <- new.env(parent = emptyenv())
+  state$request <- NULL
+
+  local_mocked_bindings(
+    req_perform = function(req) {
+      state$request <- req
+      httr2::new_response(
+        method = "GET",
+        url = req$url,
+        status_code = 200,
+        headers = list(`content-type` = "application/json"),
+        body = charToRaw(body)
+      )
+    },
+    .env = frame
+  )
+
+  state
+}
+
+test_that("can list models without credentials", {
+  withr::local_envvar(OPENROUTER_API_KEY = NA)
+  state <- local_openrouter_models()
+  models <- models_openrouter()
+
+  expect_s3_class(models, "data.frame")
+  expect_equal(nrow(models), 5)
+  expect_equal(
+    names(models),
+    c(
+      "id",
+      "created_at",
+      "name",
+      "context_length",
+      "cached_input",
+      "input",
+      "output"
+    )
+  )
+
+  # No `owned_by` is invented and model ids keep their full OpenRouter form
+  expect_setequal(
+    models$id,
+    c(
+      "minimax/minimax-m3.1-flash:free",
+      "deepseek/deepseek-v4.1-flash-1017",
+      "openai/gpt-router-5",
+      "mistral/mistral-small-latest",
+      "meta/llama-4-scout:free"
+    )
+  )
+
+  # The public endpoint is used, without an Authorization header
+  expect_equal(state$request$url, "https://openrouter.ai/api/v1/models")
+  expect_null(state$request$headers$Authorization)
+  expect_contains(names(state$request$headers), c("HTTP-Referer", "X-Title"))
+})
+
+test_that("model listing never looks up OPENROUTER_API_KEY", {
+  withr::local_envvar(OPENROUTER_API_KEY = NA)
+  state <- local_openrouter_models()
+  local_mocked_bindings(
+    openrouter_key = function() stop("must not be called"),
+    .env = environment()
+  )
+
+  expect_equal(nrow(models_openrouter()), 5)
+})
+
+test_that("unix timestamps become dates, newest first", {
+  state <- local_openrouter_models()
+  models <- models_openrouter()
+
+  expect_s3_class(models$created_at, "Date")
+  expect_equal(
+    models$id,
+    c(
+      "minimax/minimax-m3.1-flash:free",
+      "deepseek/deepseek-v4.1-flash-1017",
+      "meta/llama-4-scout:free",
+      "mistral/mistral-small-latest",
+      "openai/gpt-router-5"
+    )
+  )
+  expect_equal(
+    models$created_at,
+    as.Date(c(
+      "2026-10-19",
+      "2026-10-17",
+      "2026-10-07",
+      "2026-10-06",
+      "2026-10-05"
+    ))
+  )
+})
+
+test_that("model metadata uses expected types", {
+  state <- local_openrouter_models()
+  models <- models_openrouter()
+
+  expect_type(models$id, "character")
+  expect_type(models$name, "character")
+  expect_type(models$context_length, "integer")
+  expect_type(models$cached_input, "double")
+  expect_type(models$input, "double")
+  expect_type(models$output, "double")
+
+  deepseek <- models[models$id == "deepseek/deepseek-v4.1-flash-1017", ]
+  expect_equal(deepseek$name, "DeepSeek: DeepSeek V4.1 Flash 1017")
+  expect_equal(deepseek$context_length, 1048576L)
+})
+
+test_that("advertised prices convert to USD per million tokens", {
+  state <- local_openrouter_models()
+  models <- models_openrouter()
+  row <- function(id) models[models$id == id, ]
+
+  paid <- row("deepseek/deepseek-v4.1-flash-1017")
+  expect_equal(paid$cached_input, 0.003)
+  expect_equal(paid$input, 0.15)
+  expect_equal(paid$output, 0.6)
+
+  # Free models keep their genuine zero rates
+  free <- row("minimax/minimax-m3.1-flash:free")
+  expect_equal(free$input, 0)
+  expect_equal(free$output, 0)
+  # An absent cache-read rate is unknown, not zero
+  expect_equal(free$cached_input, NA_real_)
+
+  # Router-priced models use "-1" as a sentinel, not a negative price
+  router <- row("openai/gpt-router-5")
+  expect_equal(router$cached_input, NA_real_)
+  expect_equal(router$input, NA_real_)
+  expect_equal(router$output, NA_real_)
+
+  nocache <- row("mistral/mistral-small-latest")
+  expect_equal(nocache$cached_input, NA_real_)
+  expect_equal(nocache$input, 2)
+  expect_equal(nocache$output, 6)
+
+  # A null rate is unknown, while other zero rates stay zero
+  null_rate <- row("meta/llama-4-scout:free")
+  expect_equal(null_rate$input, 0)
+  expect_equal(null_rate$output, NA_real_)
+  expect_equal(null_rate$cached_input, 0)
+})
+
+test_that("empty model lists return a typed zero-row data frame", {
+  state <- local_openrouter_models(body = '{"data": []}')
+  models <- models_openrouter()
+  expect_equal(nrow(models), 0)
+  expect_type(models$id, "character")
+  expect_s3_class(models$created_at, "Date")
+  expect_type(models$context_length, "integer")
+  expect_type(models$input, "double")
+
+  # A missing data field is treated the same as an empty list
+  state <- local_openrouter_models(body = '{"total_count": 0}')
+  expect_equal(nrow(models_openrouter()), 0)
+})
+
+test_that("model prices come from the API, not the local price snapshot", {
+  local_prices()
+  the$prices <- data.frame(
+    provider = "OpenRouter",
+    model = "deepseek/deepseek-v4.1-flash-1017",
+    cached_input = 999,
+    input = 888,
+    output = 777
+  )
+  state <- local_openrouter_models()
+  models <- models_openrouter()
+
+  paid <- models[models$id == "deepseek/deepseek-v4.1-flash-1017", ]
+  expect_equal(paid$cached_input, 0.003)
+  expect_equal(paid$input, 0.15)
+  expect_equal(paid$output, 0.6)
+})
+
+test_that("models_openrouter() honours base_url", {
+  state <- local_openrouter_models()
+  models_openrouter(base_url = "https://example.com/api/v1")
+  expect_equal(state$request$url, "https://example.com/api/v1/models")
+})
+
+test_that("model listing fails normally on request errors", {
+  local_mocked_bindings(
+    req_perform = function(req) {
+      rlang::abort("Failed to connect to OpenRouter")
+    }
+  )
+
+  expect_snapshot(error = TRUE, models_openrouter())
+})
+
+test_that("openrouter_rate() guards invalid rates", {
+  expect_equal(openrouter_rate("0"), 0)
+  expect_equal(openrouter_rate("0.00000015"), 0.15)
+  expect_equal(openrouter_rate("Inf"), NA_real_)
+  expect_equal(openrouter_rate("-Inf"), NA_real_)
+  expect_equal(openrouter_rate("not-a-price"), NA_real_)
+  expect_equal(openrouter_rate(NULL), NA_real_)
+  expect_equal(openrouter_rate(list("0")), NA_real_)
+  expect_equal(openrouter_rate(c("0", "0")), NA_real_)
+})
+
+test_that("can list models", {
+  vcr::local_cassette("openrouter-list-models")
+
+  test_models(models_openrouter)
+})
+
+test_that("chat_openrouter() still looks up credentials normally", {
+  withr::local_envvar(OPENROUTER_API_KEY = "dummy-not-a-real-key")
+  chat <- chat_openrouter()
+  expect_equal(chat$get_provider()@credentials(), "dummy-not-a-real-key")
+})

@@ -9,7 +9,8 @@ NULL
 #' Sign up at <https://openrouter.ai>.
 #'
 #' Support for features depends on the underlying model that you use; see
-#' <https://openrouter.ai/models> for details.
+#' <https://openrouter.ai/models> for details. Use [models_openrouter()]
+#' to list the available models along with their advertised token prices.
 #'
 #' @export
 #' @family chatbots
@@ -19,7 +20,13 @@ NULL
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inheritParams chat_openai_compatible
-#' @inherit chat_openai return
+#' @return `chat_openrouter()` returns a [Chat] object. `models_openrouter()`
+#'   returns a data frame with one row per model, with its `id`, `created_at`,
+#'   human-readable `name`, and `context_length`, plus the `cached_input`,
+#'   `input`, and `output` prices OpenRouter advertises, in US dollars per
+#'   million tokens. An `NA` price means that specific rate is unknown, e.g.
+#'   because the model's cost is set by the underlying provider at request
+#'   time; genuinely free models report `0`.
 #' @section Cost reporting:
 #' The cost of each turn is the charge OpenRouter reports in its `usage.cost`
 #' response field, not an estimate computed from token rates. See the
@@ -77,6 +84,25 @@ chat_openrouter <- function(
 
 chat_openrouter_test <- function(..., echo = "none") {
   chat_openrouter(..., model = "openai/gpt-4o-mini-2024-07-18", echo = echo)
+}
+
+#' @rdname chat_openrouter
+#' @export
+#' @param base_url The base URL of the OpenRouter API. The `/models`
+#'   endpoint used by `models_openrouter()` is public, so no credentials
+#'   are required.
+models_openrouter <- function(base_url = "https://openrouter.ai/api/v1") {
+  check_string(base_url)
+
+  # https://openrouter.ai/docs/models: the /models endpoint is public, so
+  # use empty credentials rather than looking up OPENROUTER_API_KEY.
+  provider <- ProviderOpenRouter(
+    name = "OpenRouter",
+    base_url = base_url,
+    credentials = function() list()
+  )
+
+  models_list(provider)
 }
 
 ProviderOpenRouter <- new_class(
@@ -206,4 +232,59 @@ method(as_json, list(ProviderOpenRouter, ContentText)) <- function(
   } else {
     list(type = "text", text = x@text)
   }
+}
+
+# Models -----------------------------------------------------------------
+
+# Unlike the OpenAI-compatible listing, OpenRouter's /models response has
+# no `owned_by` and reports per-token prices in its own `pricing` object,
+# so parse it directly rather than matching against the static price
+# snapshot.
+method(models_list, ProviderOpenRouter) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+
+  json <- resp_body_json(resp)
+  models <- json$data %||% list()
+
+  df <- data.frame(
+    id = map_chr(models, \(x) x$id %||% NA_character_),
+    created_at = as.Date(.POSIXct(map_dbl(models, \(x) {
+      x$created %||% NA_real_
+    }))),
+    name = map_chr(models, \(x) x$name %||% NA_character_),
+    context_length = map_int(models, \(x) {
+      as.integer(x$context_length %||% NA_integer_)
+    })
+  )
+  df <- cbind(
+    df,
+    cached_input = map_dbl(models, \(x) {
+      openrouter_rate(x$pricing$input_cache_read)
+    }),
+    input = map_dbl(models, \(x) openrouter_rate(x$pricing$prompt)),
+    output = map_dbl(models, \(x) openrouter_rate(x$pricing$completion))
+  )
+  df[order(-xtfrm(df$created_at)), ]
+}
+
+# OpenRouter reports prices as strings in USD per token, and uses "-1" as
+# a sentinel for models priced by the underlying provider at request time.
+# Treat those, along with missing rates, as unknown; keep genuine zeros.
+openrouter_rate <- function(rate) {
+  if (
+    length(rate) != 1L ||
+      !(is.numeric(rate) || is.character(rate)) ||
+      is.na(rate)
+  ) {
+    return(NA_real_)
+  }
+
+  out <- suppressWarnings(as.numeric(rate))
+  if (is.na(out) || !is.finite(out) || out < 0) {
+    return(NA_real_)
+  }
+
+  round(out * 1e6, digits = 6)
 }
