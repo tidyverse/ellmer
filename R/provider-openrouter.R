@@ -28,15 +28,21 @@ NULL
 #'   because the model's cost is set by the underlying provider at request
 #'   time; genuinely free models report `0`.
 #' @section Cost reporting:
-#' The cost of each turn is the charge OpenRouter reports in its `usage.cost`
-#' response field, not an estimate computed from token rates. See the
+#' The cost of each turn is the valid charge OpenRouter reports in `usage.cost`,
+#' not an estimate computed from token rates. See the
 #' [OpenRouter usage accounting documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
-#' If OpenRouter doesn't report a valid cost, the turn's cost is `NA`, i.e. unknown.
-#' Costs surface in [token_usage()] and the `Chat` methods `get_cost()` and
-#' `get_tokens()`. An unknown turn cost also makes the cumulative chat cost and
-#' that model's session cost unknown; known individual turn costs remain
-#' available. With your own provider key, the reported charge is what
-#' OpenRouter bills you, which may not match the upstream provider's bill.
+#' When no valid charge is reported, the turn's cost is estimated from the
+#' rates the model advertises on OpenRouter's public models endpoint. The rate
+#' table is fetched lazily, at most once per R session (failed fetches
+#' included), and reused for later turns, so estimates can be stale and aren't
+#' guaranteed to match routed charges. Estimates require both prompt and
+#' completion token counts and rates for the token categories used; otherwise
+#' the cost is `NA`, i.e. unknown. Costs surface in [token_usage()] and the
+#' `Chat` methods `get_cost()` and `get_tokens()`. An unknown turn cost also
+#' makes the cumulative chat cost and that model's session cost unknown; known
+#' individual turn costs remain available. With your own provider key, the
+#' reported charge is what OpenRouter bills you, which may not match the
+#' upstream provider's bill.
 #' @examples
 #' \dontrun{
 #' chat <- chat_openrouter()
@@ -160,8 +166,13 @@ method(value_turn, ProviderOpenRouter) <- function(
     has_type = has_type
   )
 
-  # Reported charges take precedence over static token-rate estimates.
+  # Reported charges take precedence over static token-rate estimates;
+  # a missing or invalid charge is estimated from session-cached
+  # advertised rates when usage reports usable token counts.
   turn@cost <- openrouter_actual_cost(result$usage$cost)
+  if (is.na(turn@cost)) {
+    turn@cost <- openrouter_estimate_cost(model@name, turn@tokens, result$usage)
+  }
 
   turn
 }
@@ -171,6 +182,66 @@ openrouter_actual_cost <- function(cost) {
     dollars(cost)
   } else {
     dollars(NA_real_)
+  }
+}
+
+# Session-cached cost fallback ---------------------------------------------
+#
+# One lazy, session-wide table of the rates OpenRouter advertises backs all
+# missing-charge estimates: the first eligible turn fetches it once, later
+# turns for any model reuse it, and failed attempts are latched too so an
+# outage can't trigger repeated lookups. Explicit models_openrouter() calls
+# stay fresh and never read or write this cache.
+openrouter_models_cache_factory <- function() {
+  loaded <- FALSE
+  models <- NULL
+  function() {
+    if (!loaded) {
+      loaded <<- TRUE
+      models <<- tryCatch(models_openrouter(), error = function(cnd) NULL)
+    }
+    models
+  }
+}
+
+openrouter_models_cache <- openrouter_models_cache_factory()
+
+# A missing or invalid reported charge can be estimated from advertised
+# rates, but only when usage reports both token counts: the parent token
+# parsing substitutes zeros for absent counts, and a fabricated
+# zero-dollar estimate is worse than an unknown cost.
+openrouter_estimate_cost <- function(model, tokens, usage) {
+  if (is.null(usage$prompt_tokens) || is.null(usage$completion_tokens)) {
+    return(dollars(NA_real_))
+  }
+
+  models <- openrouter_models_cache()
+  if (is.null(models)) {
+    # The lookup failed earlier in this session; don't try again
+    return(dollars(NA_real_))
+  }
+
+  i <- match(model, models$id)
+  if (is.na(i)) {
+    return(dollars(NA_real_))
+  }
+
+  # Advertised rates are USD per million tokens; a rate is required only
+  # for token categories that were actually used.
+  dollars(sum(
+    openrouter_token_cost(tokens[["input"]], models$input[[i]]),
+    openrouter_token_cost(tokens[["output"]], models$output[[i]]),
+    openrouter_token_cost(tokens[["cached_input"]], models$cached_input[[i]])
+  ))
+}
+
+openrouter_token_cost <- function(tokens, rate) {
+  if (tokens == 0) {
+    0
+  } else if (is.na(rate)) {
+    NA_real_
+  } else {
+    tokens * rate / 1e6
   }
 }
 

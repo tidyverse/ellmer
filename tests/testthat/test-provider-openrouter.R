@@ -77,12 +77,36 @@ local_openrouter_static_prices <- function(
   )
 }
 
+# Missing-charge cases from before the fallback existed: keep them offline
+# with a fresh cache over an empty table, so the unknown test model stays
+# unknown without any real request.
+local_openrouter_no_fallback_models <- function(frame = parent.frame()) {
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      data.frame(
+        id = character(),
+        created_at = as.Date(.POSIXct(numeric())),
+        name = character(),
+        context_length = integer(),
+        cached_input = numeric(),
+        input = numeric(),
+        output = numeric()
+      )
+    },
+    .env = frame
+  )
+}
+
 openrouter_value_result <- function(
   cost = NULL,
   message = NULL,
   finish_reason = "stop",
   include_cost = TRUE,
-  include_usage = TRUE
+  include_usage = TRUE,
+  prompt_tokens = 10,
+  completion_tokens = 5,
+  cached_tokens = 0
 ) {
   if (is.null(message)) {
     message <- list(role = "assistant", content = "hi")
@@ -93,9 +117,9 @@ openrouter_value_result <- function(
   )
   if (include_usage) {
     usage <- list(
-      prompt_tokens = 10,
-      completion_tokens = 5,
-      prompt_tokens_details = list(cached_tokens = 0)
+      prompt_tokens = prompt_tokens,
+      completion_tokens = completion_tokens,
+      prompt_tokens_details = list(cached_tokens = cached_tokens)
     )
     if (include_cost) {
       usage$cost <- cost
@@ -216,6 +240,7 @@ test_that("value_turn() preserves zero and high-precision costs", {
 
 test_that("value_turn() reports unknown cost when usage or cost is missing", {
   local_openrouter_static_prices()
+  local_openrouter_no_fallback_models()
 
   expect_equal(
     get_token_cost(
@@ -253,6 +278,7 @@ test_that("value_turn() reports unknown cost when usage or cost is missing", {
 
 test_that("value_turn() treats invalid costs as unknown but keeps the turn", {
   local_openrouter_static_prices()
+  local_openrouter_no_fallback_models()
 
   provider <- openrouter_test_provider()
   model <- test_model("openrouter/test-model")
@@ -409,6 +435,7 @@ test_that("chat_structured() reports actual charges", {
 test_that("completed turns log actual charges for token_usage()", {
   local_tokens()
   local_openrouter_static_prices()
+  local_openrouter_no_fallback_models()
 
   chat <- chat_openrouter(model = "openrouter/test-model", echo = "none")
 
@@ -707,4 +734,295 @@ test_that("chat_openrouter() still looks up credentials normally", {
   withr::local_envvar(OPENROUTER_API_KEY = "dummy-not-a-real-key")
   chat <- chat_openrouter()
   expect_equal(chat$get_provider()@credentials(), "dummy-not-a-real-key")
+})
+
+# Session-cached cost fallback (#1189) ------------------------------------
+
+# Fresh fallback state for a test: a cache closure from the same factory
+# as the production one, with each table load counted at the
+# models_openrouter() boundary. The req_perform() mock keeps everything
+# offline and the counted wrapper proves one table serves all models.
+local_openrouter_fallback_cache <- function(
+  body = openrouter_models_fixture,
+  frame = parent.frame()
+) {
+  state <- local_openrouter_models(body = body, frame = frame)
+  state$fetches <- 0L
+
+  # Parse the fixture once through the real models_list() path so tests
+  # can freely combine this helper with local_mocked_openrouter_perform()
+  # (whose resp_body_json() passthrough would otherwise break the parse).
+  table <- models_openrouter()
+  state$fetches <- 0L
+
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      state$fetches <- state$fetches + 1L
+      table
+    },
+    .env = frame
+  )
+
+  state
+}
+
+test_that("missing cost with reported counts is estimated from advertised rates", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+
+  turn <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+
+  expect_equal(unclass(turn@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(state$fetches, 1L)
+})
+
+test_that("reported charges never trigger a model lookup", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+
+  zero <- value_turn(provider, model, openrouter_value_result(cost = 0))
+  nonzero <- value_turn(provider, model, openrouter_value_result(cost = 0.005))
+
+  expect_equal(unclass(zero@cost), 0)
+  expect_equal(unclass(nonzero@cost), 0.005)
+  expect_equal(state$fetches, 0L)
+})
+
+test_that("absent or incomplete usage stays unknown without a model lookup", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+
+  no_usage <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_usage = FALSE)
+  )
+  no_completion <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE, completion_tokens = NULL)
+  )
+  no_prompt <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE, prompt_tokens = NULL)
+  )
+
+  for (turn in list(no_usage, no_completion, no_prompt)) {
+    expect_equal(unclass(turn@cost), NA_real_)
+  }
+  expect_equal(state$fetches, 0L)
+})
+
+test_that("one session table serves repeated turns, models, and unknowns", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+  deepseek <- test_model("deepseek/deepseek-v4.1-flash-1017")
+  mistral <- test_model("mistral/mistral-small-latest")
+
+  first <- value_turn(
+    provider,
+    deepseek,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  again <- value_turn(
+    provider,
+    deepseek,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  other <- value_turn(
+    provider,
+    mistral,
+    openrouter_value_result(include_cost = FALSE, prompt_tokens = 8)
+  )
+
+  expect_equal(unclass(first@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(unclass(again@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(unclass(other@cost), 8 * 2 / 1e6 + 5 * 6 / 1e6)
+  expect_equal(state$fetches, 1L)
+
+  # A model missing from the shared table doesn't trigger a new fetch
+  unknown <- value_turn(
+    provider,
+    test_model("openrouter/not-a-real-model"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(unknown@cost), NA_real_)
+  expect_equal(state$fetches, 1L)
+})
+
+test_that("a failed table fetch is latched and attempted only once", {
+  state <- new.env(parent = emptyenv())
+  state$fetches <- 0L
+
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      state$fetches <- state$fetches + 1L
+      rlang::abort("Failed to connect to OpenRouter")
+    }
+  )
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+
+  first <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  second <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+
+  expect_equal(unclass(first@cost), NA_real_)
+  expect_equal(unclass(second@cost), NA_real_)
+  expect_equal(state$fetches, 1L)
+})
+
+test_that("estimates follow advertised rate availability", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+
+  # Genuinely free models estimate to zero
+  free <- value_turn(
+    provider,
+    test_model("minimax/minimax-m3.1-flash:free"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(free@cost), 0)
+
+  # A missing rate for a used token category can't be estimated...
+  used_null_output <- value_turn(
+    provider,
+    test_model("meta/llama-4-scout:free"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(used_null_output@cost), NA_real_)
+
+  # ...but the same model with zero output tokens estimates fine
+  zero_output <- value_turn(
+    provider,
+    test_model("meta/llama-4-scout:free"),
+    openrouter_value_result(include_cost = FALSE, completion_tokens = 0)
+  )
+  expect_equal(unclass(zero_output@cost), 0)
+
+  # Zero cached tokens don't need an advertised cache rate...
+  no_cached_tokens <- value_turn(
+    provider,
+    test_model("mistral/mistral-small-latest"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(no_cached_tokens@cost), 10 * 2 / 1e6 + 5 * 6 / 1e6)
+
+  # ...but cached tokens without a rate do
+  unknown_cache_rate <- value_turn(
+    provider,
+    test_model("mistral/mistral-small-latest"),
+    openrouter_value_result(include_cost = FALSE, cached_tokens = 2)
+  )
+  expect_equal(unclass(unknown_cache_rate@cost), NA_real_)
+
+  # Cached input uses the advertised cache-read rate
+  cached <- value_turn(
+    provider,
+    test_model("deepseek/deepseek-v4.1-flash-1017"),
+    openrouter_value_result(include_cost = FALSE, cached_tokens = 3)
+  )
+  expect_equal(
+    unclass(cached@cost),
+    7 * 0.15 / 1e6 + 5 * 0.6 / 1e6 + 3 * 0.003 / 1e6
+  )
+
+  # Router-priced models can't be estimated
+  router <- value_turn(
+    provider,
+    test_model("openai/gpt-router-5"),
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(router@cost), NA_real_)
+
+  expect_equal(state$fetches, 1L)
+})
+
+test_that("explicit models_openrouter() stays fresh and never touches the cache", {
+  state <- local_openrouter_fallback_cache()
+
+  provider <- openrouter_test_provider()
+  model <- test_model("deepseek/deepseek-v4.1-flash-1017")
+
+  # Explicit discovery hits the API each time without warming the cache
+  expect_equal(nrow(models_openrouter()), 5)
+  expect_equal(nrow(models_openrouter()), 5)
+  expect_equal(state$fetches, 2L)
+
+  # The fallback still fetches its own session table...
+  turn <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(turn@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(state$fetches, 3L)
+
+  # ...and explicit calls never mutate the cached table
+  expect_equal(nrow(models_openrouter()), 5)
+  again <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
+  expect_equal(unclass(again@cost), 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(state$fetches, 4L)
+})
+
+test_that("actual charges and fallback estimates aggregate in token_usage()", {
+  local_tokens()
+  # Conflicting static prices must never serve as the fallback
+  local_openrouter_static_prices(model = "deepseek/deepseek-v4.1-flash-1017")
+  expect_equal(
+    get_token_cost(
+      "OpenRouter",
+      "deepseek/deepseek-v4.1-flash-1017",
+      tokens(input = 10, output = 5)
+    ),
+    dollars(0.02)
+  )
+  state <- local_openrouter_fallback_cache()
+
+  chat <- chat_openrouter(
+    model = "deepseek/deepseek-v4.1-flash-1017",
+    echo = "none"
+  )
+
+  local_mocked_openrouter_perform(
+    value_result = openrouter_value_result(cost = 0.01)
+  )
+  chat$chat("hi")
+
+  local_mocked_openrouter_perform(
+    value_result = openrouter_value_result(include_cost = FALSE)
+  )
+  chat$chat("hi again")
+
+  expect_equal(token_usage()$price, 0.01 + 10 * 0.15 / 1e6 + 5 * 0.6 / 1e6)
+  expect_equal(token_usage()$input, 20)
+  expect_equal(token_usage()$output, 10)
+  expect_equal(state$fetches, 1L)
 })

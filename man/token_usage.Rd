@@ -16,13 +16,16 @@ if known.
 }
 \details{
 Most providers' costs are estimated from published token rates.
-OpenRouter is the exception: its price is the actual charge
-OpenRouter reports for each request, so it reflects your account's real
-charges rather than a token-rate estimate. Unknown costs (including any
-OpenRouter request that doesn't report a charge) are \code{NA} rather than
-zero. An unknown charge makes the cumulative total for that provider and
-model unknown, while known individual turn costs remain available through
-the chat object's \code{get_tokens()} method.
+OpenRouter is the exception: its price is the actual charge OpenRouter
+reports for each request, so it reflects your account's real charges
+rather than a token-rate estimate. When a request doesn't report a
+charge, its cost is instead estimated from the rates the model
+advertises on OpenRouter, fetched at most once per R session and reused
+for every later request. Costs are \code{NA} rather than zero whenever
+OpenRouter reports neither a charge nor the token counts and advertised
+rates needed to estimate one. An unknown charge makes the cumulative
+total for that provider and model unknown, while known individual turn
+costs remain available through the chat object's \code{get_tokens()} method.
 }
 \examples{
 token_usage()
