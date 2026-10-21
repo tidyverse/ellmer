@@ -372,8 +372,9 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
 reported by the provider. Compare it to the input tokens in
 \verb{$get_tokens()} to see how much of it a conversation has used.
 
-This requires a request to the provider's model listing endpoint, so
-the result is cached for the rest of the session.
+The first call lists the provider's models, which takes a request to
+its model listing endpoint. The listing is then cached for the rest of
+the session.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_max_context_length()}

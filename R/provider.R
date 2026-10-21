@@ -377,22 +377,51 @@ method(models_list, new_S3_class("Chat")) <- function(provider) {
   models_list(provider$get_provider())
 }
 
-the$max_context_lengths <- new_environment()
-
 model_max_context_length <- function(provider, model) {
-  key <- paste(provider@name, provider@base_url, model, sep = "|")
-  if (env_has(the$max_context_lengths, key)) {
-    return(the$max_context_lengths[[key]])
+  models <- model_listing(provider)
+  if (is.null(models)) {
+    return(NA_integer_)
+  }
+  models$max_context_length[match_model_id(model, models$id)] %||% NA_integer_
+}
+
+the$model_listings <- new_environment()
+
+# Lists the provider's models once per session. A listing that fails isn't
+# cached, so a later call can try again.
+model_listing <- function(provider) {
+  key <- paste(provider@name, provider@base_url, sep = "|")
+  if (env_has(the$model_listings, key)) {
+    return(the$model_listings[[key]])
   }
 
   models <- try_fetch(
     models_list(provider),
-    not_implemented = function(cnd) NULL
+    not_implemented = function(cnd) NULL,
+    httr2_error = function(cnd) NULL
   )
-  limit <- models$max_context_length[match(model, models$id)] %||% NA_integer_
+  if (!is.null(models)) {
+    the$model_listings[[key]] <- models
+  }
+  models
+}
 
-  the$max_context_lengths[[key]] <- limit
-  limit
+# Anthropic lists older models only as dated snapshots, so an undated alias
+# like `claude-sonnet-4-5` matches `claude-sonnet-4-5-20250929`, or the latest
+# snapshot if there are several. Ollama lists models without their default
+# `:latest` tag.
+match_model_id <- function(model, ids) {
+  idx <- match(c(model, sub(":latest$", "", model)), ids)
+  if (any(!is.na(idx))) {
+    return(idx[!is.na(idx)][[1]])
+  }
+
+  date <- substring(ids, nchar(model) + 2)
+  snapshot <- startsWith(ids, paste0(model, "-")) & grepl("^[0-9]{8}$", date)
+  if (!any(snapshot)) {
+    return(NA_integer_)
+  }
+  which(snapshot)[[which.max(as.numeric(date[snapshot]))]]
 }
 
 # Give a provider the chance to react to a model change, e.g. to swap in
