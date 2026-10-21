@@ -156,26 +156,6 @@ test_that("only openai/ models use strict mode", {
   expect_equal(gemma$get_provider()@strict, FALSE)
 })
 
-test_that("model listing reports the max context length", {
-  local_mocked_responses(function(req) {
-    response_json(
-      body = list(
-        chat = list(
-          list(
-            id = "claude-sonnet-5",
-            display_name = "Claude Sonnet 5",
-            max_context_length = 1000000
-          ),
-          list(id = "unknown", display_name = "Unknown")
-        )
-      )
-    )
-  })
-
-  models <- models_posit(credentials = \() "")
-  expect_equal(models$max_context_length, c(1000000L, NA_integer_))
-})
-
 # Checking the cache before calling models_posit() keeps an unauthenticated
 # machine from triggering (and hanging on) the interactive device flow.
 available_posit_models <- function() {

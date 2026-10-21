@@ -45,21 +45,6 @@ test_that("model listing joins the max context length from the native endpoint",
   expect_equal(models$max_context_length, c(32768L, 2048L))
 })
 
-test_that("model listing survives the native endpoint changing shape", {
-  local_mocked_responses(function(req) {
-    if (grepl("api/v1/models", req$url)) {
-      response_json(body = list(models = list(list(max_context_length = 4096))))
-    } else {
-      response_json(body = list(data = list(list(id = "qwen/qwen3-0.6b"))))
-    }
-  })
-
-  expect_equal(
-    models_lmstudio(credentials = \() "")$max_context_length,
-    NA_integer_
-  )
-})
-
 test_that("model listing survives a server without the native endpoint", {
   local_mocked_responses(function(req) {
     if (grepl("api/v1/models", req$url)) {

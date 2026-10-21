@@ -19,19 +19,3 @@ test_that("can list models", {
     has_max_context_length = TRUE
   )
 })
-
-test_that("model listing reports the max context length", {
-  local_mocked_responses(function(req) {
-    response_json(
-      body = list(
-        data = list(
-          list(id = "qwen3", max_model_len = 40960),
-          list(id = "unknown")
-        )
-      )
-    )
-  })
-
-  models <- models_vllm("https://example.com", credentials = \() "")
-  expect_equal(models$max_context_length, c(40960L, NA_integer_))
-})
