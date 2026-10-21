@@ -253,10 +253,10 @@ test_models <- function(models_fun, has_max_context_length = FALSE) {
   invisible(models)
 }
 
-local_max_context_lengths <- function(frame = parent.frame()) {
-  old <- the$max_context_lengths
-  the$max_context_lengths <- new_environment()
-  defer(the$max_context_lengths <- old, envir = frame)
+local_model_listings <- function(frame = parent.frame()) {
+  old <- the$model_listings
+  the$model_listings <- new_environment()
+  defer(the$model_listings <- old, envir = frame)
 }
 
 local_ollama_cache <- function(frame = parent.frame()) {

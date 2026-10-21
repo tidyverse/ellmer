@@ -118,7 +118,7 @@ test_that("can set model", {
 })
 
 test_that("can get the model's max context length", {
-  local_max_context_lengths()
+  local_model_listings()
   local_mocked_responses(function(req) {
     response_json(
       body = list(data = list(list(id = "qwen3", max_model_len = 40960)))
