@@ -61,13 +61,13 @@ If you’re writing a package, put your prompt(s) in `inst/prompts`,
 otherwise it’s fine to put them in the project’s root directory.
 
 Your prompts are going to change over time, so we’d highly recommend
-commiting them to a git repo. That will ensure that you can easily see
+committing them to a git repo. That will ensure that you can easily see
 what has changed, and that if you accidentally make a mistake you can
-easily roll back to a known good verison.
+easily roll back to a known good version.
 
 If your prompt includes dynamic data, use
 [`ellmer::interpolate_file()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
-to intergrate it into your prompt.
+to integrate it into your prompt.
 [`interpolate_file()`](https://ellmer.tidyverse.org/dev/reference/interpolate.md)
 works like [glue](https://glue.tidyverse.org) but uses `{{ }}` instead
 of [`{ }`](https://rdrr.io/r/base/Paren.html) to make it easier to work
@@ -591,7 +591,7 @@ into the right mindset of a very nerdy baker.)
 
 This isn’t a bad start, but I prefer to cook with weight and I only want
 to see volumes if weight isn’t available so I provide a couple of
-examples of what I’m looking for. I was pleasantly suprised that I can
+examples of what I’m looking for. I was pleasantly surprised that I can
 provide the input and output examples in such a loose format.
 
 ``` r

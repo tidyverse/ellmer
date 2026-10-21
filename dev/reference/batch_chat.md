@@ -123,7 +123,7 @@ object with one element for each prompt. Typically, when `type` is an
 object, this will will be a data frame with one row for each prompt, and
 one column for each property.
 
-For any of the aboves, will return `NULL` if `wait = FALSE` and the job
+For any of the above, will return `NULL` if `wait = FALSE` and the job
 is not complete.
 
 ## Examples

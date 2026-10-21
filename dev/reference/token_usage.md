@@ -1,7 +1,7 @@
 # Report on token usage in the current session
 
 Call this function to find out the cumulative number of tokens that you
-have sent and recieved in the current session. The price will be shown
+have sent and received in the current session. The price will be shown
 if known.
 
 ## Usage

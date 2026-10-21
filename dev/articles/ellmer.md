@@ -237,7 +237,7 @@ first few lines.
 
 LLMs are often very good at extracting structured data from unstructured
 text. This can give you traction to analyse data that was previously
-unaccessible. For example:
+inaccessible. For example:
 
 - Customer tickets and GitHub issues: you can use LLMs for quick and
   dirty sentiment analysis by extracting any specifically mentioned
