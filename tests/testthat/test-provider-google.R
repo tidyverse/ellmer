@@ -501,3 +501,41 @@ test_that("can count tokens", {
   vcr::local_cassette("google-count-tokens")
   test_token_count(chat_google_gemini_test)
 })
+
+test_that("finish reasons are standardised", {
+  provider <- chat_google_gemini(credentials = \() "key")$get_provider()
+  finish_reason <- function(reason, parts = list(list(text = "hi"))) {
+    value_finish_reason(
+      provider,
+      list(
+        candidates = list(
+          list(content = list(parts = parts), finishReason = reason)
+        )
+      )
+    )
+  }
+
+  expect_equal(finish_reason("STOP"), "success")
+  expect_equal(finish_reason("MAX_TOKENS"), "max_tokens")
+  for (reason in c(
+    "SAFETY",
+    "RECITATION",
+    "LANGUAGE",
+    "BLOCKLIST",
+    "PROHIBITED_CONTENT",
+    "SPII",
+    "IMAGE_SAFETY",
+    "IMAGE_PROHIBITED_CONTENT",
+    "IMAGE_RECITATION"
+  )) {
+    expect_equal(finish_reason(reason), "content_filter")
+  }
+  expect_equal(finish_reason("OTHER"), I("OTHER"))
+
+  # Gemini finishes with STOP when it calls a tool
+  tool_parts <- list(
+    list(text = "Let me check."),
+    list(functionCall = list(name = "weather", args = list(city = "Paris")))
+  )
+  expect_equal(finish_reason("STOP", tool_parts), "tool_use")
+})

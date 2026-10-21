@@ -314,7 +314,11 @@ method(value_finish_reason, ProviderOpenAI) <- function(provider, result) {
     return(NA_character_)
   }
   if (identical(status, "completed")) {
-    return("success")
+    # The Responses API reports "completed" when the model calls a tool
+    has_tool_call <- any(map_lgl(result$output, function(output) {
+      identical(output$type, "function_call")
+    }))
+    return(if (has_tool_call) "tool_use" else "success")
   }
   if (!identical(status, "incomplete")) {
     return(I(status))
