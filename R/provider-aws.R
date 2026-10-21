@@ -116,10 +116,16 @@ NULL
 #'   ```R
 #'   api_args = list(
 #'     additionalModelRequestFields = list(
-#'       thinking = list(type = "enabled", budget_tokens = 4000)
+#'       thinking = list(type = "adaptive"),
+#'       output_config = list(effort = "high")
 #'     )
 #'   )
 #'   ```
+#'
+#'   Claude Sonnet 4.6, Opus 4.6, and later models reject manual budgets
+#'   (`thinking = list(type = "enabled", budget_tokens = ...)`) with a 400 error;
+#'   use adaptive thinking with an effort level as above. Earlier models still
+#'   take `budget_tokens`.
 #'
 #'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
 #'   for more details.
