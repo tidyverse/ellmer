@@ -82,7 +82,7 @@ is either a \link{Chat} object (if successful), a \code{NULL} (if the request wa
 performed) or an error object (if it failed).
 
 For \code{parallel_chat_text()}, a character vector with one element for each
-prompt. Requests that weren't succesful get an \code{NA}.
+prompt. Requests that weren't successful get an \code{NA}.
 
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
