@@ -1,9 +1,8 @@
 # ellmer (development version)
 
-* `Chat` gains a `$get_max_context_length()` method that reports the current model's maximum context length in tokens, so you can tell how much of it `$get_tokens()` has used (@nbenn, #1083).
-* `models_anthropic()`, `models_google_gemini()`, `models_groq()`, `models_lmstudio()`, `models_mistral()`, `models_ollama()`, `models_posit()`, and `models_vllm()` gain a `max_context_length` column reporting how many tokens the model accepts, as does any other OpenAI-compatible endpoint that reports `context_window`. Every other `models_*()` function gains the column too, filled with `NA` where the provider doesn't report one (@nbenn, #1083).
+* New `Chat$get_max_context_length()` returns the maximum context length of the current model, in tokens, so you can compare it with `$get_tokens()`. Where the provider reports it, `models_*()` functions also include it in a new `max_context_length` column (@nbenn, #1083).
 * `models_aws_bedrock()` with `api = "messages"` or `api = "responses"` now lists models from `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat requests (@karawoo, #1205).
-* `models_mistral()` no longer errors on R 4.2 and earlier, where `as.POSIXct()` on a numeric requires an explicit `origin` (@nbenn, #1083).
+* The `models_mistral()` function no longer errors on R 4.2 and earlier, where `as.POSIXct()` on a numeric requires an explicit `origin` (@nbenn, #1083).
 
 # ellmer 0.5.2
 
