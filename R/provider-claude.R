@@ -415,7 +415,19 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   } else if (chunk$type == "message_delta") {
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
-    result$usage$output_tokens <- chunk$usage$output_tokens
+    # `message_delta` usage is cumulative, and for server tools its input and
+    # cache counts can exceed those reported by `message_start`.
+    for (field in c(
+      "input_tokens",
+      "cache_creation_input_tokens",
+      "cache_read_input_tokens",
+      "output_tokens",
+      "server_tool_use"
+    )) {
+      if (!is.null(chunk$usage[[field]])) {
+        result$usage[[field]] <- chunk$usage[[field]]
+      }
+    }
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
