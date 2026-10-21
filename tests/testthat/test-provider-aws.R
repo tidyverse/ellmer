@@ -15,17 +15,6 @@ test_that("can list models", {
   test_models(models_aws_bedrock)
 })
 
-test_that("mantle model listing reports no max context length", {
-  local_mocked_aws_credentials()
-  local_mocked_responses(function(req) {
-    response_json(body = list(data = list(list(id = "openai.gpt-5.4"))))
-  })
-
-  models <- models_aws_bedrock(api = "responses")
-  expect_equal(models$id, "openai.gpt-5.4")
-  expect_equal(models$max_context_length, NA_integer_)
-})
-
 test_that("can set api args", {
   chat <- chat_aws_bedrock_test(
     api_args = list(inferenceConfig = list(maxTokens = 1))

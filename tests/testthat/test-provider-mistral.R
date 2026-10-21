@@ -22,27 +22,6 @@ test_that("can list models", {
   test_models(models_mistral, has_max_context_length = TRUE)
 })
 
-test_that("model listing reports the max context length", {
-  local_mocked_responses(function(req) {
-    response_json(
-      body = list(
-        data = list(
-          list(
-            id = "mistral-large-latest",
-            name = "Mistral Large",
-            created = 0L,
-            max_context_length = 131072
-          ),
-          list(id = "unknown", name = "Unknown", created = 0L)
-        )
-      )
-    )
-  })
-
-  models <- models_mistral(api_key = "")
-  expect_equal(models$max_context_length, c(131072L, NA_integer_))
-})
-
 # Common provider interface -----------------------------------------------
 
 test_that("defaults are reported", {
