@@ -41,6 +41,15 @@
   in. It also no longer errors when streaming a response that is only a
   number, which Cloudflare sends as a JSON number instead of a string
   ([\#1164](https://github.com/tidyverse/ellmer/issues/1164)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  now uses Google’s Interactions API. It now accepts remote images via
+  [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md).
+  `frequency_penalty`, `presence_penalty`, `log_probs` and
+  `reasoning_tokens` are no longer supported and warn. Structured output
+  no longer works with Gemini 2.5 models, so upgrade to Gemini 3 or
+  newer if you use `chat_structured()`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1155](https://github.com/tidyverse/ellmer/issues/1155)).
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   now sends `type = "message"` on every input item to the Responses API,
   so OpenAI-compatible servers that require it (e.g. llama.cpp) no
