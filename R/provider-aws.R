@@ -122,10 +122,11 @@ NULL
 #'   )
 #'   ```
 #'
-#'   Claude Sonnet 4.6, Opus 4.6, and later models reject manual budgets
-#'   (`thinking = list(type = "enabled", budget_tokens = ...)`) with a 400 error;
-#'   use adaptive thinking with an effort level as above. Earlier models still
-#'   take `budget_tokens`.
+#'   Fixed thinking budgets (`thinking = list(type = "enabled", budget_tokens = ...)`)
+#'   are deprecated on Claude Opus 4.6 and Sonnet 4.6, and not supported by
+#'   later models (including the default, Claude Sonnet 5), so use adaptive
+#'   thinking with an effort level there. Earlier models still take
+#'   `budget_tokens`.
 #'
 #'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
 #'   for more details.
