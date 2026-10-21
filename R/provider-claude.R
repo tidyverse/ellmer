@@ -516,7 +516,7 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
         extra = list(signature = content$signature)
       ))
     } else if (content$type == "redacted_thinking") {
-      # https://platform.claude.com/docs/en/build-with-claude/extended-thinking#thinking-redaction
+      # https://platform.claude.com/docs/en/build-with-claude/thinking#redacted-thinking-blocks
       list(ContentThinking("", extra = list(redacted_data = content$data)))
     } else if (content$type == "fallback") {
       # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
