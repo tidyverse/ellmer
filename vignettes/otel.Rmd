@@ -46,9 +46,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 OTEL_SERVICE_NAME=my-app
 ```
 
-Your tool's docs will tell you which endpoint and headers to use. If no exporter is set, ellmer records nothing and the cost is close to zero. See `?otel::environmentvariables` for all the options, including `OTEL_R_SUPPRESS_SCOPES` to turn off data from one package (e.g. `OTEL_R_SUPPRESS_SCOPES=ellmer`).
-
-<!-- TODO: `OTEL_R_SUPPRESS_SCOPES=ellmer` needs the otel release that fixes r-lib/otel#50 and r-lib/otel#52. Once it is on CRAN, raise `otel (>= 0.2.0)` in DESCRIPTION to that version. -->
+Your tool's docs will tell you which endpoint and headers to use. If no exporter is set, ellmer records nothing and the cost is close to zero. See `?otel::environmentvariables` for all the options, including `OTEL_R_SUPPRESS_SCOPES` to turn off data from one package (e.g. `OTEL_R_SUPPRESS_SCOPES=ellmer`, which needs a version of otel newer than 0.2.0).
 
 Now use ellmer as you normally would:
 
