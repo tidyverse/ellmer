@@ -385,7 +385,9 @@ method(value_finish_reason, ProviderGoogleGemini) <- function(
   switch(
     reason,
     # Gemini finishes with STOP when it calls a tool
-    STOP = if (any(map_lgl(candidate$content$parts, has_name, "functionCall"))) {
+    STOP = if (
+      any(map_lgl(candidate$content$parts, has_name, "functionCall"))
+    ) {
       "tool_use"
     } else {
       "success"
