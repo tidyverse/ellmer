@@ -516,7 +516,13 @@ test_that("can count tokens", {
 })
 
 test_that("finish reasons are standardised", {
-  provider <- chat_google_gemini(credentials = \() "key")$get_provider()
+  # Vertex uses the generateContent API; Gemini now uses the Interactions API
+  provider <- ProviderGoogleGenerateContent(
+    name = "Google/Vertex",
+    base_url = "https://example.com",
+    credentials = \() list(),
+    project_id = "project"
+  )
   finish_reason <- function(reason, parts = list(list(text = "hi"))) {
     value_finish_reason(
       provider,
