@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- New
+  [`vignette("otel")`](https://ellmer.tidyverse.org/dev/articles/otel.md)
+  describes how to turn on OpenTelemetry tracing and metrics, what
+  ellmer records, and how ellmer’s spans join your own traces
+  ([@schloerke](https://github.com/schloerke),
+  [\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
 - The OpenTelemetry `gen_ai.input.messages` attribute is no longer
   dropped when a tool result returns a `Content` object, such as an
   image ([@taekop](https://github.com/taekop),

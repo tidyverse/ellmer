@@ -4,6 +4,8 @@
 
 - [Getting started with
   ellmer](https://ellmer.tidyverse.org/dev/articles/ellmer.md):
+- [Monitoring with
+  OpenTelemetry](https://ellmer.tidyverse.org/dev/articles/otel.md):
 - [Programming with
   ellmer](https://ellmer.tidyverse.org/dev/articles/programming.md):
 - [Prompt
