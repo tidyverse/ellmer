@@ -30,7 +30,7 @@ test_that("tool can get name", {
   expect_match(td@name, "^tool_")
 })
 
-test_that("json_schema_parameters generates correct paramters if no arguments", {
+test_that("json_schema_parameters generates correct parameters if no arguments", {
   expect_equal(
     as_json(test_provider(), type_object()),
     list(

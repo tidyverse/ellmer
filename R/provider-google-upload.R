@@ -38,7 +38,7 @@ google_upload <- function(
     api_key = api_key
   )
 
-  provider <- ProviderGoogleGemini(
+  provider <- ProviderGoogleInteractions(
     name = "Google/Gemini",
     base_url = paste0(base_url, "v1beta/"),
     credentials = credentials
@@ -153,7 +153,7 @@ gemini_download_file <- function(provider, name, path) {
 
 # File management --------------------------------------------------------------
 
-method(file_upload, ProviderGoogleGemini) <- function(
+method(file_upload, ProviderGoogle) <- function(
   provider,
   path,
   mime_type = NULL,
@@ -186,7 +186,7 @@ method(file_upload, ProviderGoogleGemini) <- function(
   )
 }
 
-method(file_list, ProviderGoogleGemini) <- function(provider, ...) {
+method(file_list, ProviderGoogle) <- function(provider, ...) {
   check_gemini_files_api(provider)
 
   data <- list()
@@ -217,7 +217,7 @@ method(file_list, ProviderGoogleGemini) <- function(provider, ...) {
   )
 }
 
-method(file_get, ProviderGoogleGemini) <- function(provider, id, ...) {
+method(file_get, ProviderGoogle) <- function(provider, id, ...) {
   check_gemini_files_api(provider)
 
   req <- base_request(provider)
@@ -239,7 +239,7 @@ method(file_get, ProviderGoogleGemini) <- function(provider, id, ...) {
   )
 }
 
-method(file_download, ProviderGoogleGemini) <- function(
+method(file_download, ProviderGoogle) <- function(
   provider,
   id,
   path,
@@ -253,7 +253,7 @@ method(file_download, ProviderGoogleGemini) <- function(
   gemini_download_file(provider, google_file_name(id), path)
 }
 
-method(file_delete, ProviderGoogleGemini) <- function(provider, id, ...) {
+method(file_delete, ProviderGoogle) <- function(provider, id, ...) {
   check_gemini_files_api(provider)
 
   req <- base_request(provider)
