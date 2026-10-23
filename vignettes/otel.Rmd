@@ -59,10 +59,10 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 OTEL_SERVICE_NAME=my-app
 ```
 
-Your tool's docs will tell you which endpoint and headers to use. If no exporter is set, ellmer records nothing and the
-cost is close to zero. See `?otel::environmentvariables` for all the options, including `OTEL_R_SUPPRESS_SCOPES` to turn
-off data from one package. For example, `OTEL_R_SUPPRESS_SCOPES=httr2` hides httr2's `POST` spans but keeps ellmer's
-(requires `otel >= 0.2.1`).
+Your tool's docs will tell you which endpoint and headers to use. If no exporter is set, ellmer records nothing and
+there is next to no cost. See `?otel::environmentvariables` for all the options, including `OTEL_R_SUPPRESS_SCOPES` to
+turn off data from one package. For example, `OTEL_R_SUPPRESS_SCOPES=httr2` hides httr2's `POST` spans but keeps
+ellmer's (requires `otel >= 0.2.1`).
 
 Now that we have set up the environment, use ellmer as you normally would:
 
@@ -108,7 +108,7 @@ When code execution fails during a span, that span will set an error status, an 
 exception event. A failed tool call only marks its `execute_tool` span: ellmer sends the error back to the model and the
 chat goes on, so `invoke_agent` can still end without an error. When a failure stops the whole call, like a failed model
 request, `invoke_agent` gets the same error status and type. A stream that you cancel with `stream_controller()` has
-`error.type = "cancelled"`, and a call that stops early, like after a keyboard interrupt, has
+`error.type = "cancelled"`, and a call that stops early, such as after a keyboard interrupt, has
 `error.type = "interrupted"`.
 
 ### Metrics
@@ -192,4 +192,4 @@ answer_question_async <- function(chat, question) {
 ```
 
 See `?promises::with_otel_span` for details. Other packages that use otel, like Shiny, record their own spans too.
-Together, they give you a trace of your whole app, with ellmer's spans naturally nested inside your app's spans.
+Together, they give you observability over your whole app, with ellmer's spans naturally nested inside your app's spans.
