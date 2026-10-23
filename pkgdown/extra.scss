@@ -1,0 +1,4 @@
+// pkgdown caps dropdowns at 280px, which hides the last grouped article
+.dropdown-menu[aria-labelledby="dropdown-articles"] {
+  max-height: none;
+}
