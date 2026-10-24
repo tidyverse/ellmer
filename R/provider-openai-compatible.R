@@ -638,7 +638,8 @@ method(models_list, ProviderOpenAICompatible) <- function(provider) {
   df <- data.frame(
     id = id,
     created_at = created,
-    owned_by = owned_by
+    owned_by = owned_by,
+    max_context_length = map_token_limit(json$data, "context_window")
   )
   df <- cbind(df, match_prices(provider@name, df$id))
   df[order(-xtfrm(df$created_at)), ]

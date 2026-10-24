@@ -279,6 +279,19 @@ Chat <- R6::R6Class(
       new_tokens + last$input + last$output + last$cached_input
     },
 
+    #' @description The current model's maximum context length, in tokens, as
+    #'   reported by the provider. Compare it to the input tokens in
+    #'   `$get_tokens()` to see how much of it a conversation has used.
+    #'
+    #'   The first call lists the provider's models, which takes a request to
+    #'   its model listing endpoint. The listing is then cached for the rest of
+    #'   the session.
+    #' @return A single integer, or `NA` if the provider doesn't list models
+    #'   or doesn't report a maximum context length for this one.
+    get_max_context_length = function() {
+      model_max_context_length(private$provider, private$model@name)
+    },
+
     #' @description
     #' `r lifecycle::badge("experimental")`
     #'

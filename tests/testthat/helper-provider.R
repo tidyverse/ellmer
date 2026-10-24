@@ -239,11 +239,30 @@ test_document_local <- function(chat_fun) {
 
 # Models ------------------------------------------------------------------
 
-test_models <- function(models_fun) {
+test_models <- function(models_fun, has_max_context_length = FALSE) {
   models <- models_fun()
   expect_gt(nrow(models), 0)
   expect_s3_class(models, "data.frame")
-  expect_contains(names(models), "id")
+  expect_contains(names(models), c("id", "max_context_length"))
+  expect_type(models$max_context_length, "integer")
+
+  if (has_max_context_length) {
+    expect_gt(sum(!is.na(models$max_context_length)), 0)
+  }
+
+  invisible(models)
+}
+
+local_model_listings <- function(frame = parent.frame()) {
+  old <- the$model_listings
+  the$model_listings <- new_environment()
+  defer(the$model_listings <- old, envir = frame)
+}
+
+local_ollama_cache <- function(frame = parent.frame()) {
+  old <- the$ollama_cache
+  the$ollama_cache <- new_environment()
+  defer(the$ollama_cache <- old, envir = frame)
 }
 
 # Token counting -----------------------------------------------------------
