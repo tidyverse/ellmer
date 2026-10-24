@@ -121,7 +121,7 @@ dots_named <- function(...) {
   x
 }
 
-#' Are credentials avaiable?
+#' Are credentials available?
 #'
 #' Used for examples/testing.
 #'

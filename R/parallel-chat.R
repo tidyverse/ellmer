@@ -34,7 +34,7 @@
 #' performed) or an error object (if it failed).
 #'
 #' For `parallel_chat_text()`, a character vector with one element for each
-#' prompt. Requests that weren't succesful get an `NA`.
+#' prompt. Requests that weren't successful get an `NA`.
 #'
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will
