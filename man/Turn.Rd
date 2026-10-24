@@ -23,15 +23,7 @@ AssistantTurn(
   finish_reason = NA_character_
 )
 
-AssistantPartialTurn(
-  contents = list(),
-  json = list(),
-  tokens = c(NA_real_, NA_real_, NA_real_),
-  cost = NA_real_,
-  duration = NA_real_,
-  finish_reason = NA_character_,
-  reason = "interrupted"
-)
+AssistantPartialTurn(..., reason = "interrupted")
 }
 \arguments{
 \item{role}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
@@ -58,6 +50,8 @@ across providers to one of: \code{"success"}, \code{"tool_use"},
 \code{"context_window"}.
 Unrecognized provider-specific reasons are passed through as-is.
 \code{NA} when not available.}
+
+\item{...}{Arguments passed on to \link{AssistantTurn}.}
 
 \item{reason}{A character string describing why the turn was interrupted.
 Defaults to \code{"interrupted"}.}
