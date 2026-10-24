@@ -102,7 +102,7 @@ Another direction is to give the chatbot additional context about your current e
 
 ### Structured data extraction
 
-LLMs are often very good at extracting structured data from unstructured text. This can give you traction to analyse data that was previously unaccessible. For example:
+LLMs are often very good at extracting structured data from unstructured text. This can give you traction to analyse data that was previously inaccessible. For example:
 
 * Customer tickets and GitHub issues: you can use LLMs for quick and dirty sentiment analysis by extracting any specifically mentioned products and summarising the discussion as a few bullet points.
 

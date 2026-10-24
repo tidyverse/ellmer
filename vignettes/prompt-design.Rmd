@@ -45,9 +45,9 @@ It's highly likely that you'll end up writing long, possibly multi-page prompts.
 
 In terms of file names, if you only have one prompt in your project, call it `prompt.md`. If you have multiple prompts, give them informative names like `prompt-extract-metadata.md` or `prompt-summarize-text.md`. If you're writing a package, put your prompt(s) in `inst/prompts`, otherwise it's fine to put them in the project's root directory.
 
-Your prompts are going to change over time, so we'd highly recommend commiting them to a git repo. That will ensure that you can easily see what has changed, and that if you accidentally make a mistake you can easily roll back to a known good verison.
+Your prompts are going to change over time, so we'd highly recommend committing them to a git repo. That will ensure that you can easily see what has changed, and that if you accidentally make a mistake you can easily roll back to a known good version.
 
-If your prompt includes dynamic data, use `ellmer::interpolate_file()` to intergrate it into your prompt. `interpolate_file()` works like [glue](https://glue.tidyverse.org) but uses `{{ }}` instead of `{ }` to make it easier to work with JSON.
+If your prompt includes dynamic data, use `ellmer::interpolate_file()` to integrate it into your prompt. `interpolate_file()` works like [glue](https://glue.tidyverse.org) but uses `{{ }}` instead of `{ }` to make it easier to work with JSON.
 
 As you iterate the prompt, it's a good idea to build up a small set of challenging examples that you can regularly re-check with your latest version of the prompt. Currently you'll need to do this by hand, but we hope to eventually provide tools that'll help you do this a little more formally.
 
@@ -251,7 +251,7 @@ chat$chat(ingredients)
 
 ### Provide examples
 
-This isn't a bad start, but I prefer to cook with weight and I only want to see volumes if weight isn't available so I provide a couple of examples of what I'm looking for. I was pleasantly suprised that I can provide the input and output examples in such a loose format.
+This isn't a bad start, but I prefer to cook with weight and I only want to see volumes if weight isn't available so I provide a couple of examples of what I'm looking for. I was pleasantly surprised that I can provide the input and output examples in such a loose format.
 
 ```{r}
 #| label: data-examples
