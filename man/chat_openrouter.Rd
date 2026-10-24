@@ -21,10 +21,10 @@ chat_openrouter(
 
 \item{api_key}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{credentials} instead.}
 
-\item{credentials}{Override the default credentials. You generally should not need this argument; instead set the \code{OPENROUTER_API_KEY} environment variable. The best place to set this is in \code{.Renviron},
-which you can easily edit by calling \code{usethis::edit_r_environ()}.
-
-If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
+\item{credentials}{A zero-argument function that returns the credentials
+to use in place of \code{OPENROUTER_API_KEY} or the default browser login,
+either as a string, a named list of headers, or a function that modifies
+the request. You should not usually need to set this.}
 
 \item{model}{The model to use for the chat (defaults to "gpt-5.6-terra").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
@@ -61,6 +61,18 @@ Sign up at \url{https://openrouter.ai}.
 
 Support for features depends on the underlying model that you use; see
 \url{https://openrouter.ai/models} for details.
+\subsection{Authentication}{
+
+If the \code{OPENROUTER_API_KEY} environment variable is set, \code{chat_openrouter()}
+uses it. Otherwise, the first time you use it in an interactive session,
+your browser will open so you can log in to OpenRouter and authorize ellmer.
+In a hosted session, such as Posit Workbench, OpenRouter can't send you
+back to R, so you'll be asked to paste in the code it shows you instead.
+The resulting key is cached on disk (see \code{\link[httr2:oauth_cache_path]{httr2::oauth_cache_path()}}), so
+you should only need to do this once per machine. You can see and revoke the
+key at \url{https://openrouter.ai/keys}; if you revoke it, you'll be asked to
+log in again the next time you use \code{chat_openrouter()}.
+}
 }
 \examples{
 \dontrun{

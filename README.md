@@ -112,6 +112,8 @@ managed by [Posit
 Workbench](https://docs.posit.co/ide/server-pro/user/posit-workbench/managed-credentials/managed-credentials.html)
 and [Posit
 Connect](https://docs.posit.co/connect/user/oauth-integrations/#adding-oauth-integrations-to-deployed-content).
+`chat_posit()` and `chat_openrouter()` can also log you in from the
+browser.
 
 If you find cases where ellmer cannot detect credentials from one of
 these cloud providers, feel free to open an issue; we’re happy to add
