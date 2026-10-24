@@ -172,7 +172,9 @@ test_that("provider annotations replay only to their native provider", {
     google = ContentToolRequestSearch(
       "google query",
       extra = list(
-        webSearchQueries = list("google-marker")
+        type = "google_search_call",
+        id = "google-marker",
+        arguments = list(queries = list("google query"))
       )
     )
   )
@@ -197,7 +199,7 @@ test_that("provider annotations replay only to their native provider", {
       expect_false(grepl("citation-marker", json, fixed = TRUE))
       expect_equal(
         grepl(paste0(source, "-marker"), json, fixed = TRUE),
-        target == source && target %in% c("anthropic", "openai"),
+        target == source,
         info = paste("target:", target, "source:", source)
       )
     }
