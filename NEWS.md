@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
 * Turns from `chat_google_gemini()` and `chat_openai()` that call a tool now have `finish_reason = "tool_use"` instead of `"success"`, matching the other providers. `chat_google_gemini()` also reports Gemini's `LANGUAGE`, `IMAGE_SAFETY`, `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as `"content_filter"` rather than passing them through as unexpected reasons (#1199).
 * The OpenTelemetry `gen_ai.input.messages` attribute is no longer dropped when a tool result returns a `Content` object, such as an image (@taekop, #1145).
 * OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
