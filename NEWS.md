@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* New `chat_cheaper_inference()` for models hosted at <https://cheaperinference.com>, an OpenAI-compatible gateway that gives access to models from several labs with one API key.
 * The OpenTelemetry `gen_ai.input.messages` attribute is no longer dropped when a tool result returns a `Content` object, such as an image (@taekop, #1145).
 * OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).

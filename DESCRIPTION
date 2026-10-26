@@ -102,6 +102,7 @@ Collate:
     'provider-aws-api.R'
     'provider-openai-compatible.R'
     'provider-openai.R'
+    'provider-cheaper-inference.R'
     'provider-claude.R'
     'provider-aws.R'
     'provider-azure.R'

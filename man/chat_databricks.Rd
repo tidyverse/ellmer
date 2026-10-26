@@ -92,6 +92,7 @@ Other chatbots:
 \code{\link[=chat_anthropic]{chat_anthropic()}},
 \code{\link[=chat_aws_bedrock]{chat_aws_bedrock()}},
 \code{\link[=chat_azure_openai]{chat_azure_openai()}},
+\code{\link[=chat_cheaper_inference]{chat_cheaper_inference()}},
 \code{\link[=chat_cloudflare]{chat_cloudflare()}},
 \code{\link[=chat_deepseek]{chat_deepseek()}},
 \code{\link[=chat_github]{chat_github()}},

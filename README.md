@@ -58,6 +58,7 @@ community; contributions to improve them are especially welcome.
 
 ### Community providers
 
+- Cheaper Inference: `chat_cheaper_inference()`.
 - Cloudflare: `chat_cloudflare()`.
 - Groq: `chat_groq()`.
 - Hugging Face: `chat_huggingface()`.

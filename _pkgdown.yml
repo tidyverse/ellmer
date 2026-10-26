@@ -50,6 +50,7 @@ reference:
     Community contributed and maintained. Contributions to improve these
     providers are especially welcome.
   contents:
+  - chat_cheaper_inference
   - chat_cloudflare
   - chat_groq
   - chat_huggingface
