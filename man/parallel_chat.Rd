@@ -87,8 +87,9 @@ prompt. Requests that weren't successful get an \code{NA}.
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 be a tibble with one row for each prompt, and one column for each
-property. If the output is a data frame, and some requests error,
-an \code{.error} column will be added with the error objects.
+property. If the output is a data frame, and some requests error or return
+an incomplete or unparseable response, an \code{.error} column will be added with
+the error objects.
 }
 \description{
 If you have multiple prompts, you can submit them in parallel. This is
