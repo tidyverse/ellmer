@@ -137,6 +137,7 @@ Other chatbots:
 \code{\link[=chat_github]{chat_github()}},
 \code{\link[=chat_groq]{chat_groq()}},
 \code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_llamacpp]{chat_llamacpp()}},
 \code{\link[=chat_lmstudio]{chat_lmstudio()}},
 \code{\link[=chat_mistral]{chat_mistral()}},
 \code{\link[=chat_ollama]{chat_ollama()}},
