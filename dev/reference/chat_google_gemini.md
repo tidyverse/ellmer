@@ -21,15 +21,26 @@ order:
 - An API key set in the `GOOGLE_API_KEY` or `GEMINI_API_KEY` env var
   (Gemini only).
 
+- Viewer-based credentials on Posit Connect, if the connectcreds package
+  is installed.
+
 - Google's default application credentials, if the gargle package is
   installed.
 
-- Viewer-based credentials on Posit Connect, if the connectcreds
-  package.
+- A browser-based OAuth flow, if you're in an interactive session
+  (Gemini only). On a hosted session (e.g. Posit Workbench or Google
+  Colab), the browser can't redirect back to R, so you'll be shown a
+  code to paste into the console instead. Set the
+  `ELLMER_GEMINI_OAUTH_CLIENT` env var to `"desktop"` or `"web"` to
+  force one flow or the other.
 
-- **\[experimental\]**. An browser-based OAuth flow, if you're in an
-  interactive session. This currently uses an unverified OAuth app (so
-  you will get a scary warning); we plan to verify in the near future.
+  Browser sign-in doesn't give access to file uploads, so the
+  `$file_upload()` and related methods,
+  [`google_upload()`](https://ellmer.tidyverse.org/dev/reference/google_upload.md),
+  and
+  [`batch_chat()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
+  won't work with it. Use an API key or application default credentials
+  for those.
 
 ## Usage
 

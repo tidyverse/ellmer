@@ -12,14 +12,19 @@ Authentication
 These functions try a number of authentication strategies, in this order:
 An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
 (Gemini only).
+Viewer-based credentials on Posit Connect, if the connectcreds
+package is installed.
 Google's default application credentials, if the gargle package
 is installed.
-Viewer-based credentials on Posit Connect, if the connectcreds
-package.
-. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.
+A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the ELLMER_GEMINI_OAUTH_CLIENT env var to
+&quot;desktop&quot; or &quot;web&quot; to force one flow or the other.
+Browser sign-in doesn't give access to file uploads, so the
+$file_upload() and related methods, google_upload(), and
+batch_chat() won't work with it. Use an API key or application default
+credentials for those.
 
 
 
@@ -36,14 +41,19 @@ Authentication
 These functions try a number of authentication strategies, in this order:
 An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
 (Gemini only).
+Viewer-based credentials on Posit Connect, if the connectcreds
+package is installed.
 Google's default application credentials, if the gargle package
 is installed.
-Viewer-based credentials on Posit Connect, if the connectcreds
-package.
-. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.
+A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the ELLMER_GEMINI_OAUTH_CLIENT env var to
+&quot;desktop&quot; or &quot;web&quot; to force one flow or the other.
+Browser sign-in doesn't give access to file uploads, so the
+$file_upload() and related methods, google_upload(), and
+batch_chat() won't work with it. Use an API key or application default
+credentials for those.
 
 
 
@@ -116,14 +126,19 @@ models, so upgrade to Gemini 3 or newer if you use <code>chat_structured()</code
 
 <p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> or <code>GEMINI_API_KEY</code> env var
 (Gemini only).</p></li>
+<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
+package is installed.</p></li>
 <li><p>Google's default application credentials, if the <span class="pkg">gargle</span> package
 is installed.</p></li>
-<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
-package.</p></li>
-<li><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a>. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.</p></li>
+<li><p>A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the <code>ELLMER_GEMINI_OAUTH_CLIENT</code> env var to
+<code>"desktop"</code> or <code>"web"</code> to force one flow or the other.</p>
+<p>Browser sign-in doesn't give access to file uploads, so the
+<code>$file_upload()</code> and related methods, <code><a href="google_upload.html">google_upload()</a></code>, and
+<code><a href="batch_chat.html">batch_chat()</a></code> won't work with it. Use an API key or application default
+credentials for those.</p></li>
 </ul></div>
 
     </div>

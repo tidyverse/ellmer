@@ -56,6 +56,14 @@
   newer if you use `chat_structured()`
   ([@thisisnic](https://github.com/thisisnic),
   [\#1155](https://github.com/tidyverse/ellmer/issues/1155)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)’s
+  browser-based OAuth flow now uses a verified Google OAuth app, so you
+  no longer see the “unverified app” warning. It also works on hosted
+  sessions like Posit Workbench and Google Colab, and
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  no longer falls back to it
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1156](https://github.com/tidyverse/ellmer/issues/1156)).
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
   now sends `type = "message"` on every input item to the Responses API,
   so OpenAI-compatible servers that require it (e.g. llama.cpp) no
