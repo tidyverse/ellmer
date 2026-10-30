@@ -54,6 +54,7 @@ its own.}
     \item \href{#method-Chat-get_tokens}{\code{Chat$get_tokens()}}
     \item \href{#method-Chat-get_cost}{\code{Chat$get_cost()}}
     \item \href{#method-Chat-token_count}{\code{Chat$token_count()}}
+    \item \href{#method-Chat-get_max_context_length}{\code{Chat$get_max_context_length()}}
     \item \href{#method-Chat-file_upload}{\code{Chat$file_upload()}}
     \item \href{#method-Chat-file_list}{\code{Chat$file_list()}}
     \item \href{#method-Chat-file_get}{\code{Chat$file_get()}}
@@ -360,6 +361,28 @@ extraction, created with a \code{\link[=type_boolean]{type_()}} function.}
   }
   \subsection{Returns}{
     The estimated number of input tokens.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Chat-get_max_context_length"></a>}}
+\if{latex}{\out{\hypertarget{method-Chat-get_max_context_length}{}}}
+\subsection{\code{Chat$get_max_context_length()}}{
+  The current model's maximum context length, in tokens, as
+reported by the provider. Compare it to the input tokens in
+\verb{$get_tokens()} to see how much of it a conversation has used.
+
+The first call lists the provider's models, which takes a request to
+its model listing endpoint. The listing is then cached for the rest of
+the session.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Chat$get_max_context_length()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A single integer, or \code{NA} if the provider doesn't list models
+or doesn't report a maximum context length for this one.
   }
 }
 

@@ -152,6 +152,7 @@ method(models_list, ProviderPortkeyAI) <- function(provider) {
 
   data.frame(
     id = id,
-    slug = slug
+    slug = slug,
+    max_context_length = rep(NA_integer_, length(id))
   )
 }

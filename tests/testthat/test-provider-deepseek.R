@@ -14,7 +14,7 @@ test_that("can make simple streaming request", {
 })
 
 test_that("can list models", {
-  test_models(models_deepseek)
+  test_models(models_deepseek, has_max_context_length = TRUE)
 })
 
 # Common provider interface -----------------------------------------------
