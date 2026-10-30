@@ -515,6 +515,9 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       ))
+    } else if (content$type == "redacted_thinking") {
+      # https://platform.claude.com/docs/en/build-with-claude/thinking#redacted-thinking-blocks
+      list(ContentThinking("", extra = list(redacted_data = content$data)))
     } else if (content$type == "fallback") {
       # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
       NULL
@@ -953,6 +956,10 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   x,
   ...
 ) {
+  if (!is.null(x@extra$redacted_data)) {
+    return(list(type = "redacted_thinking", data = x@extra$redacted_data))
+  }
+
   if (identical(x@thinking, "")) {
     return()
   }
