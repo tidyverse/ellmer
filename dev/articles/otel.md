@@ -35,8 +35,7 @@ Then tell otel where to send data using environment variables; otelsdk’s
 [Collecting telemetry
 data](https://otelsdk.r-lib.org/reference/collecting.html) page covers
 this in more detail. Set the variables before R starts. You can edit
-your R’s environment file using
-[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
+your R’s environment file using `usethis::edit_r_environ()`.
 
 To try things out, print spans to the console:
 

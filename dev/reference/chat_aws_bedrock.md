@@ -173,9 +173,15 @@ models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
 
       api_args = list(
         additionalModelRequestFields = list(
-          thinking = list(type = "enabled", budget_tokens = 4000)
+          thinking = list(type = "adaptive"),
+          output_config = list(effort = "high")
         )
       )
+
+  The example above uses adaptive thinking, which is what current Claude
+  models expect. Older models (before Claude Opus 4.6 and Sonnet 4.6)
+  don't support it; for those, set a fixed budget instead with
+  `thinking = list(type = "enabled", budget_tokens = 4000)`.
 
   See
   <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
