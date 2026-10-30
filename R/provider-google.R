@@ -406,19 +406,31 @@ method(value_finish_reason, ProviderGoogleGenerateContent) <- function(
   provider,
   result
 ) {
-  reason <- result$candidates[[1]]$finishReason
+  candidate <- result$candidates[[1]]
+  reason <- candidate$finishReason
   if (is.null(reason)) {
     return(NA_character_)
   }
   switch(
     reason,
-    STOP = "success",
+    # Gemini finishes with STOP when it calls a tool
+    STOP = if (
+      any(map_lgl(candidate$content$parts, has_name, "functionCall"))
+    ) {
+      "tool_use"
+    } else {
+      "success"
+    },
     MAX_TOKENS = "max_tokens",
     SAFETY = ,
     RECITATION = ,
+    LANGUAGE = ,
     BLOCKLIST = ,
     PROHIBITED_CONTENT = ,
-    SPII = "content_filter",
+    SPII = ,
+    IMAGE_SAFETY = ,
+    IMAGE_PROHIBITED_CONTENT = ,
+    IMAGE_RECITATION = "content_filter",
     I(reason)
   )
 }
