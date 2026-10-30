@@ -76,11 +76,10 @@ to enable thinking effort in Anthropic Claude models:
 )
 }\if{html}{\out{</div>}}
 
-Fixed thinking budgets (\code{thinking = list(type = "enabled", budget_tokens = ...)})
-are deprecated on Claude Opus 4.6 and Sonnet 4.6, and not supported by
-later models (including the default, Claude Sonnet 5), so use adaptive
-thinking with an effort level there. Earlier models still take
-\code{budget_tokens}.
+The example above uses adaptive thinking, which is what current Claude
+models expect. Older models (before Claude Opus 4.6 and Sonnet 4.6) don't
+support it; for those, set a fixed budget instead with
+\code{thinking = list(type = "enabled", budget_tokens = 4000)}.
 
 See \url{https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html}
 for more details.}
