@@ -29,8 +29,11 @@ SDKs' endpoint override environment variables:
 \code{AWS_ENDPOINT_URL_BEDROCK_RUNTIME} for \code{"converse"}, and
 \code{AWS_ENDPOINT_URL_BEDROCK_MANTLE} for \code{"messages"} and \code{"responses"}
 (which append their API-specific path to the override).
-\code{models_aws_bedrock()} talks to a different AWS service, so it honors
-\code{AWS_ENDPOINT_URL_BEDROCK} instead.}
+For \code{"converse"}, \code{models_aws_bedrock()} lists models from the Bedrock
+control plane, which is a different AWS service, so it honors
+\code{AWS_ENDPOINT_URL_BEDROCK} instead. For \code{"messages"} and \code{"responses"},
+it lists models from \code{base_url}, with the API-specific path replaced by
+\verb{/v1}.}
 
 \item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
