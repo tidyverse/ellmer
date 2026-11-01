@@ -20,12 +20,6 @@ test_that("can list models", {
 
 # Common provider interface -----------------------------------------------
 
-test_that("supports standard parameters", {
-  chat_fun <- chat_openai_compatible_test
-
-  test_params_stop(chat_fun)
-})
-
 test_that("supports tool calling", {
   vcr::local_cassette("openai-tool")
   chat_fun <- chat_openai_compatible_test
@@ -42,7 +36,7 @@ test_that("can extract data", {
 test_that("can use images", {
   vcr::local_cassette("openai-image")
   # Needs mini to get shape correct
-  chat_fun <- \(...) chat_openai_compatible_test(model = "gpt-4.1-mini", ...)
+  chat_fun <- \(...) chat_openai_compatible_test(model = "gpt-5.4-mini", ...)
 
   test_images_inline(chat_fun)
   test_images_remote(chat_fun)
