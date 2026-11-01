@@ -47,7 +47,7 @@ In ellmer, you can see how many tokens a conversations has used by printing it, 
 
 ```{r}
 #| cassette: token-usage
-chat <- chat_openai(model = "gpt-4.1")
+chat <- chat_openai(model = "gpt-5.4-mini")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat
 
