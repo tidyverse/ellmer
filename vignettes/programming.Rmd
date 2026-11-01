@@ -103,7 +103,7 @@ There's a bit of a problem with our `capital()` function: we can use our convers
 #| label: uhoh
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-5.4-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 capital(chat, "New Zealand")
 ```
@@ -114,7 +114,7 @@ We can avoid that problem by using `$set_turns()` to reset the conversational hi
 #| label: reset
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-5.4-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 
 capital <- function(chat, country) {
