@@ -4,12 +4,13 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What
-        time is it right now in Manchester?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
-        don’t have live clock access, so I can’t tell the exact current time in Manchester
-        right now.\n\nManchester is in the UK time zone:\n- **GMT** in winter\n- **BST
-        (GMT+1)** in summer\n\nIf you want, I can help you figure it out from your
-        current time zone, or you can check your device clock and compare."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
-        time is it right now in Manchester?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
+        time is it right now in Chicago?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
+        can’t see the current live time. Chicago is in the **America/Chicago** time
+        zone, which is:\n\n- **Central Standard Time (CST)**, UTC−6, or\n- **Central
+        Daylight Time (CDT)**, UTC−5, depending on daylight saving time.\n\nIf you
+        want, I can help you calculate the current Chicago time from your local time
+        or show you how to check it quickly on your device."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -21,18 +22,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a53dc999cf2c41d6-LHR
+      cf-ray: a53df9935e8c94fc-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 01 Nov 2026 20:53:11 GMT
+      date: Sun, 01 Nov 2026 21:25:57 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '588'
+      openai-processing-ms: '1044'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=YwNpn7k1BymKc.wZTI5b2wep_KaWCDxWFNRicZs24Es-1793566391.3305142-1.0.1.1-2m5l9aV1bqb9eQgOcV4Lay.f3bsKrUSJeYYdqpDHExliPIliWUtTbzTz6DvAvCcbAe7BIFoNBtNIYPCDG8S2UG5YcGDLZ9Kp1GAZCK0EsXbvhkGHI8d2v6y.787PCH34;
+      set-cookie: __cf_bm=.9VXILhj92kh.q_FKy.YKeNftQwHM34N2ufLZEPiOS8-1793568356.382044-1.0.1.1-lUpR8y8f3IGFEEUXTFC7CC3r_OO5YTJWvHZp73Uq0KXHZ2k0Fd_XskVKN13Mmu9ekDEvQl.DIPTyGVv24SNnmnCzPSznNhMD.q80mtPYE3btjSmidAn9v2at7Lc2dTE0;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        01 Nov 2026 21:23:11 GMT
+        01 Nov 2026 21:55:57 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '5000'
@@ -41,20 +42,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '2000000'
       x-ratelimit-reset-requests: 12ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_350711d457134223bbe7e3e49af78849
+      x-request-id: req_b862a9c0692a4bada6f4356273aecd35
     body:
       string: |-
         {
-          "id": "resp_058f542bc418d1ef016ae7a6b7667487d298543ac50e169fdf",
+          "id": "resp_042764b047271399016ae7ae646ff487d2ac0940405815203f",
           "object": "response",
-          "created_at": 1793566391,
+          "created_at": 1793568356,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1793566391,
+          "completed_at": 1793568357,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -65,11 +66,11 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "fc_058f542bc418d1ef016ae7a6b7df6c87d299d6ce9784b10494",
+              "id": "fc_042764b047271399016ae7ae65082487d281aec35d0faaa330",
               "type": "function_call",
               "status": "completed",
-              "arguments": "{\"tz\":\"Europe/London\"}",
-              "call_id": "call_lyaui2yYWiGbYhviT8hPBrhY",
+              "arguments": "{\"tz\":\"America/Chicago\"}",
+              "call_id": "call_fRP68RloHiog8SpXgEGVClrS",
               "name": "get_current_time"
             }
           ],
@@ -143,7 +144,7 @@ http_interactions:
           "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 163,
+            "input_tokens": 178,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
@@ -152,24 +153,25 @@ http_interactions:
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 184
+            "total_tokens": 199
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-11-01 20:53:11
+  recorded_at: 2026-11-01 21:25:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What
-        time is it right now in Manchester?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
-        don’t have live clock access, so I can’t tell the exact current time in Manchester
-        right now.\n\nManchester is in the UK time zone:\n- **GMT** in winter\n- **BST
-        (GMT+1)** in summer\n\nIf you want, I can help you figure it out from your
-        current time zone, or you can check your device clock and compare."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
-        time is it right now in Manchester?"}]},{"type":"function_call","call_id":"fc_058f542bc418d1ef016ae7a6b7df6c87d299d6ce9784b10494","name":"get_current_time","arguments":"{\"tz\":\"Europe/London\"}"},{"type":"function_call_output","call_id":"fc_058f542bc418d1ef016ae7a6b7df6c87d299d6ce9784b10494","output":"2025-06-25
-        17:53:23 BST"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
+        time is it right now in Chicago?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
+        can’t see the current live time. Chicago is in the **America/Chicago** time
+        zone, which is:\n\n- **Central Standard Time (CST)**, UTC−6, or\n- **Central
+        Daylight Time (CDT)**, UTC−5, depending on daylight saving time.\n\nIf you
+        want, I can help you calculate the current Chicago time from your local time
+        or show you how to check it quickly on your device."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]},{"type":"function_call","call_id":"fc_042764b047271399016ae7ae65082487d281aec35d0faaa330","name":"get_current_time","arguments":"{\"tz\":\"America/Chicago\"}"},{"type":"function_call_output","call_id":"fc_042764b047271399016ae7ae65082487d281aec35d0faaa330","output":"2025-06-25
+        11:53:23 CDT"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
@@ -181,18 +183,18 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a53dc9a1ed3c41d6-LHR
+      cf-ray: a53df99ee8d994fc-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 01 Nov 2026 20:53:13 GMT
+      date: Sun, 01 Nov 2026 21:25:58 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '596'
+      openai-processing-ms: '551'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=.JWE3_Y2FD4E7C8a7dTLGhBmdwjNlsJvsVjQ5MJflDU-1793566392.6658251-1.0.1.1-yCZR9aIQIiD.1HVayTFiK3KEaXMTIPrcd24SZH1zlfgkzW_P3sapXKJ.O.DjbK.bAD7R7PAgw2u9LyiV8CF_cGREibmIqXLx.NJHJsR.bTPZW40ownTEA_ii_JgCUH0R;
+      set-cookie: __cf_bm=_5LeROxuaHWQ0EA4A6.FMxHpwe0tfm4a2i4ASUcenEU-1793568358.2281532-1.0.1.1-TSSBjyRVHv5Gv2DU9tMeMwVHsxyaX86gsPtjeKMvg_HVxBh7nIZG9BWhuGjuUCD1M.FL2yQcaRqzVkX4TJ86xGieDkmG1e_8orHqzd137eytWw8usD_FU0h3.UZgjSfv;
         HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        01 Nov 2026 21:23:13 GMT
+        01 Nov 2026 21:55:58 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-ratelimit-limit-requests: '5000'
@@ -201,20 +203,20 @@ http_interactions:
       x-ratelimit-remaining-tokens: '2000000'
       x-ratelimit-reset-requests: 12ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_8c991a9f4ad242909a24eebd75bc4e2a
+      x-request-id: req_ba7fe65c4dbb4db3bc4f10d3c21f79cb
     body:
       string: |-
         {
-          "id": "resp_0b56eba40b7b452b016ae7a6b8b9a487d2bc0688fd9ad4e100",
+          "id": "resp_08ae75385199991a016ae7ae664d4487d297ad7eac0818f641",
           "object": "response",
-          "created_at": 1793566392,
+          "created_at": 1793568358,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1793566393,
+          "completed_at": 1793568358,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
@@ -225,7 +227,7 @@ http_interactions:
           "moderation": null,
           "output": [
             {
-              "id": "msg_0b56eba40b7b452b016ae7a6b9324c87d2a35efa42e1dec659",
+              "id": "msg_08ae75385199991a016ae7ae66b3c887d28f70606d7fdbcc89",
               "type": "message",
               "status": "completed",
               "content": [
@@ -233,7 +235,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "It\u2019s **17:53:23 BST** in Manchester right now."
+                  "text": "The current time in Chicago is **11:53:23 AM CDT**."
                 }
               ],
               "phase": "final_answer",
@@ -310,19 +312,19 @@ http_interactions:
           "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 209,
+            "input_tokens": 224,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 19,
+            "output_tokens": 20,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 228
+            "total_tokens": 244
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-11-01 20:53:13
+  recorded_at: 2026-11-01 21:25:58
 recorded_with: VCR-vcr/2.1.0
