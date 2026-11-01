@@ -5,61 +5,61 @@ http_interactions:
     body:
       string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
-        the capital of New Zealand"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
+        the capital of New Zealand"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e2e0bcbc001d-LHR
+      cf-ray: a52c12816dd02968-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:11 GMT
+      date: Fri, 30 Oct 2026 17:17:14 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '420'
+      openai-processing-ms: '699'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=oCOEXmIr9NSGK_48MzcIxxvU9wnmHAYVUPPYtcJoFrM-1791281530.9980402-1.0.1.1-RCSx05k9oX646Hp866.43oUVmkBgOy3PzBZy5tXHSJY2_u2RFk9I8PopvaZC.1rF8_FRmz5eSQWWUGEWKiYktT5.JZ0DE8xI8k0bqQ72.HtrQctjJN.WisRZObLkqStx;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:11 GMT
+      set-cookie: __cf_bm=qzN0lDyFVTU70a3pghyynQrcComnav7BTeGmOOSTk0c-1793380633.8310928-1.0.1.1-YEFzHaWUjoE9uXlESW5NuFyC46Ecc3e1p4hVSTRUMAP5OgeBip7CM_mEvVukldUXOn0DtyXEKogOZPrJQC8fv38kCWeXzC1ejt6d9P40jtgMBb.QAxn8z_MRvAvD3CQH;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        30 Oct 2026 17:47:14 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '497'
-      x-ratelimit-remaining-tokens: '199868'
-      x-ratelimit-reset-requests: 360ms
-      x-ratelimit-reset-tokens: 39ms
-      x-request-id: req_7dda0f36da334ebcac3ee3cfba1e1e88
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_357cb694567a4b2cbe78001c02d9efc1
     body:
       string: |-
         {
-          "id": "resp_00bd08369a6ea7b9016ac4c97b1ff087d2ba20f76c031dbb65",
+          "id": "resp_0e03d7b5a2891f83016ae4d119e61487d295578ae03d24e9b5",
           "object": "response",
-          "created_at": 1791281531,
+          "created_at": 1793380633,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281531,
+          "completed_at": 1793380634,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-nano-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "msg_00bd08369a6ea7b9016ac4c97b741887d2bd91de93715d5a2b",
+              "id": "msg_0e03d7b5a2891f83016ae4d11a5e2087d286d33b83b57b5a28",
               "type": "message",
               "status": "completed",
               "content": [
@@ -67,9 +67,10 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Wellington"
+                  "text": "The capital of New Zealand is **Wellington**."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
@@ -77,10 +78,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -114,140 +116,7 @@ http_interactions:
           },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
-          "truncation": "disabled",
-          "usage": {
-            "input_tokens": 19,
-            "input_tokens_details": {
-              "cache_write_tokens": 0,
-              "cached_tokens": 0
-            },
-            "output_tokens": 3,
-            "output_tokens_details": {
-              "reasoning_tokens": 0
-            },
-            "total_tokens": 22
-          },
-          "user": null,
-          "metadata": {}
-        }
-  recorded_at: 2026-10-06 10:12:11
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/responses
-    body:
-      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
-        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
-        the capital of France"}]}],"model":"gpt-4.1-nano","stream":false,"store":false,"service_tier":"auto"}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers:
-      - X-Request-ID
-      - CF-Ray
-      - CF-Ray
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: a463e2e7ec1b001d-LHR
-      content-encoding: br
-      content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:12 GMT
-      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '393'
-      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie: __cf_bm=6t9iZpEayxsZq5LqkvR7bgluIhi3GW0fSOlSmOvxmCM-1791281532.1426647-1.0.1.1-Ux8nr32noc_IhV0smel6wh7Gjw_YBbiYqzvEZYmK67mFJPPqwwNJ7WiXVgLlnM90bKjSxyOeUCJ9mUPDLhHraD5vhKyMy5xKUWNKezPcvDH8U5Z6HETZ2K1QInh3fkRg;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:12 GMT
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199963'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 11ms
-      x-request-id: req_a0a8a834a34f4f30a7089b49462b6594
-    body:
-      string: |-
-        {
-          "id": "resp_005e08f721bf241d016ac4c97c464487d2a289793081a0cd36",
-          "object": "response",
-          "created_at": 1791281532,
-          "status": "completed",
-          "access_programs": null,
-          "background": false,
-          "billing": {
-            "payer": "developer"
-          },
-          "completed_at": 1791281532,
-          "error": null,
-          "frequency_penalty": 0.0,
-          "incomplete_details": null,
-          "instructions": null,
-          "max_output_tokens": null,
-          "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
-          "moderation": null,
-          "output": [
-            {
-              "id": "msg_005e08f721bf241d016ac4c97c90b487d287c931b96f9b5a6b",
-              "type": "message",
-              "status": "completed",
-              "content": [
-                {
-                  "type": "output_text",
-                  "annotations": [],
-                  "logprobs": [],
-                  "text": "Paris"
-                }
-              ],
-              "role": "assistant"
-            }
-          ],
-          "parallel_tool_calls": true,
-          "presence_penalty": 0.0,
-          "previous_response_id": null,
-          "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
-          "reasoning": {
-            "context": null,
-            "effort": null,
-            "summary": null
-          },
-          "safety_identifier": null,
-          "service_tier": "default",
-          "store": false,
-          "temperature": 1.0,
-          "text": {
-            "format": {
-              "type": "text"
-            },
-            "verbosity": "medium"
-          },
-          "tool_choice": "auto",
-          "tool_usage": {
-            "image_gen": {
-              "input_tokens": 0,
-              "input_tokens_details": {
-                "image_tokens": 0,
-                "text_tokens": 0
-              },
-              "output_tokens": 0,
-              "output_tokens_details": {
-                "image_tokens": 0,
-                "text_tokens": 0
-              },
-              "total_tokens": 0
-            },
-            "web_search": {
-              "num_requests": 0
-            }
-          },
-          "tools": [],
-          "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
             "input_tokens": 18,
@@ -255,14 +124,149 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 2,
+            "output_tokens": 15,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 20
+            "total_tokens": 33
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:12:12
+  recorded_at: 2026-10-30 17:17:14
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/responses
+    body:
+      string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
+        terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What''s
+        the capital of France"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-nano","stream":false,"store":false,"service_tier":"auto"}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID, Server-Timing-Total
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a52c128949592968-LHR
+      content-encoding: br
+      content-type: application/json
+      date: Fri, 30 Oct 2026 17:17:15 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '392'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=iMbK8rLrSe_UNME7JgnBMrjDxt.4ayEj06bLNvbjjt4-1793380635.0932012-1.0.1.1-3xi1IQb7HfxhLvTePDmubP0Pd9.Y7ZrO07LOwXKy7gpflyS_VmLGFiaEghg162Szye07_af3xmTXEdExm3FDREv7nMy_ont.OSVNPQJZvg.LCW3uzW2Zqi0g4CkWVy.0;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        30 Oct 2026 17:47:15 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_a40dc04b43034453af27e91a389a3b0c
+    body:
+      string: |-
+        {
+          "id": "resp_05ccfdf1dbcdab5c016ae4d11b290487d29b2eb10b9354adaf",
+          "object": "response",
+          "created_at": 1793380635,
+          "status": "completed",
+          "access_programs": null,
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1793380635,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": null,
+          "max_tool_calls": null,
+          "model": "gpt-5.4-nano-2026-03-17",
+          "moderation": null,
+          "output": [
+            {
+              "id": "msg_05ccfdf1dbcdab5c016ae4d11b649087d29dd0a33299cde28f",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "The capital of France is **Paris**."
+                }
+              ],
+              "phase": "final_answer",
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "24h",
+          "reasoning": {
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 0.98,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 17,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 13,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 30
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: 2026-10-30 17:17:15
 recorded_with: VCR-vcr/2.1.0
