@@ -182,7 +182,12 @@ AssistantPartialTurn <- new_class(
   parent = AssistantTurn,
   properties = list(
     reason = prop_string("interrupted")
-  )
+  ),
+  # Explicit so the signature doesn't depend on how the installed S7 version
+  # generates subclass constructors (S7 >= 1.0.0 switched to `...`).
+  constructor = function(..., reason = "interrupted") {
+    new_object(AssistantTurn(...), reason = reason)
+  }
 )
 
 method(format, Turn) <- function(x, ...) {
