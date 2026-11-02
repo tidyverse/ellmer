@@ -62,7 +62,7 @@ models_deepseek(
 
 - model:
 
-  The model to use for the chat (defaults to "deepseek-v4-flash"). We
+  The model to use for the chat (defaults to "deepseek-flash"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 

@@ -12,6 +12,27 @@
   ellmer records, and how ellmer’s spans join your own traces
   ([@schloerke](https://github.com/schloerke),
   [\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
+- Default models have been updated for a number of providers
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1176](https://github.com/tidyverse/ellmer/issues/1176)):
+  - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+    now uses `claude-sonnet-5-5`.
+  - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+    now uses `us.anthropic.claude-sonnet-5-5`.
+  - [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md)
+    now uses `deepseek-flash`.
+  - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+    and
+    [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+    now use `gemini-3.8-flash`.
+  - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+    now uses `gpt-6.1-terra`.
+  - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+    now uses `gpt-6.1-terra`.
+  - [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
+    now uses `claude-sonnet-5-5`.
+  - [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
+    now uses `claude-sonnet-5-5`.
 - The OpenTelemetry `gen_ai.input.messages` attribute is no longer
   dropped when a tool result returns a `Content` object, such as an
   image ([@taekop](https://github.com/taekop),

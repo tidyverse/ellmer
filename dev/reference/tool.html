@@ -209,25 +209,33 @@ the following system prompt</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.400043517  0.255317055 -2.437263611 -0.005571287  0.621552721</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-6.1-terra"</span>.</span>
 <span class="r-in"><span><span class="co"># Then register it</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">tool_rnorm</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Then ask a question that needs it.</span></span></span>
 <span class="r-in"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me five numbers from a random normal distribution."</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> From a standard normal distribution (mean 0, standard deviation 1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Look at the chat history to see how tool calling works:</span></span></span>
 <span class="r-in"><span><span class="va">chat</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-5.6-terra turns=4 input=253 output=58 cost=$0.00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Chat OpenAI/gpt-6.1-terra turns=4 input=268 output=88 cost=$0.00&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Give me five numbers from a random normal distribution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=95 output=26 cost=$0.00] ──────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_08515aebae96ac45016ac4ca15582487d295182f97d395e341)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=95 output=41 cost=$0.00] ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thinking&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/thinking&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool request</span> (fc_070da7d63c247e39016ae8f432097087d28288be499e630424)]: rnorm(n = 5L, mean = 0L, sd = 1L)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_08515aebae96ac45016ac4ca15582487d295182f97d395e341)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=158 output=32 cost=$0.00] ─────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, -1.8218, -0.2473, -0.2442, -0.2827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [<span style="font-weight: bold;">tool result</span>  (fc_070da7d63c247e39016ae8f432097087d28288be499e630424)]: [1.1484,-1.8218,-0.2473,-0.2442,-0.2827]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── <span style="color: #00BB00;">assistant</span> [input=173 output=47 cost=$0.00] ─────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> From a standard normal distribution (mean 0, standard deviation 1):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.1484, −1.8218, −0.2473, −0.2442, −0.2827</span>
 <span class="r-in"><span><span class="co"># Assistant sends a tool request which is evaluated locally and</span></span></span>
 <span class="r-in"><span><span class="co"># results are sent back in a tool result.</span></span></span>
 <span class="r-in"><span></span></span>

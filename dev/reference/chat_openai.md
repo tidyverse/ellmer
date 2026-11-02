@@ -64,7 +64,7 @@ models_openai(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-5.6-terra"). We
+  The model to use for the chat (defaults to "gpt-6.1-terra"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_openai()` to see all options.
@@ -143,55 +143,31 @@ Other chatbots:
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
 ")
-#> - A **data frame** is the traditional tabular data structure in base 
-#> R. A **tibble** is a modern, enhanced version of a data frame provided
-#> by the **tibble** package (part of the tidyverse).
-#> 
-#> - Tibbles print more compactly:
-#>   - They show only the first few rows and columns by default.
-#>   - They display column types and avoid flooding the console with 
-#> large datasets.
-#>   - Base data frames often print all rows unless limited manually.
-#> 
-#> - Tibbles do not automatically convert character columns to factors.  
-#>   - Older versions of `data.frame()` converted strings to factors by 
-#> default (though modern R defaults no longer do this).
-#> 
-#> - Tibbles preserve column names more strictly:
-#>   - They allow non-syntactic names such as `"total cost"` without 
-#> automatically changing them.
-#>   - Base data frames may modify invalid names unless `check.names = 
-#> FALSE` is used.
-#> 
-#> - Tibbles are stricter when subsetting:
-#>   - Extracting a single column with `tibble[, "x"]` returns a 
-#> one-column tibble.
-#>   - With a base data frame, `df[, "x"]` usually returns a vector 
-#> unless `drop = FALSE` is specified.
-#> 
-#> - Tibbles do not partially match column names, reducing the chance of 
-#> accidental mistakes:
-#>   - `tb$long` will not silently match a column named `long_name`.
-#>   - Base data frames may allow partial matching in some situations.
-#> 
-#> - Tibbles support list-columns naturally, making them especially 
-#> useful in tidyverse workflows and nested data analysis.
-#> 
-#> - Both store rectangular data with rows and columns, and most 
-#> functions that work with data frames also work with tibbles.
+#> - **Relationship:** A tibble is a modern type of R data frame provided
+#> by the **tibble** package. It inherits from `data.frame`, so most 
+#> data-frame functions work with it.
+#> - **Printing:** Tibbles display a preview of rows and columns, along 
+#> with column types. Data frames typically print more of their contents.
+#> - **Subsetting:** `[` always returns a tibble, even when selecting one
+#> column. A data frame may simplify the result to a vector.
+#> - **Column names:** Tibbles preserve nonstandard names, such as names 
+#> containing spaces. Data frames normally adjust them by default.
+#> - **Column access:** Tibbles do not support partial matching with `$` 
+#> and warn when a column does not exist. Data frames can partially match
+#> names and return `NULL` for missing columns.
+#> - **Recycling:** Tibbles recycle only length-one inputs when creating 
+#> columns; data frames allow more permissive recycling.
 
 chat$chat("Tell me three funny jokes about statisticians")
-#> 1. A statistician drowned crossing a river that was, on average, three
+#> - Why did the statistician break up with their partner? They couldn’t 
+#> find a significant relationship.
+#> - A statistician drowned crossing a river that was, on average, three 
 #> feet deep.
-#> 
-#> 2. Why did the statistician bring a ladder to the bar?  
-#>    Because the drinks were on the house—but only with 95% confidence.
-#> 
-#> 3. A statistician’s favorite type of music?  
-#>    Heavy **meta**l—because they love a good analysis.
+#> - Why don’t statisticians trust atoms? They make up everything—and the
+#> sample size is suspiciously large.
 ```

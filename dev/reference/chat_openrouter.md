@@ -46,7 +46,7 @@ chat_openrouter(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-5.6-terra"). We
+  The model to use for the chat (defaults to "gpt-6.1-terra"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 

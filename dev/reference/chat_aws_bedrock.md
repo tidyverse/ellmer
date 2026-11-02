@@ -123,7 +123,7 @@ models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
 - model:
 
   The model to use for the chat (defaults to
-  "us.anthropic.claude-sonnet-5"). We regularly update the default, so
+  "us.anthropic.claude-sonnet-5-5"). We regularly update the default, so
   we strongly recommend explicitly specifying a model for anything other
   than casual use. Use `models_models_aws_bedrock()` to see all options.
   .
@@ -133,7 +133,7 @@ models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
   can. If you're using [cross-region
   inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
   you'll need to use the inference profile ID, e.g.
-  `model="us.anthropic.claude-sonnet-5"`.
+  `model="us.anthropic.claude-sonnet-5-5"`.
 
 - api:
 

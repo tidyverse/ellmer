@@ -129,39 +129,39 @@ property. If the output is a data frame, and some requests error, an
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 
 # Chat ----------------------------------------------------------------------
 country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
 parallel_chat(chat, prompts)
 #> [[1]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=11 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Canada?
-#> ── assistant [input=12 output=11 cost=$0.00] ──────────────────────────
-#> The capital of Canada is Ottawa.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Ottawa.
 #> 
 #> [[2]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=7 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=13 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of New Zealand?
 #> ── assistant [input=13 output=7 cost=$0.00] ───────────────────────────
 #> Wellington.
 #> 
 #> [[3]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=7 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Jamaica?
 #> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
 #> Kingston.
 #> 
 #> [[4]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=9 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=13 output=18 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of United States?
-#> ── assistant [input=13 output=9 cost=$0.00] ───────────────────────────
-#> Washington, D.C.
+#> ── assistant [input=13 output=18 cost=$0.00] ──────────────────────────
+#> The capital of the United States is **Washington, D.C.**
 #> 
 
 # Structured data -----------------------------------------------------------

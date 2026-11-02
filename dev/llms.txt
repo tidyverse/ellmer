@@ -96,10 +96,10 @@ freedom, so we have a few recommendations to help you get started:
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   are good places to start.
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  defaults to **GPT-5.6 Terra**, but you can use `model = "gpt-6-luna"`
+  defaults to **GPT-6.1 Terra**, but you can use `model = "gpt-6-luna"`
   for a cheaper, faster model.
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  defaults to **Claude Sonnet 5**, which we have found to be
+  defaults to **Claude Sonnet 5.5**, which we have found to be
   particularly good at writing R code.
 
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)

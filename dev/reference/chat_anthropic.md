@@ -57,7 +57,7 @@ models_anthropic(base_url = NULL, api_key = NULL, credentials = NULL)
 
 - model:
 
-  The model to use for the chat (defaults to "claude-sonnet-5"). We
+  The model to use for the chat (defaults to "claude-sonnet-5-5"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_anthropic()` to see all options.
@@ -191,22 +191,26 @@ Other chatbots:
 
 ``` r
 chat <- chat_anthropic()
-#> Using model = "claude-sonnet-5".
+#> Using model = "claude-sonnet-5-5".
 chat$chat("Tell me three jokes about statisticians")
-#> Here are three statistician jokes for you:
+#> Here are three statistician jokes:
 #> 
-#> 1. A statistician's wife has twins. He is delighted. He tells the 
-#> vicar he'll be baptizing them separately. "Why?" asks the vicar. 
-#> "Because," the statistician replies, "I hate sampling with 
-#> replacement."
+#> 1. **The Drowning Statistician**
+#> A statistician can have his head in an oven and his feet in ice, and 
+#> he'll say that on average he feels fine.
 #> 
-#> 2. Three statisticians go hunting. They spot a deer. The first one 
-#> shoots and misses by a foot to the left. The second shoots and misses 
-#> by a foot to the right. The third one yells, "We got it!"
+#> 2. **The Confident Interval**
+#> Three statisticians go duck hunting. The first fires and misses one 
+#> foot to the left. The second fires and misses one foot to the right. 
+#> The third yells, "We got him!"
 #> 
-#> 3. A statistician can have their head in an oven and feet in ice, and 
-#> they'll say on average they feel fine.
+#> 3. **The Correlation Trap**
+#> Why did the statistician bring a ladder to work? Because they heard 
+#> the data had high *leverage* points. (Okay, an alternate one: A 
+#> statistician's wife gave birth to twins. The doctor said, "One's a 
+#> boy, one's a girl." The statistician replied, "Great, so we're 50% 
+#> likely to be right about everything!")
 #> 
-#> Want a few more, or maybe some on a specific topic like regression or 
-#> p-values?
+#> Want some more, or perhaps ones aimed at a particular branch like 
+#> Bayesian vs. frequentist humor?
 ```

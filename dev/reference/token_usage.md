@@ -18,7 +18,7 @@ A data frame
 
 ``` r
 token_usage()
-#>    provider           model input output cached_input price
-#> 1    OpenAI   gpt-5.6-terra   828    617            0 $0.01
-#> 2 Anthropic claude-sonnet-5    19    270            0 $0.00
+#>    provider             model input output cached_input price
+#> 1    OpenAI     gpt-6.1-terra   873    669            0 $0.00
+#> 2 Anthropic claude-sonnet-5-5    21    283            0 $0.00
 ```

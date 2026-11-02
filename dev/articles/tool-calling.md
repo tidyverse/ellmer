@@ -254,11 +254,11 @@ Now we register and use it:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$register_tool(get_weather)
 chat$chat("Give me a weather update for London and Chicago")
-#> - **London:** Heavy rain, cool temperatures, and strong winds.  
-#> - **Chicago:** Overcast, warm, with strong winds.
+#> - **London:** Cool, with heavy rain and strong winds.
+#> - **Chicago:** Warm and overcast, with strong winds.
 ```
 
 We can print the chat to confirm that the model only performed a single
@@ -267,20 +267,16 @@ tool call:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-5.6-terra turns=4 input=224 output=63 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=4 input=214 output=51 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Give me a weather update for London and Chicago
-#> ── assistant [input=72 output=31 cost=$0.00] ──────────────────────────
-#> <thinking>
-#> 
-#> </thinking>
-#> 
-#> [tool request (fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6)]: get_weather(cities = c("London", "Chicago"))
+#> ── assistant [input=72 output=21 cost=$0.00] ──────────────────────────
+#> [tool request (fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5)]: get_weather(cities = c("London", "Chicago"))
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
-#> ── assistant [input=152 output=32 cost=$0.00] ─────────────────────────
-#> - **London:** Heavy rain, cool temperatures, and strong winds.  
-#> - **Chicago:** Overcast, warm, with strong winds.
+#> [tool result  (fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]
+#> ── assistant [input=142 output=30 cost=$0.00] ─────────────────────────
+#> - **London:** Cool, with heavy rain and strong winds.
+#> - **Chicago:** Warm and overcast, with strong winds.
 ```
 
 ### Image and PDF tool output
@@ -316,7 +312,7 @@ tidyverse website](https://tidyverse.org):
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$register_tool(screenshot_website)
 chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> https://tidyverse.org screenshot completed
