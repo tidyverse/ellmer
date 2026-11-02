@@ -126,12 +126,9 @@ of character vectors.</p></dd>
 <dt id="arg-max-active">max_active<a class="anchor" aria-label="anchor" href="#arg-max-active"></a></dt>
 <dd><p>The maximum number of simultaneous requests to send.</p>
 <p>For <code><a href="chat_anthropic.html">chat_anthropic()</a></code>, note that the number of active connections is
-limited primarily by the output tokens per minute limit (OTPM) which is
-estimated from the <code>max_tokens</code> parameter, which defaults to 4096. That
-means if your usage tier limits you to 16,000 OTPM, you should either set
-<code>max_active = 4</code> (16,000 / 4096) to decrease the number of active
-connections or use <code><a href="params.html">params()</a></code> in <code><a href="chat_anthropic.html">chat_anthropic()</a></code> to decrease
-<code>max_tokens</code>.</p></dd>
+limited primarily by the output tokens per minute limit (OTPM), which
+counts the tokens actually generated. If you hit rate limits, decrease
+<code>max_active</code>.</p></dd>
 
 
 <dt id="arg-rpm">rpm<a class="anchor" aria-label="anchor" href="#arg-rpm"></a></dt>

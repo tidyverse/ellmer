@@ -65,14 +65,8 @@ parallel_chat_structured(
   For
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md),
   note that the number of active connections is limited primarily by the
-  output tokens per minute limit (OTPM) which is estimated from the
-  `max_tokens` parameter, which defaults to 4096. That means if your
-  usage tier limits you to 16,000 OTPM, you should either set
-  `max_active = 4` (16,000 / 4096) to decrease the number of active
-  connections or use
-  [`params()`](https://ellmer.tidyverse.org/dev/reference/params.md) in
-  [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  to decrease `max_tokens`.
+  output tokens per minute limit (OTPM), which counts the tokens
+  actually generated. If you hit rate limits, decrease `max_active`.
 
 - rpm:
 

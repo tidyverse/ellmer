@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and the other Claude providers now default `max_tokens` to 32,000,
+  rather than 4096
+  ([\#1150](https://github.com/tidyverse/ellmer/issues/1150)).
 - New
   [`vignette("otel")`](https://ellmer.tidyverse.org/dev/articles/otel.md)
   describes how to turn on OpenTelemetry tracing and metrics, what
