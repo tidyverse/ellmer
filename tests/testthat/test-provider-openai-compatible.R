@@ -78,7 +78,11 @@ test_that("can match prices for some common models", {
 # Custom tests -----------------------------------------------------------------
 
 test_that("can retrieve log_probs (#115)", {
-  chat <- chat_openai_compatible_test(params = params(log_probs = TRUE))
+  # Reasoning models reject logprobs, so pin a model that still supports it
+  chat <- chat_openai_compatible_test(
+    model = "gpt-5.4-nano",
+    params = params(log_probs = TRUE)
+  )
   pieces <- coro::collect(chat$stream("Hi"))
 
   logprobs <- chat$last_turn()@json$choices[[1]]$logprobs$content
