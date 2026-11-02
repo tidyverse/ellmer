@@ -3,7 +3,7 @@
     Code
       . <- chat_openai()
     Message
-      Using model = "gpt-5.6-terra".
+      Using model = "gpt-6.1-terra".
 
 # file_upload() validates expires_in_h
 

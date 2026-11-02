@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
         Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date in Y-M-D format?"}]}],"model":"gpt-5.6-luna","seed":1014,"reasoning_effort":"none","stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
   response:
@@ -17,35 +17,35 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a2509214bb1cc598-EWR
+      cf-ray: a5441db4eab471c9-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:38:03 GMT
+      date: Mon, 02 Nov 2026 15:19:12 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '363'
+      openai-processing-ms: '817'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=SLU_UqXn9DzpkuyJzHmbKaQpSF7XKqsfbkhljBsPhag-1785710282.995464-1.0.1.1-P1GcQzguzhb4bnRkbDfOvXX6BwkjCA5od7Ix024Cf1jqFNJjHdAxcePmt64veEoDea31bulZMMRcwsQtneSct12D1_tvcyy2G5Ry1tq2b4fy6Wtnz1MPvqSc9u2VLAl8;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:08:03 GMT
+      set-cookie: __cf_bm=WNp_kIrAo4GmTrcYmlqQAEx8_bv5EO2zqK8bMKDZKsE-1793632750.8722746-1.0.1.1-FjoN55MQDzRNzUQv._xAp3t2kYjm.l2vX.SU1warc0ZxgSg6qxKlFNLELKq1mb0bmljBsB.cEI_bf_nbdN57WKvYLjdi8QBnYEOw4_LhGULKjaKT2kAshQTIcmf.vk3v;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 15:49:12 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199973'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 8ms
-      x-request-id: req_f888023e607f4066a473e1a8feb4ed4a
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1999973'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_38f569e2f8924d7185f92a9fe1bfd282
     body:
       string: |
         {
-          "id": "chatcmpl-E8Z6hCMcspjNGmXgGToFDh5Yrg1b9",
+          "id": "chatcmpl-Efo6RGjlTeYvzbWP9bQMaQPBni2XB",
           "object": "chat.completion",
-          "created": 1785710283,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1793632751,
+          "model": "gpt-5.6-luna",
           "choices": [
             {
               "index": 0,
@@ -54,15 +54,177 @@ http_interactions:
                 "content": null,
                 "tool_calls": [
                   {
-                    "id": "call_yhGyidjUReGGf2WQsn5XKimB",
+                    "id": "call_b8BfFnlX7cydOHwyE5cdehu3",
                     "type": "function",
                     "function": {
                       "name": "current_date",
                       "arguments": "{}"
                     }
-                  },
+                  }
+                ],
+                "refusal": null,
+                "annotations": []
+              },
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 162,
+            "completion_tokens": 13,
+            "total_tokens": 175,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2026-11-02 15:19:12
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_b8BfFnlX7cydOHwyE5cdehu3","function":{"name":"current_date","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_b8BfFnlX7cydOHwyE5cdehu3"}],"model":"gpt-5.6-luna","seed":1014,"reasoning_effort":"none","stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a5441dc06f3871c9-LHR
+      content-encoding: br
+      content-type: application/json
+      date: Mon, 02 Nov 2026 15:19:14 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '978'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=iyJ5dY11jFr8Tqbmd2sXrHD6bP6KLjaw1pA0JrugrcU-1793632752.7059014-1.0.1.1-33hMxjcCX9_RKBSVlbTIva7PKUxZlX_2JMixtLUm.GJQR1rfmj1_.2PcjrLXUFGybZbTzrZEDPz.UFuz8mxFrJPgG1nJ9r5rRDZMOrcMs8tuULfibVBm5.7eoTU_l3WW;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 15:49:14 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1999969'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_6698971b19fa4e07ac31f7617ceb40de
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Efo6TOAciEEUrivXu6dZDdYF5VqFg",
+          "object": "chat.completion",
+          "created": 1793632753,
+          "model": "gpt-5.6-luna",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "It is 2024-01-01.",
+                "refusal": null,
+                "annotations": []
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 192,
+            "completion_tokens": 13,
+            "total_tokens": 205,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0,
+              "audio_tokens": 0,
+              "accepted_prediction_tokens": 0,
+              "rejected_prediction_tokens": 0
+            }
+          },
+          "service_tier": "default",
+          "system_fingerprint": null
+        }
+  recorded_at: 2026-11-02 15:19:14
+- request:
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
+        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
+        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_b8BfFnlX7cydOHwyE5cdehu3","function":{"name":"current_date","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_b8BfFnlX7cydOHwyE5cdehu3"},{"role":"assistant","content":[{"type":"text","text":"It
+        is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
+        is it? Provide the full name"}]}],"model":"gpt-5.6-luna","seed":1014,"reasoning_effort":"none","stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
+        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
+  response:
+    status: 200
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      cf-ray: a5441dcbbca371c9-LHR
+      content-encoding: br
+      content-type: application/json
+      date: Mon, 02 Nov 2026 15:19:15 GMT
+      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
+      openai-processing-ms: '840'
+      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
+      openai-version: '2020-10-01'
+      server: cloudflare
+      set-cookie: __cf_bm=eNsBHyfYnNP15bpn4vOE3SOh4Z.6fivuKUqiVWjCYfw-1793632754.5468254-1.0.1.1-jWCMeZuZyNEzb_R0TTZSG4FuU5W_o0BIYebhdWzaAYTUJPAevKl9gv798N7d_STI4Z_nPP76w5v3fKT6QPNGQAX3ylMpk4WBFsXIqYGVNcA4SQthS6XYKej2S38ySM8q;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 15:49:15 GMT
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      x-content-type-options: nosniff
+      x-openai-proxy-wasm: v0.1
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1999953'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 1ms
+      x-request-id: req_63f0671d3b174f8e8fcbfea3af116cd2
+    body:
+      string: |
+        {
+          "id": "chatcmpl-Efo6VxTMQUXKnRXNBjok1Oc2j0LHL",
+          "object": "chat.completion",
+          "created": 1793632755,
+          "model": "gpt-5.6-luna",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
                   {
-                    "id": "call_iRYEuLBYtXfpVzzRpU6vqdzt",
+                    "id": "call_mSYjyXmNmI8qZU8DmOXVgs1q",
                     "type": "function",
                     "function": {
                       "name": "current_month",
@@ -73,16 +235,16 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "tool_calls"
             }
           ],
           "usage": {
-            "prompt_tokens": 78,
-            "completion_tokens": 39,
-            "total_tokens": 117,
+            "prompt_tokens": 221,
+            "completion_tokens": 13,
+            "total_tokens": 234,
             "prompt_tokens_details": {
               "cached_tokens": 0,
+              "cache_write_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
@@ -93,97 +255,18 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_2435b63315"
+          "system_fingerprint": null
         }
-  recorded_at: 2026-08-02 22:38:03
+  recorded_at: 2026-11-02 15:19:16
 - request:
     method: POST
     uri: https://api.openai.com/v1/chat/completions
     body:
       string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
         Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_yhGyidjUReGGf2WQsn5XKimB","function":{"name":"current_date","arguments":"{}"},"type":"function"},{"id":"call_iRYEuLBYtXfpVzzRpU6vqdzt","function":{"name":"current_month","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_yhGyidjUReGGf2WQsn5XKimB"},{"role":"tool","content":"February","tool_call_id":"call_iRYEuLBYtXfpVzzRpU6vqdzt"}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
-        the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
-        the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
-  response:
-    status: 200
-    headers:
-      access-control-expose-headers:
-      - X-Request-ID
-      - CF-Ray
-      - CF-Ray
-      alt-svc: h3=":443"; ma=86400
-      cf-cache-status: DYNAMIC
-      cf-ray: a2509219daddc598-EWR
-      content-encoding: br
-      content-type: application/json
-      date: Sun, 02 Aug 2026 22:38:04 GMT
-      openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '307'
-      openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
-      openai-version: '2020-10-01'
-      server: cloudflare
-      set-cookie: __cf_bm=q7n1Wa1T99vkNV7sN6qL.TgoV.vvY4iwRwmIN96fLsA-1785710283.8130448-1.0.1.1-x_TaClcXzyvLQjQusSz8KLZFiaCrS2IZ8_H4pzrh9lD1XFjaNeilE3DweKNBqfURkpkZAlAjGMb.L_VPLsiLhQ4Gb_Y5Aej1ZY951K93nFzOaNMLTg0vmSKbre2DXHqe;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:08:04 GMT
-      strict-transport-security: max-age=31536000; includeSubDomains; preload
-      x-content-type-options: nosniff
-      x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199966'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 10ms
-      x-request-id: req_07a419c7a28e4502a2909ef978be18f4
-    body:
-      string: |
-        {
-          "id": "chatcmpl-E8Z6icFhI9IPZmDBeWKIDiX4OS1Om",
-          "object": "chat.completion",
-          "created": 1785710284,
-          "model": "gpt-4.1-nano-2025-04-14",
-          "choices": [
-            {
-              "index": 0,
-              "message": {
-                "role": "assistant",
-                "content": "It is 2024-01-01.",
-                "refusal": null,
-                "annotations": []
-              },
-              "logprobs": null,
-              "finish_reason": "stop"
-            }
-          ],
-          "usage": {
-            "prompt_tokens": 138,
-            "completion_tokens": 11,
-            "total_tokens": 149,
-            "prompt_tokens_details": {
-              "cached_tokens": 0,
-              "audio_tokens": 0
-            },
-            "completion_tokens_details": {
-              "reasoning_tokens": 0,
-              "audio_tokens": 0,
-              "accepted_prediction_tokens": 0,
-              "rejected_prediction_tokens": 0
-            }
-          },
-          "service_tier": "default",
-          "system_fingerprint": "fp_2435b63315"
-        }
-  recorded_at: 2026-08-02 22:38:03
-- request:
-    method: POST
-    uri: https://api.openai.com/v1/chat/completions
-    body:
-      string: '{"messages":[{"role":"system","content":"Always use a tool to answer.
-        Reply with ''It is ____.''."},{"role":"user","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_yhGyidjUReGGf2WQsn5XKimB","function":{"name":"current_date","arguments":"{}"},"type":"function"},{"id":"call_iRYEuLBYtXfpVzzRpU6vqdzt","function":{"name":"current_month","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_yhGyidjUReGGf2WQsn5XKimB"},{"role":"tool","content":"February","tool_call_id":"call_iRYEuLBYtXfpVzzRpU6vqdzt"},{"role":"assistant","content":[{"type":"text","text":"It
+        the current date in Y-M-D format?"}]},{"role":"assistant","tool_calls":[{"id":"call_b8BfFnlX7cydOHwyE5cdehu3","function":{"name":"current_date","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"2024-01-01","tool_call_id":"call_b8BfFnlX7cydOHwyE5cdehu3"},{"role":"assistant","content":[{"type":"text","text":"It
         is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
-        is it? Provide the full name"}]}],"model":"gpt-4.1-nano","seed":1014,"temperature":0,"stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
+        is it? Provide the full name"}]},{"role":"assistant","tool_calls":[{"id":"call_mSYjyXmNmI8qZU8DmOXVgs1q","function":{"name":"current_month","arguments":"{}"},"type":"function"}]},{"role":"tool","content":"February","tool_call_id":"call_mSYjyXmNmI8qZU8DmOXVgs1q"}],"model":"gpt-5.6-luna","seed":1014,"reasoning_effort":"none","stream":false,"tools":[{"type":"function","function":{"name":"current_date","description":"Return
         the current date","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}},{"type":"function","function":{"name":"current_month","description":"Return
         the full name of the current month","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}}]}'
   response:
@@ -195,35 +278,35 @@ http_interactions:
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a250921d4d69c598-EWR
+      cf-ray: a5441dd758eb71c9-LHR
       content-encoding: br
       content-type: application/json
-      date: Sun, 02 Aug 2026 22:38:04 GMT
+      date: Mon, 02 Nov 2026 15:19:17 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '241'
+      openai-processing-ms: '994'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=ivriDLQXew8ahCFL8fdb9JE.LuctSZ2.jy4vU6C4c0c-1785710284.3641865-1.0.1.1-t7jeHBFGCrMLLdxwpKvG8yOtImptnOj708PuIpXVyenbCw_a3CmQLkncV.Jf0zhUwDBm1.Dbo_j0jBIGvofXHcAyJ7jS4Y9_UInfsuf4UKIyA4nPBqf5UX0_lly1dkRZ;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
-        02 Aug 2026 23:08:04 GMT
+      set-cookie: __cf_bm=wSO36h9VBe8Jd39NxrQxubRZMPll3cDxp18uovVjYhM-1793632756.3780107-1.0.1.1-z7SavhsKLwOs4w2hdhgLg8hPi6Jjx5r5BVgWP9E0AfouFezUY74aYywFW74xqupthAP2v5.6KNLe961uiAnY4AIYiHUC25E1Ql5ghSV9pNKSnZOWEppndKFNXVu4xKMP;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 15:49:17 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
       x-openai-proxy-wasm: v0.1
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199950'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 15ms
-      x-request-id: req_9f0effb2e6b94f5c9a03b98c425a7a0a
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1999949'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 1ms
+      x-request-id: req_f7f0447eb9064991b48b8aa86672d7f3
     body:
       string: |
         {
-          "id": "chatcmpl-E8Z6ibfNRvWp2kCBol3d1T0OAZSn7",
+          "id": "chatcmpl-Efo6Wn8WFcqxnGPq21DJlSu53sVXT",
           "object": "chat.completion",
-          "created": 1785710284,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "created": 1793632756,
+          "model": "gpt-5.6-luna",
           "choices": [
             {
               "index": 0,
@@ -233,16 +316,16 @@ http_interactions:
                 "refusal": null,
                 "annotations": []
               },
-              "logprobs": null,
               "finish_reason": "stop"
             }
           ],
           "usage": {
-            "prompt_tokens": 165,
-            "completion_tokens": 5,
-            "total_tokens": 170,
+            "prompt_tokens": 246,
+            "completion_tokens": 7,
+            "total_tokens": 253,
             "prompt_tokens_details": {
               "cached_tokens": 0,
+              "cache_write_tokens": 0,
               "audio_tokens": 0
             },
             "completion_tokens_details": {
@@ -253,7 +336,7 @@ http_interactions:
             }
           },
           "service_tier": "default",
-          "system_fingerprint": "fp_2435b63315"
+          "system_fingerprint": null
         }
-  recorded_at: 2026-08-02 22:38:04
+  recorded_at: 2026-11-02 15:19:17
 recorded_with: VCR-vcr/2.1.0

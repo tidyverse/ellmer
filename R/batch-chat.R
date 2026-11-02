@@ -49,7 +49,7 @@
 #' will be a data frame with one row for each prompt, and one column for each
 #' property.
 #'
-#' For any of the aboves, will return `NULL` if `wait = FALSE` and the job
+#' For any of the above, will return `NULL` if `wait = FALSE` and the job
 #' is not complete.
 #' @examplesIf has_credentials("openai")
 #' chat <- chat_openai(model = "gpt-5-nano")

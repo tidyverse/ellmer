@@ -21,68 +21,70 @@ http_interactions:
         of dough onto an ungreased baking sheet and bake at 350°F (175°C)\n  for 10-12
         minutes, or until the edges are lightly browned. Let the cookies\n  cool on
         the baking sheet for a few minutes before transferring to a wire\n  rack to
-        cool completely. Enjoy!\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
+        cool completely. Enjoy!\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e3a3eb0706aa-LHR
+      cf-ray: a545e411da87cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:45 GMT
+      date: Mon, 02 Nov 2026 20:29:26 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2919'
+      openai-processing-ms: '4831'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=ulJ1fzDEDICzhLnxd8i4K.J0t36Xxgksm01S1.RPZt0-1791281562.225469-1.0.1.1-SYqoXfl2BzyYzTR_5K3RKiTlcYFs8jBrneTrMUj8TeqzejQfIHtACrS0njelAKEmAzCSQkOFPo5bFjvpg2f06PJLohs97XQuz6b.N5ssDW45Lyr_W9cCjDxb2LuN5eU9;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:45 GMT
+      set-cookie: __cf_bm=Q_dFt5BEJZ6.15_slxRa6yiNUJW5TiaSNe2qMbpJDuA-1793651361.5797231-1.0.1.1-dYVMGIR_8lUz9TYigRerseeu_sMVLlxdvHhjyKkAQhOEWj38i9vIYCdLz3RZ3_B9DeG1FuAN4wmeYG0VjJlFxUKMOmVqNXcRcgeAFDMMGhmsPfgBPRDVSvKukn7jW55I;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 20:59:26 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499842'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 18ms
-      x-request-id: req_b0a3be2011184adca96a56f9c711b980
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999785'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 12ms
+      x-request-id: req_04b4c75eb1d04f29a6d7f2ebd75ee486
     body:
       string: |-
         {
-          "id": "resp_0943af62751a73e5016ac4c99a548887d2a2527a359c8f906d",
+          "id": "resp_057e6e4dcfde398e016ae8f2a1aa2887d2b595895978b5d86a",
           "object": "response",
-          "created_at": 1791281562,
+          "created_at": 1793651361,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281565,
+          "completed_at": 1793651366,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "rs_0943af62751a73e5016ac4c99ad76087d2857f6e098b86676b",
+              "id": "rs_057e6e4dcfde398e016ae8f2a2275087d2b8a9cf1d566339c1",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqxMmd6faYwrd6EfrFGlldBRs4J0rUXsDxBpDxZ9M6M7gd3-5crS4QGp1opv9yAjPBGhcV1hP6YftEOF4BxDmM4W3BggXx56g33gr0HiD0tBW_QCQSzWWKkqcN5bSHJRX-LYYlBMCVb6rbJ9ctHzbqoXbbYXLxpQ-BBSCzvcbUVeXSQbDoEAF3YvMQx5w18P8DkeHnt33O1jl1OFFhRAn7i331lGagveRwSpGKCRlM9lOvFX8WQM8WXZbNjCeyVi2HANWFQKh5O6uWxoP6WWSBFFrOcMpNZVemAvmdDN9mY7pFxqcB1_D3BFmKOJ4WkN5Eptg31TkzfalXFHQb6akSIiMvl16r5zxMI40YnF7K-dvnGFeZMbVm0Vm74HeJt043c35MsJmlAeCRlMinTmAsxv9X08tcoQV88F5vRR4NhFXpwB2HlNC1yKeDGmmKlUsP_1iOB6wuklkAb-z2A3RhZA0hgLiOk_j0sc-TXU7bfc8P09802NbOdvzMD49SmOq1QL4TxdAgHIDOnTWeYgwOh3uAfmp_E908NzlMYJyKJREn2XRfVzV4UfspRaw0bWbKD8ve747P-HwWzyExh6bvGY4xo6zmDHM1Zk4lrfN3q2R1rkLucxLivTBmQEj1NRpdv-wTyWvKkDnb8jcFnEmTQ3jbomTP8HaPkDMx5icNq8YBlo2m-tbr49hg6O1VgtswYHrTeIu9UuPG1hPHFCQ6HK_XSIvLjhDrGSwLdiU02PucsRtrhSgqraHnxUgX6CV71b1GB3Txj1ox7pBe5joOHSPPV4m_RXOO5HwHMl0W7qB3v4SwFRMFra8khkXk_H5iUGkLhBn-AuMl90c7ROVZwOZD9AHgelP9u_GmkhA4QbbeFejsFI5OYpZjP1VoacnXuB-i_nHgQgqEzAAJ-gbFbUIVbxNlbo1ISdJhs7cjdsmnA2YdV7x5DS7r2pkSiyCg2eLRVtX6v5N5cT0sLYi4J9iG-1DBYyTDUmQRKdlkO9tn8mm3fXOFkXwrTuKzINXg_gqiRee3dokK9YPf4ace6umbdG8dlCRvc_4fQWrG26AkXkUZHThdDwM96HC76IIJQxpZUnC1Ybl1GRrS6oh_mgOt49X_sVgK9G2ZKFkZauGYB0_9925Cvl1UT5bb3KKa8yyPalcBX05CJeoQvJpGfNaUIdVd2PvT2PwNH7HY-EDVzLQWDe-RZQQ8l2P_A3E8YtI9Ye5VzJJuxqlThsCPnRK7JVpxljG_K1fF7X-r27Wq8f4sfGMNqH6o7jh94ZvKyriUrT-p57rQyvpd0B0hH0vv1NZz8jf_nAgQ6ZFiDgtuFbGAzd8XMdeowfBJuuWfj94vC3oqVGmWAocixcaH3chSk7-58Ld4W-FSkXoEIRcD-P86sKii9BNknOHpk7gHof_C0Oj820zSOcxe70ZAC895PlvgBJFZSiIv1JgwD-UIWtD0BMBeO1OOd5PI6K0PCCu9ROtHiqElbq6EtrOFfn1zXnpgXlHREqZ26iVHtjfHzmE=",
+              "encrypted_content": "gAAAAABq6PKmAM6HaQ7eMeHYoiHSfN1EItJhKvFmeI3F_ZRXcZbxL9p9Y09xdQKaHjwi884ezq5Ps9JmiUSDRE8N5v31sU-GkVbD7GWFMi1_gQeTd0oyt8V09KChro8ltS84bEJKDLtJ03Zi0t3PZaERbgKJuc2Q9DXwPbOEzCLQJAFI7En3y4dTyHCpn8vWrn0sjjCjkEzslHojhI69L0DtjM4lFIXCBgcMxwozsFVf_kqqHm9VnZhDx62Yt9CN6ZCUpJmR0sQl8NSTrNZN-E3aPbkSKzIQ4gZGw8rGOMcf3gMpjEO1VI8E-6fRLGUFlfdBRiBY6Bs73fQeSS5g7rj9BWgunjKaUIlgP24y1kWrvoFZsQq9U4P60KWutWT4dR5egjvoXDBLEIJiS8HXvDrrHYLHLkJnNjLxjA4iknHbryAe_HQCgWgPEJa17ueoJd7AH2dbDLbccInR6q4b4NFeegYzI-qFUMxboP0sHvrE-yL-Jf0LX5lfQ561J7vN0Rz_ra76a1oZerXOl2c6VyA9f0miU3ubQb8yYIgQ_VFWkDhzj-ehzHfnT4PXkFvRyCXe6OfBUp1BmyTM5EdOvcDAyfRR3Qbw0reSfGhPQNBNue0F1D1OYqAggifA8SczNPoGSSJlmdh2jKIxumyv-c1vrwIzmIoghrT-tVrBg1PgSA5-vBNteLF3ZYUUlcjqp3oeO-XESmVpIWIFZlgG-fAIH3obZatA8ugqUnXJqUnt-apbVxedF7ZE-5jC50i4D88ULDGbKHgfZrvDJhFsVEUjSsv9oEn1tg0cHmQjbwsOA6NtdzRQ5HG_8CecNH7_6UWq1QeACWGUpyERCdWj8ZlD-rTj2uYj46xsRw2Pprz3jv8zw9uPcsPQZmC_LT49ztGCsmy9ap2XVrZi_tAC_WpY5JpEoe7aaetqhj3nqkmQx6lkiOugRsK5RMxqpSuHbxRk7Xlyk5-q4V4Xr9X9CqkDh6CCzrsIzUUCnMPwzYcvJzDMIQoW89PORLTBiW2blTgH3P7kZYQpDNvI9IGFGGF7NqAoTwxzBiCEAL4B3c-0jNHeQXr0DwnaPhleEKJELlmEcsBZuYoTTxU9r0jPyNNJbUPgm-4P_ccwI8l201UUBVrFNgUgm-vMg6QKPi6WEVnXHbJkG-l_C_hoaVSfXN2_NCU1uIKUsrmsuhNoCz6UyoGJPx3AF_eKgK3OQp2e4GrEdXaiK74QI4lbs6n3_tVCHBwySHDrBsaKQZ8B9beDm3C7n5w2h-7sg_aRum_s_aGtKWAnlHEuQ2Kl80AN0sYDjDS2jX5ZfKnf1Ej0s_6hjoyZvTgVj6htYKIjB7FgurSxMMdER561S5YXMXVjszu0zpunzx-OwTvwS8H_0N7zYIoCSG0S7yIPcxentm9YDF_6_kuaQFyItBt5cO8ZaXjwKOTkQ9hD0heulV7V-W4r4ZbydhkQoR6958WBNCY3Y6GH38ysQ3ndGZU5jahePc6WK6dxptWNx1FbeIZMf8td0Lz6Jq3aJw2eiqJrGoLh61QCD-p--MncqkrIo8zb9WbX-1BYU37Bv4icpSNmSpbh6_OaVpqb3Yz_RBFjE877qJ_8Vl8r1Cuk4jTnW5MwBybOxkOrcRvMQjlvnDI6vpAEPQ2dhAgi_aRMxsVKB7qbRnffklHGA99EWLBLLmryBPSg494FUCRupsjpX6iUioGDLcfj8jSOoezeRkGH5ji_vie_E3gE3gQrOoR_oSEJ3vyFFU5zdN6ObKXHYkOM_aoUGo5Qt5sadDkzeNddzWnxeO--GK1xdS0JO6kTbZdn3r1mxYd_AIdW47vU84Fii9zlFI1T9EDSYr2moC5SLgUCsuld5sXnSm0mC4xOGXNIc9SEvkA1Xy7Y5qY4DFTQv9Vm9zClSGk1_1pvxxTvJQaVHVlGLcFuZwNctiXU2HkZZpQAXhsfyuU7g1iclR51WALur9FkSpuUlgHCmHpcEtKI62CRl2ppNgnMgUSiXFZlePKDULVyPLG94bjnD9VueaTJgaQVS5Dhep1qrgy1vD5uggd6oFApltam3f98uJQpzy9aa48roDO3FR5dwpw2L-zF-wv-7lpB2VjV-V96wwgifpl2TZCkmPCtWDAHcRjjhjIJzpoGiQgHfq2eZhs9RFpPqBIWA-zmI9n_VInI2cepbiAmaPrwGbQmk8kY2MXurObGi0Ae3NFG7TO1q0uEyF6cqMsl1YuqNLqljEvg0NCvXbpHcJ5ePy_RetsSzJkTEdGy73HSQ4XlGkSRUmG_zC1xdi-gRWHjijYUQJ2WEpc4HeQ4qQLgiLFpN5cl9hcsSFcb83Sw17dh6F0xKVNcWBXcy5fS3OtdJObufACeKMhOMBb37BOovYRGCuXDWiQ3bvfMoURv2DEdw5jsdlRxEUubMsEdu4MG4TRmEVXxGHUWZfoWy3OPQnY-ll-Z08KfnyT3OslnBao9zg7iSDi6Ib5BRgwUxoQIoLtg-ZEyTmqbXUIYFDYgDBjkwEWGtqPL2CTjDcubK3K9rM9ZcHq170nmctMHMgT0IHA_WzODiRzZ129g_8nhYpltnxjJRqeFVaiXB0rlsTXkHLkYrhzG8ixcDd_dR8pp94bRJ-YWa76nOKHO5q0oWgf04wAUoVWw-s6_BWTOVXqY9OWfTcxPoBJXhqdg9DKLDo286vgEV9yA2_quPIR_roPMWDJK-r5iRpfnKhIacBrduXmne6WqVJlOvCDBrZqme-ebOsoCdkXDGQXe3MxwLcYwn7exECt0YlbmCbblZut2TFhrcnoY206tof6dL1086bz2myw-2hlfjbyGrSzXFfap",
               "summary": []
             },
             {
-              "id": "msg_0943af62751a73e5016ac4c99b925087d2ad885b583cdc1e51",
+              "id": "msg_057e6e4dcfde398e016ae8f2a36cc087d2a7f6a56f5786f95b",
               "type": "message",
               "status": "completed",
               "content": [
@@ -90,7 +92,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[\n  {\n    \"name\": \"unsalted butter, softened\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"one cup of softened unsalted butter\"\n  },\n  {\n    \"name\": \"white sugar\",\n    \"quantity\": 0.25,\n    \"unit\": \"cup\",\n    \"input\": \"a quarter cup of white sugar\"\n  },\n  {\n    \"name\": \"egg\",\n    \"quantity\": 1,\n    \"unit\": \"egg\",\n    \"input\": \"an egg\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"input\": \"1 teaspoon of vanilla extract\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 2,\n    \"unit\": \"cup\",\n    \"input\": \"2 cups of all-purpose flour\"\n  },\n  {\n    \"name\": \"semisweet chocolate chips\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"1 cup of semisweet chocolate chips\"\n  }\n]"
+                  "text": "[\n  {\n    \"name\": \"softened unsalted butter\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"one cup of softened unsalted butter\"\n  },\n  {\n    \"name\": \"white sugar\",\n    \"quantity\": 0.25,\n    \"unit\": \"cup\",\n    \"input\": \"a quarter cup of white sugar\"\n  },\n  {\n    \"name\": \"egg\",\n    \"quantity\": 1,\n    \"unit\": null,\n    \"input\": \"an egg\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\",\n    \"input\": \"1 teaspoon of vanilla extract\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 2,\n    \"unit\": \"cup\",\n    \"input\": \"2 cups of all-purpose flour\"\n  },\n  {\n    \"name\": \"semisweet chocolate chips\",\n    \"quantity\": 1,\n    \"unit\": \"cup\",\n    \"input\": \"1 cup of semisweet chocolate chips\"\n  }\n]"
                 }
               ],
               "phase": "final_answer",
@@ -147,14 +149,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 301,
+            "output_tokens": 358,
             "output_tokens_details": {
-              "reasoning_tokens": 56
+              "reasoning_tokens": 114
             },
-            "total_tokens": 666
+            "total_tokens": 723
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:12:45
+  recorded_at: 2026-11-02 20:29:26
 recorded_with: VCR-vcr/2.1.0

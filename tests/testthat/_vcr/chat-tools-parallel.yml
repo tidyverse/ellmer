@@ -5,74 +5,74 @@ http_interactions:
     body:
       string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Roll
-        two dice and compute the total."}]}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        two dice and compute the total."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a six-sided die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463de0c2af20038-LHR
+      cf-ray: a52c11170d4ca17a-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:08:55 GMT
+      date: Fri, 30 Oct 2026 17:16:16 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1772'
+      openai-processing-ms: '1012'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=8UaEACnWdKf2hVrfcv3UZ5WUsCEn_AsXIYrWpi2B.Mw-1791281333.1414883-1.0.1.1-8.gXQ7xvmxVaQ82RrLwvs3JgVFVLn1UKtOdKhAdIvPnxksxXJJLEKtv8uxumV0PYBucq116p9gqslruMcwXCWHqBvHgeAdna8LQFS.bFdGI0QfoacJx9D95T4ik7h.is;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:38:55 GMT
+      set-cookie: __cf_bm=Sps7bgCVx953nZTQxSwzC8TYp7XXu46haGGI8kjEAdU-1793380575.8495007-1.0.1.1-vye26utn.gVyKL6CLtGQ_2r_99hVnC8K4RpIPQelSnStN4OyerW3wBIm7LJu1YMDOtLEKZoNR7hrqErAooX60bwu91wM1ZtgqdLvQMmoozDaSK7UKx3hbxNlHmMZ6K.F;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        30 Oct 2026 17:46:16 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199739'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 78ms
-      x-request-id: req_ad285767a83a46ce8ec17cd334f00ba6
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_b892bdd976e94ba38cfaa3d5506cb56a
     body:
       string: |-
         {
-          "id": "resp_076f70d4373bae68016ac4c8b5f48087d2abc48a1701377519",
+          "id": "resp_0b7591c2c00be356016ae4d0dfecf887d28eef88e2282f1b4e",
           "object": "response",
-          "created_at": 1791281333,
+          "created_at": 1793380575,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281335,
+          "completed_at": 1793380576,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "fc_076f70d4373bae68016ac4c8b7ad8087d28251321dbb5f9528",
+              "id": "fc_0b7591c2c00be356016ae4d0e0c7c087d2ad589ce4f663135b",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_Xrix2EdHwVOHSDHkaKEikU5Z",
+              "call_id": "call_YNAzZ7dXtj6h4HbbwC73HmrW",
               "name": "dice"
             },
             {
-              "id": "fc_076f70d4373bae68016ac4c8b7ad9087d2a2bc1e7738d4452c",
+              "id": "fc_0b7591c2c00be356016ae4d0e0c7cc87d2aa1b45c4e64f6b46",
               "type": "function_call",
               "status": "completed",
               "arguments": "{}",
-              "call_id": "call_eLIM7mBbVV6O88w2og0vLUwJ",
+              "call_id": "call_nJHwzjD37ioLkmnlYN94PdNO",
               "name": "dice"
             }
           ],
@@ -80,10 +80,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -132,86 +133,86 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 44,
+            "input_tokens": 49,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 40,
+            "output_tokens": 43,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 84
+            "total_tokens": 92
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:08:55
+  recorded_at: 2026-10-30 17:16:17
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"system","content":[{"type":"input_text","text":"Be
         terse"}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Roll
-        two dice and compute the total."}]},{"type":"function_call","call_id":"fc_076f70d4373bae68016ac4c8b7ad8087d28251321dbb5f9528","name":"dice","arguments":"{}"},{"type":"function_call","call_id":"fc_076f70d4373bae68016ac4c8b7ad9087d2a2bc1e7738d4452c","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_076f70d4373bae68016ac4c8b7ad8087d28251321dbb5f9528","output":"2"},{"type":"function_call_output","call_id":"fc_076f70d4373bae68016ac4c8b7ad9087d2a2bc1e7738d4452c","output":"5"}],"model":"gpt-4.1-nano","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
+        two dice and compute the total."}]},{"type":"function_call","call_id":"fc_0b7591c2c00be356016ae4d0e0c7c087d2ad589ce4f663135b","name":"dice","arguments":"{}"},{"type":"function_call","call_id":"fc_0b7591c2c00be356016ae4d0e0c7cc87d2aa1b45c4e64f6b46","name":"dice","arguments":"{}"},{"type":"function_call_output","call_id":"fc_0b7591c2c00be356016ae4d0e0c7c087d2ad589ce4f663135b","output":"2"},{"type":"function_call_output","call_id":"fc_0b7591c2c00be356016ae4d0e0c7cc87d2aa1b45c4e64f6b46","output":"5"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","temperature":0,"stream":false,"tools":[{"type":"function","name":"dice","description":"Rolls
         a six-sided die","strict":true,"parameters":{"type":"object","description":"","properties":{},"required":[],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463de1fd9080038-LHR
+      cf-ray: a52c1121ecd6a17a-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:08:58 GMT
+      date: Fri, 30 Oct 2026 17:16:18 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1513'
+      openai-processing-ms: '1168'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=8aheX4tVKXalID3WKWMT8oA2oyVxeIRjXg6RISiMCz4-1791281336.297933-1.0.1.1-P7fIJF24BYkHV0fdIoFO6ZgssmP4zW9rWrzhpSkFKT7ng.z.xcnTNROc_Jjmo0ndl9HfSBLdAL8fGCkBjbQ558kJTA0LkfSAlQqpQ9z5OrrGET1h8lrXWI8Ij.mIO9Kb;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:38:58 GMT
+      set-cookie: __cf_bm=sp5k2cV237MR3Q7FZ8rYDuXRZbauYRXtTP.WvNOkKI4-1793380577.585331-1.0.1.1-7b8cRBLUsxWyYWP4aCpJqGdbifhAjR58kmgOcWwj7euxveWlYGIwv7A1820Me2nNxhofHBu5HOhdtGIfP5M52XvcG3fdrmT4jGR.9JTT1edIjsFkBg9_VYoqIKv.TC3x;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        30 Oct 2026 17:46:18 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '200000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '199705'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 88ms
-      x-request-id: req_2ab2133b09cc43a393bb331328c94a36
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_4c44a629f84348c1afa0629488bc4cd4
     body:
       string: |-
         {
-          "id": "resp_030132d28a35fc89016ac4c8b878c487d2a1d12db1f40e62eb",
+          "id": "resp_0f986da5f3c0ce71016ae4d0e1abdc87d28731ddf094dbb0e7",
           "object": "response",
-          "created_at": 1791281336,
+          "created_at": 1793380577,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281337,
+          "completed_at": 1793380578,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-nano-2025-04-14",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "msg_030132d28a35fc89016ac4c8b9d4cc87d2b31431d1d119e94b",
+              "id": "msg_0f986da5f3c0ce71016ae4d0e2582087d2a161c7c57d434f3a",
               "type": "message",
               "status": "completed",
               "content": [
@@ -219,9 +220,10 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The total is 7."
+                  "text": "2 and 5, total 7."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
@@ -229,10 +231,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -281,22 +284,22 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 78,
+            "input_tokens": 114,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 8,
+            "output_tokens": 13,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 86
+            "total_tokens": 127
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:08:58
+  recorded_at: 2026-10-30 17:16:18
 recorded_with: VCR-vcr/2.1.0

@@ -91,12 +91,14 @@ chat_portkey <- function(
 
 chat_portkey_test <- function(
   ...,
-  model = "@open-ai-virtual-7f0dcd/gpt-4.1-nano",
+  model = "@open-ai-virtual-7f0dcd/gpt-5.6-luna",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
-  params$temperature <- params$temperature %||% 0
+  # Chat Completions only allows function tools on reasoning models when
+  # reasoning is turned off
+  params$reasoning_effort <- params$reasoning_effort %||% "none"
 
   chat_portkey(model = model, params = params, ..., echo = echo)
 }

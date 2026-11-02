@@ -40,17 +40,17 @@ library(ellmer)
 
 ### Motivating example
 
-Let's take a look at an example where we really need an external tool. Chat models generally do not know the current time, which makes questions like these impossible.
+Let's take a look at an example where we really need an external tool. Chat models don't have access to a clock, which makes questions like this impossible to answer.
 
 ```{r}
 #| label: no-tool
 #| cassette: true
 
-chat <- chat_openai(model = "gpt-4o")
-chat$chat("How long ago did Neil Armstrong touch down on the moon?")
+chat <- chat_openai(model = "gpt-5.4-mini")
+chat$chat("What time is it right now in Chicago?")
 ```
 
-Since the model doesn't know what day it is, the result is incorrect.
+Nothing tells the model the time of day, so the best it can do is explain that it doesn't know.
 
 ### Defining a tool function
 
@@ -119,7 +119,7 @@ That's all we need to do! Let's retry our query:
 #| label: with-tool
 #| cassette: true
 
-chat$chat("How long ago did Neil Armstrong touch down on the moon?")
+chat$chat("What time is it right now in Chicago?")
 ```
 
 That's correct! Without any further guidance, the chat model decided to call our tool function and successfully used its result in formulating its response.
@@ -129,8 +129,6 @@ If we print the chat we can see where the model decided to use the tool:
 ```{r}
 chat
 ```
-
-(Full disclosure: I originally tried this example with the default model of `gpt-4o-mini` and it got the tool calling right but the date math wrong, hence the explicit `model="gpt-4o"`.)
 
 This tool example was extremely simple, but you can imagine doing much more interesting things from tool functions: calling APIs, reading from or writing to a database, kicking off a complex simulation, or even calling a complementary GenAI model (like an image generator). Or if you are using ellmer in a Shiny app, you could use tools to set reactive values, setting off a chain of reactive updates.
 
@@ -219,7 +217,7 @@ You could use this tool to allow the LLM to "see" websites, like [the tidyverse 
 #| eval: false
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-6.1-terra".
 chat$register_tool(screenshot_website)
 chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> https://tidyverse.org screenshot completed

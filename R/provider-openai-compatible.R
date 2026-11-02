@@ -121,13 +121,15 @@ chat_openai_compatible <- function(
 chat_openai_compatible_test <- function(
   system_prompt = "Be terse.",
   ...,
-  model = "gpt-4.1-nano",
+  model = "gpt-5.6-luna",
   params = NULL,
   echo = "none"
 ) {
   params <- params %||% params()
   params$seed <- params$seed %||% 1014
-  params$temperature <- params$temperature %||% 0
+  # Chat Completions only allows function tools on reasoning models when
+  # reasoning is turned off
+  params$reasoning_effort <- params$reasoning_effort %||% "none"
 
   chat <- chat_openai_compatible(
     # Test with real OpenAI API
@@ -250,6 +252,7 @@ method(chat_params, ProviderOpenAICompatible) <- function(provider, params) {
       logprobs = "log_probs",
       max_completion_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
+      reasoning_effort = "reasoning_effort",
       seed = "seed",
       stop = "stop_sequences",
       temperature = "temperature",

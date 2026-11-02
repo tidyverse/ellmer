@@ -3,7 +3,7 @@
     Code
       . <- chat_anthropic()
     Message
-      Using model = "claude-sonnet-5".
+      Using model = "claude-sonnet-5-5".
 
 # binary documents are rejected
 

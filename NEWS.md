@@ -1,10 +1,23 @@
 # ellmer (development version)
 
+* `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
+* New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
+* Default models have been updated for a number of providers (@thisisnic, #1176):
+  * `chat_anthropic()` now uses `claude-sonnet-5-5`.
+  * `chat_aws_bedrock()` now uses `us.anthropic.claude-sonnet-5-5`.
+  * `chat_deepseek()` now uses `deepseek-flash`.
+  * `chat_google_gemini()` and `chat_google_vertex()` now use `gemini-3.8-flash`.
+  * `chat_openai()` now uses `gpt-6.1-terra`.
+  * `chat_openrouter()` now uses `gpt-6.1-terra`.
+  * `chat_posit()` now uses `claude-sonnet-5-5`.
+  * `chat_snowflake()` now uses `claude-sonnet-5-5`.
 * `chat_openrouter()` now uses the cost OpenRouter reports for each request instead of estimating it from token rates. If no valid charge is available, the cost remains unknown; with your own provider key, OpenRouter's charge may differ from the upstream provider's bill. The now-unused static OpenRouter prices have also been removed from the pricing snapshot (#1189).
 * The OpenTelemetry `gen_ai.input.messages` attribute is no longer dropped when a tool result returns a `Content` object, such as an image (@taekop, #1145).
 * OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).
 * `chat_cloudflare()` now uses its `account` argument to build the API URL. Previously it always read `CLOUDFLARE_ACCOUNT_ID`, ignoring any `account` you passed in. It also no longer errors when streaming a response that is only a number, which Cloudflare sends as a JSON number instead of a string (#1164).
+* `chat_google_gemini()` now uses Google's Interactions API. It now accepts remote images via `content_image_url()`. `frequency_penalty`, `presence_penalty`, `log_probs` and `reasoning_tokens` are no longer supported and warn. Structured output no longer works with Gemini 2.5 models, so upgrade to Gemini 3 or newer if you use `chat_structured()` (@thisisnic, #1155).
+* `chat_google_gemini()`'s browser-based OAuth flow now uses a verified Google OAuth app, so you no longer see the "unverified app" warning. It also works on hosted sessions like Posit Workbench and Google Colab, and `chat_google_vertex()` no longer falls back to it (@thisisnic, #1156).
 * `chat_openai()` now sends `type = "message"` on every input item to the Responses API, so OpenAI-compatible servers that require it (e.g. llama.cpp) no longer reject replayed assistant turns (@taekop, #1153).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * Streamed responses now record the time to first chunk (in seconds) as the `gen_ai.response.time_to_first_chunk` attribute on the OpenTelemetry `chat` span (@schloerke, #1142).

@@ -175,9 +175,13 @@ local_mocked_openrouter_perform <- function(
   )
 }
 
-test_that("value_turn() prefers reported cost over conflicting static prices", {
+test_that("value_turn() uses the reported cost", {
   local_openrouter_static_prices()
 
+  provider <- openrouter_test_provider()
+  model <- test_model("openrouter/test-model")
+
+  # The fixture's static prices would charge $0.02 for these tokens
   expect_equal(
     get_token_cost(
       "OpenRouter",
@@ -187,21 +191,11 @@ test_that("value_turn() prefers reported cost over conflicting static prices", {
     dollars(0.02)
   )
 
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
-
-  # With the fixture's prices these tokens would cost $0.02
-  turn <- value_turn(provider, model, openrouter_value_result(cost = 0.005))
-
-  expect_equal(unclass(turn@cost), 0.005)
-  expect_equal(unname(turn@tokens), c(10, 5, 0))
-})
-
-test_that("value_turn() preserves zero and high-precision costs", {
-  local_openrouter_static_prices()
-
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
+  # The reported charge wins over the static estimate, including zero and
+  # high-precision values.
+  reported <- value_turn(provider, model, openrouter_value_result(cost = 0.005))
+  expect_equal(unclass(reported@cost), 0.005)
+  expect_equal(unname(reported@tokens), c(10, 5, 0))
 
   zero <- value_turn(provider, model, openrouter_value_result(cost = 0))
   expect_equal(unclass(zero@cost), 0)
@@ -212,59 +206,19 @@ test_that("value_turn() preserves zero and high-precision costs", {
     openrouter_value_result(cost = 0.000123456789)
   )
   expect_equal(unclass(tiny@cost), 0.000123456789)
-})
 
-test_that("value_turn() reports unknown cost when usage or cost is missing", {
-  local_openrouter_static_prices()
-
-  expect_equal(
-    get_token_cost(
-      "OpenRouter",
-      "openrouter/test-model",
-      tokens(input = 10, output = 5)
-    ),
-    dollars(0.02)
-  )
-
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
-
-  no_usage <- value_turn(
-    provider,
-    model,
-    openrouter_value_result(include_usage = FALSE)
-  )
-  no_cost <- value_turn(
-    provider,
-    model,
-    openrouter_value_result(include_cost = FALSE)
-  )
-  null_cost <- value_turn(
-    provider,
-    model,
-    openrouter_value_result(cost = NULL)
-  )
-
-  for (turn in list(no_usage, no_cost, null_cost)) {
-    expect_equal(unclass(turn@cost), NA_real_)
-    expect_equal(turn@text, "hi")
-  }
-})
-
-test_that("value_turn() treats invalid costs as unknown but keeps the turn", {
-  local_openrouter_static_prices()
-
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
-
-  invalid <- list(
+  # Missing or malformed charges stay unknown rather than falling back to
+  # the static estimate.
+  unknown <- list(
+    openrouter_value_result(include_usage = FALSE),
+    openrouter_value_result(include_cost = FALSE),
+    openrouter_value_result(cost = NULL),
     openrouter_value_result(cost = "0.005"),
     openrouter_value_result(cost = list(0.005)),
     openrouter_value_result(cost = NaN),
     openrouter_value_result(cost = Inf)
   )
-
-  for (result in invalid) {
+  for (result in unknown) {
     turn <- value_turn(provider, model, result)
     expect_equal(unclass(turn@cost), NA_real_)
     expect_equal(turn@text, "hi")
@@ -285,68 +239,51 @@ test_that("value_turn() preserves error checking", {
   expect_snapshot(error = TRUE, value_turn(provider, model, result))
 })
 
-test_that("value_turn() keeps reported cost through tool-call parsing", {
+test_that("value_turn() keeps reported cost through tool and structured output", {
   local_openrouter_static_prices()
 
   provider <- openrouter_test_provider()
   model <- test_model("openrouter/test-model")
 
-  result <- openrouter_value_result(
-    cost = 0.0075,
-    finish_reason = "tool_calls",
-    message = list(
-      role = "assistant",
-      content = NULL,
-      tool_calls = list(list(
-        id = "call_1",
-        type = "function",
-        `function` = list(
-          name = "current_date",
-          arguments = "{}"
-        )
-      ))
+  tool <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(
+      cost = 0.0075,
+      finish_reason = "tool_calls",
+      message = list(
+        role = "assistant",
+        content = NULL,
+        tool_calls = list(list(
+          id = "call_1",
+          type = "function",
+          `function` = list(
+            name = "current_date",
+            arguments = "{}"
+          )
+        ))
+      )
     )
   )
 
-  turn <- value_turn(provider, model, result)
+  expect_s7_class(tool@contents[[1]], ContentToolRequest)
+  expect_equal(tool@contents[[1]]@name, "current_date")
+  expect_equal(tool@finish_reason, "tool_use")
+  expect_equal(unclass(tool@cost), 0.0075)
 
-  expect_s7_class(turn@contents[[1]], ContentToolRequest)
-  expect_equal(turn@contents[[1]]@name, "current_date")
-  expect_equal(turn@finish_reason, "tool_use")
-  expect_equal(unclass(turn@cost), 0.0075)
-})
-
-test_that("value_turn() keeps reported cost through structured-output parsing", {
-  local_openrouter_static_prices()
-
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
-
-  result <- openrouter_value_result(
-    cost = 0.0021,
-    message = list(role = "assistant", content = '{"a":1}')
+  json <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(
+      cost = 0.0021,
+      message = list(role = "assistant", content = '{"a":1}')
+    ),
+    has_type = TRUE
   )
 
-  turn <- value_turn(provider, model, result, has_type = TRUE)
-
-  expect_s7_class(turn@contents[[1]], ContentJson)
-  expect_equal(turn@contents[[1]]@parsed, list(a = 1))
-  expect_equal(unclass(turn@cost), 0.0021)
-})
-
-test_that("final usage-only stream chunk supplies the reported cost", {
-  provider <- openrouter_test_provider()
-  model <- test_model("openrouter/test-model")
-
-  result <- NULL
-  for (chunk in openrouter_stream_chunks(cost = 0.0123)) {
-    result <- stream_merge_chunks(provider, result, chunk)
-  }
-
-  turn <- value_turn(provider, model, result)
-
-  expect_equal(unclass(turn@cost), 0.0123)
-  expect_equal(unname(turn@tokens), c(9, 4, 3))
+  expect_s7_class(json@contents[[1]], ContentJson)
+  expect_equal(json@contents[[1]]@parsed, list(a = 1))
+  expect_equal(unclass(json@cost), 0.0021)
 })
 
 test_that("chat() reports actual charges and cost summary", {
@@ -363,7 +300,7 @@ test_that("chat() reports actual charges and cost summary", {
   expect_equal(unclass(chat$get_tokens()$cost), 0.005)
 })
 
-test_that("stream() merges final usage chunk into reported cost", {
+test_that("stream() and stream_async() merge the final usage-only chunk", {
   local_openrouter_static_prices()
   local_mocked_openrouter_perform(
     stream_chunks = openrouter_stream_chunks(cost = 0.0123)
@@ -376,13 +313,10 @@ test_that("stream() merges final usage chunk into reported cost", {
   turn <- chat$last_turn()
   expect_equal(unclass(turn@cost), 0.0123)
   expect_equal(unname(turn@tokens), c(9, 4, 3))
-})
 
-test_that("stream_async() merges final usage chunk into reported cost", {
   local_mocked_openrouter_perform(
     stream_chunks = openrouter_stream_chunks(cost = 0.0123)
   )
-
   chat <- chat_openrouter(model = "openrouter/test-model", echo = "none")
   out <- sync(coro::async_collect(chat$stream_async("hi")))
   expect_equal(paste0(unlist(out), collapse = ""), "Hello world\n")
