@@ -32,7 +32,7 @@ SDKs' endpoint override environment variables:
 \code{models_aws_bedrock()} talks to a different AWS service, so it honors
 \code{AWS_ENDPOINT_URL_BEDROCK} instead.}
 
-\item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5").
+\item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_models_aws_bedrock()} to see all options.
 .
@@ -41,7 +41,7 @@ While ellmer provides a default model, there's no guarantee that you'll
 have access to it, so you'll need to specify a model that you can.
 If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
 you'll need to use the inference profile ID, e.g.
-\code{model="us.anthropic.claude-sonnet-5"}.}
+\code{model="us.anthropic.claude-sonnet-5-5"}.}
 
 \item{api}{Which Bedrock API to use: \code{"converse"}, \code{"messages"}, or
 \code{"responses"}. The default, \code{NULL}, picks the API from \code{model}, falling

@@ -10,28 +10,28 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-length: '0'
       content-type: text/plain; charset=utf-8
-      date: Fri, 25 Sep 2026 11:46:40 GMT
+      date: Mon, 02 Nov 2026 14:05:11 GMT
       server: UploadServer
       x-goog-upload-chunk-granularity: '8388608'
-      x-goog-upload-control-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80yJCO6ASrZoFJozFKvERejJfmLWykcg3EvTZrCpd8L79F4OP5GC4rUxq9svPcL46o7i9-qoqWR40RFi9mhflz5SybxZOATaEcibqimQg&upload_protocol=resumable
+      x-goog-upload-control-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AFy3sg2hrmOHK0bpkX6ZEzc9IEhCj1ofaJtmGrqq7PXWYj5uVDdJugp3_0xZXA1u36t9tazL_AkJerLq7JefHIi26anqg3jPdte7P4oExSdhAQ&upload_protocol=resumable
       x-goog-upload-header-content-type: application/json; charset=UTF-8
       x-goog-upload-header-vary:
       - Origin
       - X-Origin
       - Referer
-      x-goog-upload-header-x-google-backends: unix:/tmp/esfbackend.1790328994.513211.3560633
+      x-goog-upload-header-x-google-backends: unix:/tmp/esfbackend.1793604453.378264.1759653
       x-goog-upload-header-x-google-esf-cloud-client-params: 'backend_service_name:
         "generativelanguage.googleapis.com" backend_fully_qualified_method: "google.ai.generativelanguage.v1beta.FileService.CreateFile"'
-      x-goog-upload-header-x-google-gfe-backend-request-cost: '14.0623'
+      x-goog-upload-header-x-google-gfe-backend-request-cost: '25.6396'
       x-goog-upload-header-x-google-security-signals: FRAMEWORK=ONE_PLATFORM,ENV=borg,ENV_DEBUG=borg_user:genai-api;borg_job:prod.genai-api
       x-goog-upload-header-x-google-session-info: GgQYECgLIAE6IxIhZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29t
       x-goog-upload-status: active
-      x-goog-upload-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80yJCO6ASrZoFJozFKvERejJfmLWykcg3EvTZrCpd8L79F4OP5GC4rUxq9svPcL46o7i9-qoqWR40RFi9mhflz5SybxZOATaEcibqimQg&upload_protocol=resumable
-      x-guploader-uploadid: AP6rU80yJCO6ASrZoFJozFKvERejJfmLWykcg3EvTZrCpd8L79F4OP5GC4rUxq9svPcL46o7i9-qoqWR40RFi9mhflz5SybxZOATaEcibqimQg
-  recorded_at: 2026-09-25 11:46:40
+      x-goog-upload-url: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AFy3sg2hrmOHK0bpkX6ZEzc9IEhCj1ofaJtmGrqq7PXWYj5uVDdJugp3_0xZXA1u36t9tazL_AkJerLq7JefHIi26anqg3jPdte7P4oExSdhAQ&upload_protocol=resumable
+      x-guploader-uploadid: AFy3sg2hrmOHK0bpkX6ZEzc9IEhCj1ofaJtmGrqq7PXWYj5uVDdJugp3_0xZXA1u36t9tazL_AkJerLq7JefHIi26anqg3jPdte7P4oExSdhAQ
+  recorded_at: 2026-11-02 14:05:12
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AP6rU80yJCO6ASrZoFJozFKvERejJfmLWykcg3EvTZrCpd8L79F4OP5GC4rUxq9svPcL46o7i9-qoqWR40RFi9mhflz5SybxZOATaEcibqimQg&upload_protocol=resumable
+    uri: https://generativelanguage.googleapis.com/upload/v1beta/files?upload_id=AFy3sg2hrmOHK0bpkX6ZEzc9IEhCj1ofaJtmGrqq7PXWYj5uVDdJugp3_0xZXA1u36t9tazL_AkJerLq7JefHIi26anqg3jPdte7P4oExSdhAQ&upload_protocol=resumable
     body:
       string: apples.pdf
   response:
@@ -40,47 +40,47 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-length: '542'
       content-type: application/json; charset=UTF-8
-      date: Fri, 25 Sep 2026 11:46:42 GMT
+      date: Mon, 02 Nov 2026 14:05:13 GMT
       server: UploadServer
       vary:
       - Origin
       - X-Origin
       - Referer
       x-goog-upload-status: final
-      x-guploader-uploadid: AP6rU80yJCO6ASrZoFJozFKvERejJfmLWykcg3EvTZrCpd8L79F4OP5GC4rUxq9svPcL46o7i9-qoqWR40RFi9mhflz5SybxZOATaEcibqimQg
+      x-guploader-uploadid: AFy3sg2hrmOHK0bpkX6ZEzc9IEhCj1ofaJtmGrqq7PXWYj5uVDdJugp3_0xZXA1u36t9tazL_AkJerLq7JefHIi26anqg3jPdte7P4oExSdhAQ
     body:
       string: |
         {
           "file": {
-            "name": "files/psooytwbxgkz",
+            "name": "files/oeaw8u4xfe3z",
             "displayName": "apples.pdf",
             "mimeType": "application/pdf",
             "sizeBytes": "14560",
-            "createTime": "2026-09-25T11:46:42.021810Z",
-            "updateTime": "2026-09-25T11:46:42.021810Z",
-            "expirationTime": "2026-09-27T11:46:41.879519231Z",
+            "createTime": "2026-11-02T14:05:13.170102Z",
+            "updateTime": "2026-11-02T14:05:13.170102Z",
+            "expirationTime": "2026-11-04T14:05:12.534386031Z",
             "sha256Hash": "MWE4OWZhODBjYmU3ZmE0YzU3MTJmN2IxNTQxOGM0YmIzM2I5YzJjMDY4MGQwYzI3M2Q5NTMyOGEyZWVlMGU2Zg==",
-            "uri": "https://generativelanguage.googleapis.com/v1beta/files/psooytwbxgkz",
+            "uri": "https://generativelanguage.googleapis.com/v1beta/files/oeaw8u4xfe3z",
             "state": "ACTIVE",
             "source": "UPLOADED"
           }
         }
-  recorded_at: 2026-09-25 11:46:42
+  recorded_at: 2026-11-02 14:05:13
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/psooytwbxgkz","mime_type":"application/pdf"}]}],"generation_config":{"temperature":0,"seed":1014}}'
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/oeaw8u4xfe3z","mime_type":"application/pdf"}]}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 11:46:43 GMT
+      date: Mon, 02 Nov 2026 14:05:17 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1365
+      server-timing: gfet4t7; dur=4244
       vary:
       - Origin
       - X-Origin
@@ -89,15 +89,15 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"completed","usage":{"total_tokens":576,"total_input_tokens":530,"input_tokens_by_modality":[{"modality":"text","tokens":10},{"modality":"image","tokens":520}],"total_cached_tokens":0,"total_output_tokens":12,"total_tool_use_tokens":0,"total_thought_tokens":34,"raw_prompt_token":647,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":127},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":127},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":34}]}]},"created":"2026-09-25T11:46:43Z","updated":"2026-09-25T11:46:43Z","service_tier":"standard","steps":[{"signature":"EvUBCvIBAWkUfRNwapXo90980XUB+MZ2/ymU+Eyj/qCgZ1MsKSm3DQpjlhwmdDEE/E0sPGiBcX+s4JeyhztJuKy5yyHTgT4gEfKbFOcBH8HDqieZygC9fijGPdmriJUO5anqkt9sWtEWk2MGXFWTopFCnCIEfnuS3eOhXCVbNJ+q3LFq40PqdXIeYmxA270NMITjDOFY48SzvRg3DXW00tvYlUI2uR0+qOO5+7z8qSVr1eaejcS8EOsfrsHAkYXkIlMVCArjTD2vaWWgOv4zgsQ95K82JPoD9w9n1pLCxX1gR3MlHnjbLyr2/u8S/YBHkVkUUdqDD8I=","type":"thought"},{"content":[{"text":"The
-        title of the document is **Apples are tasty**.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 11:46:44
+      string: '{"status":"completed","usage":{"total_tokens":618,"total_input_tokens":530,"input_tokens_by_modality":[{"modality":"image","tokens":520},{"modality":"text","tokens":10}],"total_cached_tokens":0,"total_output_tokens":11,"total_tool_use_tokens":0,"total_thought_tokens":77,"initial_input_tokens":612},"created":"2026-11-02T14:05:17Z","updated":"2026-11-02T14:05:17Z","service_tier":"standard","steps":[{"signature":"EpcDCpQDAWkUfRN5fn0jWw4MKGghUGELI56xwJNaTNGTl9VYTqB71BpxgVWsCRTTU7LaRweTbl7/AzsZvuipJ5siiBddHpQ9UD1zl7gAnXf5UcwQtfniCGmCHNlIEmKDd99VaVTonX51FjmG8amwDn/LD27mMYKsk/eCOngDJf6XQZ6T7GirsJJAJUsK+29Mk6c0kNG9PBel1z2TUWt+b4FVnNAjUSnLwCmRGQfis/DJfDGDeAVND+K5zJWjHxKWi7WPUFeNW4okfO2yngprG0yc0wjiHtYXs9vNvaqxAwrrP8HMng3I0FQtTVKJ0LN+UJUsqH6vWSYjLNdVMTDDe23UsBtHISBRS4DjcGCokPfoalbFWuzsN52kQs8IDD+W8mzIXWKO6IfxeGBNky/cG8Ly6syL1K1v6KQnpygHB97yE1193PPVolDSwdO0Zm3dfwWKaPKxC/AGCNS7Vttg216wGI8fW7s5MLrKlJiPs+WkMZNFReKVr6swcMc9BjTHjFL2UzAnpxEqvMn37utf963t2mdZ2CbcmTI=","type":"thought"},{"content":[{"text":"The
+        title of the document is **Apples are tasty**.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:17
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/psooytwbxgkz","mime_type":"application/pdf"}]},{"signature":"EvUBCvIBAWkUfRNwapXo90980XUB+MZ2/ymU+Eyj/qCgZ1MsKSm3DQpjlhwmdDEE/E0sPGiBcX+s4JeyhztJuKy5yyHTgT4gEfKbFOcBH8HDqieZygC9fijGPdmriJUO5anqkt9sWtEWk2MGXFWTopFCnCIEfnuS3eOhXCVbNJ+q3LFq40PqdXIeYmxA270NMITjDOFY48SzvRg3DXW00tvYlUI2uR0+qOO5+7z8qSVr1eaejcS8EOsfrsHAkYXkIlMVCArjTD2vaWWgOv4zgsQ95K82JPoD9w9n1pLCxX1gR3MlHnjbLyr2/u8S/YBHkVkUUdqDD8I=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/oeaw8u4xfe3z","mime_type":"application/pdf"}]},{"signature":"EpcDCpQDAWkUfRN5fn0jWw4MKGghUGELI56xwJNaTNGTl9VYTqB71BpxgVWsCRTTU7LaRweTbl7/AzsZvuipJ5siiBddHpQ9UD1zl7gAnXf5UcwQtfniCGmCHNlIEmKDd99VaVTonX51FjmG8amwDn/LD27mMYKsk/eCOngDJf6XQZ6T7GirsJJAJUsK+29Mk6c0kNG9PBel1z2TUWt+b4FVnNAjUSnLwCmRGQfis/DJfDGDeAVND+K5zJWjHxKWi7WPUFeNW4okfO2yngprG0yc0wjiHtYXs9vNvaqxAwrrP8HMng3I0FQtTVKJ0LN+UJUsqH6vWSYjLNdVMTDDe23UsBtHISBRS4DjcGCokPfoalbFWuzsN52kQs8IDD+W8mzIXWKO6IfxeGBNky/cG8Ly6syL1K1v6KQnpygHB97yE1193PPVolDSwdO0Zm3dfwWKaPKxC/AGCNS7Vttg216wGI8fW7s5MLrKlJiPs+WkMZNFReKVr6swcMc9BjTHjFL2UzAnpxEqvMn37utf963t2mdZ2CbcmTI=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
         title of the document is **Apples are tasty**."}]},{"type":"user_input","content":[{"type":"text","text":"What
         apple is not tasty?"}]}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
@@ -106,9 +106,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 11:46:46 GMT
+      date: Mon, 02 Nov 2026 14:05:20 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2004
+      server-timing: gfet4t7; dur=2279
       vary:
       - Origin
       - X-Origin
@@ -117,18 +117,20 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"completed","usage":{"total_tokens":632,"total_input_tokens":584,"input_tokens_by_modality":[{"modality":"text","tokens":64},{"modality":"image","tokens":520}],"total_cached_tokens":0,"total_output_tokens":18,"total_tool_use_tokens":0,"total_thought_tokens":30,"raw_prompt_token":713,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":193},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":22}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":193},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":22}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}]},"created":"2026-09-25T11:46:46Z","updated":"2026-09-25T11:46:46Z","service_tier":"standard","steps":[{"signature":"EuQBCuEBAWkUfRMeDRpkh/z0Vz8xdGHV31dccZ7xLJYXFrkVcuHNNNcxeAa4ww7Dd0pb7w1UMiaiaoLJJbBlKY490zw3198wGR4R5wbC0MrY0cpWd1X0Z602U55mGrHatGYzwrP8lmNPkqPtoZq6iUY3Sr9u+svGIb6d0arpQiAOakSXzXhjtkJpmcdw3lI3ZpoSQZ+u5PDs0nmcdgFo8ySqHY0GR3TJPRKXCv4XLCPTEvt/BD9ymRp3cCQ4SImcXAbDpvs+ABJIRX82RA/Im5o2mqkMn9HCKSBtUDh0rMGTx6Ji+Lz8","type":"thought"},{"content":[{"text":"According
-        to the document, the **red delicious** apple is not tasty (not delicious).","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 11:46:46
+      string: '{"status":"completed","usage":{"total_tokens":702,"total_input_tokens":627,"input_tokens_by_modality":[{"modality":"image","tokens":520},{"modality":"text","tokens":107}],"total_cached_tokens":0,"total_output_tokens":32,"total_tool_use_tokens":0,"total_thought_tokens":43,"initial_input_tokens":707},"created":"2026-11-02T14:05:20Z","updated":"2026-11-02T14:05:20Z","service_tier":"standard","steps":[{"signature":"EpUCCpICAWkUfRNHfA0w3Hmnp8mSQ0Nirp01IFDCohbKGl48/1Z4oTYbVh0nAxAT1bbb84WZgurrXWHB39GSMkAmBeQKWB3JIikmBFtMUjgtjRQcZ9wyl5AXTIHNrVzHMdLXwyuo3kBSO/rbckkD5PekHs6jh1sBWNkT+bNZIv9I6oCBCkbrJlStjJo0PGT17vjaqL4IBC1LR0j0mE+Zx8wA2Kg4/UHCI4ODftCSQg3UVdbjXV4+VxFpBwIfwyW+WQAn8h6NwqYmOnYeZDZDyu1CKjoBIWWlo+49+28x6swyghmcLFE4LWSC63pQtATp196hRDdMW1RGO8ekwbo0BnBJ+CwARadaVwmxQIKTI4KkfUewtizOWw==","type":"thought"},{"content":[{"text":"According
+        to the document, the **red delicious** apple is not tasty (it states: \"Except
+        for red delicious, that is. They are NOT delicious.\").","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:20
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/psooytwbxgkz","mime_type":"application/pdf"}]},{"signature":"EvUBCvIBAWkUfRNwapXo90980XUB+MZ2/ymU+Eyj/qCgZ1MsKSm3DQpjlhwmdDEE/E0sPGiBcX+s4JeyhztJuKy5yyHTgT4gEfKbFOcBH8HDqieZygC9fijGPdmriJUO5anqkt9sWtEWk2MGXFWTopFCnCIEfnuS3eOhXCVbNJ+q3LFq40PqdXIeYmxA270NMITjDOFY48SzvRg3DXW00tvYlUI2uR0+qOO5+7z8qSVr1eaejcS8EOsfrsHAkYXkIlMVCArjTD2vaWWgOv4zgsQ95K82JPoD9w9n1pLCxX1gR3MlHnjbLyr2/u8S/YBHkVkUUdqDD8I=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"What''s
+        the title of this document?"},{"type":"document","uri":"https://generativelanguage.googleapis.com/v1beta/files/oeaw8u4xfe3z","mime_type":"application/pdf"}]},{"signature":"EpcDCpQDAWkUfRN5fn0jWw4MKGghUGELI56xwJNaTNGTl9VYTqB71BpxgVWsCRTTU7LaRweTbl7/AzsZvuipJ5siiBddHpQ9UD1zl7gAnXf5UcwQtfniCGmCHNlIEmKDd99VaVTonX51FjmG8amwDn/LD27mMYKsk/eCOngDJf6XQZ6T7GirsJJAJUsK+29Mk6c0kNG9PBel1z2TUWt+b4FVnNAjUSnLwCmRGQfis/DJfDGDeAVND+K5zJWjHxKWi7WPUFeNW4okfO2yngprG0yc0wjiHtYXs9vNvaqxAwrrP8HMng3I0FQtTVKJ0LN+UJUsqH6vWSYjLNdVMTDDe23UsBtHISBRS4DjcGCokPfoalbFWuzsN52kQs8IDD+W8mzIXWKO6IfxeGBNky/cG8Ly6syL1K1v6KQnpygHB97yE1193PPVolDSwdO0Zm3dfwWKaPKxC/AGCNS7Vttg216wGI8fW7s5MLrKlJiPs+WkMZNFReKVr6swcMc9BjTHjFL2UzAnpxEqvMn37utf963t2mdZ2CbcmTI=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"The
         title of the document is **Apples are tasty**."}]},{"type":"user_input","content":[{"type":"text","text":"What
-        apple is not tasty?"}]},{"signature":"EuQBCuEBAWkUfRMeDRpkh/z0Vz8xdGHV31dccZ7xLJYXFrkVcuHNNNcxeAa4ww7Dd0pb7w1UMiaiaoLJJbBlKY490zw3198wGR4R5wbC0MrY0cpWd1X0Z602U55mGrHatGYzwrP8lmNPkqPtoZq6iUY3Sr9u+svGIb6d0arpQiAOakSXzXhjtkJpmcdw3lI3ZpoSQZ+u5PDs0nmcdgFo8ySqHY0GR3TJPRKXCv4XLCPTEvt/BD9ymRp3cCQ4SImcXAbDpvs+ABJIRX82RA/Im5o2mqkMn9HCKSBtUDh0rMGTx6Ji+Lz8","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"According
-        to the document, the **red delicious** apple is not tasty (not delicious)."}]},{"type":"user_input","content":[{"type":"text","text":"What
+        apple is not tasty?"}]},{"signature":"EpUCCpICAWkUfRNHfA0w3Hmnp8mSQ0Nirp01IFDCohbKGl48/1Z4oTYbVh0nAxAT1bbb84WZgurrXWHB39GSMkAmBeQKWB3JIikmBFtMUjgtjRQcZ9wyl5AXTIHNrVzHMdLXwyuo3kBSO/rbckkD5PekHs6jh1sBWNkT+bNZIv9I6oCBCkbrJlStjJo0PGT17vjaqL4IBC1LR0j0mE+Zx8wA2Kg4/UHCI4ODftCSQg3UVdbjXV4+VxFpBwIfwyW+WQAn8h6NwqYmOnYeZDZDyu1CKjoBIWWlo+49+28x6swyghmcLFE4LWSC63pQtATp196hRDdMW1RGO8ekwbo0BnBJ+CwARadaVwmxQIKTI4KkfUewtizOWw==","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"According
+        to the document, the **red delicious** apple is not tasty (it states: \"Except
+        for red delicious, that is. They are NOT delicious.\")."}]},{"type":"user_input","content":[{"type":"text","text":"What
         apple is not tasty?"}]}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
     status: 200
@@ -136,9 +138,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 11:46:48 GMT
+      date: Mon, 02 Nov 2026 14:05:23 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1238
+      server-timing: gfet4t7; dur=2663
       vary:
       - Origin
       - X-Origin
@@ -147,7 +149,7 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"completed","usage":{"total_tokens":670,"total_input_tokens":640,"input_tokens_by_modality":[{"modality":"image","tokens":520},{"modality":"text","tokens":120}],"total_cached_tokens":0,"total_output_tokens":7,"total_tool_use_tokens":0,"total_thought_tokens":23,"raw_prompt_token":781,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":261},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":11}],"thoughts_tokens_details":[{"modality":"text","tokens":23}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":261},{"modality":"image","tokens":520}],"candidates_tokens_details":[{"modality":"text","tokens":11}],"thoughts_tokens_details":[{"modality":"text","tokens":23}]}]},"created":"2026-09-25T11:46:48Z","updated":"2026-09-25T11:46:48Z","service_tier":"standard","steps":[{"signature":"EtgBCtUBAWkUfRMZj2+dWvH1tT6fjpoagB+iTYaAEz0GroJ/ADOxE23rqLZYXdnmFghJvtKHCEO+Pf5vXU3qxn39BsctJ4ZpNIjC3wcpkgY3vzrUqksg+5NcOSZFMaS6EVNqUcYIRQhzJKm8fbC+qixPlYTZLLUzVZBpsAwAXUH2EMNR9GoeZM7gNk3pV6fxWKcpewBr87soYXmsekzFXGzfwRPiA3iZTO/JbAxCzp9r/1bQmPiMd3WaCvj3tFKXhyDQNfQgOHwwO9Bj0RUMQb9i0r69xDhk4Rwe","type":"thought"},{"content":[{"text":"The
-        **Red Delicious** apple.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 11:46:48
+      string: '{"status":"completed","usage":{"total_tokens":745,"total_input_tokens":710,"input_tokens_by_modality":[{"modality":"image","tokens":520},{"modality":"text","tokens":190}],"total_cached_tokens":0,"total_output_tokens":7,"total_tool_use_tokens":0,"total_thought_tokens":28,"initial_input_tokens":788},"created":"2026-11-02T14:05:23Z","updated":"2026-11-02T14:05:23Z","service_tier":"standard","steps":[{"signature":"EusBCugBAWkUfRPsgwUZmrG3Ke9hpifLCEEQrLwuZolceZNampKU9YGjsrwd+d27q1m9xcZ/uFhY1BHoN0a6tyc7XPHV2G12lJdER1b+N9ifxkKRpwB2CIXCDmPbuzt0qKJWXix3Db+S0JO9qq/hSUnTl4sITJRrVuQOjt81ebRjkP8uDZD2+6L542c8MBUEyXQrz7ikyQVf7A4w4XDQIwMsaXrm+sc2aZr4Kp7Tu7yEaO3G8pLVoGSKpNDugSM1wbqtNTIj93dB/FijQulD2B3CpTAzZOsRAhXKxqJnqNWsTMwemLG/Vkmpqh/WTQ==","type":"thought"},{"content":[{"text":"The
+        **red delicious** apple.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:23
 recorded_with: VCR-vcr/2.1.0

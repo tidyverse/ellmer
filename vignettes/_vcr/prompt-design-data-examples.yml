@@ -15,61 +15,70 @@ http_interactions:
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
+        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e381ae8106aa-LHR
+      cf-ray: a545e3cbf907cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:39 GMT
+      date: Mon, 02 Nov 2026 20:29:16 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2175'
+      openai-processing-ms: '5471'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=RRGzNBCiKDRTDRMzxhNO1zo.QJiDrotNKs.Ae6MuWeQ-1791281556.7442691-1.0.1.1-Aa5.ypeJszy2Ts6QY97uc.27ipUHkDPDfIuFSduvzrRWIldsVvG_El2OpRwFgh1pYjC7BuoPSrvVN2SYAcXhEmz8QzxFx0G8aMw9moP.Mp4H2sRzvj.n.CJlQk.7KXAs;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:39 GMT
+      set-cookie: __cf_bm=rKBFlKOSngxS6MvQJYjG7IWxIvI.0GmIXfCESkY9CcQ-1793651350.464052-1.0.1.1-LxQuIqtierz4oKVlTFZnO1TR7z_HjkzVhx_LvqCYzHxslx4DWxabvqRzFKkfJSaIm2j60wkKGWYM4RRagyAbxvHa6yxnUn.WlkCkQg4Idx8lEeV2xKt5E4.CffVZenPo;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 20:59:16 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499567'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 51ms
-      x-request-id: req_92c0498652fd42bfbb77de78ac6b010e
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999772'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 13ms
+      x-request-id: req_1b8aa850b0344819a125c9380fbe5b6a
     body:
       string: |-
         {
-          "id": "resp_086d54b7be3bd9d7016ac4c994dd5487d29cbe5531c2bd2b00",
+          "id": "resp_0cd2c6be1e409d2b016ae8f296b94c87d2b64592d84bd0bd97",
           "object": "response",
-          "created_at": 1791281556,
+          "created_at": 1793651350,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281558,
+          "completed_at": 1793651356,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_086d54b7be3bd9d7016ac4c995662087d29aae93b97d697c5e",
+              "id": "rs_0cd2c6be1e409d2b016ae8f297ef1487d2884688470be5c498",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABq6PKc4fEcUcMVol7OE3ODRBzMDiSzY3Ye--mGcJQYhDQ1TTPJjnyBu3pc0EzFzcXznBWUD28EKknKk5tXpeiQjhM5srVdJvCdT9g2aUmWSaLWvSIliuEHTMyey-tBoPgr8cSFW9d6KWJDDmAwQdUnshfU--vLWB5TvhhGtCYqBOJkR5-fX8QuDz2SnBTkALeH0fmu7CZFjA04ou4U4Vyr7S_WZo7C1Z0Aho95WPSviPowSKW0S5fLvxMa1Xpp3Y8deZB_Bz8Nsg6jxD2z5M6a0GCTSm-4BaGv6fIYZa8FWORYm2LLfn8OtrsN3nGi4iszuR-3vyoXOZjH84N9egV2dc0W4ApAU4BkSDhAvEsHWhocNRAgfht4p1G5VmQVQPsaWRS9B9OmoRtHeInXpo1G_jppUhIgUsj3VQSY6StcsbPyW7j76lzRIACaoCNNAZg2eVrkY3TFD1bbMO0VwtW_h_OWAvKVh4s45JyuKJzbDJJfcXmJBJq_3qoxdY3zbcJRJsyxU2RQfOdjJEOsfbEYV-DQ11zQx_b7jKa4B1bTOvfzDw9fFAfs6Q85kLryfjP5Zq5PE6Hq3CWvhy7iN-yiurvrww452H1qMzkoRk_3sB0nmQpjM5QH4DA4YJ0tTrem7wsag8JewzM5KvjxrnTwUoeFhikrsMk5lWQLe80p_GgXkxxYEvqiB_VWgMw7-q5YRIWM6Arf5sC2-APZ_QVwTHnxbbpgEX3wG0V8leuS3aBXXC-2icUQ4T6_qYC2ZsC52pQ8KuJ4HwQ-W5zz3LBdr_SsUFlmDVJfoUMOlAt5rqN4E15yXOadp0NPMxU4cShXGh2v4qkXD_DywkDhM6okHdps7PjQiSp3TmcPpIig42-EF4EiqriXGpHwGrjk9wmzmHgOjdN8GyXZZLpz_ke3EzjW3lmB18Zc6SrBVnJopJx1sijK7MSe8HxDKHtr7rxhzke96UxRmukFbjPkU7TJ9f2EX34l__ybtJCQ1H6XNgJp4sM92878ZdxFa0AwLTBWDzKz7sw0H4E0DV0SJ4VFAOxaM_GCN7uIIN0bdEzITPgMHy8Bokl1ZkHwni2Of4y0r86UaDz6mVckLm015_t0XxJitcvRCWnqzT92yDQdqHW3FDsVpGvRUfEkbGiVkn7Y4ZV1E2I4_mas0qjWw6zXBxOQrW4Bl9RVq7RJOIVFcNo_QaEQHJfKl7q3Wa-lS943hWb7LvVe9eYqJabRzGT3LODuDWQjPvckm-M3j5jbX-8BW5Xkr1F1rbLhJfxXtiYfytav20X4csxP8zCRw63QPl7h0PngRrE3sx4Hsl2F-y-gQnmexpOew0TCIaemkC7o0iEZAZn77QWbx-iiYqMynUFQzBj7Ufac6-IEEfg96l-iYhkAIEyUHdwjEGx6pIkMYzkX599wc1aMnOkmVw_mUOpYRJ_bW3KIt4r9rf4_YhjYsTjo88fZp-QUphoebMAyutNSKgFOs3dQVQbrVBww0dCaSKbcnh8Hs3de6zxG4tiD--QpbTOUv1r9zl8eIEb02EooqSMnvRd5i9zfXMGOSMyzY4XAG24D1jVo-1IL8G8pwlyK7aOH_iCbLbTdt5VF3qEtnnqa4p1es0Qiy0A0o6M0lOyFxQKMNT0by0fhjm3HjICk9eEHmJ6MdgFY9jjKCPoqJs9on0XTZafpNYdw4DUTuxUPLQ9apDxgYLbcMJ7cKapATN_T7zHIr5lEHN0aZ8zVRxTh4DD1AzxXPriA4_MlIhPFDeCrfBm598J6RYoXltOPDVMnDlVfWybywRz3ybynlgxBXzM3RxUwM-jFlLbB1s72t1Fz_ZzvzwFFfqQXmQ11oTQNSEKedlKSg5V2abTXSRBdRl2jVLKi5_TIGoAE8nS9VzsNYnOV-_DPuWL47md9C8o72C88fp2czdWhhAMwpKV4xiwzMLo32qMgcR1My5ua2jHQOLg5_CqeoqCLV0PBvs_5GyqDsnfTnoXnoWLER2mpe58jJ6pibZAn_ccnwcHKszf0kQcNZKQqWpNZjuDAijdSkxgKZozBkBG1R05udAyIeJwzXIQ485KuyH4J6cva3IomUwD_hLRcFhcJMJ3kFEzfX1UpU1RhN3QE3B-uARHhXEOU1_WeOsUTX5Qhxq7iZHeKxnq8P4tyvZYM47TRoeH3EewoRrsnq8rasvOHY2rJC_QcFzZuNfyeclJ1sFKkdPmhntCr604MIkZxqMQs9zuwOvSJOSlO1PGzGbN0cXxdZ5Ta9CVxAm3sfXJ2IpAUPZKVTZPr83PcGxTdy7Li5q60qNlC7xcgiL-CZekpbW1yk-fPiZhL8DZ-9FN-jKiORBLEqTdeo1XevB1HjWdClQnoXaaecpfb5yLA2UkmvpE161bqi7thScSRY6AHCOT0jM1W8QnOdgHtNCl8gJ_djdQwCNlMBoJqErX-eojBupkrUz0LMFNOx0MPIz1razzWsQZYKq7bijbVXKmmtcCofbg8SKzCFzEsoCn12VifL-ZNwnCyA8y7XPi-lP7bK6QL772V_kMXu-dRi8zenLd2PwFBfG9R7YVrXqBCB32P5JnscVAm4LKySxsLHccIGpM-7G-4ESUqKIGHPLDA42USlRJLbBlAdBSXyoJQHU22EYr1uGFqlViNKSdTI95190nC7nSZ_EbUxrgJ6FuG-FcN6udW0xYIm2y0pTFovDAh61V_GdsdXjI0JDNHCwIyu8j-Xd-bt5Sstk5hPVVO8RhNwF2KcM6jO5FcGPvxGx5vOh_zSYinIJC8pjC_q4QTZnU-PQfbpE3WUvW1ag1ezxn4H2ENtLS5VdeVFKkHDtGb3mpF-B_IJ81qaPsXhyH7_0XlirJJJGkhjnN-KeSH8oR9uQh3KvW1-96pNs8_MSN2w9D_b5PAI7_fgiz_vozDxzucWVrXFT4hK-Bmon5S8lj2R6CqCtA4rxFmdGdEFMUCeszyA1NE5JfSTC9PJHH6tnMo1bK-a5NFn_VCISO8QGQ4GKj2tdiBdasRHpCigUpJPMp5Gy5swT4F5nzfJ2H390MzmsoqyAbN1ZN63X0fnjVKNjhttgApVVN7uUD3Hfr5KAJqmVMzne3LmLqOdWrV47uJf4673aumMnMog-skOiSaTja_0XzR_CO849UKQTi-gTox1RsrZxDflIKPxAHGG3xdeerpHzuXTwUlnZ9h2gL_2o-oQmJ8rHy9Jy75HMDhjX4MXgmKDoLB_5WXZrYpyOEnxxaMkacIUNjLi5_00qptdAzI-qMgEaBRa_ROeY-I-dTC0W0AuOPvJ3rfCJ6cpfBj6jD6pmHF8AKDFMuuhMI=",
+              "summary": []
+            },
+            {
+              "id": "msg_0cd2c6be1e409d2b016ae8f299f16887d29e1beee8095ca481",
               "type": "message",
               "status": "completed",
               "content": [
@@ -77,7 +86,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "[\n  {\n    \"name\": \"dark brown sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"large eggs\",\n    \"quantity\": 2,\n    \"unit\": \"whole\"\n  },\n  {\n    \"name\": \"sour cream\",\n    \"quantity\": 165,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"unsalted butter, melted\",\n    \"quantity\": 113,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"vanilla extract\",\n    \"quantity\": 1,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"kosher salt\",\n    \"quantity\": 0.75,\n    \"unit\": \"teaspoon\"\n  },\n  {\n    \"name\": \"neutral oil\",\n    \"quantity\": 80,\n    \"unit\": \"ml\"\n  },\n  {\n    \"name\": \"all-purpose flour\",\n    \"quantity\": 190,\n    \"unit\": \"g\"\n  },\n  {\n    \"name\": \"sugar\",\n    \"quantity\": 150,\n    \"unit\": \"g\",\n    \"additional_quantity\": 1.5,\n    \"additional_unit\": \"teaspoon\"\n  }\n]"
+                  "text": "[\n  {\"name\": \"dark brown sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"large eggs\", \"quantity\": 2, \"unit\": null},\n  {\"name\": \"sour cream\", \"quantity\": 165, \"unit\": \"g\"},\n  {\"name\": \"unsalted butter, melted\", \"quantity\": 113, \"unit\": \"g\"},\n  {\"name\": \"vanilla extract\", \"quantity\": 1, \"unit\": \"teaspoon\"},\n  {\"name\": \"kosher salt\", \"quantity\": 0.75, \"unit\": \"teaspoon\"},\n  {\"name\": \"neutral oil\", \"quantity\": 80, \"unit\": \"ml\"},\n  {\"name\": \"all-purpose flour\", \"quantity\": 190, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 150, \"unit\": \"g\"},\n  {\"name\": \"sugar\", \"quantity\": 1.5, \"unit\": \"teaspoon\"}\n]"
                 }
               ],
               "phase": "final_answer",
@@ -134,14 +143,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 274,
+            "output_tokens": 371,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 146
             },
-            "total_tokens": 531
+            "total_tokens": 628
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:12:39
+  recorded_at: 2026-11-02 20:29:16
 recorded_with: VCR-vcr/2.1.0

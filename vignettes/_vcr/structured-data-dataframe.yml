@@ -6,69 +6,71 @@ http_interactions:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n*
         John Smith. Age: 30. Height: 180 cm. Weight: 80 kg.\n* Jane Doe. Age: 25.
         Height: 5''5\". Weight: 110 lb.\n* Jose Rodriguez. Age: 40. Height: 190 cm.
-        Weight: 90 kg.\n* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"height":{"type":"number","description":"in
+        Weight: 90 kg.\n* June Lee | Age: 35 | Height 175 cm | Weight: 70 kg\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"age":{"type":"integer","description":""},"height":{"type":"number","description":"in
         m"},"weight":{"type":"number","description":"in kg"}},"required":["name","age","height","weight"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e4df4fd9a430-LHR
+      cf-ray: a545ec833a08cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:35 GMT
+      date: Mon, 02 Nov 2026 20:35:09 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2419'
+      openai-processing-ms: '2168'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=5bGnVIHd7Sd9sT_J8SDoEhfQalDXNxadfUXaCKBPY78-1791281612.6844919-1.0.1.1-7UZp7vWGAYCGUx4EmjGCa8ed75sKsFwvJw9nEYGxKUdCWAHJG39uhO5PFwvA9TGKyCyBvRyWAj5JU.LNbzlnMpRzp6lP7wNj2S9qZpk35mQ9gWeYKP6fAZ7yhtATqfXF;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:35 GMT
+      set-cookie: __cf_bm=VQIIm47C_uotWInG.DN_eRngguSuU_l_bgejPaOE8E0-1793651707.3934135-1.0.1.1-VfBDUAf9uI8XfE_jwvYFGesMa7MP.VNRRoGAJuqyb7Tgm6b3T7seZIQkaUdE0yMstmaYJAX2qITHSXPUlV27GdWHOlv10q9IM7YjCzPHBoeb0p2HBgti2EdCBTpOMX.e;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:09 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499991'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 1ms
-      x-request-id: req_b6039e79f9c74f679fb1219cb376e946
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_257c1f34746c451f95e6d5660df7366f
     body:
       string: |-
         {
-          "id": "resp_0758b9b1f3691dec016ac4c9ccc9a087d2987043f1843367cc",
+          "id": "resp_00d831f87f94aa32016ae8f3fb7b0087d298dcb12e05476163",
           "object": "response",
-          "created_at": 1791281612,
+          "created_at": 1793651707,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281615,
+          "completed_at": 1793651709,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "rs_0758b9b1f3691dec016ac4c9cdbe5887d2a6c9ac4587529d8c",
+              "id": "rs_00d831f87f94aa32016ae8f3fc196c87d29d7a150eaae9639d",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqxMnP76PwGk2lGRq7hGxPKilBBkRVzArOO1cxYs0oRkJbFJ9__TGpH_fvQ4GDC0WWmZWeUPHu1JGANmIEIDaMFPQroxGjuUfSgP0eGniL1lG867Ti3g-LYOBc9clS2s3CJaeUvU7hI2AkzIYLbtc7HU21BI3IFPeVKbMi6RiHrx5-0GDsgA0HQ1Ah8p-NLRZxKvLqDiudNqtntDu-lpm7TnlTdLOfhcWXjTq4vmD_thctqTYsUxEhOdYO1aTGgNodjtjv02e3g320W_rz8oWeZBMwGsQG_8KEJHWnsrPKHA2v667SsMsCz1N9mCSMgpJI-69HxvF3q6f4GbJYf6ryYrtwaGyMgfzGW4k1BrWPNgd_a930Fhx31_IPstYegyDKMNLGrKN7_yFQ1Qrvgwx4gkam0fBJdsnm6y8o3wsyXXCdv5iNi8MrfRy08Rs8qOWwLYTWZ7m8bnOV9vqIqU9kN5ObE-aDyv2hh-ZAxYUGpMwcfh4fIFTQIoaCApVzFky3562FyRYgxTQPUGT5NMlDXuqsM8BVJyFl9FmuT45PkigiZeqHSzbzBz9KLpcbsVf9N2BykB_qota3ggSTwohZEeJZjY7AffurBRrAdb_jGhDdYvEY4Q9nB7TCSilEkong5tOqLbt8JaXVNUNtWts62TEt4JOhEc6UpGnYYe5pvH7GSwyouZeE2rtlqX_HMacRe8vKnSAaXRD5ii83Lrmu65zN_l7hgrBFg5sabVZVr_g19a1hTQN40taAzOgvVd2inL41wUQwqhPXaL3yIWSDaz4tkH5LW-MAavObjiP52sVmgCGr4jjweu_NZA4e4cGGfMSLoWSAXDDvzsoLQOYaVSRI5sQrHhNi0pg9hwGwG0kckrmnJfykFDHhM-qC-5ZtP8kPc7WZWWJYTmeSudbXl7znLprnp5TWCV5AK_5OgN9KdXmquI8WfqWJi6JF9IFEh0-QkJVcJdVateabWnutlN3q9CiQLaEpuOqC1SSeHezeJhGGLMenFX-sfsgu1IPzhDrAbDAa5MFvfY1gZe92GrSXsGtPLPn5eFh6BHdx8GL8pUhikb6SzlpIRK0hq4LqnbI4ECZUduUtXhB9I0Q7p03HSgEiL2Nt6gbUOoaKDfuER_v5SNr_H2oKwxDX-XsMP6HPzAI0MKAYuXUNPomL_ekRiDOFblVxfZrf5sd35TNJQkG61Il_oQUa8f3eMtIZQHCBhktZbZlTs4klwNR4LBaMFLWHwOO4mj94rS0zbp47cdVWpD83FdIKKqrlWs-k_n2Z7Ps6_N1d60QH2SErDKOM8XboC0lbcLs0lXLcm7WkujUykxJF37Qolx9W28byT7ASTNtbJksolVP-YHu_-DFFhA==",
+              "encrypted_content": "gAAAAABq6PP9ER2AsYiRE8f9aCe4VFPefVuJPamdLESAQo9cllWmrqboX2Dw-ODj7OnV7JX2AjJ_kBeAlFqHW6NXug3jO4daK4LN88ugX80UbO8pSLu9z_IMYgwQfXwNW0sZo8ggVqK5Q3zS2iSZ2Kg4B9Ca5m3ANKAZ2vUx27vjSlMXPZRpAoDewWrf--bXTfoKlS-HDmWane_HkgcUieH02CKXruFoVXYVr0TIzBL7weG3FeKOGF5d34UIHwWb-0bf1ibUK_4nFHBRsDKqLcy0hqecDGx0D8cEFECAu5bu6A-tPVuGhrKWenuiOkpja33yFgbWzMIaxBhcvVZ7lKuPtXuVwwpgqR8FaRu88V_yLevtf0g5moKTOCgX5ci3Pjs3cugWrG7Gc77LTM5CzLSwFy43C925wNXpgGkf1tDPzhT7PJm0Dnfxd9rvkoRdx7AxZQR2-iE870q0TeAn_ERtIXgrxEw7P1X7h7bIYiRUl1Lc4yySKnAm6ZRnIFaH1SFHvbDgLLXUy5Z4hoLAsfoIoEF_DJJvnietwOy1UEgZSGsk3C0leTAnrwbCWyTiPSkEFQ-7Gf1GVMCbtLG_eb7KK5lT1mrvOpkoOHGeO9aVWXMY4HAf_y3WP8evV8p8USrD_J-U679T1HALJ1qDxCpcGQmxKbBSkch6sjKMAPMxoqInnfVd5b8wDq35ARMzPY6cu5sbr50SBqksr2aCtX5Mn_xDdRpDCxKFX0n5IwN5N5cbgByhvzIMcWjTpzYjgirk07Wtp3p7rutAItaYLReSh1gF60COOm9WZmWiUpyZVZQL8byqJshkU1rJjRjcZJw1rIFfJ8bcQdI3Kmuf505yRz3_5kr2FBCUhzBAJGSEHYjdpPjqMuefqzQv46Qa9RF17OgU4cjTmvmmZ0_OgF9uI2cHJANgLLsqylETbrKhifNxqsX43X2cc7QYhd4QflFTCzF4gmI81OwqCY241fhKtv3dt65nCCynbRtyah0B6V_4zLIvHgJn00V--2TcwpOmQAnyPD258-duEsxxBbX8A7BUOdgpgqrFVyGJPvqnp344fDitSr7O42wBWUA9UiLGQgEdwYkcuj2C2D0R8z90bMWyxCFmssXt9SEhFfB5EwLYKYiycZ77mycbbktFDvj3QX0Co-gLw67s3ScicP6Zo7v8J-hSl8Dhrul33wncaY0zMVjampqp4uZ5DqRWhVOxjmozJrLP5kIF0NYAV9Bhv_gevmoWLEQ4q_tt83AudtI10p6ejo4dl0QgjFx3IH9wbbF0q_wylZViyIMbbXuxoxsTbspK3cCVEyofnUuMtZ5vilZIHIQZ5HQrg5vQn0Kn8110y7WH0V_cVNqi2xqVfuohljpifQgs-gBOR8lvq4fW9_fNTnmFqca9YiXgsysI4MBk46aTUvCCnWliDor18_u10RKDVmZ8dSFUbwiYfMUIcWpL8jW9GGCapZ6LzgXKfPHswD-fmM9ZqBJ8Oc7IMLB8UjLw5P75UnuaBKYh0KxpifjlIProtRjC2J7wZs9ZrqpwQbGu3r9p-4nRcNYma-ETboQa_9QuageR9E3JhrLjpfm3hRVR1QXARCZPDN-xzV1FRv0tAg3tRmjGqVfXe0D1vUxg_QJHokq_bFUUMgrya6ocQo0v6XRgO4nr0YKsAO8JcAlcmi5tetIJYvhN5FGoaBDbA5jqplHY9FB7eyiyQySYytCLYxByS3BhrxbcgjkJ44T52wSi6zHNq1Xe8IJmik2nPy4-QLyps_jwCDshzyqQ9Ok=",
               "summary": []
             },
             {
-              "id": "msg_0758b9b1f3691dec016ac4c9ce6d1087d2971e700008b74d51",
+              "id": "msg_00d831f87f94aa32016ae8f3fc878887d29abbbb0862f60de9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -76,7 +78,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"John Smith\",\"age\":30,\"height\":1.8,\"weight\":80},{\"name\":\"Jane Doe\",\"age\":25,\"height\":1.651,\"weight\":49.9},{\"name\":\"Jose Rodriguez\",\"age\":40,\"height\":1.9,\"weight\":90},{\"name\":\"June Lee\",\"age\":35,\"height\":1.75,\"weight\":70}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"John Smith\",\"age\":30,\"height\":1.8,\"weight\":80},{\"name\":\"Jane Doe\",\"age\":25,\"height\":1.651,\"weight\":49.895},{\"name\":\"Jose Rodriguez\",\"age\":40,\"height\":1.9,\"weight\":90},{\"name\":\"June Lee\",\"age\":35,\"height\":1.75,\"weight\":70}]}"
                 }
               ],
               "phase": "final_answer",
@@ -179,14 +181,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 152,
+            "output_tokens": 126,
             "output_tokens_details": {
-              "reasoning_tokens": 59
+              "reasoning_tokens": 33
             },
-            "total_tokens": 323
+            "total_tokens": 297
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:35
+  recorded_at: 2026-11-02 20:35:09
 recorded_with: VCR-vcr/2.1.0

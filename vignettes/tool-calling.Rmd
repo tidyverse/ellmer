@@ -217,7 +217,7 @@ You could use this tool to allow the LLM to "see" websites, like [the tidyverse 
 #| eval: false
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$register_tool(screenshot_website)
 chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> https://tidyverse.org screenshot completed

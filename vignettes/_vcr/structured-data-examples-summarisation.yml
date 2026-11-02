@@ -300,7 +300,7 @@ http_interactions:
         If you were able to develop technology that made it very hard to fine-tune
         an AI model away from its original capability distribution, then it’d be easier
         to confidently release models without potentially compromising on downstream
-        safety."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
+        safety."}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"Summary
         of the article.","properties":{"author":{"type":"string","description":"Name
         of the article author"},"topics":{"type":"array","description":"Array of topics,
         e.g. [\"tech\", \"politics\"]. Should be as specific as possible, and can
@@ -312,63 +312,65 @@ http_interactions:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e4f19a60a430-LHR
+      cf-ray: a545ec942dc2cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:39 GMT
+      date: Mon, 02 Nov 2026 20:35:14 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '4029'
+      openai-processing-ms: '3893'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=jUKO6yFiiIS16Wt70uT6x0GCaMhj7VrdIelQF3oS3bg-1791281615.6208549-1.0.1.1-yz3Gf2dEr7FnoYUo1XmIDV8hmkS0rK87P7pKYY74VSNHaArMLRLCac.k0fmKTleiWE.XFvXd95TTNWmLKz.z8UWxHbCcyE53.nOWwedmORWnijr8RwKaHzqfgDSxFl3b;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:39 GMT
+      set-cookie: __cf_bm=E581Yt13PX8_1KA7B5_1sc9QVy.UapWDiE.GO.wfZig-1793651710.1070278-1.0.1.1-oAntxnsRYoMFBiLrBCzvkw7yQ0nry7f_ZIkhLbJrGq8nh.FzwgNQl3f3O_Tw16K8GZWn4ZRxCkfnhaXUEIhdt9iBGa0BJwQYob2hq7u4Wxlit9e6t..Kj1T9DDlActyo;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:14 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '498'
-      x-ratelimit-remaining-tokens: '499838'
-      x-ratelimit-reset-requests: 240ms
-      x-ratelimit-reset-tokens: 19ms
-      x-request-id: req_ee11acb7c4a1419abf69fc12f72f3544
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999924'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 4ms
+      x-request-id: req_60c0d6ffc1774ceead834d6a600c7747
     body:
       string: |-
         {
-          "id": "resp_07395bcd22bd8e2d016ac4c9cfbd1887d29f2dd843deb158fe",
+          "id": "resp_0c355c00f3de2b45016ae8f3fe289887d28c5019dffdecb603",
           "object": "response",
-          "created_at": 1791281615,
+          "created_at": 1793651710,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281619,
+          "completed_at": 1793651713,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "rs_07395bcd22bd8e2d016ac4c9d050d087d2ba7fc2a8a1cb686c",
+              "id": "rs_0c355c00f3de2b45016ae8f3feb6c087d28a417322fb041aa9",
               "type": "reasoning",
               "content": [],
-              "encrypted_content": "gAAAAABqxMnTmVEpZFDVYtMaI9Tsp2xtU-vbnWjPbc_f7mt3r_2AexEDffwhABSWV2Qxsx71aDc98lBo3pghmm9fJKi8RnsvnbeOjfOZSUEzHY1n27RbAX2TN08GX25ExKoWaexz6ty5hxzCyqtYwJHbx4xN94AgQcvLOWk1KeypbQxWRF_1HLkDFoAf4_Q3P8qVxH_YApdASTW8y_nRJzo302GB2rSCRKnhCnzXbZy3fFA4lN5-lraeo60VuKQ9ZIoNW3A8R-AOUev1cteI2ethvoMV2FYuxuzcXaWT6k88eoTRFsYj61SdTWD-cbiM3cme5ot5JoqlW0E-4YqXRlahpES0gCcCvPvBFooFfK3-zJ8evA_UJKDsbpKA9WRo91gxB1uHzrDdpIdP-94OA0pIU3V8CbjAZbpw--Wd5lxnZ5n-rFlLq1ZbMY83AnyQKv42BH-xL0yH-BymDAFnWAshqNBF35pk9W1-5Ag7iVdo_616Wqs6rPBd3Mcmfwoal_NGrQqCLo7M-burrCpQm29D6cVwitM2h3fy6yRhHrlhXa1_6Pr3wSMs-h91iIFpTt2uFjVEV0phC5qJKCE5zc8HnJUsMAglRNdGlqF6Dg6-1Zai0qXJQZqrdfe947Zc_i0uEumaUF2OEh82I_CHL5rRqxmYv8doxz5MAUC4cDBQDtpZWIF53Rv4wKPlzWmg7NxhWsT2US86kDBzdxnpqL7ykoS-5ztKabDZwfrWxh0c6K9-JXU5OehUA4KfCtE88lJcqa4zPIDTg5prh1OR9vPNwfjViAMxGqwhr3rdwZwi8hK3scURWizgYo-g_6UgLaP2XG9eHgD4uRn27krVxpi3r4jN3Az7So9Q8Mb8Ws5mwrwY1FMy7lVt-dZMmRbYabNCfAZS95SOKYmkrJz8rKGzBsf6o6ciZKwfS05OKLb-3y2WjDd4V1RpRSAgS73KkPVUPy0RvFr7BlAxftDKbq8Gf3l0tcoW7ScLXkoAfXK5EyDM0d3KANPVnV24AxtrKLXnSIoIHl0U_QcwPi4ytSMbkQxqDsiFcq_KoYnmXmVwIGENKz8lXAo63GA0Sr7_WQGQ-Di1rBOSTbGxRTKzi5IADlFZknxSNd4mnmxZ1flGzMVoZe_J7PfvodD1RfYDOHJDwcELCa-yjoAsAGVZx8fhuwG4B5D8Kiu3mBqRGqy6_q4wbKvdEGwvVTV4Iss_epi8efmJcgHrQve022tgkuQh9K7KSB1HpzBZlbwn9rCnodF32OvdMORuY3wfw6gizAO0O9nhAhdikNn4NlTpD08ozQBtRNIAy8DjCwryjoYAuYODkjM3CGs=",
+              "encrypted_content": "gAAAAABq6PQCyaGeV_PFf7fDCdrHKxMsql1Jyv-KAF0y_5mnPb2D8-BSU12xuzbkjZY3QhgeRCEGhx5H4g-kslHEYXqggyEzvVJrBehxO4kQDo80d1xbdq6vrNVDzfdtESq3rEOTUW5QfFoTYnPt2d5my87o5l1C4OfEIeM3T4C69O6tZRb1StfRI1Wc8lcgu2JRTrSbzPUj7_H_6IjWkd-vNbKo4qQdZveG90h-pRgH4wmdU2s-5CTYHWRGujLZFUL7bfWXlsO7dH-XoU3hMII1Y9Zc_GNey5KVyQ2WYa_ATxhEtWeaLBcMWCY6sEdK2Prja7W2pJHOexUSLoINjUeH9n6B233BhBo13Uzncjoq1Kh30CSHTqD7kQX8Im61TCM4CL3QW4b_yrDd0M1OrhHZOKnVHuZyPxSfJPyW8YHtDye_FI6YOl07kvmXDQatf6Tt91sH42HuoB8xn0Hl8aM1_4_6KAZwGdiXv93RCIAj-Jl2bync2nLCItA2SqPfShyshnCMs83NCaOBJJwFk6_T9r9zbtqCdVLJsomT4v5ZXOxoIpxWZR4_CCxIkjBnjIE_gm20PRYJkO6w62SDc0iIVHjfkmzAYy6Oji4b3S0-8m5bX8g8evbi-JShciLq_V9RxWQn01y2DHN-NeigUyMT4_Ztkx464xrbra_0R8SS6JINUYzfYj3ysDUMJ56CwqzPGsMEatGwU3QODkXt9Te_B09M0oGK93SMLIkjpDa8WQzRxakVrM0YOUiRoUx0qOEIXUhKJdUyxnX8RbVM_JxAwcSS_e4OhJvlbYS9mmZzHLosyX87uaOs4VtPomtKSzZRY_PA0ehZ5XsfEuUspsXguZq5uZKnGvuMTf5a9kK_ei6JDf-wnlJmWSFa--OfbEUpa8NY1CTODNNSMGMGYGQHMXCwei8v_XMZleLdFzBitQ0r1RAVmsNxu-qrwmd8Y77vUUpFx0BkB8PsR9ZmDoj6jwxke0jvrPR_pBoN8pdQBfr5krdGSo0fmb1hgcGqc2TJZ3o0lBQOldHMkDnU2WWeBzQgzixfx330sQGHZqje1AmDwfcdQj5WF11NsM3toz_F3BiSfmlYJSWqP96jjZZ6CCifFuD2SqYJU8aOccNnzZ1h4p6ptwFpFZsn6YQLWT-4C8xCFF4L7oQfWwVrGijO35m-blowiWHmQAzyeMt3koTzwMpcgpLyboJfBNIu4J4czpLnbLiTYqqa2XWGciBTs8P8VmLnVlw5R7GbIq4KUqFPtJfZhtAb_gb4pKDSkJQdMLpy6wFjz2YsLGSxEhFrp8IdpcB288cok5mvVDUZ8P7k2UiLExdPIhlWJjj5of7P8QImqb-J0a6CoZsA7lZKdT00CDi0_0FvmRI7_8tM6vlkljPimj-5RQhiH69G09hFRQBoJNO0GoymYDFzuIhiwR5fKFC47hT_a5EFXEp0OTaFbmydIJTw_XVwit7b2BEQV1XmtlNMsPm6NuTqQwkyE4NLVOoxkx4Dbuek9j495pr5GgXfmb8DLGktzTwpAz-2t9HIxz9HAT5oSDm2sh-65BhZnwO5NH-p9xryszi3238e2sRFW-RCjVxujaHqo8YhJcgliSDDpSqnf6FIhr-Co34wrkl3g4o7bHj4e5yOGw900Htq2MasntvJ47gKmM-asD9oBGORg7KnI2-yRsDaLHVkitkKFe9ohE1zYqqkPxBiS7p_5HGveeHCNLyVJwuAjXcQaQ237WTH-J4eFHo2xWgLzasFZvchI73f9HNdGLXO-h_doPta-EchFqN6mjreVxAP2vBKvRY6JtEX6JcBoXttcUVVkiJYb4h3M52g_F6r8MbZVjFC9AYBSsfi6SMqlcU9L1zeAbe47sS9ZRxAg4T7KuHzQAqc-ldtoWxgaOxlHM21A7jOqmTTGFVTg1q9T8lwDOy-qGTW6x39RIqXx3exn32Tx3DJ313NOSONcU-z58BdG5n2VNhoeAIEDNaC3y2wkSGGuDbqlcxXpnlkXjPzyjFr3rhVzk4WX-08DvBF8cgfIvI=",
               "summary": []
             },
             {
-              "id": "msg_07395bcd22bd8e2d016ac4c9d0875887d2b77ba9bde31c0366",
+              "id": "msg_0c355c00f3de2b45016ae8f3ff81b087d2b6a4c9415feaf60b",
               "type": "message",
               "status": "completed",
               "content": [
@@ -376,7 +378,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"AI policy\",\"frontier AI safety\",\"third-party AI testing\",\"AI evaluations\",\"Responsible Scaling Policy\",\"AI regulation\",\"national security risks\",\"open-source AI models\",\"regulatory capture\"],\"summary\":\"Anthropic argues that frontier, general-purpose AI systems should be subject to a carefully scoped third-party testing and oversight regime. Because such systems can be adapted to many uses and may create risks including election interference, discrimination, cyberattacks, bioweapon assistance, and unintended autonomous behavior, self-governance by individual companies is insufficient. The proposed regime would combine trusted tests, independent auditors, government capacity, academic participation, and a two-stage process of broad automated screening followed by expert-led evaluation where concerns arise.\\n\\nThe article advocates initially applying requirements only to the most computationally intensive frontier models, both to minimize compliance burdens and to avoid disadvantaging smaller developers. It calls for government investment in institutions and infrastructure such as NIST, AI Safety Institutes, research clouds, and national-security evaluation capacity. It also contends that credible third-party testing can inform policy on open model releases, reduce the likelihood of harmful incidents and reactive regulation, and help limit regulatory capture\u2014though it acknowledges uncertainty about future risks and the need to iteratively prototype and refine standards.\",\"coherence\":91,\"persuasion\":0.78}"
+                  "text": "{\"author\":\"Anthropic\",\"topics\":[\"frontier AI governance\",\"third-party AI safety testing\",\"AI model evaluation\",\"national security and AI misuse\",\"open-source AI safety\",\"regulatory capture\",\"AI research infrastructure\"],\"summary\":\"Anthropic argues that independent testing of frontier AI systems is needed to complement self-governance and sector-specific regulation. It proposes a narrowly scoped, iterative regime involving industry, academia, and government, with fast automated screening followed by expert-led testing where risks are identified. Potential tests include assessments of bioweapons and cyberattack capabilities.\\n\\nThe company calls for public investment in testing infrastructure and applies the same principle to both proprietary and openly released models. It acknowledges its own interest as a proprietary developer and emphasizes limiting compliance burdens and regulatory capture while developing standards for serious risks.\",\"coherence\":92,\"persuasion\":0.8}"
                 }
               ],
               "phase": "final_answer",
@@ -474,14 +476,14 @@ http_interactions:
               "cache_write_tokens": 4331,
               "cached_tokens": 0
             },
-            "output_tokens": 305,
+            "output_tokens": 226,
             "output_tokens_details": {
-              "reasoning_tokens": 23
+              "reasoning_tokens": 44
             },
-            "total_tokens": 4639
+            "total_tokens": 4560
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:39
+  recorded_at: 2026-11-02 20:35:14
 recorded_with: VCR-vcr/2.1.0
