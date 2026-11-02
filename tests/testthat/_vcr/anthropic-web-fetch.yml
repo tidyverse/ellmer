@@ -4,39 +4,39 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Mon, 02 Nov 2026 14:25:14 GMT
+      date: Mon, 02 Nov 2026 21:07:11 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '9998000'
-      anthropic-ratelimit-input-tokens-reset: '2026-11-02T14:25:14Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T21:07:11Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-11-02T14:25:14Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T21:07:11Z'
       anthropic-ratelimit-requests-limit: '13000'
       anthropic-ratelimit-requests-remaining: '12999'
-      anthropic-ratelimit-requests-reset: '2026-11-02T14:25:12Z'
+      anthropic-ratelimit-requests-reset: '2026-11-02T21:07:09Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '11998000'
-      anthropic-ratelimit-tokens-reset: '2026-11-02T14:25:14Z'
+      anthropic-ratelimit-tokens-reset: '2026-11-02T21:07:11Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      request-id: req_011CgeFk7jNuoGqNBDFiTpCT
-      traceresponse: 00-a15a1d2354129926ad505286ad90abf6-2bfe42b91f49fe62-01
+      request-id: req_011CgenPrqF2HE1EuShtAPAo
+      traceresponse: 00-d60c8647b7cb513e87fc847bdd5663e8-99a539d373ae5523-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
       content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=2316
+      server-timing: x-originResponse;dur=2485
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a543cea479400cc1-LHR
+      cf-ray: a5461b6dae88a49a-LHR
     body:
-      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgeFk7uYVbWDGYDLKXrk4","type":"message","role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgenPryB2sx1V7aByfMAZ","type":"message","role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
         Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
         shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n\n[Skip
         to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
@@ -105,16 +105,17 @@ http_interactions:
         On this page\n\nDeveloped by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
         built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
         films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
-        first movie listed is **The Phantom Menace**. It was released on 1999-05-19
-        and directed by George Lucas. The page lists the films in episode order, not
-        release order. *A New Hope*, the earliest release (1977), appears fourth."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":6,"cache_creation_input_tokens":3420,"cache_read_input_tokens":1082,"cache_creation":{"ephemeral_5m_input_tokens":3420,"ephemeral_1h_input_tokens":0},"output_tokens":150,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard","server_tool_use":{"web_search_requests":0,"web_fetch_requests":1}},"diagnostics":null}'
-  recorded_at: 2026-11-02 14:25:14
+        first movie listed on that page is **The Phantom Menace**. It was released
+        on 1999-05-19 and directed by George Lucas.\n\nThe page lists the films in
+        the order of the prequel trilogy, then the original trilogy, then *The Force
+        Awakens*. That isn''t release order. *A New Hope* is fourth on the page."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":6,"cache_creation_input_tokens":3420,"cache_read_input_tokens":1082,"cache_creation":{"ephemeral_5m_input_tokens":3420,"ephemeral_1h_input_tokens":0},"output_tokens":176,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard","server_tool_use":{"web_search_requests":0,"web_fetch_requests":1}},"diagnostics":null}'
+  recorded_at: 2026-11-02 21:07:11
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
         Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
         shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n\n[Skip
         to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
@@ -183,53 +184,53 @@ http_interactions:
         On this page\n\nDeveloped by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
         built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
         films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
-        first movie listed is **The Phantom Menace**. It was released on 1999-05-19
-        and directed by George Lucas. The page lists the films in episode order, not
-        release order. *A New Hope*, the earliest release (1977), appears fourth."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        first movie listed on that page is **The Phantom Menace**. It was released
+        on 1999-05-19 and directed by George Lucas.\n\nThe page lists the films in
+        the order of the prequel trilogy, then the original trilogy, then *The Force
+        Awakens*. That isn''t release order. *A New Hope* is fourth on the page."}]},{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Mon, 02 Nov 2026 14:25:16 GMT
+      date: Mon, 02 Nov 2026 21:07:13 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-11-02T14:25:15Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T21:07:12Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-11-02T14:25:16Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T21:07:13Z'
       anthropic-ratelimit-requests-limit: '13000'
       anthropic-ratelimit-requests-remaining: '12999'
-      anthropic-ratelimit-requests-reset: '2026-11-02T14:25:15Z'
+      anthropic-ratelimit-requests-reset: '2026-11-02T21:07:12Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-11-02T14:25:15Z'
+      anthropic-ratelimit-tokens-reset: '2026-11-02T21:07:12Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      request-id: req_011CgeFkKXngj7Aqppf49diE
-      traceresponse: 00-9e3ad179c0e0d3e8109694395c66f03c-71ad0628ae56b775-01
+      request-id: req_011CgenQ6ciMJrkggZdTfHuU
+      traceresponse: 00-14c974eda5f8d061f4da80fa6f823d08-8ad8dc6a7947b105-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
       content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=1050
+      server-timing: x-originResponse;dur=1556
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a543ceb5a8580cc1-LHR
+      cf-ray: a5461b81d990a49a-LHR
     body:
-      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgeFkKdjx7iL6aFcVgeCB","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"","signature":"CAQSnQUKEAgTGAI4AUIIdGhpbmtpbmcSDJQeSZ715BZhlqfNBxoMMSaHJisdDdE31SD9IjBeLy45cddQPBTOMasJkYe5s28OP4tq81d1bwaB34GktqJnKJVCIXCvVt9j/RRgGhoqugQdl3yfwOdvGT1raXST3YuQSc+eUUP0Qa+Y0rusLovVRlXFyxk/hXSupXCVYVtjVXmPrdzs1ydHv3H9lPmYgmTL5Y1Ygeyz9NwrDhod6MIjJWEwFJcXS/+iHt1oUHy5xZelDaHREzoIYVfCzpmQB3H1Q5ODSwk7+OBnWWw5SffM+LLCUXW4i9Sa23oyFWLBGrsOQUxiq8tZXgjuyPLHInyPwt6MJb3C+aAkQ4zejDmbFOOVSnN1ArhC0uCXYp6z1o0lDn3EMNzOk9CvmIq+IDqyzTdcZunFWX+AflZS6TIJmrr57iN/aXAdG1ILanhf2M4GOags1JpkPJ+j2PnVBrPzkUOqQh4jsdobVwwhqDYku0H8rVhPZLostNsf9k0E+fgWcx2vhbp+gQEXgbdsNnNikdPULE3S8f1HXU40EBRsjkfF7YVo/evgzyFJzFRxQqQLT+5Qx7Pz4gtPWJuzw90T1pM5elZ4ZiuePFeJ32RQEMDpGSl6QJiALmefRYf9i7645sChqfu2NQAnFt55d7YJlYys7maPCuoTvLnVpEd4hMv1q1SuXr+ZsMJ5B6C5q+/czBS35eCHrFdBp65FNUUHcRhZF2egMUSav5rh6laXu6oz3e8vCMhNF47czf8gZ8rAbjzUh7j+TRU1a4SSc1f7ZvmAaA5IUGabPX3SdlEhgvPNFhoSQ8KEonjMC+d5SK9djJ9xqOEq3fx/5pjjdAMDX5+7ekkvTLwZdWELyTaXIJF8PMahlyApcoEYAQ=="},{"type":"text","text":"The
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgenQ6k9JoqEyyd6uPgBB","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"","signature":"CAQSiwUKEAgTGAI4AUIIdGhpbmtpbmcSDLqcvDecj5hH0lKnCRoMtLxaCXd5eU0Kx8iUIjD26j6dHiQXiN35JI1i+QxKQnVNXU2xtWsSwgqh08Qz1eCCyDu4u2v6+QzmktVu3WUqqASaW4LJyQTjfx1GuxM4KBzElpF00RWtdJOIOwglaNuh11ibxGqpbYnNBqXDXixTwX3TRVcbaHL9+lMFTnRwZqmOMEta/E0e2ivcI0R6+Wdaw/HMJBO+Zi02dJLuMoqSyIUBL+CvsnGtaTXLv0CD1CiM0zHxUqWzvm9L56hnf8nxOBr4qwMLoFCzvGQCYuLisD515xOqEF8/+TZ8IrBxQSITtQpjmc5Ub7yyxN7jZB+fgjfhXWWGJc9nEGvUV7psqE8VS7xZ/SkU3S6rkl1X8xyGBmxzkvg7Hbnpm92kcgLV0lbMbspd+/dH/+o2hiKF/pmgqgVyE8hDhL8WwPDQlqX823ExL1F9PMMwSrhqXhRanUuw9UbINwtbAEZbmvbKt/DbwqWkEN4/T4hUlWjKtiUyBNGJSO/pRS+qaeVU06I0g77Y7ZiYhqdTepMLEdvAQmXyA0O0sLZ7lptuimEvjwOzYWgR3sF8xzCW3uNJGyOEN9e1i9atf9ri+R2vT975bjRGe56yLb1dP2c2RF7+JSJjK7L7fhGSYKZbSnDLYV1Zfvadoi5hyTjCY9Rkb0tkeUAky8iZTExxSVAoh/trmGtoGAnOCru1UQsIiGDzXmzOXINPMFCDkxJq58lZIpzWu/GeqcJWt4e1Nl2tvv847cj8GtwEmd3AniNLgU6sEu4J9txI2C+bxT0IPPSohs85logZCheR+4JrXSPXtMPOv6iLBzyzpHWfE1IYAQ=="},{"type":"text","text":"The
         first movie listed on that page is **The Phantom Menace**. It was released
-        on 1999-05-19 and directed by George Lucas.\n\nThe page lists the films in
-        episode order, not release order. *A New Hope*, the earliest release (1977),
-        is fourth."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":114,"cache_read_input_tokens":3420,"cache_creation":{"ephemeral_5m_input_tokens":114,"ephemeral_1h_input_tokens":0},"output_tokens":112,"output_tokens_details":{"thinking_tokens":29},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
-  recorded_at: 2026-11-02 14:25:16
+        on 1999-05-19 and directed by George Lucas. This comes from the page I fetched
+        earlier."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":140,"cache_read_input_tokens":3420,"cache_creation":{"ephemeral_5m_input_tokens":140,"ephemeral_1h_input_tokens":0},"output_tokens":84,"output_tokens_details":{"thinking_tokens":25},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
+  recorded_at: 2026-11-02 21:07:14
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
         Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
         shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n\n[Skip
         to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
@@ -298,55 +299,55 @@ http_interactions:
         On this page\n\nDeveloped by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
         built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
         films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
-        first movie listed is **The Phantom Menace**. It was released on 1999-05-19
-        and directed by George Lucas. The page lists the films in episode order, not
-        release order. *A New Hope*, the earliest release (1977), appears fourth."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
         first movie listed on that page is **The Phantom Menace**. It was released
         on 1999-05-19 and directed by George Lucas.\n\nThe page lists the films in
-        episode order, not release order. *A New Hope*, the earliest release (1977),
-        is fourth."}]},{"role":"user","content":[{"type":"text","text":"Who directed
-        it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        the order of the prequel trilogy, then the original trilogy, then *The Force
+        Awakens*. That isn''t release order. *A New Hope* is fourth on the page."}]},{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
+        first movie listed on that page is **The Phantom Menace**. It was released
+        on 1999-05-19 and directed by George Lucas. This comes from the page I fetched
+        earlier."}]},{"role":"user","content":[{"type":"text","text":"Who directed
+        it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Mon, 02 Nov 2026 14:25:17 GMT
+      date: Mon, 02 Nov 2026 21:07:15 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-11-02T14:25:17Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T21:07:15Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-11-02T14:25:17Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T21:07:15Z'
       anthropic-ratelimit-requests-limit: '13000'
       anthropic-ratelimit-requests-remaining: '12999'
-      anthropic-ratelimit-requests-reset: '2026-11-02T14:25:16Z'
+      anthropic-ratelimit-requests-reset: '2026-11-02T21:07:14Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-11-02T14:25:17Z'
+      anthropic-ratelimit-tokens-reset: '2026-11-02T21:07:15Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      request-id: req_011CgeFkSHad3VjvQbFNDBha
-      traceresponse: 00-7df87586580a2a7f55e256069ede06c8-fb16c64cc7d7b97a-01
+      request-id: req_011CgenQGRJqnjXRF9FDcPXj
+      traceresponse: 00-ec86e2c7cee06e3bcb33700afb59b41f-d91f36f7cba605e5-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
       content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=691
+      server-timing: x-originResponse;dur=1273
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a543cebf8e570cc1-LHR
+      cf-ray: a5461b901929a49a-LHR
     body:
-      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgeFkSS1cbRuMqayY5sdn","type":"message","role":"assistant","content":[{"type":"text","text":"George
-        Lucas directed *The Phantom Menace*."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":91,"cache_read_input_tokens":3534,"cache_creation":{"ephemeral_5m_input_tokens":91,"ephemeral_1h_input_tokens":0},"output_tokens":20,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
-  recorded_at: 2026-11-02 14:25:17
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgenQGZVsQJJFTvucZ4Hq","type":"message","role":"assistant","content":[{"type":"text","text":"George
+        Lucas directed *The Phantom Menace*, according to the page."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":67,"cache_read_input_tokens":3560,"cache_creation":{"ephemeral_5m_input_tokens":67,"ephemeral_1h_input_tokens":0},"output_tokens":25,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
+  recorded_at: 2026-11-02 21:07:15
 - request:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01CmWEd7WphNmdFQ7rGaUYcn","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"server_tool_use","id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","name":"web_fetch","input":{"url":"https://rvest.tidyverse.org/articles/starwars.html"}},{"type":"web_fetch_tool_result","tool_use_id":"srvtoolu_01PeYAqYdDVhboEjt3ZFTmo3","content":{"type":"web_fetch_result","url":"https://rvest.tidyverse.org/articles/starwars.html","retrieved_at":"2026-11-02T14:25:13+00:00","content":{"type":"document","source":{"type":"text","media_type":"text/plain","data":"---\nmeta-og:title:
         Star Wars films (static HTML)\nmeta-viewport: width=device-width, initial-scale=1,
         shrink-to-fit=no\ntitle: Star Wars films (static HTML) • rvest\n---\n\n[Skip
         to content](#container)\n\n[rvest](https://rvest.tidyverse.org/index.html)
@@ -415,49 +416,50 @@ http_interactions:
         On this page\n\nDeveloped by [Hadley Wickham](https://hadley.nz), [![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co).\n\nSite
         built with [pkgdown](https://pkgdown.r-lib.org/) 2.1.3."},"title":"Star Wars
         films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
-        first movie listed is **The Phantom Menace**. It was released on 1999-05-19
-        and directed by George Lucas. The page lists the films in episode order, not
-        release order. *A New Hope*, the earliest release (1977), appears fourth."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
         first movie listed on that page is **The Phantom Menace**. It was released
         on 1999-05-19 and directed by George Lucas.\n\nThe page lists the films in
-        episode order, not release order. *A New Hope*, the earliest release (1977),
-        is fourth."}]},{"role":"user","content":[{"type":"text","text":"Who directed
+        the order of the prequel trilogy, then the original trilogy, then *The Force
+        Awakens*. That isn''t release order. *A New Hope* is fourth on the page."}]},{"role":"user","content":[{"type":"text","text":"What''s
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
+        first movie listed on that page is **The Phantom Menace**. It was released
+        on 1999-05-19 and directed by George Lucas. This comes from the page I fetched
+        earlier."}]},{"role":"user","content":[{"type":"text","text":"Who directed
         it?"}]},{"role":"assistant","content":[{"type":"text","text":"George Lucas
-        directed *The Phantom Menace*."}]},{"role":"user","content":[{"type":"text","text":"Who
-        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        directed *The Phantom Menace*, according to the page."}]},{"role":"user","content":[{"type":"text","text":"Who
+        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Mon, 02 Nov 2026 14:25:18 GMT
+      date: Mon, 02 Nov 2026 21:07:17 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-11-02T14:25:18Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T21:07:17Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-11-02T14:25:18Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T21:07:17Z'
       anthropic-ratelimit-requests-limit: '13000'
       anthropic-ratelimit-requests-remaining: '12999'
-      anthropic-ratelimit-requests-reset: '2026-11-02T14:25:18Z'
+      anthropic-ratelimit-requests-reset: '2026-11-02T21:07:16Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-11-02T14:25:18Z'
+      anthropic-ratelimit-tokens-reset: '2026-11-02T21:07:17Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
-      request-id: req_011CgeFkXPvWz7LnF57dwZXz
-      traceresponse: 00-3155a5fc628f9c58a464f78e72992391-0163f21b489a2a4e-01
+      request-id: req_011CgenQQjsWHpcYE5HSRph9
+      traceresponse: 00-dccc66f4d1c2c9b517237984ae12846c-4200b8877a34c611-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
       anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
       content-encoding: br
       server: cloudflare
-      server-timing: x-originResponse;dur=745
+      server-timing: x-originResponse;dur=1259
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a543cec70aa70cc1-LHR
+      cf-ray: a5461b9c49f8a49a-LHR
     body:
-      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgeFkXYbSfpWjFZSRa4Zw","type":"message","role":"assistant","content":[{"type":"text","text":"George
-        Lucas directed *The Phantom Menace*, according to the page."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":28,"cache_read_input_tokens":3625,"cache_creation":{"ephemeral_5m_input_tokens":28,"ephemeral_1h_input_tokens":0},"output_tokens":25,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
-  recorded_at: 2026-11-02 14:25:18
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgenQQtYnyRbSZz7q8dtt","type":"message","role":"assistant","content":[{"type":"text","text":"George
+        Lucas directed *The Phantom Menace*, the first film listed on the rvest Star
+        Wars page."}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":33,"cache_read_input_tokens":3627,"cache_creation":{"ephemeral_5m_input_tokens":33,"ephemeral_1h_input_tokens":0},"output_tokens":37,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
+  recorded_at: 2026-11-02 21:07:17
 recorded_with: VCR-vcr/2.1.0
