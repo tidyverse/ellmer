@@ -2,6 +2,8 @@
 
 * `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
 * New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
+* Default models have been updated for a number of providers (@thisisnic, #1176):
+  * `chat_google_gemini()` and `chat_google_vertex()` now use `gemini-3.8-flash`.
 * The OpenTelemetry `gen_ai.input.messages` attribute is no longer dropped when a tool result returns a `Content` object, such as an image (@taekop, #1145).
 * OpenAI-compatible providers, including `chat_posit()`, `chat_lmstudio()`, `chat_databricks()`, `chat_mistral()`, `chat_deepseek()`, `chat_perplexity()`, and `chat_cloudflare()`, now send standard JSON Schema instead of OpenAI's strict-mode schema, so `required = FALSE` tool arguments stay optional. `chat_openai()`, `chat_azure_openai()`, Groq's structured outputs, and `chat_posit()` models whose id starts with `openai/` keep strict mode. `chat_openai_compatible()`, `chat_vllm()`, `chat_openrouter()`, `chat_portkey()`, and `chat_huggingface()` gain a `strict` argument to opt back in (#1135).
 * `Chat$get_tokens()` no longer errors when the conversation ends with a user turn that has no completed assistant response yet, or with a partial (interrupted) assistant turn (@taekop, #1131).

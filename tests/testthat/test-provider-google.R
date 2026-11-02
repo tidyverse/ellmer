@@ -131,7 +131,7 @@ test_that("binary documents are rejected", {
 test_that("can match prices for some common models", {
   provider <- chat_google_gemini_test()$get_provider()
 
-  expect_true(has_cost(provider@name, "gemini-3.7-flash"))
+  expect_true(has_cost(provider@name, "gemini-3.8-flash"))
 
   expect_false(has_cost(provider@name, "gemini-1.0-pro-latest"))
 })
@@ -418,16 +418,20 @@ test_that("can use thinking levels", {
   vcr::local_cassette("google-thinking-level")
 
   chat <- chat_google_gemini_test(
-    model = "gemini-3.7-flash",
-    params = params(temperature = 0, reasoning_effort = "low")
+    model = "gemini-3.8-flash",
+    params = params(temperature = 0, reasoning_effort = "medium")
   )
-  resp <- chat$chat("What is 1 + 1?", echo = FALSE)
+  # Needs a question that takes some thought; trivial ones get an empty block
+  resp <- chat$chat(
+    "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?",
+    echo = FALSE
+  )
 
   contents <- chat$last_turn()@contents
   thinking <- Filter(\(x) S7::S7_inherits(x, ContentThinking), contents)
   expect_length(thinking, 1)
   expect_gt(nchar(thinking[[1]]@thinking), 0)
-  expect_match(resp, "2")
+  expect_match(resp, "0.05|5 cents|five cents")
 })
 
 test_that("batch chat works", {

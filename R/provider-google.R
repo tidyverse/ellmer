@@ -41,7 +41,7 @@ NULL
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials A function that returns a list of authentication headers
 #'   or `NULL`, the default, to use ambient credentials. See above for details.
-#' @param model `r param_model("gemini-3.7-flash", "google_gemini")`
+#' @param model `r param_model("gemini-3.8-flash", "google_gemini")`
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. `chat_google_gemini()` uses the
 #'   [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview)
@@ -68,7 +68,7 @@ chat_google_gemini <- function(
   api_headers = character(),
   echo = NULL
 ) {
-  model <- set_default(model, "gemini-3.7-flash")
+  model <- set_default(model, "gemini-3.8-flash")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(
@@ -99,7 +99,7 @@ chat_google_gemini <- function(
 
 chat_google_gemini_test <- function(
   ...,
-  model = "gemini-3.7-flash",
+  model = "gemini-3.8-flash",
   params = NULL,
   echo = "none"
 ) {
@@ -128,7 +128,7 @@ chat_google_vertex <- function(
   check_string(location, allow_empty = FALSE)
   check_string(project_id, allow_empty = FALSE)
 
-  model <- set_default(model, "gemini-3.7-flash")
+  model <- set_default(model, "gemini-3.8-flash")
   echo <- check_echo(echo)
   credentials <- default_google_credentials(variant = "vertex")
 
