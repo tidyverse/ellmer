@@ -20,5 +20,5 @@
       . <- chat$chat("hi", echo = "none")
     Condition
       Warning:
-      Ignoring unsupported parameters: "reasoning_effort"
+      Ignoring unsupported parameters: "top_k"
 

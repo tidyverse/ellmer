@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{has_credentials}
 \alias{has_credentials}
-\title{Are credentials avaiable?}
+\title{Are credentials available?}
 \usage{
 has_credentials(provider)
 }

@@ -16,12 +16,9 @@
 #' @param max_active The maximum number of simultaneous requests to send.
 #'
 #'   For [chat_anthropic()], note that the number of active connections is
-#'   limited primarily by the output tokens per minute limit (OTPM) which is
-#'   estimated from the `max_tokens` parameter, which defaults to 4096. That
-#'   means if your usage tier limits you to 16,000 OTPM, you should either set
-#'   `max_active = 4` (16,000 / 4096) to decrease the number of active
-#'   connections or use [params()] in `chat_anthropic()` to decrease
-#'   `max_tokens`.
+#'   limited primarily by the output tokens per minute limit (OTPM), which
+#'   counts the tokens actually generated. If you hit rate limits, decrease
+#'   `max_active`.
 #' @param rpm Maximum number of requests per minute.
 #' @param on_error What to do when a request fails. One of:
 #'   * `"return"` (the default): stop processing new requests, wait for
@@ -34,7 +31,7 @@
 #' performed) or an error object (if it failed).
 #'
 #' For `parallel_chat_text()`, a character vector with one element for each
-#' prompt. Requests that weren't succesful get an `NA`.
+#' prompt. Requests that weren't successful get an `NA`.
 #'
 #' For `parallel_chat_structured()`, a single structured data object with one
 #' element for each prompt. Typically, when `type` is an object, this will

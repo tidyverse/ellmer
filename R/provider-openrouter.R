@@ -15,7 +15,7 @@ NULL
 #' @family chatbots
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("OPENROUTER_API_KEY")`
-#' @param model `r param_model("gpt-5.6-terra")`
+#' @param model `r param_model("gpt-6.1-terra")`
 #' @param params Common model parameters, usually created by [params()].
 #' @inheritParams chat_openai
 #' @inheritParams chat_openai_compatible
@@ -46,7 +46,7 @@ chat_openrouter <- function(
   api_headers = character(),
   strict = FALSE
 ) {
-  model <- set_default(model, "gpt-5.6-terra")
+  model <- set_default(model, "gpt-6.1-terra")
   echo <- check_echo(echo)
 
   credentials <- as_credentials(

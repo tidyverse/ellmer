@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Give
-        me a weather update for London and Chicago"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
+        me a weather update for London and Chicago"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
         on weather conditions in multiple cities. For efficiency, request\n    all
         weather updates using a single tool call\n  ","strict":true,"parameters":{"type":"object","description":"","properties":{"cities":{"type":"array","description":"City
         names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -12,67 +12,62 @@ http_interactions:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e57ec9edef1b-LHR
+      cf-ray: a545ed0e8c06cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:59 GMT
+      date: Mon, 02 Nov 2026 20:35:30 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '787'
+      openai-processing-ms: '1036'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=VOEVaRLh5o3UxFHN0j1QhqyLjsllyblax3Yf0qq6QDg-1791281638.2104435-1.0.1.1-KPfbnWukD1vDvqIcEF0PMBZEBfB5nuvDMcSy_yKLh1dzUB4u..7fucpdJcYO7q6D3YcSxDW8O1JhWdJ9i2vqILVHqUtWbJUsHE0Ff6k_YCTU3yDh8Ve5lWo_6YyD.92H;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:59 GMT
+      set-cookie: __cf_bm=byj2PEUuht4zB50XmLr5fx9BL_Qdcrmr8BBGGgATvfI-1793651729.6882224-1.0.1.1-1Dszsa6BInweg5163XpTzvfzdCz79RDl9KJXy9EsI_SAY4Cua_tamjjsbb837MFFDK.U5Neda1i_ug2.ekiM._P_SYNykuSCBS3lflFf2bRhU6Yt_TwUH3sOI9ca4Q52;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:30 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1000000'
+      x-ratelimit-reset-requests: 12ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a4d2deeab21945c28471cc21f280f1d0
+      x-request-id: req_cbf667c58cb64c71baee50fa9ddf2833
     body:
       string: |-
         {
-          "id": "resp_0aa526d20484491d016ac4c9e6542087d2bcaa8da77c375183",
+          "id": "resp_01d02caa3ab47b0c016ae8f411c22087d2b16e66443551f0d9",
           "object": "response",
-          "created_at": 1791281638,
+          "created_at": 1793651729,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281639,
+          "completed_at": 1793651730,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "rs_0aa526d20484491d016ac4c9e6bcb087d2a02882e7d3aed9b5",
-              "type": "reasoning",
-              "content": [],
-              "encrypted_content": "gAAAAABqxMnnVV_x1VtaA8XtbddhCeCy_kLJhUXuEvgt-gW--GdGxkI_gGzwMXceZvzzwf1nBt2-IFfQdQV56I-taQZ-99a7PkzVWWXfxSIST7nX9YjCRrW3ouTgB-F7QFB1_6XGFn0hb0IDBKjL4Ub5StTEPIeuYzaCb2vN25nhI8BYYQf7kOg1lEhY0xEiIXxFMe4DJTUBSJjZRS_UMc3HoIBvWCQK5yWtWL08BBG-1dUt6hg_6FSlotskh2Oq4eK_YZJJyAgHc5JtJI0Suee-MqhKZ8w1csQaRyscFik5_ELNCQq3wiPnQA8Tx12TBnJDu9bmH-iNCj2Yh6Ybc1oriHX3o-9yO-3pXrIq4KqWwyvSJ1tSe99Hu0Usu5nL0nysSjPyey4hDdl6IpvCD2zq5bIoZOi3BrrrfhM-QVTzcs6SLAc8U_nvVdi6NGumTkf6cHBtygHsiFGKDKGNXbBI9NndKjN8NcTSc6XuJoUUhAyW7I0eF3VwHNSxVPeNImShMF-3S7wYbIFFJ137K7Nr_l3nHmgkBIbhFrOwUp1vr4qYnF7TFp997Q5UPexC-FcklIYTcwME1jzRPeyffl9LBwHa9r2H9PT0vuPkRzEJXhX-bNjcXcPyQhK7GdmyMcCA9kv8tTB0fUljBLmpT7M79H7jQq4lVZ8mERH9MlxWmHzd9ZFDWx6ACgeBzuIyL61I8QsXkbZ-3HqotVslOd72ENuHFYYM7iBz-gCinoqhmkJGdekcVzo7w2rltONPI6GoXnJBpOsCHiuSniJdjCUeyayRcGXeZ1jNk1PrUDtKjWBvts9cEklhIPSZpq7EyZhhyq1jqnvU1EMde4EOe1yqh36tp2cAqNRPmT3R85DlySEOYTWf5xVzB6fJ0ghQdu_qPI4KuYSziIJXOtL_J3ImXEAeAiqnVzcYw31z1FwZbrZ9KXWzCJgM4cerd24RZXQch-3Bx_V-yQiMYifiy97XuEIxLKKDDdJ-U-Jp8nE0VK9KlmCtJxjmehH2NG1WFYEr43Us8vfCTjZHkaNBFKO-T7EE-naZqlmo0_2PLFmsEaBd3hBNQPnKDU-Nap8Xt3BJlCfyYxBjB22aLExJSRY3529lig0jKYxOKqHPNGJoqGfXEg2Ahpxnore5QluOzt_WZyCdKsylzRhdHDiRjGZrkBKBGXvYtcf2lxUzOnj_wlwACqvG0xA=",
-              "summary": []
-            },
-            {
-              "id": "fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6",
+              "id": "fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5",
               "type": "function_call",
               "status": "completed",
               "arguments": "{\"cities\":[\"London\",\"Chicago\"]}",
-              "call_id": "call_vYo4MUKUWPdy4f8o9EVadQZx",
+              "call_id": "call_gOMlT89XyCRa0ySGePL7F7xr",
               "name": "get_weather"
             }
           ],
@@ -152,22 +147,22 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 31,
+            "output_tokens": 21,
             "output_tokens_details": {
-              "reasoning_tokens": 8
+              "reasoning_tokens": 0
             },
-            "total_tokens": 103
+            "total_tokens": 93
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:59
+  recorded_at: 2026-11-02 20:35:30
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Give
-        me a weather update for London and Chicago"}]},{"id":"rs_0aa526d20484491d016ac4c9e6bcb087d2a02882e7d3aed9b5","type":"reasoning","content":[],"encrypted_content":"gAAAAABqxMnnVV_x1VtaA8XtbddhCeCy_kLJhUXuEvgt-gW--GdGxkI_gGzwMXceZvzzwf1nBt2-IFfQdQV56I-taQZ-99a7PkzVWWXfxSIST7nX9YjCRrW3ouTgB-F7QFB1_6XGFn0hb0IDBKjL4Ub5StTEPIeuYzaCb2vN25nhI8BYYQf7kOg1lEhY0xEiIXxFMe4DJTUBSJjZRS_UMc3HoIBvWCQK5yWtWL08BBG-1dUt6hg_6FSlotskh2Oq4eK_YZJJyAgHc5JtJI0Suee-MqhKZ8w1csQaRyscFik5_ELNCQq3wiPnQA8Tx12TBnJDu9bmH-iNCj2Yh6Ybc1oriHX3o-9yO-3pXrIq4KqWwyvSJ1tSe99Hu0Usu5nL0nysSjPyey4hDdl6IpvCD2zq5bIoZOi3BrrrfhM-QVTzcs6SLAc8U_nvVdi6NGumTkf6cHBtygHsiFGKDKGNXbBI9NndKjN8NcTSc6XuJoUUhAyW7I0eF3VwHNSxVPeNImShMF-3S7wYbIFFJ137K7Nr_l3nHmgkBIbhFrOwUp1vr4qYnF7TFp997Q5UPexC-FcklIYTcwME1jzRPeyffl9LBwHa9r2H9PT0vuPkRzEJXhX-bNjcXcPyQhK7GdmyMcCA9kv8tTB0fUljBLmpT7M79H7jQq4lVZ8mERH9MlxWmHzd9ZFDWx6ACgeBzuIyL61I8QsXkbZ-3HqotVslOd72ENuHFYYM7iBz-gCinoqhmkJGdekcVzo7w2rltONPI6GoXnJBpOsCHiuSniJdjCUeyayRcGXeZ1jNk1PrUDtKjWBvts9cEklhIPSZpq7EyZhhyq1jqnvU1EMde4EOe1yqh36tp2cAqNRPmT3R85DlySEOYTWf5xVzB6fJ0ghQdu_qPI4KuYSziIJXOtL_J3ImXEAeAiqnVzcYw31z1FwZbrZ9KXWzCJgM4cerd24RZXQch-3Bx_V-yQiMYifiy97XuEIxLKKDDdJ-U-Jp8nE0VK9KlmCtJxjmehH2NG1WFYEr43Us8vfCTjZHkaNBFKO-T7EE-naZqlmo0_2PLFmsEaBd3hBNQPnKDU-Nap8Xt3BJlCfyYxBjB22aLExJSRY3529lig0jKYxOKqHPNGJoqGfXEg2Ahpxnore5QluOzt_WZyCdKsylzRhdHDiRjGZrkBKBGXvYtcf2lxUzOnj_wlwACqvG0xA=","summary":[]},{"type":"function_call","call_id":"fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6","name":"get_weather","arguments":"{\"cities\":[\"London\",\"Chicago\"]}"},{"type":"function_call_output","call_id":"fc_0aa526d20484491d016ac4c9e6d26487d2bdfa60627726c2e6","output":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
+        me a weather update for London and Chicago"}]},{"type":"function_call","call_id":"fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5","name":"get_weather","arguments":"{\"cities\":[\"London\",\"Chicago\"]}"},{"type":"function_call_output","call_id":"fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5","output":"[{\"city\":\"London\",\"raining\":\"heavy\",\"temperature\":\"cool\",\"wind\":\"strong\"},{\"city\":\"Chicago\",\"raining\":\"overcast\",\"temperature\":\"warm\",\"wind\":\"strong\"}]"}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"tools":[{"type":"function","name":"get_weather","description":"\n    Report
         on weather conditions in multiple cities. For efficiency, request\n    all
         weather updates using a single tool call\n  ","strict":true,"parameters":{"type":"object","description":"","properties":{"cities":{"type":"array","description":"City
         names","items":{"type":"string","description":""}}},"required":["cities"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
@@ -175,56 +170,58 @@ http_interactions:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e587e869ef1b-LHR
+      cf-ray: a545ed1a0e0dcc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:14:01 GMT
+      date: Mon, 02 Nov 2026 20:35:32 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1395'
+      openai-processing-ms: '1331'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=j9SF.5vCkxNyN9m6007UlJhtUuFA65tFFj_.eS9FWpE-1791281639.6657403-1.0.1.1-yCjUaJ4bNEVuXt4WbDlA3i94e1WHTX.eOudT0YlA7pRb0iSK02g3l1Mb3CuSROAvDq2JJtwXiOcwGKFh68E0KCWw5FTNA0KLR77pw9xkZ9IxISdq0ANLfqNWDUEwh8_i;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:44:01 GMT
+      set-cookie: __cf_bm=DimFQAhZzJzQS_KkEzkSf_9YoHc4iKTE3zpXk24aRE8-1793651731.522958-1.0.1.1-fskUNFLCKUBZp7Ewmiquo4xoIK.4TWOpHSYbRYhGhjBzxQ9IbwBYiAKhLn.tWOUmHkKdFmucJlsZSEIvRc9FhmJnlo0q82GW5ACke65v898ZCkYtJo.pLltdWjwoZx7W;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:32 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1000000'
+      x-ratelimit-reset-requests: 12ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_6a006332455f46c4a21659c1fa6aa040
+      x-request-id: req_184fb7734e86437c91413dfd6c3f7c1d
     body:
       string: |-
         {
-          "id": "resp_0aa526d20484491d016ac4c9e7c7fc87d28807d5305266626a",
+          "id": "resp_0c3611bd76e17965016ae8f41394b887d2b9681459a6abae5d",
           "object": "response",
-          "created_at": 1791281639,
+          "created_at": 1793651731,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281641,
+          "completed_at": 1793651732,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0aa526d20484491d016ac4c9e8782087d29c8c7bade945eb2e",
+              "id": "msg_0c3611bd76e17965016ae8f414474887d2bd6d74f5bbd213e9",
               "type": "message",
               "status": "completed",
               "content": [
@@ -232,7 +229,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "- **London:** Heavy rain, cool temperatures, and strong winds.  \n- **Chicago:** Overcast, warm, with strong winds."
+                  "text": "- **London:** Cool, with heavy rain and strong winds.\n- **Chicago:** Warm and overcast, with strong winds."
                 }
               ],
               "phase": "final_answer",
@@ -310,19 +307,19 @@ http_interactions:
           "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 152,
+            "input_tokens": 142,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 32,
+            "output_tokens": 30,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 184
+            "total_tokens": 172
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:14:01
+  recorded_at: 2026-11-02 20:35:32
 recorded_with: VCR-vcr/2.1.0

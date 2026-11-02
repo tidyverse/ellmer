@@ -1,64 +1,50 @@
 http_interactions:
 - request:
     method: POST
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent
+    uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"contents":[{"role":"user","parts":[{"text":"What is 1 + 1?"}]}],"systemInstruction":{"parts":{"text":""}},"generationConfig":{"temperature":0,"seed":1014,"thinkingConfig":{"thinkingLevel":"low","includeThoughts":true}}}'
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"input":[{"type":"user_input","content":[{"type":"text","text":"A
+        bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball.
+        How much does the ball cost?"}]}],"generation_config":{"temperature":0,"thinking_level":"medium","seed":1014,"thinking_summaries":"auto"}}'
   response:
     status: 200
     headers:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
-      content-length: '1009'
-      content-type: application/json; charset=UTF-8
-      date: Thu, 03 Sep 2026 05:36:49 GMT
+      content-type: application/json
+      date: Mon, 02 Nov 2026 14:12:50 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1576
+      server-timing: gfet4t7; dur=6179
       vary:
       - Origin
       - X-Origin
       - Referer
       x-content-type-options: nosniff
       x-frame-options: SAMEORIGIN
-      x-gemini-service-tier: standard
       x-xss-protection: '0'
     body:
-      string: |
-        {
-          "candidates": [
-            {
-              "content": {
-                "parts": [
-                  {
-                    "text": "**My Immediate Response to the Query**\n\nOkay, so the user wants the sum of 1 and 1. Straightforward enough. My process is pretty automatic for something this basic. First, I identify the fundamental question: they're asking \"What is 1 + 1?\". Next, I perform the computation – it's a simple addition, so I know 1 + 1 equals 2. Finally, I construct the answer. Given the simplicity of the request, a direct and clear response is most appropriate. No need for complex explanations here.\n\n\n",
-                    "thought": true
-                  },
-                  {
-                    "text": "1 + 1 = 2",
-                    "thoughtSignature": "ErICCq8CARFNMg8O+gIQx62tx9jH/wi0+5vc3XqQDlSSR/H6aC1x6yn/ISFPv9aecfcenf0s1AMQ2BdHLVJc0OTF4KdqRC13bHNwCK1SB2a6VF7mwfeXkpIYounu/XD1e1Z+OeaDc30T/bbiekD0dcHoLdRi/cBS8ohjzsMiucGl8nBIRSKoAwuVZ3R0z2J+Qb5fDo3ppWO+hcAy9w5lMICCl4MjKMAgN56VWxMqLDgwFLp0zg5SYOOqhC38N89tzUhaCw/OsgmXHs9FDXqHL1AYI7TS6tBnEhaq2YqFhLkTWZ3WQOb/NiqXBVG+Dfvi7Ok2hWvg7c9PyPhh1kCLdyDs22Rd2AqbVM+AomUIIE/14QQ8TkGhj/wvOCVuFQQ+APPbKLT7im/iBBFJeIslofiqRZ36"
-                  }
-                ],
-                "role": "model"
-              },
-              "finishReason": "STOP",
-              "index": 0
-            }
-          ],
-          "usageMetadata": {
-            "promptTokenCount": 9,
-            "candidatesTokenCount": 7,
-            "totalTokenCount": 80,
-            "promptTokensDetails": [
-              {
-                "modality": "TEXT",
-                "tokenCount": 9
-              }
-            ],
-            "thoughtsTokenCount": 64,
-            "serviceTier": "standard"
-          },
-          "modelVersion": "gemini-3.7-flash",
-          "responseId": "cAeZavewA_H6xN8PlsWGuQw"
-        }
-  recorded_at: 2026-09-03 05:36:49
+      string: '{"status":"completed","usage":{"total_tokens":330,"total_input_tokens":35,"input_tokens_by_modality":[{"modality":"text","tokens":35}],"total_cached_tokens":0,"total_output_tokens":146,"total_tool_use_tokens":0,"total_thought_tokens":149,"initial_input_tokens":34},"created":"2026-11-02T14:12:50Z","updated":"2026-11-02T14:12:50Z","service_tier":"standard","steps":[{"signature":"Ep0DCpoDAWkUfRPQR92odfkCKkK4MxJ7e+B+njvHpM10aYQ/4wyJvRZ64LXq1wl5jtlVTDAtHuG9CVf6Kvph+sWJOhgt9gHVk2IVvlg9eLp07TLLiVWaQh+HgYk1RQN6GYaPqudGASvq+ul6uYsqKplERUcY1uK2UKx+MRikGqX+Y2ehGb1NQ7BdDq2LA4pKkJRYUmtzPr+hQCKTV0JABnDp4v3TzEnAiXgEWXpgrrFQOCtnldgkHFQHnFeYXVhrrX2wuvIJXJhQ1pNAckOdLOx2lEWfg/qpP+NLDsqf27IwYMi0hwVjX7El3l3i7kQQ2X0zxTkg+xjzPwOQp15X3hNzQQldfm/WMIy6UuKZLT6PbUXJCUGRmts7LdtJjUS43502OTmjOV8yaZEd7vSa1gg57OBe0CM5WIcuE1m+yCUdqr22Np39bvlQHLrsGqA1/FyOWS4Q+XunzKAGsYTuXbpoIIMD3bsOc8ZIXu5CSIy8Boe/0jnz9LLCOtWzjEygBHvlTei5Mkt1stSkgbZKsea59Um5WYUOcXtnNJpmP5c=","summary":[{"text":"Here''s
+        my analysis of this classic problem:\n\n**Deconstructing the Cognitive Reflection
+        Test Question**\n\nAlright, this is a familiar setup. They''ve presented a
+        standard cognitive reflection test question, aiming to trip up intuitive,
+        System 1 thinking. My goal is to break it down logically. The core issue is
+        that people often jump to an answer without properly representing the relationships
+        in the problem.\n\nI''ll start by defining my variables:\n\n*   Total Cost
+        = $1.10\n*   Bat = Ball + $1.00 (the bat costs a dollar more than the ball).\n*   Then
+        it follows that Bat + Ball = $1.10\n\nNow I can set up my equation, substituting
+        the value of ''Bat'':\n\n(Ball + $1.00) + Ball = $1.10\n\nSimplifying, I can
+        rewrite this as:\n\n2 \\* Ball + $1.00 = $1.10\n\nNow I solve for the ball:\n\n2
+        \\* Ball = $0.10\n\nTherefore, Ball = $0.05.\n\nTo check this and verify the
+        answer, I can calculate the price of the bat.\nSince the Bat = Ball + $1.00,
+        then the Bat = $0.05 + $1.00 = $1.05\n\nThen the solution of\n$1.05 (Bat)
+        + $0.05 (Ball) = $1.10, is correct.\nThe difference between the Bat and Ball
+        is $1.00, also correct.\n\nPerfect, the solution checks out. It''s a classic
+        demonstration of how quickly we can fall prey to an intuitive, incorrect answer
+        if we aren''t careful.\n\n\n","type":"text"}],"type":"thought"},{"content":[{"text":"The
+        ball costs **$0.05** (5 cents). \n\nHere is the breakdown:\n* Bat + Ball =
+        $1.10\n* Bat = Ball + $1.00\n\nSubstituting the bat''s cost into the equation:\n*
+        (Ball + $1.00) + Ball = $1.10\n* 2 × Ball + $1.00 = $1.10\n* 2 × Ball = $0.10\n*
+        **Ball = $0.05**\n\n(The bat costs $1.05, which is $1.00 more than the ball,
+        making the total $1.10.)","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:12:50
 recorded_with: VCR-vcr/2.1.0

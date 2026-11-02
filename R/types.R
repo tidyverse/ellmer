@@ -3,7 +3,7 @@ NULL
 
 #' Type definitions for function calling and structured data extraction.
 #'
-#' These S7 classes are provided for use by package devlopers who are
+#' These S7 classes are provided for use by package developers who are
 #' extending ellmer. In every day use, use [type_boolean()] and friends.
 #'
 #' @name Type
