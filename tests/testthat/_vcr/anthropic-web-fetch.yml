@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -184,7 +184,7 @@ http_interactions:
         films (static HTML)","citations":{"enabled":false}}},"caller":{"type":"direct"}},{"type":"text","text":"The
         first movie listed on that page is **The Phantom Menace** (Released: 1999-05-19,
         Director: George Lucas)."}]},{"role":"user","content":[{"type":"text","text":"What''s
-        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -298,7 +298,7 @@ http_interactions:
         the first movie listed on https://rvest.tidyverse.org/articles/starwars.html?"}]},{"role":"assistant","content":[{"type":"text","text":"The
         first movie listed on that page is **The Phantom Menace** (Released: 1999-05-19,
         Director: George Lucas)."}]},{"role":"user","content":[{"type":"text","text":"Who
-        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -413,7 +413,7 @@ http_interactions:
         Director: George Lucas)."}]},{"role":"user","content":[{"type":"text","text":"Who
         directed it?"}]},{"role":"assistant","content":[{"type":"text","text":"**The
         Phantom Menace** was directed by **George Lucas**."}]},{"role":"user","content":[{"type":"text","text":"Who
-        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":4096}'
+        directed it?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_fetch","type":"web_fetch_20250910","citations":{"enabled":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:

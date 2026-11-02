@@ -11,7 +11,7 @@ http_interactions:
         that are less commonly used.\n  * Always use double quotes for strings.\n  *
         Use the base pipe, `|>`, not the magrittr pipe `%>%`.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
-        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:

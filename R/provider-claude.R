@@ -303,7 +303,7 @@ method(chat_params, ProviderAnthropic) <- function(provider, params) {
   )
 
   # Unlike other providers, Claude requires that this be set
-  params$max_tokens <- params$max_tokens %||% 4096
+  params$max_tokens <- params$max_tokens %||% 32000
 
   params$stop_sequences <- as.list(params$stop_sequences)
 

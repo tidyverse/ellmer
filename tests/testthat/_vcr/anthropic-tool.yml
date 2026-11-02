@@ -7,7 +7,7 @@ http_interactions:
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
         the current date in Y-M-D format?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
-        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":4096}'
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -47,7 +47,7 @@ http_interactions:
         use a tool to answer. Reply with ''It is ____.''.","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What''s
         the current date in Y-M-D format?"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_01KxYwXjGNkqkpvqfLTPPR8Q","name":"current_date","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01KxYwXjGNkqkpvqfLTPPR8Q","content":"2024-01-01","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
-        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":4096}'
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -90,7 +90,7 @@ http_interactions:
         is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
         is it? Provide the full name","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
-        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":4096}'
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -132,7 +132,7 @@ http_interactions:
         is 2024-01-01."}]},{"role":"user","content":[{"type":"text","text":"What month
         is it? Provide the full name"}]},{"role":"assistant","content":[{"type":"tool_use","id":"toolu_01CsLvwXCRDWyXQyD4dvTe6S","name":"current_month","input":{}}]},{"role":"user","content":[{"type":"tool_result","tool_use_id":"toolu_01CsLvwXCRDWyXQyD4dvTe6S","content":"February","is_error":false,"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"current_date","description":"Return
         the current date","input_schema":{"type":"object","description":"","additionalProperties":false}},{"name":"current_month","description":"Return
-        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":4096}'
+        the full name of the current month","input_schema":{"type":"object","description":"","additionalProperties":false}}],"max_tokens":32000}'
   response:
     status: 200
     headers:
