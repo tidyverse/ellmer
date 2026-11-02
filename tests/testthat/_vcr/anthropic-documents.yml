@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"Which
         penguin won the race? Answer with just the penguin''s name."},{"type":"document","title":"penguin_race.csv","source":{"type":"text","media_type":"text/plain","data":"penguin,race_time_seconds\nWaddlesworth,43.2\nFlipper
-        McGee,38.7\nTurbo Tuxedo,31.9\nCaptain Blubber,45.1\nSir Slidesalot,36.4\n"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        McGee,38.7\nTurbo Tuxedo,31.9\nCaptain Blubber,45.1\nSir Slidesalot,36.4\n"},"cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:

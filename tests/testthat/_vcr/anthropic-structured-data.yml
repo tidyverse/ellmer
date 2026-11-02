@@ -8,7 +8,7 @@ http_interactions:
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
         delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"output_config":{"format":{"type":"json_schema","schema":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
-        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}},"max_tokens":4096}'
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}},"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -55,7 +55,7 @@ http_interactions:
         and I like to eat them.\n    Except for red delicious, that is. They are NOT
         delicious.\n  ","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"output_config":{"format":{"type":"json_schema","schema":{"type":"object","description":"Summary
         of the article. Preserve existing case.","properties":{"title":{"type":"string","description":"Content
-        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}},"max_tokens":4096}'
+        title"},"author":{"type":"string","description":"Name of the author"}},"required":["title","author"],"additionalProperties":false}}},"max_tokens":32000}'
   response:
     status: 200
     headers:

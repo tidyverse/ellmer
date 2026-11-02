@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"When
-        was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":4096}'
+        was ggplot2 1.0.0 released to CRAN?\n\nAnswer in YYYY-MM-DD format.","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -70,7 +70,7 @@ http_interactions:
         14, 2025"}],"caller":{"type":"direct"}},{"type":"text","text":"According to
         CRAN publish records, "},{"type":"text","text":"ggplot2 1.0.0 was published
         on 2014-05-21"},{"type":"text","text":".\n\n**2014-05-21**"}]},{"role":"user","content":[{"type":"text","text":"What
-        month was that?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":4096}'
+        month was that?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -123,7 +123,7 @@ http_interactions:
         on 2014-05-21"},{"type":"text","text":".\n\n**2014-05-21**"}]},{"role":"user","content":[{"type":"text","text":"What
         month was that?"}]},{"role":"assistant","content":[{"type":"text","text":"That
         was **May** (2014)."}]},{"role":"user","content":[{"type":"text","text":"What
-        month was that?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":4096}'
+        month was that?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"tools":[{"name":"web_search","type":"web_search_20250305"}],"max_tokens":32000}'
   response:
     status: 200
     headers:

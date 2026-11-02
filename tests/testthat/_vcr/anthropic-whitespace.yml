@@ -4,7 +4,7 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"Respond
-        to this question with only two blank lines","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        to this question with only two blank lines","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -44,7 +44,7 @@ http_interactions:
       string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"Respond
         to this question with only two blank lines"}]},{"role":"assistant","content":[{"type":"text","text":"[empty
         string]"}]},{"role":"user","content":[{"type":"text","text":"What''s 1+1?
-        Just give me the number","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        Just give me the number","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:

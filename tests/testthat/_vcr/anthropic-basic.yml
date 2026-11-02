@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"Be as terse
         as possible; no punctuation","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"What
-        is 1 + 1?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        is 1 + 1?","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:
