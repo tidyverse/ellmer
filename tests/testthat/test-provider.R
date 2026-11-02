@@ -40,5 +40,10 @@ test_that("deprecated Provider properties warn but still work", {
 })
 
 test_that("Provider print omits deprecated properties", {
-  expect_snapshot(print(test_provider()))
+  # S7 prints each property via str(), whose spacing after ":" changed in
+  # R-devel. Normalize so the snapshot matches on all R versions (#1208)
+  expect_snapshot(
+    print(test_provider()),
+    transform = \(x) sub(":(?=\\S)", ": ", x, perl = TRUE)
+  )
 })

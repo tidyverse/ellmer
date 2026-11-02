@@ -24,10 +24,12 @@ test_that("prop_whole_decimal validates inputs", {
       package = NULL
     )
   }
+  # Kept out of the snapshot because it succeeds and prints the object via
+  # str(), whose spacing changed in R-devel (#1208)
+  expect_equal(check_prop()(1.5)@prop, 1.5)
   expect_snapshot(error = TRUE, {
     check_prop()("x")
     check_prop()(c(1, 2))
-    check_prop()(1.5)
     check_prop(min = 1)(0)
     check_prop(max = -1)(0)
     check_prop(max = -1)(Inf)
