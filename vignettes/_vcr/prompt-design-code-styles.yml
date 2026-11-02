@@ -7,7 +7,7 @@ http_interactions:
         are an expert R programmer who prefers data.table.\n  Just give me the code.
         I don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
-        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:
@@ -53,7 +53,7 @@ http_interactions:
         are an expert R programmer who prefers base R.\n  Just give me the code. I
         don''t want any explanation or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
-        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:

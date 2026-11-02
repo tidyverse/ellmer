@@ -7,7 +7,7 @@ http_interactions:
         all characteristics of supplied character","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  The
         man is tall, with a beard and a scar on his left cheek. He has a deep voice
         and wears a black leather jacket.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"output_config":{"format":{"type":"json_schema","schema":{"type":"array","description":"All
-        characteristics","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"value":{"type":"string","description":""}},"required":["name","value"],"additionalProperties":false}}}},"max_tokens":4096}'
+        characteristics","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":""},"value":{"type":"string","description":""}},"required":["name","value"],"additionalProperties":false}}}},"max_tokens":32000}'
   response:
     status: 200
     headers:
