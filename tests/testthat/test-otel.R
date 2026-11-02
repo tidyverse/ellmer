@@ -415,6 +415,7 @@ test_that("token usage and operation duration are recorded as metrics", {
       list(input = 3, cached_input = 1, output = 5)
     },
     value_reasoning_tokens = function(provider, result) 2,
+    value_cache_write_tokens = function(provider, result) 3,
     value_turn = function(provider, model, result, has_type = FALSE) {
       AssistantTurn(
         list(ContentText("hi")),
@@ -435,6 +436,10 @@ test_that("token usage and operation duration are recorded as metrics", {
     chat_span$attributes[["gen_ai.usage.cache_read.input_tokens"]],
     1L
   )
+  expect_equal(
+    chat_span$attributes[["gen_ai.usage.cache_write.input_tokens"]],
+    3L
+  )
   expect_equal(chat_span$attributes[["gen_ai.response.finish_reasons"]], "stop")
   expect_null(chat_span$attributes[["gen_ai.request.stream"]])
 
@@ -448,6 +453,7 @@ test_that("token usage and operation duration are recorded as metrics", {
       "gen_ai.client.inference.usage.input_tokens",
       "gen_ai.client.inference.usage.output_tokens",
       "gen_ai.client.inference.usage.cache_read.input_tokens",
+      "gen_ai.client.inference.usage.cache_write.input_tokens",
       "gen_ai.client.inference.usage.reasoning.output_tokens",
       "gen_ai.invoke_agent.duration",
       "gen_ai.invoke_agent.inference_calls",
@@ -471,6 +477,12 @@ test_that("token usage and operation duration are recorded as metrics", {
       1L
     ]]$value,
     1
+  )
+  expect_equal(
+    points[["gen_ai.client.inference.usage.cache_write.input_tokens"]][[
+      1L
+    ]]$value,
+    3
   )
   expect_equal(
     points[["gen_ai.client.inference.usage.reasoning.output_tokens"]][[

@@ -342,6 +342,7 @@ test_that("value_turn() prices cache writes at 1.25x while reporting raw tokens"
   #   (1000 + 400 * 1.25) * $10/1M + 50 * $100/1M + 200 * $1/1M
   expected_cost <- ((1000 + 400 * 1.25) * 10 + 50 * 100 + 200 * 1) / 1e6
   expect_equal(unclass(turn@cost), expected_cost)
+  expect_equal(value_cache_write_tokens(provider, result), 400)
 })
 
 test_that("value_turn() prices a refusal fallback at the serving model's rate", {

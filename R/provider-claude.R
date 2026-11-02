@@ -441,6 +441,13 @@ method(value_tokens, ProviderAnthropic) <- function(provider, json) {
   )
 }
 
+method(value_cache_write_tokens, ProviderAnthropic) <- function(
+  provider,
+  json
+) {
+  json$usage$cache_creation_input_tokens
+}
+
 # https://docs.anthropic.com/en/api/handling-stop-reasons
 method(value_finish_reason, ProviderAnthropic) <- function(provider, result) {
   reason <- result$stop_reason
@@ -528,7 +535,7 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
   contents <- contents %||% list()
 
   tokens <- value_tokens(provider, result)
-  cache_write <- result$usage$cache_creation_input_tokens %||% 0
+  cache_write <- value_cache_write_tokens(provider, result) %||% 0
   # Anthropic charges 1.25x the input rate for cache writes; tokens$input
   # already counts them at 1.0x, so add the 0.25x surcharge for pricing.
   cost_tokens <- tokens

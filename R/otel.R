@@ -75,6 +75,10 @@ otel_counter_specs <- list(
     description = "Number of input tokens served from a provider-managed cache",
     unit = "{token}"
   ),
+  "gen_ai.client.inference.usage.cache_write.input_tokens" = list(
+    description = "Number of input tokens written to a provider-managed cache",
+    unit = "{token}"
+  ),
   "gen_ai.client.inference.usage.reasoning.output_tokens" = list(
     description = "Number of output tokens used for reasoning",
     unit = "{token}"
@@ -460,6 +464,7 @@ record_chat_otel_span_status <- function(
   input <- as.integer(tokens$input + tokens$cached_input)
   output <- as.integer(tokens$output)
   reasoning <- as.integer(value_reasoning_tokens(provider, result) %||% 0L)
+  cache_write <- as.integer(value_cache_write_tokens(provider, result) %||% 0L)
   if (input > 0L || output > 0L) {
     otel_record_histogram(
       "gen_ai.client.inference.operation.input_tokens",
@@ -477,6 +482,7 @@ record_chat_otel_span_status <- function(
       "gen_ai.client.inference.usage.cache_read.input_tokens" = as.integer(
         tokens$cached_input
       ),
+      "gen_ai.client.inference.usage.cache_write.input_tokens" = cache_write,
       "gen_ai.client.inference.usage.reasoning.output_tokens" = reasoning
     )
     usage_attributes <- c(attributes, "gen_ai.token.modality" = "unknown")
@@ -503,6 +509,9 @@ record_chat_otel_span_status <- function(
       "gen_ai.usage.cache_read.input_tokens",
       as.integer(tokens$cached_input)
     )
+  }
+  if (cache_write > 0L) {
+    span$set_attribute("gen_ai.usage.cache_write.input_tokens", cache_write)
   }
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
