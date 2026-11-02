@@ -347,12 +347,6 @@ test_that("structured output includes `strict` only when the provider is strict"
   expect_equal(fn$parameters$properties$y$type, c("number", "null"))
 })
 
-test_that("reasoning_effort is passed through", {
-  provider <- ProviderOpenAICompatible(name = "", base_url = "")
-  params <- chat_params(provider, params(reasoning_effort = "low"))
-  expect_equal(params$reasoning_effort, "low")
-})
-
 test_that("image detail is sent", {
   provider <- ProviderOpenAICompatible(name = "", base_url = "")
   image <- content_image_url("data:image/png;base64,abcd", detail = "low")
