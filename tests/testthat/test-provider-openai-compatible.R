@@ -78,7 +78,7 @@ test_that("can match prices for some common models", {
 # Custom tests -----------------------------------------------------------------
 
 test_that("can retrieve log_probs (#115)", {
-  # Reasoning models reject logprobs, so pin a model that still supports it
+  # gpt-5.6-luna doesn't return logprobs, so pin an older model that does
   chat <- chat_openai_compatible_test(
     model = "gpt-5.4-nano",
     params = params(log_probs = TRUE)
@@ -345,6 +345,12 @@ test_that("structured output includes `strict` only when the provider is strict"
   expect_true(fn$strict)
   expect_equal(unlist(fn$parameters$required), c("x", "y"))
   expect_equal(fn$parameters$properties$y$type, c("number", "null"))
+})
+
+test_that("reasoning_effort is passed through", {
+  provider <- ProviderOpenAICompatible(name = "", base_url = "")
+  params <- chat_params(provider, params(reasoning_effort = "low"))
+  expect_equal(params$reasoning_effort, "low")
 })
 
 test_that("image detail is sent", {
