@@ -35,7 +35,7 @@ which you can easily edit by calling \code{usethis::edit_r_environ()}.
 
 If you do need additional control, this argument takes a zero-argument function that returns either a string (the API key), or a named list (added as additional headers to every request).}
 
-\item{model}{The model to use for the chat (defaults to "deepseek-v4-flash").
+\item{model}{The model to use for the chat (defaults to "deepseek-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.}
 
 \item{params}{Common model parameters, usually created by \code{\link[=params]{params()}}.}

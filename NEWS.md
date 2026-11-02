@@ -5,6 +5,7 @@
 * Default models have been updated for a number of providers (@thisisnic, #1176):
   * `chat_anthropic()` now uses `claude-sonnet-5-5`.
   * `chat_aws_bedrock()` now uses `us.anthropic.claude-sonnet-5-5`.
+  * `chat_deepseek()` now uses `deepseek-flash`.
   * `chat_google_gemini()` and `chat_google_vertex()` now use `gemini-3.8-flash`.
   * `chat_openai()` now uses `gpt-6.1-terra`.
   * `chat_openrouter()` now uses `gpt-6.1-terra`.
