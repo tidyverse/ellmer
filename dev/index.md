@@ -96,8 +96,8 @@ freedom, so we have a few recommendations to help you get started:
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   are good places to start.
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  defaults to **GPT-5.6 Terra**, but you can use
-  `model = "gpt-5.6-luna"` for a cheaper, faster model.
+  defaults to **GPT-5.6 Terra**, but you can use `model = "gpt-6-luna"`
+  for a cheaper, faster model.
   [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   defaults to **Claude Sonnet 5**, which we have found to be
   particularly good at writing R code.
@@ -148,7 +148,7 @@ creating a new chat object:
 
 library(ellmer)
 
-chat <- chat_openai("Be terse", model = "gpt-4o-mini")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 ```
 
 Chat objects are stateful [R6 objects](https://r6.r-lib.org): they
@@ -192,16 +192,18 @@ method:
 ``` r
 
 chat$chat("What preceding languages most influenced R?")
-#> R was primarily influenced by:
-#>
-#> 1. **S** - The predecessor to R, which introduced many foundational concepts.
-#> 2. **Scheme** - A dialect of Lisp that influenced R's functional programming
-#> aspects.
-#> 3. **Fortran** - Influenced R's efficiency and mathematical capabilities.
-#> 4. **C** - Impacted R's performance and low-level programming features.
-#>
-#> These languages contributed to R's design and functionality in statistics and
-#> data analysis.
+#> R was most directly influenced by:
+#> 
+#> - **S** — the main immediate ancestor; R was designed as an open-source 
+#> implementation inspired by S.
+#> - **Scheme / Lisp** — especially in ideas around functional programming and 
+#> language design.
+#> - **FORTRAN** — via numerical computing and the statistical computing 
+#> tradition.
+#> - **C** — for implementation and low-level language structure.
+#> - **Awk / Unix tools** — some influence on data handling and scripting style.
+#> 
+#> If you mean the **biggest single influence**, it’s **S**.
 ```
 
 If you initialize the chat object in the global environment, the `chat`
@@ -222,12 +224,21 @@ chat$chat(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   "Can you explain this logo?"
 )
-#> The logo features a stylized letter "R" within a circular shape. The design
-#> reflects the programming language R, which is widely used for statistical
-#> analysis and data visualization. The circular element suggests continuity and
-#> completeness, while the bold "R" emphasizes its identity. Overall, the logo
-#> conveys modernity and practicality, aligning with R's functionality in data
-#> science.
+#> This is the **R logo**, used for the R programming language.
+#> 
+#> What it represents:
+#> - The big **R** is the language itself.
+#> - The gray oval/loop behind it is part of the stylized brand mark.
+#> - The design is meant to look simple and technical, fitting a statistical 
+#> computing language.
+#> 
+#> A common interpretation is that it echoes the idea of a **circle/loop** around 
+#> the letter, but there’s no official deep symbolic meaning beyond branding.
+#> 
+#> If you want, I can also explain:
+#> - the **history of the R logo**
+#> - what **R** stands for
+#> - how it differs from the **S** language logo/history
 ```
 
 ### Streaming vs capturing
@@ -240,7 +251,7 @@ to return a string instead:
 ``` r
 
 my_function <- function() {
-  chat <- chat_openai("Be terse", model = "gpt-4o-mini", echo = "none")
+  chat <- chat_openai("Be terse", model = "gpt-5.4-mini", echo = "none")
   chat$chat("What is 6 times 7?")
 }
 str(my_function())

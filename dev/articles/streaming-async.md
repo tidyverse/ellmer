@@ -104,7 +104,7 @@ ui <- bslib::page_fillable(
 server <- function(input, output, session) {
   chat <- ellmer::chat_openai(
     system_prompt = "You're a trickster who answers in riddles",
-    model = "gpt-4.1-nano"
+    model = "gpt-5.4-mini"
   )
 
   chat_mod_server("chat", chat)
@@ -169,7 +169,7 @@ article](https://shiny.posit.co/r/articles/improve/nonblocking/).
         # multi-turn conversation.
         chat <- chat_openai(
           system_prompt = "You are a rambling chatbot who likes to tell stories but gets distracted easily.",
-          model = "gpt-4.1-nano"
+          model = "gpt-5.4-mini"
         )
 
         # Stream the chat completion into the markdown stream. `markdown_stream()`

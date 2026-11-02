@@ -69,9 +69,9 @@ will typically require more tokens, because (in brief) LLMs are trained
 on data from the internet, which is primarily in English.
 
 LLMs are priced per million tokens. State of the art models (like
-GPT-4.1 or Claude 3.5 sonnet) cost \$2-3 per million input tokens, and
-\$10-15 per million output tokens. Cheaper models can cost much less,
-e.g. GPT-4.1 nano costs \$0.10 per million input tokens and \$0.40 per
+GPT-6.1 Sol or Claude Opus 5.5) cost \$2-4 per million input tokens, and
+\$10-20 per million output tokens. Cheaper models can cost much less,
+e.g. GPT-6 Luna costs \$0.10 per million input tokens and \$0.50 per
 million output tokens. Even \$10 of API credit will give you a lot of
 room for experimentation, particularly with cheaper models, and prices
 are likely to decline as model performance improves.
@@ -88,18 +88,18 @@ printing it, and you can see total usage for a session with
 
 ``` r
 
-chat <- chat_openai(model = "gpt-4.1")
+chat <- chat_openai(model = "gpt-5.4-mini")
 . <- chat$chat("Who created R?", echo = FALSE)
 chat
-#> <Chat OpenAI/gpt-4.1 turns=2 input=11 output=86 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=2 input=10 output=33 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> Who created R?
-#> ── assistant [input=11 output=86 cost=$0.00] ──────────────────────────
-#> The programming language **R** was created by **Ross Ihaka** and **Robert Gentleman**. They began developing it in **1992** at the University of Auckland, New Zealand. The name "R" is partially derived from the first letters of their names, **R**oss and **R**obert, and also as a play on the name of the S language, which influenced the creation of R.
+#> ── assistant [input=10 output=33 cost=$0.00] ──────────────────────────
+#> R was created by **Ross Ihaka** and **Robert Gentleman** at the **University of Auckland** in the early 1990s.
 
 token_usage()
-#>   provider   model input output cached_input price
-#> 1   OpenAI gpt-4.1    11     86            0 $0.00
+#>   provider        model input output cached_input price
+#> 1   OpenAI gpt-5.4-mini    10     33            0 $0.00
 ```
 
 If you want to learn more about tokens and tokenizers, I’d recommend

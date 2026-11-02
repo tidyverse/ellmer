@@ -51,18 +51,26 @@ library(ellmer)
 ### Motivating example
 
 Let’s take a look at an example where we really need an external tool.
-Chat models generally do not know the current time, which makes
-questions like these impossible.
+Chat models don’t have access to a clock, which makes questions like
+this impossible to answer.
 
 ``` r
 
-chat <- chat_openai(model = "gpt-4o")
-chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, 
-#> that was 54 years ago.
+chat <- chat_openai(model = "gpt-5.4-mini")
+chat$chat("What time is it right now in Chicago?")
+#> I can’t see the current live time. Chicago is in the 
+#> **America/Chicago** time zone, which is:
+#> 
+#> - **Central Standard Time (CST)**, UTC−6, or
+#> - **Central Daylight Time (CDT)**, UTC−5, depending on daylight saving
+#> time.
+#> 
+#> If you want, I can help you calculate the current Chicago time from 
+#> your local time or show you how to check it quickly on your device.
 ```
 
-Since the model doesn’t know what day it is, the result is incorrect.
+Nothing tells the model the time of day, so the best it can do is
+explain that it doesn’t know.
 
 ### Defining a tool function
 
@@ -137,9 +145,8 @@ That’s all we need to do! Let’s retry our query:
 
 ``` r
 
-chat$chat("How long ago did Neil Armstrong touch down on the moon?")
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of now, 
-#> that was almost 56 years ago.
+chat$chat("What time is it right now in Chicago?")
+#> The current time in Chicago is **11:53:23 AM CDT**.
 ```
 
 That’s correct! Without any further guidance, the chat model decided to
@@ -151,24 +158,25 @@ If we print the chat we can see where the model decided to use the tool:
 ``` r
 
 chat
-#> <Chat OpenAI/gpt-4o turns=6 input=286 output=76 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=6 input=417 output=135 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
-#> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=19 output=30 cost=$0.00] ──────────────────────────
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago.
+#> What time is it right now in Chicago?
+#> ── assistant [input=15 output=94 cost=$0.00] ──────────────────────────
+#> I can’t see the current live time. Chicago is in the **America/Chicago** time zone, which is:
+#> 
+#> - **Central Standard Time (CST)**, UTC−6, or
+#> - **Central Daylight Time (CDT)**, UTC−5, depending on daylight saving time.
+#> 
+#> If you want, I can help you calculate the current Chicago time from your local time or show you how to check it quickly on your device.
 #> ── user ───────────────────────────────────────────────────────────────
-#> How long ago did Neil Armstrong touch down on the moon?
-#> ── assistant [input=116 output=16 cost=$0.00] ─────────────────────────
-#> [tool request (fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d)]: get_current_time(tz = "UTC")
+#> What time is it right now in Chicago?
+#> ── assistant [input=178 output=21 cost=$0.00] ─────────────────────────
+#> [tool request (fc_042764b047271399016ae7ae65082487d281aec35d0faaa330)]: get_current_time(tz = "America/Chicago")
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d)]: 2025-06-25 16:53:23 UTC
-#> ── assistant [input=151 output=30 cost=$0.00] ─────────────────────────
-#> Neil Armstrong touched down on the moon on July 20, 1969. As of now, that was almost 56 years ago.
+#> [tool result  (fc_042764b047271399016ae7ae65082487d281aec35d0faaa330)]: 2025-06-25 11:53:23 CDT
+#> ── assistant [input=224 output=20 cost=$0.00] ─────────────────────────
+#> The current time in Chicago is **11:53:23 AM CDT**.
 ```
-
-(Full disclosure: I originally tried this example with the default model
-of `gpt-4o-mini` and it got the tool calling right but the date math
-wrong, hence the explicit `model="gpt-4o"`.)
 
 This tool example was extremely simple, but you can imagine doing much
 more interesting things from tool functions: calling APIs, reading from
@@ -308,7 +316,7 @@ tidyverse website](https://tidyverse.org):
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-4.1".
+#> Using model = "gpt-5.6-terra".
 chat$register_tool(screenshot_website)
 chat$chat("Describe the design aesthetic of https://tidyverse.org")
 #> https://tidyverse.org screenshot completed

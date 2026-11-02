@@ -185,7 +185,7 @@ chat interactions automatically.</p>
 <span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span></span>
 <span>    system_prompt <span class="op">=</span> <span class="st">"You're a trickster who answers in riddles"</span>,</span>
-<span>    model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span></span>
+<span>    model <span class="op">=</span> <span class="st">"gpt-5.4-mini"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_mod_ui.html" class="external-link">chat_mod_server</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">chat</span><span class="op">)</span></span>
@@ -240,7 +240,7 @@ operations</em> article</a>.</p>
 <span>    <span class="co"># multi-turn conversation.</span></span>
 <span>    <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span></span>
 <span>      system_prompt <span class="op">=</span> <span class="st">"You are a rambling chatbot who likes to tell stories but gets distracted easily."</span>,</span>
-<span>      model <span class="op">=</span> <span class="st">"gpt-4.1-nano"</span></span>
+<span>      model <span class="op">=</span> <span class="st">"gpt-5.4-mini"</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># Stream the chat completion into the markdown stream. `markdown_stream()`</span></span>
