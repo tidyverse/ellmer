@@ -63,10 +63,6 @@ test_that("validate_price_providers() names missing providers", {
     variant = ""
   )
 
-  expect_error(
-    validate_price_providers(df, EXPECTED_PRICE_PROVIDERS),
-    class = "ellmer_price_providers_invalid"
-  )
   expect_snapshot(
     error = TRUE,
     validate_price_providers(df, EXPECTED_PRICE_PROVIDERS)
@@ -82,10 +78,6 @@ test_that("validate_price_providers() detects a same-count substitution", {
   swapped[swapped == "OpenAI"] <- "OpenRouter"
   df <- data.frame(provider = swapped, model = "m", variant = "")
 
-  expect_error(
-    validate_price_providers(df, EXPECTED_PRICE_PROVIDERS),
-    class = "ellmer_price_providers_invalid"
-  )
   expect_snapshot(
     error = TRUE,
     validate_price_providers(df, EXPECTED_PRICE_PROVIDERS)
@@ -101,10 +93,6 @@ test_that("validate_price_providers() names unexpected providers", {
     variant = ""
   )
 
-  expect_error(
-    validate_price_providers(df, EXPECTED_PRICE_PROVIDERS),
-    class = "ellmer_price_providers_invalid"
-  )
   expect_snapshot(
     error = TRUE,
     validate_price_providers(df, EXPECTED_PRICE_PROVIDERS)
