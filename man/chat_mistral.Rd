@@ -84,6 +84,7 @@ Other chatbots:
 \code{\link[=chat_google_gemini]{chat_google_gemini()}},
 \code{\link[=chat_groq]{chat_groq()}},
 \code{\link[=chat_huggingface]{chat_huggingface()}},
+\code{\link[=chat_llamacpp]{chat_llamacpp()}},
 \code{\link[=chat_lmstudio]{chat_lmstudio()}},
 \code{\link[=chat_ollama]{chat_ollama()}},
 \code{\link[=chat_openai]{chat_openai()}},
