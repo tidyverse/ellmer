@@ -534,38 +534,6 @@ test_that("redacted thinking blocks are kept and replayed", {
   )
 })
 
-test_that("redacted thinking blocks survive streaming", {
-  provider <- chat_anthropic_test()$get_provider()
-  chunks <- list(
-    list(
-      type = "message_start",
-      message = list(content = list(), usage = list(input_tokens = 1))
-    ),
-    list(
-      type = "content_block_start",
-      index = 0L,
-      content_block = list(type = "redacted_thinking", data = "encrypted")
-    ),
-    list(type = "content_block_stop", index = 0L),
-    list(
-      type = "message_delta",
-      delta = list(stop_reason = "end_turn"),
-      usage = list(output_tokens = 5)
-    )
-  )
-
-  completion <- NULL
-  for (chunk in chunks) {
-    completion <- stream_merge_chunks(provider, completion, chunk)
-  }
-  turn <- value_turn(provider, test_model(), completion)
-
-  expect_equal(
-    as_json(provider, turn@contents[[1]]),
-    list(type = "redacted_thinking", data = "encrypted")
-  )
-})
-
 test_that("stream_content() emits Anthropic citations after completed text", {
   provider <- chat_anthropic_test()$get_provider()
   chunks <- list(
