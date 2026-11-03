@@ -77,10 +77,10 @@ str_prop <- function(x) {
     if (identical(class(x), "function")) {
       cat(" ")
     }
-  } else if (getRversion() >= "4.7.0") {
-    if (!inherits(x, c("S7_object", "S7_class"))) {
-      cat(" ")
-    }
+  } else if (
+    getRversion() >= "4.7.0" && !inherits(x, c("S7_object", "S7_class"))
+  ) {
+    cat(" ")
   }
   utils::str(x, give.attr = FALSE, nest.lev = 1, indent.str = "  ..")
 }
