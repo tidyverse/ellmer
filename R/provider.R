@@ -71,17 +71,19 @@ provider_print <- function(x, hide = character()) {
 # Mirrors S7's str_space() and str_function(). R 4.7.0 changed str() to
 # print the space after a label itself instead of leaving it to the nested
 # call, so print it ourselves, and on older versions also print it for the
-# types that never had one, so the output matches on all versions.
+# types that never had one, so the output matches on all versions. S7 objects
+# print their own space.
 str_prop <- function(x) {
   if (is.function(x)) {
     attr(x, "srcref") <- NULL
   }
   if (
-    getRversion() >= "4.7.0" ||
-      identical(class(x), "function") ||
-      is.environment(x) ||
-      is.data.frame(x) ||
-      (is.list(x) && !is.object(x) && length(x) > 0)
+    !inherits(x, c("S7_object", "S7_class")) &&
+      (getRversion() >= "4.7.0" ||
+        identical(class(x), "function") ||
+        is.environment(x) ||
+        is.data.frame(x) ||
+        (is.list(x) && length(x) > 0))
   ) {
     cat(" ")
   }
