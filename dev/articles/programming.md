@@ -400,7 +400,7 @@ str(turns[[2]])
 #>  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"
 #>  @ cost         : 'ellmer_dollars' num $0.00
 #>  @ duration     : num NA
-#>  @ finish_reason: chr "success"
+#>  @ finish_reason: chr "tool_use"
 ```
 
 You can use the `@json` to extract additional information that ellmer

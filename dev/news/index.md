@@ -12,6 +12,17 @@
   ellmer records, and how ellmer’s spans join your own traces
   ([@schloerke](https://github.com/schloerke),
   [\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
+- [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  and
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  now report `finish_reason = "tool_use"` rather than `"success"` for
+  turns that call a tool, matching the other providers.
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  also reports the `LANGUAGE`, `IMAGE_SAFETY`,
+  `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as
+  `"content_filter"`
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1199](https://github.com/tidyverse/ellmer/issues/1199)).
 - Default models have been updated for a number of providers
   ([@thisisnic](https://github.com/thisisnic),
   [\#1176](https://github.com/tidyverse/ellmer/issues/1176)):
