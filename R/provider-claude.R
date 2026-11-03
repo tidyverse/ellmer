@@ -415,7 +415,9 @@ method(stream_merge_chunks, ProviderAnthropic) <- function(
   } else if (chunk$type == "message_delta") {
     result$stop_reason <- chunk$delta$stop_reason
     result$stop_sequence <- chunk$delta$stop_sequence
-    result$usage$output_tokens <- chunk$usage$output_tokens
+    # `message_delta` usage is cumulative, and for server tools its input and
+    # cache counts can exceed those reported by `message_start`.
+    result$usage <- modify_list(result$usage, compact(chunk$usage))
   } else if (chunk$type == "error") {
     if (chunk$error$type == "overloaded_error") {
       # https://docs.anthropic.com/en/api/messages-streaming#error-events
@@ -515,6 +517,9 @@ method(value_turn_with_turns, ProviderAnthropic) <- function(
         content$thinking,
         extra = list(signature = content$signature)
       ))
+    } else if (content$type == "redacted_thinking") {
+      # https://platform.claude.com/docs/en/build-with-claude/thinking#redacted-thinking-blocks
+      list(ContentThinking("", extra = list(redacted_data = content$data)))
     } else if (content$type == "fallback") {
       # https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback
       NULL
@@ -953,6 +958,10 @@ method(as_json, list(ProviderAnthropic, ContentThinking)) <- function(
   x,
   ...
 ) {
+  if (!is.null(x@extra$redacted_data)) {
+    return(list(type = "redacted_thinking", data = x@extra$redacted_data))
+  }
+
   if (identical(x@thinking, "")) {
     return()
   }

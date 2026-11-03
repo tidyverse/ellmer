@@ -176,7 +176,7 @@ gemini_steps <- function(json, type) {
 
   # Number the items so that each item gets a new number, unless it's a block
   # that follows another block, in which case it shares the previous number
-  joins_previous <- is_block & c(FALSE, head(is_block, -1))
+  joins_previous <- is_block & c(FALSE, utils::head(is_block, -1))
   groups <- unname(split(json, cumsum(!joins_previous)))
 
   # A group is now either a run of blocks (to be wrapped in a step) or a
