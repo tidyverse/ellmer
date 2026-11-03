@@ -59,7 +59,7 @@ method(print, Provider) <- function(x, ...) {
 
 provider_print <- function(x, hide = character()) {
   cat("<", class(x)[[1]], ">\n", sep = "")
-  str(
+  utils::str(
     provider_props(x, hide),
     no.list = TRUE,
     give.attr = FALSE,
