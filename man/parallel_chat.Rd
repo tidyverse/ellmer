@@ -44,12 +44,9 @@ of character vectors.}
 \item{max_active}{The maximum number of simultaneous requests to send.
 
 For \code{\link[=chat_anthropic]{chat_anthropic()}}, note that the number of active connections is
-limited primarily by the output tokens per minute limit (OTPM) which is
-estimated from the \code{max_tokens} parameter, which defaults to 4096. That
-means if your usage tier limits you to 16,000 OTPM, you should either set
-\code{max_active = 4} (16,000 / 4096) to decrease the number of active
-connections or use \code{\link[=params]{params()}} in \code{chat_anthropic()} to decrease
-\code{max_tokens}.}
+limited primarily by the output tokens per minute limit (OTPM), which
+counts the tokens actually generated. If you hit rate limits, decrease
+\code{max_active}.}
 
 \item{rpm}{Maximum number of requests per minute.}
 
@@ -82,7 +79,7 @@ is either a \link{Chat} object (if successful), a \code{NULL} (if the request wa
 performed) or an error object (if it failed).
 
 For \code{parallel_chat_text()}, a character vector with one element for each
-prompt. Requests that weren't succesful get an \code{NA}.
+prompt. Requests that weren't successful get an \code{NA}.
 
 For \code{parallel_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will

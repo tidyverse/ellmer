@@ -5,61 +5,70 @@ http_interactions:
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
+        list\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e5e2f8a3beaa-LHR
+      cf-ray: a545ed35cfb37e9f-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:14:19 GMT
+      date: Mon, 02 Nov 2026 20:35:42 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '5132'
+      openai-processing-ms: '5956'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=WyyMxT.3SInnemmfJ8CWZA10LxmXEauzROC_iloZGoU-1791281654.2366314-1.0.1.1-15QpQAVoNgF5f.hm8W0qIYhq0qooAA3OEU_wtcx4N3EaQjS9OAutYozNnAyvinovinZiWm6FQRC5d0ovVIu4Nhj30Lxtvwy4XJrvLBPuESeEvnSNatiqTXhMw_78f0uE;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:44:19 GMT
+      set-cookie: __cf_bm=GtfrYKWy5rSIK_64k1xH_7PYBSr4BldOMiUfpmQq16I-1793651735.9667892-1.0.1.1-tt1_sM46mD15f4Ip0ku_VkxlU2p9I.I2F_zMhMImFXtw71UwijvyIs62d29PYNxcpMG1_DKED.uJWdoBay0eye5fGo6GvMF7EwdnBMnseO4nvNcGlCuMHZ1f4ZNXkJbR;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:42 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499795'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 24ms
-      x-request-id: req_e21e56ba7b2242a387cc1a577cee241d
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999750'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 15ms
+      x-request-id: req_50a4ccdbf8764dc2abc26d29a4527d7f
     body:
       string: |-
         {
-          "id": "resp_0ae8186ea1acd94c016ac4c9f6600c87d2b6f65d074cf7bb67",
+          "id": "resp_001c50fbf925a1b3016ae8f4180b9c87d29f5c2c071a6e0f59",
           "object": "response",
-          "created_at": 1791281654,
+          "created_at": 1793651736,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281659,
+          "completed_at": 1793651741,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0ae8186ea1acd94c016ac4c9f6f6d887d28087c621b38ed898",
+              "id": "rs_001c50fbf925a1b3016ae8f418b28487d29f89f627833bd5ca",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABq6PQdYkstecWPcPBpQtWu8M4o9RPg0SEW48ug1lK1IFtiajQjPLi_YnzIMjSFcb5p6HiAhL0ErEcAGjDaZ61lwJPBITIpk00GF_gjXBzqOnybvd7B01MQvmsOqr6VORG5_yzvGr5jKLdW5EVTyte87i78xVoFhfCfEX5xlyB4zEyNQEViShwiaqLv3w-rKgM-TCXRfg6X96hnGb5baBNlFm_msl6T-_oOW48W2egrVjZKDImp3A39pn_hgta65l2KgwUJyG6zyX81arP7c3RpGkuFQlbFqkdDLyzipd8Eceb4bgW9weKtND77pFg2UdWezzmJIh6f87l7Vq8alOCRp2Wq6-JvFwlRbdkGlNHaTL_ZPt6FaG-AjJqhLMbrCvmqqWxfZMgZS8rni5u3WiiIMpc6wn2CIh60MK8AjS1ahLyuOsG0dNpB-qSngSYdYzs8V3TKIJxLq46YXDcCisNkf0pM4IQIQtzir7AgP29_L9J1U7m1jewtM0AZaFUwrOrXon8OJQyal23IY9Wyc7XMhDSyUIlZ0E--ek4y6Uyi905fdg5Ez8xWtVP97kymiA89-LpNvYM0ORdJaZjJ14sRHv161eF8K6aGJ9vq7S2NN-8d3aT6X6X0tcYa-eQ_-bginm_piPH5rkn8fbC2TxorsmFzxQj_ohAJq-FOrolB25vtxYszHrSikHh3xMx6iHESvl3fuWuSLl4gFXuhughBRsbz5vt2IJUBkmsxXqYqpJ1amif6C103OH_R6Kn8pDWvv4nKMf_gW4fYSDVpdl2G4MGe95C1IWG5c3QrRhLdHaprZenFhUF0he6ZGUPU7AAZ9KzV4NAwwe2ep2KeTiD0N9jkSzvsHoxTniB84aze-1CLufVvw1GpQdqSAeOX6sw7E-UrpUZ9M0XtaNrNwjv-h1nT4Qykia5R0F7vriaQ80UVSuVLb8muT3OGA1ddF2e7Qq7kOoor9zsrqKOpbjsiWBKXKlkhzvqyXgogtQn-GSt6I28y4xK3j-nY0rA4g95Cx46GJTdEqi9Gw00h9FWoWRpJsKT_m2adPR0cRsNQZl4cvq6bQbd1d-qHpaI91bGRaPjGZ5MGmlf3tI0E26mffEQwOLJ3WGb1U6smsRRiaPDPisaEl363Q7Gw9iSKNxRRPdjtbaeMgP-NcIXoU7hic1mTNH6S0j8B4BMd57lF1m2FrplOI70h0rBRyt2HPVSxyasH3DMtN6vpq_H9rU4lZDqp5o6zqTlOSsknCtk_iZpfmBJ2VQpZ4cDwbtfYZ6bVVGbnePMK3IJod9kCbCoGK_lNF1moyxHwmOTBw-QaOUI2WoPWjcuVzCS9mTpbvH-CQ7UZQ1uImaCvXj0JUIJkTQMsg2nsDIkDtCyDSioG3ZEy1BOD-LG9h_tWLqRuleXoaO4ZogFuSvPEtlYTz0jeTZU3cMnrMlL6RJSFSMqGvKAS5lY_rsQOfiuJRerxmGekov3jxcsSTpF44algK2gXEfVIgA5UahNpIUuLlpFqfXx9zsaoIMm7el-qp1l9sJBPee4DnFrLBzPp6YHDOnKIpo_F7B1SUipGbHKIWkqDrK8GJchqBjuj7v5u2az5KvYL1HBJkk8-lMnIW4fguITVeOXjjPPiWuYmzvZy_AvrkroGMsusc6fxlM7JyDe2IPvekGkCIL9R-Q7ggeEMDUdFDWZsxNmgs6v_kK7N6B748Riwq4ryGkDLs-yfdIX6_ZZuRsQ4LT-AJKrGKW94tRWEfD37ICpXDIhS1cO-Sd1nETKJtE8oJmPu0nMntLJrKqwOkyrn59ajz4yw24TAnEXzm0wyXOSYJ3mNdRNycFdHr5R4LaG1qjwlowBph6lY45CrvioJZo25CvuNt8E02Ta6QKQ3sLCcbINHfEr9XJbuoyK7PRuwAKWMoBgZH6JXq4Dd20_uLLhL9anIpHIiE6VGldmlNOPKDQEyVlELB9XMTeRLTA8vK95bPbkUGYQpVdBgexFHxRD73oMZ2Lvr-bwcngdlfGG9lTobLwkcltgDKkb_qOOVTA54m0ud-ET5nP1gc-zgR-rjhMYMKZxxnQfOTA-a9JWvSWVFSzPApO_lIJDBkEH0p21u58xC0QWbWyD5CXhXVuQlTjClq1ifN6U7u6T1C_wGP13sisjp8XX6YQhryR-4HjledR1rtK4txYO43us7cBg6kjsNXJ_MvLwot_-fZv-PLSK61XxZmvcdvazwPGnH9mRaYy_AJvIRyBzkBVbEqedR_NZk7pBDcpqF2-VPe-gcwNVoYsK4ARu3RAZFhciG3O1hFOnIlFVnlHDbJqy399HT5XWVbi6lXuHu-yzT1AT5a3M-RJP3wY3_j1EzaZHWfopZrVvqV9hZv13E_l3-WI0Yuu3VsKgIDNDFK0oxUwMbjR5WbCUvA4VY6vrtoIOuAGSpAcWsSWYyRQdLy6mLSeU9IjAO7XR9HBmso5NnNHx6d0dcPXWcLe1DBF3HquglVUXvLp_f--PaDvhTrdAyGDjLh8WSfRpmZwhHVnoOwqZxNY1ouvEqN9ukWR6pkNz7UYpKdnGDReoqIszcq09vzHAFpn2Gx0Vod-hWQJat_4FJ3yShCab7Vyuy6Z4bWBfd03iMTyyFW2bbSbE0UiOEEHXpQG9nzvcPsoCwn0fRoGme05aeHvnBWzAogf_7QS_qDThDWIj4KZ25n-JcMuMZ3txxrAoWhpGdrV7TWrIOTIj0QY5YGHzBx85gkcLoOATbDa0dqF74y8JpU357wLA2CVeZYuOv3CmLVGZnPj0M5soyqt_vbe5gViuyNgC3saCiPnqC1NtTQWSBHslekuQvjS9gW7XKVwlZUqQmdB35enEmeYcZ0_eVde66HedYvyHm6gFLK9eCjsAkaol9bey2QszwRf3BBqL5HJoBagMKr8fgEtE2y3nQbiNGHY3NWFo5hYqAHLV0S6vjIFFa20DD1VXCfd3K-cf2nYe1f3g_hDaad7cx_P4kgxXXnVXIqEbSaTKyfqF0VHLavm_ynBbRY_DnvsaijradLFCNlejw5huWRUK9gvizpYHx2r1FhvUK4xk0d1Znimnw3D1htgOF783E8bpENoYmyAAYvHzTRG9XR5iAOvBUcrPTwjOnNcZD2b2-ncGduhEAcj-uJlfVg-P9ARVfMoztryjPIzcgCvM9xSfyIy7BLjW01XfXDYFNQiYr4YFzykTjZej1wc70IPWcdRSnqgaCOEeUbcScAStAnjCX8OHeHN0MQ8DuUFJSlGKGbrqVSi7S6bY2QlM92PtewI0T4b_09JCIGRrgIZeCVbqsyFIoeZWzdJRIzmUpH9fp8qOdT1nEC_J4PqZL84LFpYBrNhtKjw59GXpzCjxwNERXnJdmS03WuOhCmmbJDfbjyPsZ5Hk91e22oJcbuGqqVAkOZ9EAiYcL30fjd9Ll8GSTzr3sVet6RLnjOIUfKXoYnWPoQOBZfcbuvuu5tyEv71ByMH7cWPBI0MersvEnU7rE6lGmx0p5CIG2gbemKUWqn7QD2R09_OutwVmIOpstmAD6obFqc-brmCEc5AflZ_4p21bEVGV_-DxjSWJZh_1Pi0ZDkpRPCXPhPe7ejTGagFEAAcU4VvkPn-zrzYNl94c0cpiZ-7T5jXsy3C1-t_zriKONNZoacDeBUVv6AYLlLNtmx4KgZY3p6A1BSRG3WT0ihft7ALrIxR8YJwzAXc60r7MlVoRYrLxppZ-kIuS643qiGakHTAYLSHH8rCHdDbY3CD2dUl6gP5TVW7iCOdgWtDIdAw0Idq9oiwvnUeroBvuTn5ng9_GGC5rbtR0WksV-OZDncAzFK-l2SSNb0jooORKHp-wYjaLewA7Pa0DuZR09woQuLuyj8Bvmml8-zmkT9S-W8oMxwQ2l8aRdZCHsBakMr5RPIBa8MgRkSdttdvJVXT0k_TJ7KD-s5L0QZDMqyFuJU2wQutA8mUphp5wAJRkWumAhGhoSn1CyQ_nyMjBdnxhWolnbhwhTFw==",
+              "summary": []
+            },
+            {
+              "id": "msg_001c50fbf925a1b3016ae8f41ba4cc87d2ab306200aaf41374",
               "type": "message",
               "status": "completed",
               "content": [
@@ -67,7 +76,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "- A **data frame** is the traditional tabular data structure in base R. A **tibble** is a modern, enhanced version of a data frame provided by the **tibble** package (part of the tidyverse).\n\n- Tibbles print more compactly:\n  - They show only the first few rows and columns by default.\n  - They display column types and avoid flooding the console with large datasets.\n  - Base data frames often print all rows unless limited manually.\n\n- Tibbles do not automatically convert character columns to factors.  \n  - Older versions of `data.frame()` converted strings to factors by default (though modern R defaults no longer do this).\n\n- Tibbles preserve column names more strictly:\n  - They allow non-syntactic names such as `\"total cost\"` without automatically changing them.\n  - Base data frames may modify invalid names unless `check.names = FALSE` is used.\n\n- Tibbles are stricter when subsetting:\n  - Extracting a single column with `tibble[, \"x\"]` returns a one-column tibble.\n  - With a base data frame, `df[, \"x\"]` usually returns a vector unless `drop = FALSE` is specified.\n\n- Tibbles do not partially match column names, reducing the chance of accidental mistakes:\n  - `tb$long` will not silently match a column named `long_name`.\n  - Base data frames may allow partial matching in some situations.\n\n- Tibbles support list-columns naturally, making them especially useful in tidyverse workflows and nested data analysis.\n\n- Both store rectangular data with rows and columns, and most functions that work with data frames also work with tibbles."
+                  "text": "- **Relationship:** A tibble is a modern type of R data frame provided by the **tibble** package. It inherits from `data.frame`, so most data-frame functions work with it.\n- **Printing:** Tibbles display a preview of rows and columns, along with column types. Data frames typically print more of their contents.\n- **Subsetting:** `[` always returns a tibble, even when selecting one column. A data frame may simplify the result to a vector.\n- **Column names:** Tibbles preserve nonstandard names, such as names containing spaces. Data frames normally adjust them by default.\n- **Column access:** Tibbles do not support partial matching with `$` and warn when a column does not exist. Data frames can partially match names and return `NULL` for missing columns.\n- **Recycling:** Tibbles recycle only length-one inputs when creating columns; data frames allow more permissive recycling."
                 }
               ],
               "phase": "final_answer",
@@ -124,99 +133,92 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 348,
+            "output_tokens": 393,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 196
             },
-            "total_tokens": 377
+            "total_tokens": 422
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:14:19
+  recorded_at: 2026-11-02 20:35:42
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  What
         is the difference between a tibble and a data frame?\n  Answer with a bulleted
-        list\n"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"-
-        A **data frame** is the traditional tabular data structure in base R. A **tibble**
-        is a modern, enhanced version of a data frame provided by the **tibble** package
-        (part of the tidyverse).\n\n- Tibbles print more compactly:\n  - They show
-        only the first few rows and columns by default.\n  - They display column types
-        and avoid flooding the console with large datasets.\n  - Base data frames
-        often print all rows unless limited manually.\n\n- Tibbles do not automatically
-        convert character columns to factors.  \n  - Older versions of `data.frame()`
-        converted strings to factors by default (though modern R defaults no longer
-        do this).\n\n- Tibbles preserve column names more strictly:\n  - They allow
-        non-syntactic names such as `\"total cost\"` without automatically changing
-        them.\n  - Base data frames may modify invalid names unless `check.names =
-        FALSE` is used.\n\n- Tibbles are stricter when subsetting:\n  - Extracting
-        a single column with `tibble[, \"x\"]` returns a one-column tibble.\n  - With
-        a base data frame, `df[, \"x\"]` usually returns a vector unless `drop = FALSE`
-        is specified.\n\n- Tibbles do not partially match column names, reducing the
-        chance of accidental mistakes:\n  - `tb$long` will not silently match a column
-        named `long_name`.\n  - Base data frames may allow partial matching in some
-        situations.\n\n- Tibbles support list-columns naturally, making them especially
-        useful in tidyverse workflows and nested data analysis.\n\n- Both store rectangular
-        data with rows and columns, and most functions that work with data frames
-        also work with tibbles."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Tell
-        me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"store":false,"service_tier":"auto"}'
+        list\n"}]},{"id":"rs_001c50fbf925a1b3016ae8f418b28487d29f89f627833bd5ca","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6PQdYkstecWPcPBpQtWu8M4o9RPg0SEW48ug1lK1IFtiajQjPLi_YnzIMjSFcb5p6HiAhL0ErEcAGjDaZ61lwJPBITIpk00GF_gjXBzqOnybvd7B01MQvmsOqr6VORG5_yzvGr5jKLdW5EVTyte87i78xVoFhfCfEX5xlyB4zEyNQEViShwiaqLv3w-rKgM-TCXRfg6X96hnGb5baBNlFm_msl6T-_oOW48W2egrVjZKDImp3A39pn_hgta65l2KgwUJyG6zyX81arP7c3RpGkuFQlbFqkdDLyzipd8Eceb4bgW9weKtND77pFg2UdWezzmJIh6f87l7Vq8alOCRp2Wq6-JvFwlRbdkGlNHaTL_ZPt6FaG-AjJqhLMbrCvmqqWxfZMgZS8rni5u3WiiIMpc6wn2CIh60MK8AjS1ahLyuOsG0dNpB-qSngSYdYzs8V3TKIJxLq46YXDcCisNkf0pM4IQIQtzir7AgP29_L9J1U7m1jewtM0AZaFUwrOrXon8OJQyal23IY9Wyc7XMhDSyUIlZ0E--ek4y6Uyi905fdg5Ez8xWtVP97kymiA89-LpNvYM0ORdJaZjJ14sRHv161eF8K6aGJ9vq7S2NN-8d3aT6X6X0tcYa-eQ_-bginm_piPH5rkn8fbC2TxorsmFzxQj_ohAJq-FOrolB25vtxYszHrSikHh3xMx6iHESvl3fuWuSLl4gFXuhughBRsbz5vt2IJUBkmsxXqYqpJ1amif6C103OH_R6Kn8pDWvv4nKMf_gW4fYSDVpdl2G4MGe95C1IWG5c3QrRhLdHaprZenFhUF0he6ZGUPU7AAZ9KzV4NAwwe2ep2KeTiD0N9jkSzvsHoxTniB84aze-1CLufVvw1GpQdqSAeOX6sw7E-UrpUZ9M0XtaNrNwjv-h1nT4Qykia5R0F7vriaQ80UVSuVLb8muT3OGA1ddF2e7Qq7kOoor9zsrqKOpbjsiWBKXKlkhzvqyXgogtQn-GSt6I28y4xK3j-nY0rA4g95Cx46GJTdEqi9Gw00h9FWoWRpJsKT_m2adPR0cRsNQZl4cvq6bQbd1d-qHpaI91bGRaPjGZ5MGmlf3tI0E26mffEQwOLJ3WGb1U6smsRRiaPDPisaEl363Q7Gw9iSKNxRRPdjtbaeMgP-NcIXoU7hic1mTNH6S0j8B4BMd57lF1m2FrplOI70h0rBRyt2HPVSxyasH3DMtN6vpq_H9rU4lZDqp5o6zqTlOSsknCtk_iZpfmBJ2VQpZ4cDwbtfYZ6bVVGbnePMK3IJod9kCbCoGK_lNF1moyxHwmOTBw-QaOUI2WoPWjcuVzCS9mTpbvH-CQ7UZQ1uImaCvXj0JUIJkTQMsg2nsDIkDtCyDSioG3ZEy1BOD-LG9h_tWLqRuleXoaO4ZogFuSvPEtlYTz0jeTZU3cMnrMlL6RJSFSMqGvKAS5lY_rsQOfiuJRerxmGekov3jxcsSTpF44algK2gXEfVIgA5UahNpIUuLlpFqfXx9zsaoIMm7el-qp1l9sJBPee4DnFrLBzPp6YHDOnKIpo_F7B1SUipGbHKIWkqDrK8GJchqBjuj7v5u2az5KvYL1HBJkk8-lMnIW4fguITVeOXjjPPiWuYmzvZy_AvrkroGMsusc6fxlM7JyDe2IPvekGkCIL9R-Q7ggeEMDUdFDWZsxNmgs6v_kK7N6B748Riwq4ryGkDLs-yfdIX6_ZZuRsQ4LT-AJKrGKW94tRWEfD37ICpXDIhS1cO-Sd1nETKJtE8oJmPu0nMntLJrKqwOkyrn59ajz4yw24TAnEXzm0wyXOSYJ3mNdRNycFdHr5R4LaG1qjwlowBph6lY45CrvioJZo25CvuNt8E02Ta6QKQ3sLCcbINHfEr9XJbuoyK7PRuwAKWMoBgZH6JXq4Dd20_uLLhL9anIpHIiE6VGldmlNOPKDQEyVlELB9XMTeRLTA8vK95bPbkUGYQpVdBgexFHxRD73oMZ2Lvr-bwcngdlfGG9lTobLwkcltgDKkb_qOOVTA54m0ud-ET5nP1gc-zgR-rjhMYMKZxxnQfOTA-a9JWvSWVFSzPApO_lIJDBkEH0p21u58xC0QWbWyD5CXhXVuQlTjClq1ifN6U7u6T1C_wGP13sisjp8XX6YQhryR-4HjledR1rtK4txYO43us7cBg6kjsNXJ_MvLwot_-fZv-PLSK61XxZmvcdvazwPGnH9mRaYy_AJvIRyBzkBVbEqedR_NZk7pBDcpqF2-VPe-gcwNVoYsK4ARu3RAZFhciG3O1hFOnIlFVnlHDbJqy399HT5XWVbi6lXuHu-yzT1AT5a3M-RJP3wY3_j1EzaZHWfopZrVvqV9hZv13E_l3-WI0Yuu3VsKgIDNDFK0oxUwMbjR5WbCUvA4VY6vrtoIOuAGSpAcWsSWYyRQdLy6mLSeU9IjAO7XR9HBmso5NnNHx6d0dcPXWcLe1DBF3HquglVUXvLp_f--PaDvhTrdAyGDjLh8WSfRpmZwhHVnoOwqZxNY1ouvEqN9ukWR6pkNz7UYpKdnGDReoqIszcq09vzHAFpn2Gx0Vod-hWQJat_4FJ3yShCab7Vyuy6Z4bWBfd03iMTyyFW2bbSbE0UiOEEHXpQG9nzvcPsoCwn0fRoGme05aeHvnBWzAogf_7QS_qDThDWIj4KZ25n-JcMuMZ3txxrAoWhpGdrV7TWrIOTIj0QY5YGHzBx85gkcLoOATbDa0dqF74y8JpU357wLA2CVeZYuOv3CmLVGZnPj0M5soyqt_vbe5gViuyNgC3saCiPnqC1NtTQWSBHslekuQvjS9gW7XKVwlZUqQmdB35enEmeYcZ0_eVde66HedYvyHm6gFLK9eCjsAkaol9bey2QszwRf3BBqL5HJoBagMKr8fgEtE2y3nQbiNGHY3NWFo5hYqAHLV0S6vjIFFa20DD1VXCfd3K-cf2nYe1f3g_hDaad7cx_P4kgxXXnVXIqEbSaTKyfqF0VHLavm_ynBbRY_DnvsaijradLFCNlejw5huWRUK9gvizpYHx2r1FhvUK4xk0d1Znimnw3D1htgOF783E8bpENoYmyAAYvHzTRG9XR5iAOvBUcrPTwjOnNcZD2b2-ncGduhEAcj-uJlfVg-P9ARVfMoztryjPIzcgCvM9xSfyIy7BLjW01XfXDYFNQiYr4YFzykTjZej1wc70IPWcdRSnqgaCOEeUbcScAStAnjCX8OHeHN0MQ8DuUFJSlGKGbrqVSi7S6bY2QlM92PtewI0T4b_09JCIGRrgIZeCVbqsyFIoeZWzdJRIzmUpH9fp8qOdT1nEC_J4PqZL84LFpYBrNhtKjw59GXpzCjxwNERXnJdmS03WuOhCmmbJDfbjyPsZ5Hk91e22oJcbuGqqVAkOZ9EAiYcL30fjd9Ll8GSTzr3sVet6RLnjOIUfKXoYnWPoQOBZfcbuvuu5tyEv71ByMH7cWPBI0MersvEnU7rE6lGmx0p5CIG2gbemKUWqn7QD2R09_OutwVmIOpstmAD6obFqc-brmCEc5AflZ_4p21bEVGV_-DxjSWJZh_1Pi0ZDkpRPCXPhPe7ejTGagFEAAcU4VvkPn-zrzYNl94c0cpiZ-7T5jXsy3C1-t_zriKONNZoacDeBUVv6AYLlLNtmx4KgZY3p6A1BSRG3WT0ihft7ALrIxR8YJwzAXc60r7MlVoRYrLxppZ-kIuS643qiGakHTAYLSHH8rCHdDbY3CD2dUl6gP5TVW7iCOdgWtDIdAw0Idq9oiwvnUeroBvuTn5ng9_GGC5rbtR0WksV-OZDncAzFK-l2SSNb0jooORKHp-wYjaLewA7Pa0DuZR09woQuLuyj8Bvmml8-zmkT9S-W8oMxwQ2l8aRdZCHsBakMr5RPIBa8MgRkSdttdvJVXT0k_TJ7KD-s5L0QZDMqyFuJU2wQutA8mUphp5wAJRkWumAhGhoSn1CyQ_nyMjBdnxhWolnbhwhTFw==","summary":[]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"-
+        **Relationship:** A tibble is a modern type of R data frame provided by the
+        **tibble** package. It inherits from `data.frame`, so most data-frame functions
+        work with it.\n- **Printing:** Tibbles display a preview of rows and columns,
+        along with column types. Data frames typically print more of their contents.\n-
+        **Subsetting:** `[` always returns a tibble, even when selecting one column.
+        A data frame may simplify the result to a vector.\n- **Column names:** Tibbles
+        preserve nonstandard names, such as names containing spaces. Data frames normally
+        adjust them by default.\n- **Column access:** Tibbles do not support partial
+        matching with `$` and warn when a column does not exist. Data frames can partially
+        match names and return `NULL` for missing columns.\n- **Recycling:** Tibbles
+        recycle only length-one inputs when creating columns; data frames allow more
+        permissive recycling."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"Tell
+        me three funny jokes about statisticians"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e606e9fcbeaa-LHR
+      cf-ray: a545ed611f437e9f-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:14:22 GMT
+      date: Mon, 02 Nov 2026 20:35:45 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '2178'
+      openai-processing-ms: '2218'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=nZ6iO6025rfJNGmHF3maBYYR0lcr0hs_HYfqtN2SPII-1791281659.9898143-1.0.1.1-Mt7emh2obKtddF7hCXQM5.sPGWKAcBs_iVxGxyVupHGTE2d7EI6IKGytj93iJuY8b.1CziKTEqDTMgUXYS1vdCaeyBinM24boCw4cGMIDG8W.8gOQdpYhAFGUcI6DLiq;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:44:22 GMT
+      set-cookie: __cf_bm=dqMnNI14UC1cvdSabB0PVssWL1pipJWyjL19lO2ZGSA-1793651742.8940816-1.0.1.1-INUa_dkvTNoaeACmYPg9rOlbbj0cbX7iVfosSD3ioK5YGrF9EwftVEGpY2ynd_h3IyV86LxvBppf9jXc_WycnSi7stUFXWo8TdqvN0IcBTP4GzpTzgFQF9XlI_aiYBRh;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:45 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '500000'
-      x-ratelimit-reset-requests: 120ms
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '1000000'
+      x-ratelimit-reset-requests: 12ms
       x-ratelimit-reset-tokens: 0s
-      x-request-id: req_a823efde88d64a4385ab026264ea200f
+      x-request-id: req_681c1022605e4963bb47742c5cf2e8e4
     body:
       string: |-
         {
-          "id": "resp_00afec19efbc6031016ac4c9fc1d1887d28a5639ac3c6c388c",
+          "id": "resp_001c50fbf925a1b3016ae8f41ef50087d2bbc89ab567c9ee5d",
           "object": "response",
-          "created_at": 1791281660,
+          "created_at": 1793651743,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281662,
+          "completed_at": 1793651745,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_00afec19efbc6031016ac4c9fc841087d2b4e564c593598ea0",
+              "id": "msg_001c50fbf925a1b3016ae8f41fc87c87d28f16a048662e5bf1",
               "type": "message",
               "status": "completed",
               "content": [
@@ -224,7 +226,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "1. A statistician drowned crossing a river that was, on average, three feet deep.\n\n2. Why did the statistician bring a ladder to the bar?  \n   Because the drinks were on the house\u2014but only with 95% confidence.\n\n3. A statistician\u2019s favorite type of music?  \n   Heavy **meta**l\u2014because they love a good analysis."
+                  "text": "- Why did the statistician break up with their partner? They couldn\u2019t find a significant relationship.\n- A statistician drowned crossing a river that was, on average, three feet deep.\n- Why don\u2019t statisticians trust atoms? They make up everything\u2014and the sample size is suspiciously large."
                 }
               ],
               "phase": "final_answer",
@@ -276,19 +278,19 @@ http_interactions:
           "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 391,
+            "input_tokens": 436,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 80,
+            "output_tokens": 64,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 471
+            "total_tokens": 500
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:14:22
+  recorded_at: 2026-11-02 20:35:45
 recorded_with: VCR-vcr/2.1.0

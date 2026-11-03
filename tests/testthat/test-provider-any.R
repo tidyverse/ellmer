@@ -13,9 +13,9 @@ test_that("can set model or use default", {
   expect_equal(chat1$get_provider()@name, "OpenAI")
   expect_equal(chat1$get_model(), chat_openai()$get_model())
 
-  chat2 <- chat("openai/gpt-4.1-mini")
+  chat2 <- chat("openai/gpt-5.4-mini")
   expect_equal(chat2$get_provider()@name, "OpenAI")
-  expect_equal(chat2$get_model(), "gpt-4.1-mini")
+  expect_equal(chat2$get_model(), "gpt-5.4-mini")
 
   # We split at the first slash, the remainder is passed to `model`
   chat3 <- chat("openai/provider/model")

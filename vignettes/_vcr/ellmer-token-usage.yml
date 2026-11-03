@@ -4,61 +4,61 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"Who
-        created R?"}]}],"model":"gpt-4.1","stream":false,"store":false,"service_tier":"auto"}'
+        created R?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e2b83c4d7796-LHR
+      cf-ray: a52cb5dfcbf80bac-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:05 GMT
+      date: Fri, 30 Oct 2026 19:08:47 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1196'
+      openai-processing-ms: '2220'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=lXmHNRAtu_EFMVBPUjYmuBgTd8hn5.p7B0eeKHJxexU-1791281524.521544-1.0.1.1-xFDPgA.9zxGA_qSoZZa5VptbTGic.XpwvREPUGjB6MJ0kIEgYRM6kUJUnFBgZVj9QFX4WQORLLNTG4VZuo8geZQzOR.Y_Y_zOvIQ_yQCsscJpF6mS5pEFJRsdsUZnbLk;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:05 GMT
+      set-cookie: __cf_bm=j2e5xIQr8W1greydG6T_.pKnAsbcTig7VrzOT6Bv5r4-1793387325.4121168-1.0.1.1-YU6VIn5X_5wBC_DcO4DJMU.0MIRncyYYvH9zrIj.OK.5A7JnfOMHPFKbZ5U0e9AwKXk1DE2SJwLkTYW2.syUb4ZwOQXyh9hjOMm_OoSD7RC1wRv2mMCkMsDtamYzq9Ms;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        30 Oct 2026 19:38:47 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '30000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29933'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 134ms
-      x-request-id: req_c7008843ad2545d9a7108c2208673bcb
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_568b31411f1d44c5972b28fb5daadef7
     body:
       string: |-
         {
-          "id": "resp_0ede2780f6d6773a016ac4c974ae0c87d2911c62a96d93876d",
+          "id": "resp_08dbb316cb805e3e016ae4eb3d78a487d28137d76aa21d7fa3",
           "object": "response",
-          "created_at": 1791281524,
+          "created_at": 1793387325,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281525,
+          "completed_at": 1793387327,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4.1-2025-04-14",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0ede2780f6d6773a016ac4c974fc6087d295270c8da31c9a96",
+              "id": "msg_08dbb316cb805e3e016ae4eb3f6e3887d29c19f84dfdd6b9da",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,9 +66,10 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "The programming language **R** was created by **Ross Ihaka** and **Robert Gentleman**. They began developing it in **1992** at the University of Auckland, New Zealand. The name \"R\" is partially derived from the first letters of their names, **R**oss and **R**obert, and also as a play on the name of the S language, which influenced the creation of R."
+                  "text": "R was created by **Ross Ihaka** and **Robert Gentleman** at the **University of Auckland** in the early 1990s."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
@@ -76,10 +77,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -113,22 +115,22 @@ http_interactions:
           },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 11,
+            "input_tokens": 10,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 86,
+            "output_tokens": 33,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 97
+            "total_tokens": 43
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:12:06
+  recorded_at: 2026-10-30 19:08:46
 recorded_with: VCR-vcr/2.1.0

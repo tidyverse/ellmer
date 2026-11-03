@@ -728,19 +728,18 @@ test_that("unsupported request params are not recorded on spans", {
   )
 
   recorded <- with_otel_record({
-    # OpenAI-compatible providers don't support `reasoning_effort`.
-    chat <- chat_openai_compatible(
-      base_url = "https://example.com",
+    # chat_openai() doesn't support `top_k`.
+    chat <- chat_openai(
       model = "m",
       credentials = \() "key",
-      params = params(temperature = 0.5, reasoning_effort = "low")
+      params = params(temperature = 0.5, top_k = 5)
     )
     expect_snapshot(. <- chat$chat("hi", echo = "none"))
   })
 
   for (span in recorded$traces[c("invoke_agent", "chat m")]) {
     expect_equal(span$attributes[["gen_ai.request.temperature"]], 0.5)
-    expect_null(span$attributes[["gen_ai.request.reasoning.level"]])
+    expect_null(span$attributes[["gen_ai.request.top_k"]])
   }
 })
 

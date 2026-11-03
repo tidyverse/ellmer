@@ -120,6 +120,19 @@ reference:
   - df_schema
   - params
 
+articles:
+- title: Working with models
+  navbar: Working with models
+  contents:
+  - prompt-design
+  - structured-data
+  - tool-calling
+- title: Building with ellmer
+  navbar: Building with ellmer
+  contents:
+  - programming
+  - streaming-async
+  - otel
 
 news:
   releases:

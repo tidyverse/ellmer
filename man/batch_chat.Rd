@@ -70,7 +70,7 @@ element for each prompt. Typically, when \code{type} is an object, this will
 will be a data frame with one row for each prompt, and one column for each
 property.
 
-For any of the aboves, will return \code{NULL} if \code{wait = FALSE} and the job
+For any of the above, will return \code{NULL} if \code{wait = FALSE} and the job
 is not complete.
 }
 \description{

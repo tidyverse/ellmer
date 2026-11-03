@@ -1,5 +1,5 @@
 test_that("file operations error on Vertex", {
-  provider <- ProviderGoogleGemini(
+  provider <- ProviderGoogle(
     name = "Google/Vertex",
     base_url = "https://us-central1-aiplatform.googleapis.com/v1beta1/",
     credentials = function() list()

@@ -3,71 +3,74 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
-        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
+        can’t see the current live time. Chicago is in the **America/Chicago** time
+        zone, which is:\n\n- **Central Standard Time (CST)**, UTC−6, or\n- **Central
+        Daylight Time (CDT)**, UTC−5, depending on daylight saving time.\n\nIf you
+        want, I can help you calculate the current Chicago time from your local time
+        or show you how to check it quickly on your device."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e5667c49ef1b-LHR
+      cf-ray: a53df9935e8c94fc-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:55 GMT
+      date: Sun, 01 Nov 2026 21:25:57 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '986'
+      openai-processing-ms: '1044'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=mMdlgrSrgDOg1xpavTK8YXmmOd203Iliovgi2LFc4uU-1791281634.3179467-1.0.1.1-Bs70aKJn4k0C5hmpKgCQv4BcvlsNCPiFV3c1i6jor0Aggmdr8bP_6v0Rgu3Iwq3vFjtsg6xaWvmFNWcfz_.r4MUevWP7HHcUUny9G2.k83I0ma0fKKwAwh.q2imua.b9;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:55 GMT
+      set-cookie: __cf_bm=.9VXILhj92kh.q_FKy.YKeNftQwHM34N2ufLZEPiOS8-1793568356.382044-1.0.1.1-lUpR8y8f3IGFEEUXTFC7CC3r_OO5YTJWvHZp73Uq0KXHZ2k0Fd_XskVKN13Mmu9ekDEvQl.DIPTyGVv24SNnmnCzPSznNhMD.q80mtPYE3btjSmidAn9v2at7Lc2dTE0;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        01 Nov 2026 21:55:57 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '30000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29667'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 666ms
-      x-request-id: req_2dc96a123f6c4b499d97a7886d497d2a
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_b862a9c0692a4bada6f4356273aecd35
     body:
       string: |-
         {
-          "id": "resp_0ee12848637802f1016ac4c9e2709887d2910f28024e156e38",
+          "id": "resp_042764b047271399016ae7ae646ff487d2ac0940405815203f",
           "object": "response",
-          "created_at": 1791281634,
+          "created_at": 1793568356,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281635,
+          "completed_at": 1793568357,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d",
+              "id": "fc_042764b047271399016ae7ae65082487d281aec35d0faaa330",
               "type": "function_call",
               "status": "completed",
-              "arguments": "{\"tz\":\"UTC\"}",
-              "call_id": "call_afC9mNylq9JTRZYgwxx2Frh4",
+              "arguments": "{\"tz\":\"America/Chicago\"}",
+              "call_id": "call_fRP68RloHiog8SpXgEGVClrS",
               "name": "get_current_time"
             }
           ],
@@ -75,10 +78,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -137,90 +141,93 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 116,
+            "input_tokens": 178,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 16,
+            "output_tokens": 21,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 132
+            "total_tokens": 199
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:55
+  recorded_at: 2026-11-01 21:25:57
 - request:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Neil
-        Armstrong touched down on the moon on July 20, 1969. As of 2023, that was
-        54 years ago."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]},{"type":"function_call","call_id":"fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d","name":"get_current_time","arguments":"{\"tz\":\"UTC\"}"},{"type":"function_call_output","call_id":"fc_0ee12848637802f1016ac4c9e3509087d287100ff145c7360d","output":"2025-06-25
-        16:53:23 UTC"}],"model":"gpt-4o","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]},{"type":"message","role":"assistant","content":[{"type":"output_text","text":"I
+        can’t see the current live time. Chicago is in the **America/Chicago** time
+        zone, which is:\n\n- **Central Standard Time (CST)**, UTC−6, or\n- **Central
+        Daylight Time (CDT)**, UTC−5, depending on daylight saving time.\n\nIf you
+        want, I can help you calculate the current Chicago time from your local time
+        or show you how to check it quickly on your device."}]},{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]},{"type":"function_call","call_id":"fc_042764b047271399016ae7ae65082487d281aec35d0faaa330","name":"get_current_time","arguments":"{\"tz\":\"America/Chicago\"}"},{"type":"function_call_output","call_id":"fc_042764b047271399016ae7ae65082487d281aec35d0faaa330","output":"2025-06-25
+        11:53:23 CDT"}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"tools":[{"type":"function","name":"get_current_time","description":"Returns
         the current time.","strict":true,"parameters":{"type":"object","description":"","properties":{"tz":{"type":["string","null"],"description":"Time
         zone to display the current time in. Defaults to `\"UTC\"`."}},"required":["tz"],"additionalProperties":false}}],"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e571384eef1b-LHR
+      cf-ray: a53df99ee8d994fc-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:57 GMT
+      date: Sun, 01 Nov 2026 21:25:58 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1441'
+      openai-processing-ms: '551'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=e1QkCnqwxVfB0tVM9G8az2v1ohxbr55fVo6W4qOIYpQ-1791281636.0327842-1.0.1.1-wwvBLPU7ux4VKMzsoFlUoNQmE.0Y16YJKzuD941CY_Dx5h1WRcHryMeEx29Kpm8IcAceOIeEvt2FlU60A23FSdBOZAizhc32RNJ1qGBrErFK51O3E.NjS1q8g8xfyzx3;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:57 GMT
+      set-cookie: __cf_bm=_5LeROxuaHWQ0EA4A6.FMxHpwe0tfm4a2i4ASUcenEU-1793568358.2281532-1.0.1.1-TSSBjyRVHv5Gv2DU9tMeMwVHsxyaX86gsPtjeKMvg_HVxBh7nIZG9BWhuGjuUCD1M.FL2yQcaRqzVkX4TJ86xGieDkmG1e_8orHqzd137eytWw8usD_FU0h3.UZgjSfv;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        01 Nov 2026 21:55:58 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '30000'
-      x-ratelimit-remaining-requests: '498'
-      x-ratelimit-remaining-tokens: '29284'
-      x-ratelimit-reset-requests: 240ms
-      x-ratelimit-reset-tokens: 1.432s
-      x-request-id: req_27dfca2a03204979bddb211b4895c53e
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_ba7fe65c4dbb4db3bc4f10d3c21f79cb
     body:
       string: |-
         {
-          "id": "resp_07f3e7be59431ff8016ac4c9e429a487d2a76c693f5af8efe9",
+          "id": "resp_08ae75385199991a016ae7ae664d4487d297ad7eac0818f641",
           "object": "response",
-          "created_at": 1791281636,
+          "created_at": 1793568358,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281637,
+          "completed_at": 1793568358,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "msg_07f3e7be59431ff8016ac4c9e52ddc87d291d8eb762436d9f7",
+              "id": "msg_08ae75385199991a016ae7ae66b3c887d28f70606d7fdbcc89",
               "type": "message",
               "status": "completed",
               "content": [
@@ -228,9 +235,10 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of now, that was almost 56 years ago."
+                  "text": "The current time in Chicago is **11:53:23 AM CDT**."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
@@ -238,10 +246,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -300,22 +309,22 @@ http_interactions:
             }
           ],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 151,
+            "input_tokens": 224,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 30,
+            "output_tokens": 20,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 181
+            "total_tokens": 244
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:57
+  recorded_at: 2026-11-01 21:25:58
 recorded_with: VCR-vcr/2.1.0

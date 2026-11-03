@@ -32,7 +32,7 @@ SDKs' endpoint override environment variables:
 \code{models_aws_bedrock()} talks to a different AWS service, so it honors
 \code{AWS_ENDPOINT_URL_BEDROCK} instead.}
 
-\item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5").
+\item{model}{The model to use for the chat (defaults to "us.anthropic.claude-sonnet-5-5").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use \code{models_models_aws_bedrock()} to see all options.
 .
@@ -41,7 +41,7 @@ While ellmer provides a default model, there's no guarantee that you'll
 have access to it, so you'll need to specify a model that you can.
 If you're using \href{https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/}{cross-region inference},
 you'll need to use the inference profile ID, e.g.
-\code{model="us.anthropic.claude-sonnet-5"}.}
+\code{model="us.anthropic.claude-sonnet-5-5"}.}
 
 \item{api}{Which Bedrock API to use: \code{"converse"}, \code{"messages"}, or
 \code{"responses"}. The default, \code{NULL}, picks the API from \code{model}, falling
@@ -70,10 +70,16 @@ to enable thinking effort in Anthropic Claude models:
 
 \if{html}{\out{<div class="sourceCode R">}}\preformatted{api_args = list(
   additionalModelRequestFields = list(
-    thinking = list(type = "enabled", budget_tokens = 4000)
+    thinking = list(type = "adaptive"),
+    output_config = list(effort = "high")
   )
 )
 }\if{html}{\out{</div>}}
+
+The example above uses adaptive thinking, which is what current Claude
+models expect. Older models (before Claude Opus 4.6 and Sonnet 4.6) don't
+support it; for those, set a fixed budget instead with
+\code{thinking = list(type = "enabled", budget_tokens = 4000)}.
 
 See \url{https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html}
 for more details.}
