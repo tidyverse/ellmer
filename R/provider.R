@@ -59,14 +59,30 @@ method(print, Provider) <- function(x, ...) {
 
 provider_print <- function(x, hide = character()) {
   cat("<", class(x)[[1]], ">\n", sep = "")
-  utils::str(
-    provider_props(x, hide),
-    no.list = TRUE,
-    give.attr = FALSE,
-    comp.str = "@ ",
-    indent.str = " "
-  )
+  props <- provider_props(x, hide)
+  names <- format(names(props))
+  for (i in seq_along(props)) {
+    cat(" @ ", names[[i]], ":", sep = "")
+    str_prop(props[[i]])
+  }
   invisible(x)
+}
+
+# Mirrors S7's str_nest() and str_space(). Base str() printed the space that
+# separates the label from nested output before R 4.7.0 but no longer does,
+# so print it ourselves. S7 objects and plain functions print their own.
+str_prop <- function(x) {
+  if (is.function(x)) {
+    attr(x, "srcref") <- NULL
+    if (identical(class(x), "function")) {
+      cat(" ")
+    }
+  } else if (getRversion() >= "4.7.0") {
+    if (!inherits(x, c("S7_object", "S7_class"))) {
+      cat(" ")
+    }
+  }
+  utils::str(x, give.attr = FALSE, nest.lev = 1)
 }
 
 test_provider <- function(name = "", base_url = "", ...) {
