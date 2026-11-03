@@ -413,7 +413,7 @@ method(value_finish_reason, ProviderGoogleGenerateContent) <- function(
   }
   switch(
     reason,
-    # Gemini finishes with STOP when it calls a tool
+    # The GenerateContent API finishes with STOP when it calls a tool
     STOP = if (
       any(map_lgl(candidate$content$parts, has_name, "functionCall"))
     ) {

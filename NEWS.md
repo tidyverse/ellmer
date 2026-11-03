@@ -2,7 +2,7 @@
 
 * `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
 * New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
-* Turns from `chat_google_gemini()` and `chat_openai()` that call a tool now have `finish_reason = "tool_use"` instead of `"success"`, matching the other providers. `chat_google_gemini()` also reports Gemini's `LANGUAGE`, `IMAGE_SAFETY`, `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as `"content_filter"` rather than passing them through as unexpected reasons (#1199).
+* `chat_google_vertex()` and `chat_openai()` now report `finish_reason = "tool_use"` rather than `"success"` for turns that call a tool, matching the other providers. `chat_google_vertex()` also reports the `LANGUAGE`, `IMAGE_SAFETY`, `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as `"content_filter"` (@pcbeingused333, #1199).
 * Default models have been updated for a number of providers (@thisisnic, #1176):
   * `chat_anthropic()` now uses `claude-sonnet-5-5`.
   * `chat_aws_bedrock()` now uses `us.anthropic.claude-sonnet-5-5`.
