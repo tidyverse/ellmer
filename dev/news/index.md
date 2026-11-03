@@ -12,6 +12,14 @@
   ellmer records, and how ellmer’s spans join your own traces
   ([@schloerke](https://github.com/schloerke),
   [\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  now report the correct input and cache token counts when a streamed
+  response uses server tools such as web search, so `$get_tokens()` and
+  `$get_cost()` match the same request without streaming
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1194](https://github.com/tidyverse/ellmer/issues/1194)).
 - [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
