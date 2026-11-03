@@ -68,17 +68,20 @@ provider_print <- function(x, hide = character()) {
   invisible(x)
 }
 
-# Mirrors S7's str_nest() and str_space(). Base str() printed the space that
-# separates the label from nested output before R 4.7.0 but no longer does,
-# so print it ourselves. S7 objects and plain functions print their own.
+# Mirrors S7's str_space() and str_function(). R 4.7.0 changed str() to
+# print the space after a label itself instead of leaving it to the nested
+# call, so print it ourselves, and on older versions also print it for the
+# types that never had one, so the output matches on all versions.
 str_prop <- function(x) {
   if (is.function(x)) {
     attr(x, "srcref") <- NULL
-    if (identical(class(x), "function")) {
-      cat(" ")
-    }
-  } else if (
-    getRversion() >= "4.7.0" && !inherits(x, c("S7_object", "S7_class"))
+  }
+  if (
+    getRversion() >= "4.7.0" ||
+      identical(class(x), "function") ||
+      is.environment(x) ||
+      is.data.frame(x) ||
+      (is.list(x) && !is.object(x) && length(x) > 0)
   ) {
     cat(" ")
   }
