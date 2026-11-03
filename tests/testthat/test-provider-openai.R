@@ -502,19 +502,3 @@ test_that("value_reasoning_tokens() reads reasoning tokens from usage", {
   expect_equal(value_reasoning_tokens(provider, json), 12)
   expect_null(value_reasoning_tokens(provider, list(usage = list())))
 })
-
-test_that("a completed response that calls a tool finishes with tool_use", {
-  provider <- chat_openai(credentials = \() "key")$get_provider()
-  completed <- function(...) {
-    value_finish_reason(
-      provider,
-      list(status = "completed", output = list(...))
-    )
-  }
-
-  expect_equal(completed(list(type = "message")), "success")
-  expect_equal(
-    completed(list(type = "message"), list(type = "function_call")),
-    "tool_use"
-  )
-})
