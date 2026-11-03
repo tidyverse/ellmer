@@ -44,7 +44,7 @@
     Code
       print(test_provider())
     Output
-      <ellmer: :Provider>
+      <ellmer::Provider>
        @ name         : chr ""
        @ base_url     : chr ""
        @ extra_headers: chr(0) 

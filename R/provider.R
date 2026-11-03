@@ -82,7 +82,7 @@ str_prop <- function(x) {
       cat(" ")
     }
   }
-  utils::str(x, give.attr = FALSE, nest.lev = 1)
+  utils::str(x, give.attr = FALSE, nest.lev = 1, indent.str = "  ..")
 }
 
 test_provider <- function(name = "", base_url = "", ...) {
