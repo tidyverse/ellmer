@@ -3,53 +3,68 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-5","system":[{"type":"text","text":"\n  You
+      string: '{"model":"claude-sonnet-5-5","system":[{"type":"text","text":"\n  You
         are an expert R teacher.\n  I am a new R user who wants to improve my programming
         skills.\n  Help me understand the code you produce by explaining each function
         call with\n  a brief comment. For more complicated calls, add documentation
         to each\n  argument. Just give me the code. I don''t want any explanation
         or sample data.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}],"messages":[{"role":"user","content":[{"type":"text","text":"\n  How
         can I compute the mean and median of variables a, b, c, and so on,\n  all
-        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+        the way up to z, grouped by age and sex.\n","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 22:32:53 GMT
+      date: Mon, 02 Nov 2026 14:34:06 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:32:50Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T14:34:02Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
-      anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:32:53Z'
-      anthropic-ratelimit-requests-limit: '10000'
-      anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-08-02T22:32:49Z'
+      anthropic-ratelimit-output-tokens-remaining: '1999000'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T14:34:06Z'
+      anthropic-ratelimit-requests-limit: '13000'
+      anthropic-ratelimit-requests-remaining: '12999'
+      anthropic-ratelimit-requests-reset: '2026-11-02T14:34:02Z'
       anthropic-ratelimit-tokens-limit: '12000000'
-      anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-08-02T22:32:50Z'
-      request-id: req_011CdeiWYtYhnraSbzDL3dkD
+      anthropic-ratelimit-tokens-remaining: '11999000'
+      anthropic-ratelimit-tokens-reset: '2026-11-02T14:34:02Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
+      request-id: req_011CgeGRAeaNK79xGWEVkcfh
+      traceresponse: 00-87506163af5f12df42172ee0aa434b19-1fcf095ad27fbdfb-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-27527678c91c3074eac05a0b2f272405-2bd134c20cfe7606-01
-      server: cloudflare
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
+      content-encoding: br
+      server: cloudflare
+      server-timing: x-originResponse;dur=4330
       cf-cache-status: DYNAMIC
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a2508a6e2ea0f965-EWR
+      cf-ray: a543db9369bc9571-LHR
     body:
-      string: '{"model":"claude-sonnet-5","id":"msg_011CdeiWZML35uJ63LiXe5ZQ","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"","signature":"EosDCokBCBAYAipABj57JjCoG0/SniERx8338q9i6jyzGJjfNRoUSuqMp68s9XKdlXsf7JifGkpCBoq6TrFo9Qt4zYQq6AAtz0iNqTIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ2N2JiOGZlYi03YmNhLTQzNjktOWUwNC0zMzlkNzM2NDZiNDASDLb0FFPPs8nsc7gwPRoMxJD1J4C9/37VCWS3IjApDh7xE36KLpV76co9ZV5lrYfYIsuxCzLQDTyw6ch1G5oJHvpIKcmwYUgl26dCmq4qrgEbF8wQF38o7BmFBzpCFuttW6n30Miojeuo7LlEe038F+tYrIN9jaDGZbljbqJQ0bWiNNw4h3sTSqxi5mGLmdo7m4NgnrPS8DWmUdvk77iOd/jeNYStQV9Nn87osKkivOrIwBrblumH/R/GCa4fO8nKQxKXwIJb4o5V+5JQAC6VZSGE7D/AcR5OMYpZDXBNwCcV7Quv115Z6/W3dsEmO3/EH8f+GnsWxlTTQeFviPsYAQ=="},{"type":"text","text":"```r\nlibrary(dplyr)
-        # load dplyr for data manipulation (group_by, summarise, across)\n\nresult
-        <- df %>%                      # start pipeline with data frame ''df''\n  group_by(age,
-        sex) %>%               # group rows by combinations of ''age'' and ''sex''\n  summarise(\n    across(\n      .cols
-        = letters,                 # ''letters'' is R''s built-in vector c(\"a\",\"b\",...,\"z\")\n                                        #
-        selects all columns named a through z\n      .fns = list(\n        mean   =
-        ~ mean(.x, na.rm = TRUE),   # compute mean of each column, ignoring NAs\n        median
-        = ~ median(.x, na.rm = TRUE)  # compute median of each column, ignoring NAs\n      ),\n      .names
-        = \"{.col}_{.fn}\"          # name output columns like \"a_mean\", \"a_median\",
-        etc.\n    ),\n    .groups = \"drop\"                   # drop grouping structure
-        after summarising\n  )\n\nprint(result) # display the resulting summary table\n```"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":148,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":380,"output_tokens_details":{"thinking_tokens":49},"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-08-02 22:32:53
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgeGRAnX3ZL13hmYMa6LK","type":"message","role":"assistant","content":[{"type":"text","text":"```r\n#
+        Load dplyr for data manipulation functions and the pipe operator\nlibrary(dplyr)\n\nresult
+        <- your_data %>%                      # Start with your data frame and pipe
+        it forward\n  group_by(age, sex) %>%                     # Split the data
+        into groups for each age/sex combination\n  summarise(                                 #
+        Collapse each group into a single row of summaries\n    across(                                  #
+        Apply the same function(s) to many columns at once\n      a:z,                                   #
+        Columns to summarise: every column from a through z\n      list(mean = mean,
+        median = median),    # Named list of functions to apply to each column\n      na.rm
+        = TRUE,                          # Ignore missing values when calculating\n      .names
+        = \"{.col}_{.fn}\"                # Name output columns like \"a_mean\", \"a_median\"\n    ),\n    .groups
+        = \"drop\"                         # Remove the grouping from the result\n  )\n\n#
+        Display the result\nresult\n```\n\nNote: `na.rm = TRUE` passed directly to
+        `across()` is deprecated in recent dplyr versions. Use this equivalent version
+        if you get a warning:\n\n```r\nlibrary(dplyr)                               #
+        Load dplyr\n\nresult <- your_data %>%                      # Start with your
+        data frame\n  group_by(age, sex) %>%                     # Group by age and
+        sex\n  summarise(                                 # Summarise each group\n    across(\n      a:z,                                   #
+        Columns a through z\n      list(\n        mean   = ~ mean(.x, na.rm = TRUE),   #
+        Mean for each column, ignoring NAs (.x = current column)\n        median =
+        ~ median(.x, na.rm = TRUE)  # Median for each column, ignoring NAs\n      ),\n      .names
+        = \"{.col}_{.fn}\"                # Name columns like \"a_mean\", \"a_median\"\n    ),\n    .groups
+        = \"drop\"                         # Remove grouping from the result\n  )\n\nresult                                       #
+        Display the result\n```"}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":150,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":618,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
+  recorded_at: 2026-11-02 14:34:06
 recorded_with: VCR-vcr/2.1.0

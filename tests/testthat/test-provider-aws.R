@@ -470,11 +470,11 @@ test_that("cross-region prefix is stripped for mantle but kept for converse", {
 
   expect_equal(
     chat_aws_bedrock(api = "messages")$get_model(),
-    "anthropic.claude-sonnet-5"
+    "anthropic.claude-sonnet-5-5"
   )
   expect_equal(
     chat_aws_bedrock(api = "converse")$get_model(),
-    "us.anthropic.claude-sonnet-5"
+    "us.anthropic.claude-sonnet-5-5"
   )
 })
 

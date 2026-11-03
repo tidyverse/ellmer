@@ -54,7 +54,7 @@ test_that("can extract data", {
 
 test_that("can search web pages", {
   vcr::local_cassette("openai-v2-web-search")
-  chat_fun <- \(...) chat_openai_test(model = "gpt-4.1", ...)
+  chat_fun <- \(...) chat_openai_test(model = "gpt-5.4-mini", ...)
   test_tool_web_search(
     chat_fun,
     openai_tool_web_search(),
@@ -65,7 +65,7 @@ test_that("can search web pages", {
 test_that("can use images", {
   vcr::local_cassette("openai-v2-image")
   # Needs mini to get shape correct
-  chat_fun <- \(...) chat_openai_test(model = "gpt-4.1-mini", ...)
+  chat_fun <- \(...) chat_openai_test(model = "gpt-5.4-mini", ...)
 
   test_images_inline(chat_fun)
   test_images_remote(chat_fun)
@@ -190,7 +190,7 @@ test_that("structured data work with and without wrapper", {
 
 test_that("service tier affects pricing", {
   vcr::local_cassette("openai-v2-service-tier")
-  chat <- chat_openai_test(model = "gpt-4.1-nano", service_tier = "priority")
+  chat <- chat_openai_test(model = "gpt-5.4-mini", service_tier = "priority")
   chat$chat("Tell me a joke")
 
   last_turn <- chat$last_turn()

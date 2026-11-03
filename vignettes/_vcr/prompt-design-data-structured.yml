@@ -16,63 +16,72 @@ http_interactions:
         cup (150g) dark brown sugar\n  2 large eggs\n  ¾ cup (165g) sour cream\n  ½
         cup (113g) unsalted butter, melted\n  1 teaspoon vanilla extract\n  ¾ teaspoon
         kosher salt\n  ⅓ cup (80ml) neutral oil\n  1½ cups (190g) all-purpose flour\n  150g
-        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
+        plus 1½ teaspoons sugar\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"Ingredient
         name"},"quantity":{"type":"number","description":""},"unit":{"type":"string","description":"Unit
         of measurement"}},"required":["name","quantity","unit"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e3940d8206aa-LHR
+      cf-ray: a545e3f50f3bcc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:12:41 GMT
+      date: Mon, 02 Nov 2026 20:29:20 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1893'
+      openai-processing-ms: '3904'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=_HzxyzbFaPm5RtjIo2VLa9JJZ6wDeNPYbvpzFMPGuaU-1791281559.6816342-1.0.1.1-USCS7wY7n45YXqAF_OV9OgGJts5pw95BjcqhEXd9aSenW6yGYasPlWqPhPPbPCRsJUgwLfy.Z9wsIZ9wBhxnd2jYm_.cotQcuGYMbAX97CZ3k.w4HX.AVeLOL6dVJI3F;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:42:41 GMT
+      set-cookie: __cf_bm=Zk8G4PJBj3uXWHPHyZEeyFD3vmGpQpXSM4Ft50aXTZk-1793651356.970495-1.0.1.1-iI7Dj3pTgmDo0YOVIRnmKeg5Uw.MaPRxXul1FBndlDdy10C_rN68Tnx01Ra9XkMYI74SqmA4Os4nrqzpgrfu43VRZyloSXgvxyFHHQqckHTRorwvImb_cB5mYTl6IKH3;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 20:59:20 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499982'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 2ms
-      x-request-id: req_69690c20df254542a7c63355d33d51b7
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999883'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 7ms
+      x-request-id: req_d96a3c3cc30c4d3b81214e34c53c7ae4
     body:
       string: |-
         {
-          "id": "resp_0bb007d45e909d28016ac4c997cd3087d29befe38c27cd6264",
+          "id": "resp_0940972a56398484016ae8f29d114887d2a6b2939bc3ede02b",
           "object": "response",
-          "created_at": 1791281559,
+          "created_at": 1793651357,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281561,
+          "completed_at": 1793651360,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0bb007d45e909d28016ac4c9986b2487d28814e4d1fc7a8bb1",
+              "id": "rs_0940972a56398484016ae8f29dbe3c87d2a301d7f67317af31",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABq6PKgb0VaUDCEmX95VLnPlC2j9RltGu6epZzC61b7mYEtIiHbWQa4dY7D7oNuo3m4hYvKVXRegniyUtRZCbcp-YH9ondsSkI1ludfQZH_Uz31MFCCvnI13KBxWFmjrLcFQrqpOGh_X5CjOnR8_f94KGJvpGoGMSpXT0eFY38BI3Za42njH88tDnnTuD-vhuSBNlcApP1osfFjPj0JyliGX_Hc2Nn7-ta17LvLoZwFl9duH5OlFMEgzZaHmE3m8cFk_MAmEUZ_1g9WmQTmLxxsBwchzQFVRAHbqT6RLcfq-EfmvL18XeG5PFW33i5fiqr956TzeNylc-69tGSOAwYJa821_BhqIP46KS8EkKETG4p1v_3hKoqy3_alTlKOXwQVOO5662df6ON-YYaBCv2fb8DD-AnwuNIyjYRZt-3jxeKN5Kfkg9tHnpql-L6ga30J-rD0NWIYPLC5maHyWmxUfmeh4ovq4pjjLgBYYrCH1neTu0o5iqjdTbClDHm8bZZjR4Yo3rMdpWi0fbRtpedxYQy0s_hy1pKhAYrvuc4Ve7_sMIJpBlHDxjPovN6wDvYpE9WJ_Ie09PGxxANWf7Wrwst2XuAVoK538xBnj-RG91G03n-YvXqt5sQINxLkZW5ows8EC_XuH0yyPMVDVVKfk3FYt1vJVYPkJOVj_mmokB2JGBqOXzIv6saY0jxZHNKLn7GOUDGpd7qGDU_ho0jjaIugt__zWOik7RIioIf3zKAFv6Ay8OZ6IB0XlHyfpdPomoG29NEBOZn4NmRKWf2s1RRMQw21uo_EwVjJRQkeF0yAtXeDtLq8FuDlElTGxJ_j0jS4ts50RnLi8nCfcNF6iKxyTpYNrILOixYhhNOO31JulwkkiWEY5zmuVT_3OGQvcnrLUXh8RVmFc5PCjFFhGx3x6JCsmR3nsPZwWggbaWNpaM3jFG8FAbPwRleQcpfahKfYD5qyz-FmHSDfWwwNxkzTdekzI10VrPio7ABae0V-OkGMEwoAPs_i8LOa2hA4pAS-D6A4PN9iyjkB5NKAaLNigVIcqQsuNzyFu2Is5R2tLpHo_ALE0OKI1FA3gv_Fpv3Msg_-48dQz51N8ptMGqnotU5An1-mQ5ipid7YjYV7GNziOK18OcXKPj_No3nM-GsCbqeG2dKg64kGUb7qAx3xZIjGTBKxW6pyZSmoIV4c3xTBfE_FQZs-egS0E5UADqi1xqSO-Yd-9xp9A4c7XhoEBBr6aKzrs3mU_iK20tqQwEffFwmjSufaTv_FXX4Rgy5T_l9pmbAb0vOsl953dQnrisOWNyQe6QkYAKv90tNmoc9r1eS2Y_gql2Rt2pltjuV_EI6p1tJV6WzNn1VCP8rc45nJWkmlXgkg92acnrW-hepWFQPI8tgl0uDLHNj9tIYVt5GyJlFzngiCF1bjpOQa-LBw0iJB_l30kTQhT74ab48SYoRGhJPkF65XQ_nDu785Fa2UwUVmsDcuH52rixpSOReJDBYzvv1igR_DxKcjgY-iRoTchktZLpRk_xZqfjgljyLlqxr6FIrW8Tc4WjBHR_iw-yRVC_EueF-stkFxujyeafmyoKEbBG9er1OdspdwlTzFwN694bo-q3fpEDierVN2HkB08UbDH4pCenA2Mbcr7jPiiu4nzYsYSaaT47yLWclbcBKzSyJltiDyWVpbHHFqLtHqp57VLlgAoFQXAGwAoEdY_ZyF4T8FMMDnAODlR2y3kIKfdU1oxCKp6cuJK2o7Y6oqpd03cg75P_tJy8TAe4YWKbq55EJqozcV8gQ3V30N_Bh7BRz-wa_ryjWxEhK1AI-I84zXAx5PYCI8kQsQ698JY1s5CATrFYaLxmJxJ2AUFhqHtNd86OMMwuTIIb6J5aLRlwYXXg0qxIo-ZBGpIEmcQuJ1mh0nv3JVH0BL2U5jz1-ASNZaCjw2_vQVVGUrLNVjVFROYZq_eL6HlcDvkrLRa6s1Pu9NSk2eD3fxPjnnNdwznWK6XoizNeMfUhiDsAANYbAdkBKs8oXruPvwvfngIs9DAPmeCIHaYKlS8_swyhY2RCNVmE0gxXCoOEZP_m8YPaDTaWO1l7KFHfB0AEp3vmoVmgEie8CHx2SeP0aolUcbIfXyfzQBlblYqpliRwmVPGipGAxUljSQpRfRy0AbxpT1LYqXUtCwHluX95XNh6_KM-z_836_mYYEhV1w4P1t4VmJUpdD_TmlgGTk90r5aRGl0txHpZucVmmxLjgLWkLMlhjVYKD-SEUcx0PHIiacCExVowvJNRiknmYuQGeNI_OOQ2j7Ff5yjQdm2oFB6lDOeSC3xaVnT76cACdB-4Z4ZjtvLdQhFlWNxQiO7yAMFCL4j7RvubfOld8wTVASmfg79LayMQ58UqUu7swtaQcdrwNEbESvc19_1OrsDYpYcKmogKeMTvM7KkQMN2LfjoC45Y_Tz3mBXB-qvWXO_eRSslcPvGjxClhlifKEUwTJJD65WxtvleExM-KfGhJm0fOPkRz1ylFVmRYgTU2_QHFn8buFKy6mdrWlEFNY1VFEVPSYklSvEJH5mU8jx2jwr5Fd-zGFCOo5YKuJuz2nIP5kG1tmN3flikZb2tida5shSUuHV8-otL87jqrMrKtrPtIWaAFo_UdJcSpJ-IAmx7awL6aiNewmOl5qNil8Ii7gvyEx63STqprel8MYJoJ19rPScaFoLCK-T5aMKnKqI83cFbi5YjJ6eUk4QHyWMZMHS5RqqhqtACbHOHG_uIf6uyYivPBKYLa_ZB7hnn8A8hsVwqy8CeYcDN8fjlOc8YD4tMTuO_aLtOcGKcaMkC6jbvfI5pFFxxF12-LQ1B7aCzKmfyXyXoib0qvWJ-6Xh2tkoBLDjAhO7y0V3cK9",
+              "summary": []
+            },
+            {
+              "id": "msg_0940972a56398484016ae8f29f6cc087d284dabd76be494be6",
               "type": "message",
               "status": "completed",
               "content": [
@@ -80,7 +89,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"large\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":1.5,\"unit\":\"teaspoon\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"dark brown sugar\",\"quantity\":150,\"unit\":\"g\"},{\"name\":\"large eggs\",\"quantity\":2,\"unit\":\"\"},{\"name\":\"sour cream\",\"quantity\":165,\"unit\":\"g\"},{\"name\":\"unsalted butter, melted\",\"quantity\":113,\"unit\":\"g\"},{\"name\":\"vanilla extract\",\"quantity\":1,\"unit\":\"teaspoon\"},{\"name\":\"kosher salt\",\"quantity\":0.75,\"unit\":\"teaspoon\"},{\"name\":\"neutral oil\",\"quantity\":80,\"unit\":\"ml\"},{\"name\":\"all-purpose flour\",\"quantity\":190,\"unit\":\"g\"},{\"name\":\"sugar\",\"quantity\":150,\"unit\":\"g\"}]}"
                 }
               ],
               "phase": "final_answer",
@@ -178,14 +187,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 161,
+            "output_tokens": 267,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 121
             },
-            "total_tokens": 510
+            "total_tokens": 616
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:12:41
+  recorded_at: 2026-11-02 20:29:21
 recorded_with: VCR-vcr/2.1.0

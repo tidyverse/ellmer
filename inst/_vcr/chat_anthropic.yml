@@ -3,46 +3,50 @@ http_interactions:
     method: POST
     uri: https://api.anthropic.com/v1/messages
     body:
-      string: '{"model":"claude-sonnet-5","messages":[{"role":"user","content":[{"type":"text","text":"Tell
-        me three jokes about statisticians","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":4096}'
+      string: '{"model":"claude-sonnet-5-5","messages":[{"role":"user","content":[{"type":"text","text":"Tell
+        me three jokes about statisticians","cache_control":{"type":"ephemeral","ttl":"5m"}}]}],"stream":false,"max_tokens":32000}'
   response:
     status: 200
     headers:
-      date: Sun, 02 Aug 2026 22:26:41 GMT
+      date: Mon, 02 Nov 2026 21:08:20 GMT
       content-type: application/json
       anthropic-ratelimit-input-tokens-limit: '10000000'
       anthropic-ratelimit-input-tokens-remaining: '10000000'
-      anthropic-ratelimit-input-tokens-reset: '2026-08-02T22:26:37Z'
+      anthropic-ratelimit-input-tokens-reset: '2026-11-02T21:08:17Z'
       anthropic-ratelimit-output-tokens-limit: '2000000'
       anthropic-ratelimit-output-tokens-remaining: '2000000'
-      anthropic-ratelimit-output-tokens-reset: '2026-08-02T22:26:41Z'
-      anthropic-ratelimit-requests-limit: '10000'
-      anthropic-ratelimit-requests-remaining: '9999'
-      anthropic-ratelimit-requests-reset: '2026-08-02T22:26:37Z'
+      anthropic-ratelimit-output-tokens-reset: '2026-11-02T21:08:20Z'
+      anthropic-ratelimit-requests-limit: '13000'
+      anthropic-ratelimit-requests-remaining: '12999'
+      anthropic-ratelimit-requests-reset: '2026-11-02T21:08:16Z'
       anthropic-ratelimit-tokens-limit: '12000000'
       anthropic-ratelimit-tokens-remaining: '12000000'
-      anthropic-ratelimit-tokens-reset: '2026-08-02T22:26:37Z'
-      request-id: req_011Cdei36QbKZV15jgNFUz9U
+      anthropic-ratelimit-tokens-reset: '2026-11-02T21:08:17Z'
       strict-transport-security: max-age=31536000; includeSubDomains; preload
+      request-id: req_011CgenUrkR3kt6NDd2UYbMP
+      traceresponse: 00-b67cc3c8d5a5369c4e89e82e4242cf6e-ba04122de73d916c-01
       anthropic-organization-id: 67bb8feb-7bca-4369-9e04-339d73646b40
-      traceresponse: 00-fcb995e185620e1b4671d9978eef9e3d-620ebc8b93764ac2-01
-      server: cloudflare
-      content-encoding: gzip
+      anthropic-workspace-id: wrkspc_01HCeyEoRM38KjSttghsJ3cP
       vary: Accept-Encoding
-      cf-cache-status: DYNAMIC
+      content-encoding: br
+      server: cloudflare
+      server-timing: x-originResponse;dur=3398
       x-robots-tag: none
       content-security-policy: default-src 'none'; frame-ancestors 'none'
-      cf-ray: a2508156382d74b5-EWR
+      cf-cache-status: DYNAMIC
+      cf-ray: a5461d156a9c001c-LHR
     body:
-      string: '{"model":"claude-sonnet-5","id":"msg_011Cdei378zVkfSMTs3FRPMH","type":"message","role":"assistant","content":[{"type":"thinking","thinking":"","signature":"EvgCCokBCBAYAipAYyfl/1vyQTFrWHV5bVT18CMqh5ymd2MTjBSiXQsRXXKCa/+fMZGjmeijrl1uSFR+0SM6nuCWuX0GM8xMuv7L9TIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ2N2JiOGZlYi03YmNhLTQzNjktOWUwNC0zMzlkNzM2NDZiNDASDEiv7RzmB9NXTrffIhoMp3iqbsZ3+X8ERdtaIjAMfKdR/j7fcwCwuoiwhX4LAX3pTXwoHvFJsQ/CP2UArOp3sJePs8AoZ5HS7Npx85MqmwFiLngJDqQm8jh8+J4jFYIi2ZnQXwWHevX1ZMqnn0o4CYjJNL49PDMRfGRVet8RzGVqOT3lRBWqaXrAbjpgrbVtoevqjPxPoIKpz0ySKFs5wupU1Wj0X9twCcwVdCnFLfbXQbPQkAeg2V5QkZiWnJ//CEeSzugr+ReRTsI6DyJPNFLsLpWjFBYkbI+znK11sy4P3JoCyHhrTwCVSRgB"},{"type":"text","text":"Here
-        are three statistician jokes for you:\n\n1. A statistician''s wife has twins.
-        He is delighted. He tells the vicar he''ll be baptizing them separately. \"Why?\"
-        asks the vicar. \"Because,\" the statistician replies, \"I hate sampling with
-        replacement.\"\n\n2. Three statisticians go hunting. They spot a deer. The
-        first one shoots and misses by a foot to the left. The second shoots and misses
-        by a foot to the right. The third one yells, \"We got it!\"\n\n3. A statistician
-        can have their head in an oven and feet in ice, and they''ll say on average
-        they feel fine.\n\nWant a few more, or maybe some on a specific topic like
-        regression or p-values?"}],"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":19,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":270,"output_tokens_details":{"thinking_tokens":54},"service_tier":"standard","inference_geo":"global"}}'
-  recorded_at: 2026-08-02 22:26:41
+      string: '{"model":"claude-sonnet-5-5","id":"msg_011CgenUrt6P1cgjHW8DFu22","type":"message","role":"assistant","content":[{"type":"text","text":"Here
+        are three statistician jokes:\n\n1. **The Drowning Statistician**\nA statistician
+        can have his head in an oven and his feet in ice, and he''ll say that on average
+        he feels fine.\n\n2. **The Confident Interval**\nThree statisticians go duck
+        hunting. The first fires and misses one foot to the left. The second fires
+        and misses one foot to the right. The third yells, \"We got him!\"\n\n3. **The
+        Correlation Trap**\nWhy did the statistician bring a ladder to work? Because
+        they heard the data had high *leverage* points. (Okay, an alternate one: A
+        statistician''s wife gave birth to twins. The doctor said, \"One''s a boy,
+        one''s a girl.\" The statistician replied, \"Great, so we''re 50% likely to
+        be right about everything!\")\n\nWant some more, or perhaps ones aimed at
+        a particular branch like Bayesian vs. frequentist humor?"}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":21,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":283,"output_tokens_details":{"thinking_tokens":0},"service_tier":"standard","inference_geo":"global","speed":"standard"},"diagnostics":null}'
+  recorded_at: 2026-11-02 21:08:20
 recorded_with: VCR-vcr/2.1.0

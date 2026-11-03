@@ -99,13 +99,13 @@ NULL
 #'   Not supported when `api = "responses"`, which caches automatically.
 #'
 #'   See details below.
-#' @param model `r param_model("us.anthropic.claude-sonnet-5", "models_aws_bedrock")`.
+#' @param model `r param_model("us.anthropic.claude-sonnet-5-5", "models_aws_bedrock")`.
 #'
 #'   While ellmer provides a default model, there's no guarantee that you'll
 #'   have access to it, so you'll need to specify a model that you can.
 #'   If you're using [cross-region inference](https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/),
 #'   you'll need to use the inference profile ID, e.g.
-#'   `model="us.anthropic.claude-sonnet-5"`.
+#'   `model="us.anthropic.claude-sonnet-5-5"`.
 #' @param params Common model parameters, usually created by [params()].
 #' @param api_args Named list of arbitrary extra arguments appended to the body
 #'   of every chat API call. Use `params` for common parameters. Model-specific
@@ -116,10 +116,16 @@ NULL
 #'   ```R
 #'   api_args = list(
 #'     additionalModelRequestFields = list(
-#'       thinking = list(type = "enabled", budget_tokens = 4000)
+#'       thinking = list(type = "adaptive"),
+#'       output_config = list(effort = "high")
 #'     )
 #'   )
 #'   ```
+#'
+#'   The example above uses adaptive thinking, which is what current Claude
+#'   models expect. Older models (before Claude Opus 4.6 and Sonnet 4.6) don't
+#'   support it; for those, set a fixed budget instead with
+#'   `thinking = list(type = "enabled", budget_tokens = 4000)`.
 #'
 #'   See <https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html>
 #'   for more details.
@@ -159,7 +165,7 @@ chat_aws_bedrock <- function(
   echo <- check_echo(echo)
 
   params <- params %||% params()
-  model <- set_default(model, "us.anthropic.claude-sonnet-5")
+  model <- set_default(model, "us.anthropic.claude-sonnet-5-5")
 
   provider <- provider_aws_bedrock(
     base_url = base_url,

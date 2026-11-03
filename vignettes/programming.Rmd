@@ -19,6 +19,8 @@ vcr::setup_knitr()
 
 This vignette includes tips and tricks for programming with ellmer, and/or using it inside your own package. It's currently fairly short but will grow over time.
 
+The examples use `gpt-5.4-mini`, a cheap OpenAI model. Any provider works the same way, but the exact responses vary from model to model, and a couple of the examples rely on behavior that smaller models don't reliably show. Those are noted in the code.
+
 ```{r setup}
 library(ellmer)
 ```
@@ -45,7 +47,7 @@ Mutable objects don't work the same way:
 #| label: mutable
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 
 capital <- function(chat, country) {
   chat$chat(interpolate("What's the capital of {{country}}"))
@@ -64,7 +66,7 @@ Creating a copy of the object is the job of the `$clone()` method. It will creat
 #| label: chat-clone
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 
 capital <- function(chat, country) {
   chat <- chat$clone()
@@ -82,7 +84,7 @@ You can also use `clone()` when you want to create a conversational "tree", wher
 #| label: tree
 #| cassette: true
 
-chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat1 <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat1$chat("My name is Hadley and I'm a data scientist")
 chat2 <- chat1$clone()
 
@@ -103,7 +105,8 @@ There's a bit of a problem with our `capital()` function: we can use our convers
 #| label: uhoh
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+# Smaller models tend to refuse to pretend, so this needs a reasonably capable model
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 capital(chat, "New Zealand")
 ```
@@ -114,7 +117,7 @@ We can avoid that problem by using `$set_turns()` to reset the conversational hi
 #| label: reset
 #| cassette: true
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
 
 capital <- function(chat, country) {
@@ -152,7 +155,8 @@ Chat objects provide some tools to get to ellmer's internal data structures. For
 #| cassette: true
 set.seed(1014) # make it reproducible
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+# Smaller models often make the two tool calls one at a time rather than together
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$register_tool(tool(function() sample(6, 1), "Roll a die"))
 chat$chat("Roll two dice and tell me the total")
 

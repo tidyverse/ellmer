@@ -12,7 +12,7 @@
     Code
       . <- chat_google_gemini()
     Message
-      Using model = "gemini-3.7-flash".
+      Using model = "gemini-3.8-flash".
 
 # binary documents are rejected
 
