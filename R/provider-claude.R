@@ -57,7 +57,7 @@ NULL
 #'
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
-#' @param model `r param_model("claude-sonnet-5", "anthropic")`
+#' @param model `r param_model("claude-sonnet-5-5", "anthropic")`
 #' @param api_key `r lifecycle::badge("deprecated")` Use `credentials` instead.
 #' @param credentials `r api_key_param("ANTHROPIC_API_KEY")`
 #' @param base_url The base URL to the endpoint; the default is the
@@ -94,7 +94,7 @@ chat_anthropic <- function(
   echo <- check_echo(echo)
   base_url <- base_url %||% anthropic_base_url()
 
-  model <- set_default(model, "claude-sonnet-5")
+  model <- set_default(model, "claude-sonnet-5-5")
   cache <- arg_match(cache)
 
   credentials <- as_credentials(
@@ -131,7 +131,7 @@ chat_claude <- chat_anthropic
 
 chat_anthropic_test <- function(
   ...,
-  model = "claude-sonnet-5",
+  model = "claude-sonnet-5-5",
   params = NULL,
   echo = "none"
 ) {
@@ -303,7 +303,7 @@ method(chat_params, ProviderAnthropic) <- function(provider, params) {
   )
 
   # Unlike other providers, Claude requires that this be set
-  params$max_tokens <- params$max_tokens %||% 4096
+  params$max_tokens <- params$max_tokens %||% 32000
 
   params$stop_sequences <- as.list(params$stop_sequences)
 

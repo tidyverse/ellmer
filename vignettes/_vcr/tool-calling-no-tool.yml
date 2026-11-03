@@ -3,62 +3,62 @@ http_interactions:
     method: POST
     uri: https://api.openai.com/v1/responses
     body:
-      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"How
-        long ago did Neil Armstrong touch down on the moon?"}]}],"model":"gpt-4o","stream":false,"store":false,"service_tier":"auto"}'
+      string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"What
+        time is it right now in Chicago?"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.4-mini","stream":false,"store":false,"service_tier":"auto"}'
   response:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e5597af5ef1b-LHR
+      cf-ray: a53df985cb0f94fc-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:53 GMT
+      date: Sun, 01 Nov 2026 21:25:55 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1085'
+      openai-processing-ms: '1194'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=PEre2rYRckRxL37b86C56.ApPUlGeZWLqsxpINtMIcA-1791281632.2387788-1.0.1.1-HArkDyBzBCoO2Ie4p_5c73ns2WWyLXQHOoBJtQw38fF.MnSFYttlLjzwbUsT6h_2a5w70Fk0Pb3jdmYSWIjldLEVE8u6ABg.XJKqbWMyqITuO3jUp0ZIUdlHlD.RPHtK;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:53 GMT
+      set-cookie: __cf_bm=iTjLDcB95fmVjscwYEIiBAOFdRYqjFjHZMyAX8yeX3o-1793568354.2056923-1.0.1.1-mo6iBM9ZOlaFzl_rVsMfFtUs.ZiCOqWlmYzY4ytwc3kfaTz4Wq27Hr5a4QC.xfwesxRAM_Y.Ka9AuG_Q1iuD2K.4GEYoyANxj5WUQtYmR_dr0jH8GIY0zjHLeH2zRHVv;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Sun,
+        01 Nov 2026 21:55:55 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '30000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '29962'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 76ms
-      x-request-id: req_2a56ff92da8340d0af8da79b8b3598a9
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '2000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '2000000'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_c0eca5e0770e4a88bf0b040c13f5482f
     body:
       string: |-
         {
-          "id": "resp_0163e148d91b142f016ac4c9e05e5487d289a63e8235e6d46c",
+          "id": "resp_00c8cc0ab1870016016ae7ae624d2c87d2afcc54abb9a2baa3",
           "object": "response",
-          "created_at": 1791281632,
+          "created_at": 1793568354,
           "status": "completed",
           "access_programs": null,
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281633,
+          "completed_at": 1793568355,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-5.4-mini-2026-03-17",
           "moderation": null,
           "output": [
             {
-              "id": "msg_0163e148d91b142f016ac4c9e12c4887d29c0daaa24acd4c93",
+              "id": "msg_00c8cc0ab1870016016ae7ae62dec487d2853797b23479cc07",
               "type": "message",
               "status": "completed",
               "content": [
@@ -66,9 +66,10 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago."
+                  "text": "I can\u2019t see the current live time. Chicago is in the **America/Chicago** time zone, which is:\n\n- **Central Standard Time (CST)**, UTC\u22126, or\n- **Central Daylight Time (CDT)**, UTC\u22125, depending on daylight saving time.\n\nIf you want, I can help you calculate the current Chicago time from your local time or show you how to check it quickly on your device."
                 }
               ],
+              "phase": "final_answer",
               "role": "assistant"
             }
           ],
@@ -76,10 +77,11 @@ http_interactions:
           "presence_penalty": 0.0,
           "previous_response_id": null,
           "prompt_cache_key": null,
-          "prompt_cache_retention": "in_memory",
+          "prompt_cache_retention": "24h",
           "reasoning": {
-            "context": null,
-            "effort": null,
+            "context": "current_turn",
+            "effort": "none",
+            "mode": "standard",
             "summary": null
           },
           "safety_identifier": null,
@@ -113,22 +115,22 @@ http_interactions:
           },
           "tools": [],
           "top_logprobs": 0,
-          "top_p": 1.0,
+          "top_p": 0.98,
           "truncation": "disabled",
           "usage": {
-            "input_tokens": 19,
+            "input_tokens": 15,
             "input_tokens_details": {
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 30,
+            "output_tokens": 94,
             "output_tokens_details": {
               "reasoning_tokens": 0
             },
-            "total_tokens": 49
+            "total_tokens": 109
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:53
+  recorded_at: 2026-11-01 21:25:55
 recorded_with: VCR-vcr/2.1.0

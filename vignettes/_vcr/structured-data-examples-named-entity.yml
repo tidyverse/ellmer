@@ -5,7 +5,7 @@ http_interactions:
     body:
       string: '{"input":[{"type":"message","role":"user","content":[{"type":"input_text","text":"\n  John
         works at Google in New York. He met with Sarah, the CEO of\n  Acme Inc., last
-        week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-5.6-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
+        week in San Francisco.\n"}]}],"include":["reasoning.encrypted_content"],"model":"gpt-6.1-terra","stream":false,"text":{"format":{"type":"json_schema","name":"structured_data","schema":{"type":"object","description":"","properties":{"wrapper":{"type":"array","description":"","items":{"type":"object","description":"","properties":{"name":{"type":"string","description":"The
         extracted entity name."},"type":{"type":"string","description":"The entity
         type","enum":["person","location","organization"]},"context":{"type":"string","description":"The
         context in which the entity appears in the text."}},"required":["name","type","context"],"additionalProperties":false}}},"required":["wrapper"],"additionalProperties":false},"strict":true}},"store":false,"service_tier":"auto"}'
@@ -13,56 +13,65 @@ http_interactions:
     status: 200
     headers:
       access-control-expose-headers:
-      - X-Request-ID
+      - X-Request-ID, Server-Timing-Total
       - CF-Ray
       - CF-Ray
       alt-svc: h3=":443"; ma=86400
       cf-cache-status: DYNAMIC
-      cf-ray: a463e50e1a83a430-LHR
+      cf-ray: a545ecaf7b75cc1d-LHR
       content-encoding: br
       content-type: application/json
-      date: Tue, 06 Oct 2026 10:13:41 GMT
+      date: Mon, 02 Nov 2026 20:35:17 GMT
       openai-organization: user-k8m6yzpx9oqbrzisf5xeeeap
-      openai-processing-ms: '1619'
+      openai-processing-ms: '3128'
       openai-project: proj_1zyW3RxIpA38KxiYN69dBj4g
       openai-version: '2020-10-01'
       server: cloudflare
-      set-cookie: __cf_bm=06GKwsbE9PygdNyriQGjMe16u.9yqXLb3ZrXjZvknFA-1791281620.180289-1.0.1.1-SwTZkbQ87LEqPpFQ.IrkzgTG6HjpJYdaSqcT0o4zmhQaNQlmt8x89Kx0qxqVCw9x_MqSq.j7dCgn1V780Go.e0nCi.1aPeVhffDTwqVm7Cuepm6JhhdyTFuPoYx2CAMv;
-        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Tue,
-        06 Oct 2026 10:43:41 GMT
+      set-cookie: __cf_bm=9k_tyFFUYr5oF7A6GO0Uhgu6_nkDwKca59ai3erdQUQ-1793651714.4830656-1.0.1.1-vgxgh75qen5veu1EYHQgTyyAya6ai0Fz6l5DQUGTeBLU0mxfZxQ58C2Tfm_mvlYAYHv9cP6kEbGNxvi0TTEZYgntf78Wmgg.UcSyIsdKKRajvs_x3oxN_x7COTv96Qk4;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Mon,
+        02 Nov 2026 21:05:17 GMT
       strict-transport-security: max-age=31536000; includeSubDomains; preload
       x-content-type-options: nosniff
-      x-ratelimit-limit-requests: '500'
-      x-ratelimit-limit-tokens: '500000'
-      x-ratelimit-remaining-requests: '499'
-      x-ratelimit-remaining-tokens: '499835'
-      x-ratelimit-reset-requests: 120ms
-      x-ratelimit-reset-tokens: 19ms
-      x-request-id: req_23425547e1be46d4bf90438cc9a5cc5d
+      x-ratelimit-limit-requests: '5000'
+      x-ratelimit-limit-tokens: '1000000'
+      x-ratelimit-remaining-requests: '4999'
+      x-ratelimit-remaining-tokens: '999993'
+      x-ratelimit-reset-requests: 12ms
+      x-ratelimit-reset-tokens: 0s
+      x-request-id: req_4889b3232d7f4b0c8462d7f7f45d3618
     body:
       string: |-
         {
-          "id": "resp_045d8d8990790b09016ac4c9d44bb487d2a3e74fa27f1c72f3",
+          "id": "resp_0bd1e1e46416307b016ae8f40292f487d2bb9cd40b0540217d",
           "object": "response",
-          "created_at": 1791281620,
+          "created_at": 1793651714,
           "status": "completed",
-          "access_programs": null,
+          "access_programs": {
+            "cyber": "standard"
+          },
           "background": false,
           "billing": {
             "payer": "developer"
           },
-          "completed_at": 1791281621,
+          "completed_at": 1793651717,
           "error": null,
           "frequency_penalty": 0.0,
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
           "max_tool_calls": null,
-          "model": "gpt-5.6-terra",
+          "model": "gpt-6.1-terra",
           "moderation": null,
           "output": [
             {
-              "id": "msg_045d8d8990790b09016ac4c9d4d25c87d28776aaaca914314f",
+              "id": "rs_0bd1e1e46416307b016ae8f4038f5887d29c49726819a56aa9",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "gAAAAABq6PQFhtzp5q09vOTd-M26mJ3KRJwn6LqEhrYdY4UULdebFwugTaU88o0CtvKL6EVvXJARKqOwFmB72cEkxX73D82SZXf6_0WFp_2wMyzu2qRWVmzDjM1CbnCCQ4Ww3ppTIoR9MNawFHhuA6kYXzPPQFFW2cYAG2FoMZoeYiRY_i4i5-uqjZjZn658V2gESUTnq8yQucooutlf63IwG406du9OJt3xLK8soLbsroFNvSK2UOvjWfbeLeNEN24EGz5-H_xJtxBM39ZUaGzXGxyo0PsTVnSveTOnqPwwzFJY4tGfI1Ho39vnuVZ39H7upreIf7GrIs03UblDfKbCUTp4mSWs29Jj-p0u0nRYLrMFPwbkXVXFZprRvMsAzMDCK_arEkjFl-NGRTDEunNKYHIMtYTITATIj3KBsSt0mdaZ_myq_oIgCRyvH5piAsSgBAEWZp6_58rLLPTo53lqwWKl-CgYxrB_KUoG5p21pZ1hsIPDXS3toML_JIYizxgiWnPckg12hUVSvnHIkG0WB7OBvMy2uPRzGoy1eoxw1pGvX2-BJZsFVG-BLycwhviQKooz_93mfd0dKsFB0EFNjCCwu3KgNWbGsNgyW9KIeCwW__irAFF6uMBP-VMwXm065uKdsU-Tu5H6T1i7mBPCQ_enJsMWfAe-lw9sNKZMipY6Q927nkQ4s-w3nxlehDv3kuHp0j4_O8khUHSpCvp4i5jWW8GV_buwk3ZqCDV0kPuOzU0NEoV_vLa17IcInkBQDrHS_OUrI2G0apPZhgX-XROqjtdT1xO0cP1aynlc7FaarHGiBlPhJUf97a9YIf7i2YZg8bkQLMi4EIH8GnCckYkSM4Lho1ujBwxoNj3VBRVEy-yw1jg2acAjuZA71tLtYJzzfIM-E8QrSoI6Xi7y9Lh-OQRy32Eu5JBAKh48tAHlT1RQm8ZDpF4eBKhwtU2u7EWQtyG2oew9d7hoq0zkFHC1n4bmnaOtRdoJ4EIbY_PJjaXCwehRJ4YqVK8h-4GeUTFPwIOLK1zLox9VPuM5JfKuQA-IxUfvgCrkhOFLBpDnpttfymTUXU9vo8Gje4smoCRjTKLlTdxu9LHERa7qAP2VU6rR2zmI-G01nJj_HJwbxGocvMCmpBa6pc8i9pHVXMYZBBH5WqpsQY9osJ-p_dUmpT9PXNoTpT0RWJ6HpQvaOEQPIdYOEEwcpy80-lns3vffy0DZ1fmwGaGDP08AWx0bJJnAWvQeGmXXigD6Vt7roTKFd0M_x5USnRwpfraJ5CaQqi6SAX4RbS_ZmSb_kwq8B1qHun7i4L-kH0-oOXBGbE0KN3gXsvi3t6_Ez_oS9s9gU03iiRDubR7j8Xb22D4QokApvj1Smt1IbGB4MVRpzSPuawseZzSS_0I8lC1p6qcFyG8wdX8bMNksupWUaloh0sjTE7jPG9bcDIuSm-C0U_sCQ3n9niXt7Aci220-e-BVZvgRaXHpqIvIYa0aDOnsNtKifOUp3N2LwpDnVPLrtttMSe8HTuM7lKlCBEY6p_JtOsx5au479107wAR_TM712XOKnKkfJzXkc9oev1Oe262nE_8chlygzDpTek4wuO9ou4QSFcCcZuzlQGzxJmndcKv5G0N2VyoACamCG3dSH9MhOLqnGsnsXT6dolKPGCBV_9mhE89XMhCu1ASZ3KuOAfFx3v2qCbxEkPwl_AV20nc_Q85VipY9OAsGc5gr7XnTl8LZOKpXDXNjH8zN-DPjSgh9quhYwCF47eNXQU1s7-daGxiWIYH5O8JrnrTOFPMIBGFz",
+              "summary": []
+            },
+            {
+              "id": "msg_0bd1e1e46416307b016ae8f4040a2087d28d447fb4e79d42ce",
               "type": "message",
               "status": "completed",
               "content": [
@@ -70,7 +79,7 @@ http_interactions:
                   "type": "output_text",
                   "annotations": [],
                   "logprobs": [],
-                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John works at Google in New York.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"John works at Google in New York.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"John met with Sarah, the CEO of Acme Inc., last week in San Francisco.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"Sarah is identified as the CEO of Acme Inc.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"John met with Sarah last week in San Francisco.\"}]}"
+                  "text": "{\"wrapper\":[{\"name\":\"John\",\"type\":\"person\",\"context\":\"Works at Google in New York and met with Sarah.\"},{\"name\":\"Google\",\"type\":\"organization\",\"context\":\"John's employer.\"},{\"name\":\"New York\",\"type\":\"location\",\"context\":\"Where John works.\"},{\"name\":\"Sarah\",\"type\":\"person\",\"context\":\"CEO of Acme Inc. who met with John.\"},{\"name\":\"Acme Inc.\",\"type\":\"organization\",\"context\":\"The company where Sarah is CEO.\"},{\"name\":\"San Francisco\",\"type\":\"location\",\"context\":\"Where John met with Sarah last week.\"}]}"
                 }
               ],
               "phase": "final_answer",
@@ -173,14 +182,14 @@ http_interactions:
               "cache_write_tokens": 0,
               "cached_tokens": 0
             },
-            "output_tokens": 146,
+            "output_tokens": 157,
             "output_tokens_details": {
-              "reasoning_tokens": 0
+              "reasoning_tokens": 27
             },
-            "total_tokens": 274
+            "total_tokens": 285
           },
           "user": null,
           "metadata": {}
         }
-  recorded_at: 2026-10-06 10:13:41
+  recorded_at: 2026-11-02 20:35:17
 recorded_with: VCR-vcr/2.1.0

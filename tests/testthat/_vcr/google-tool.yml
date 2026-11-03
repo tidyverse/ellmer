@@ -3,7 +3,7 @@ http_interactions:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"system_instruction":"Always
         use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
         the current date in Y-M-D format?"}]}],"tools":[{"type":"function","name":"current_date","description":"Return
         the current date"},{"type":"function","name":"current_month","description":"Return
@@ -14,9 +14,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 13:31:13 GMT
+      date: Mon, 02 Nov 2026 14:05:27 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2565
+      server-timing: gfet4t7; dur=3185
       vary:
       - Origin
       - X-Origin
@@ -25,15 +25,15 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"requires_action","usage":{"total_tokens":160,"total_input_tokens":68,"input_tokens_by_modality":[{"modality":"text","tokens":68}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":82,"raw_prompt_token":111,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":111}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":82}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":111}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":82}]}]},"created":"2026-09-25T13:31:13Z","updated":"2026-09-25T13:31:13Z","service_tier":"standard","steps":[{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"id":"call_1205409","type":"function_call","name":"current_date","arguments":{}}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 13:31:13
+      string: '{"status":"requires_action","usage":{"total_tokens":159,"total_input_tokens":68,"input_tokens_by_modality":[{"modality":"text","tokens":68}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":81,"initial_input_tokens":56},"created":"2026-11-02T14:05:27Z","updated":"2026-11-02T14:05:27Z","service_tier":"standard","steps":[{"signature":"EvICCu8CAWkUfRNzUxaWKdpLC/M5Snsh7eG3brOjAAaxoLlvbRo5rQNwTn9zWA2WXyp14ZbWnbcpo4WIeVx4Ow83cScRNPftlGNFRL+lg+seB+EXE2lHIiflz4DGHicSsOc54UyZ3MGNAXO1TsErlBwFJtxUpQqFgPnZwlpEs0iHsvMt3P57Rq+u3EWYA8G4cksvlojlXeOZQPM6XJMHtVS373mnTVMPKCmjCiDkJBfZKKy89n9NcxMzeeajS9b6B3KnD9YhTh4NAgMgLucLIOQhyWiawH+of/2ar5tvxR4REmVi3yJYAxSDR/bZugrMbwWQDRLrc4GHtGQ4N/sMT7LJ8r64fY1+dtn3MS4dDEOgi/8Dfta4wHkKpz2BCouX5wJDgSlfV9gFpsn56EDHuQ4ayUdC2cjoGDoaL3nyw8MtdpWObLTePv20mJIY7jPjgsZv9udVp7OS0nSIvV+iRiC+3/LCY+eJ8YAmesQupNga2565Iw==","type":"thought"},{"id":"call_562913","type":"function_call","name":"current_date","arguments":{}}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:27
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"system_instruction":"Always
         use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
+        the current date in Y-M-D format?"}]},{"signature":"EvICCu8CAWkUfRNzUxaWKdpLC/M5Snsh7eG3brOjAAaxoLlvbRo5rQNwTn9zWA2WXyp14ZbWnbcpo4WIeVx4Ow83cScRNPftlGNFRL+lg+seB+EXE2lHIiflz4DGHicSsOc54UyZ3MGNAXO1TsErlBwFJtxUpQqFgPnZwlpEs0iHsvMt3P57Rq+u3EWYA8G4cksvlojlXeOZQPM6XJMHtVS373mnTVMPKCmjCiDkJBfZKKy89n9NcxMzeeajS9b6B3KnD9YhTh4NAgMgLucLIOQhyWiawH+of/2ar5tvxR4REmVi3yJYAxSDR/bZugrMbwWQDRLrc4GHtGQ4N/sMT7LJ8r64fY1+dtn3MS4dDEOgi/8Dfta4wHkKpz2BCouX5wJDgSlfV9gFpsn56EDHuQ4ayUdC2cjoGDoaL3nyw8MtdpWObLTePv20mJIY7jPjgsZv9udVp7OS0nSIvV+iRiC+3/LCY+eJ8YAmesQupNga2565Iw==","type":"thought"},{"type":"function_call","id":"call_562913","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_562913","name":"current_date","result":"2024-01-01","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
         the current date"},{"type":"function","name":"current_month","description":"Return
         the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
@@ -42,9 +42,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 13:31:16 GMT
+      date: Mon, 02 Nov 2026 14:05:34 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=2217
+      server-timing: gfet4t7; dur=6169
       vary:
       - Origin
       - X-Origin
@@ -53,16 +53,16 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"completed","usage":{"total_tokens":275,"total_input_tokens":183,"input_tokens_by_modality":[{"modality":"text","tokens":183}],"total_cached_tokens":0,"total_output_tokens":14,"total_tool_use_tokens":0,"total_thought_tokens":78,"raw_prompt_token":236,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":236}],"candidates_tokens_details":[{"modality":"text","tokens":18}],"thoughts_tokens_details":[{"modality":"text","tokens":78}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":236}],"candidates_tokens_details":[{"modality":"text","tokens":18}],"thoughts_tokens_details":[{"modality":"text","tokens":78}]}]},"created":"2026-09-25T13:31:16Z","updated":"2026-09-25T13:31:16Z","service_tier":"standard","steps":[{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"content":[{"text":"It
-        is 2024-01-01.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 13:31:16
+      string: '{"status":"completed","usage":{"total_tokens":314,"total_input_tokens":167,"input_tokens_by_modality":[{"modality":"text","tokens":167}],"total_cached_tokens":0,"total_output_tokens":13,"total_tool_use_tokens":0,"total_thought_tokens":134,"initial_input_tokens":162},"created":"2026-11-02T14:05:33Z","updated":"2026-11-02T14:05:33Z","service_tier":"standard","steps":[{"signature":"EroDCrcDAWkUfRPNFdP7FoZf5ViMP0t6lXpsvFbPPattIY0LXggO2w2iCeDjsRAkvQvxpZ9wPLXexDpV6Or/Nengqf/QGig1nkcyrt0P/BDLwiLDYVqjSyfrRVSZHA9qW5HpHju4PEn5VFQXVzYrvc7Y4kpe41vKGqX9GIvl76mQveqeIaO74SL7xSds3el4KR1309EAhAduPEj4/JuiMBTatxL5wuQKxQtKaVejcf0tyaHKWLAYlFeBI4tULl+b00L5UB+/269airOyyBW4Im891IErlBBwdmTdaiMQc3svGVTVOzbSUo3sn4mJRzqdICUxbDmeEqWWd3LI95hbL4FyMGvBci76KvAgZv0U/kEgW9kRFz9moUkG2CUMQ1EEzJnvegvd5D42pN20KfDVj1Pu+LEYU3GSb4LR2YqVW9WXJoeRGU+uaze+jsDfHciV0auVoRJazPUzaQCcX2Aw58H84IrdKjh1C08OnCmU1qL+Uj5H1xTDGjRqiuL7V7YglufbkTrGciCGA3AP5RW+pkaTfSHKla3sfEGE6I7FLB3vsL4PjhOFOM5l5YqANcczm13tDNfNZn1bQ5WWSA==","type":"thought"},{"content":[{"text":"It
+        is 2024-01-01.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:34
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"system_instruction":"Always
         use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
+        the current date in Y-M-D format?"}]},{"signature":"EvICCu8CAWkUfRNzUxaWKdpLC/M5Snsh7eG3brOjAAaxoLlvbRo5rQNwTn9zWA2WXyp14ZbWnbcpo4WIeVx4Ow83cScRNPftlGNFRL+lg+seB+EXE2lHIiflz4DGHicSsOc54UyZ3MGNAXO1TsErlBwFJtxUpQqFgPnZwlpEs0iHsvMt3P57Rq+u3EWYA8G4cksvlojlXeOZQPM6XJMHtVS373mnTVMPKCmjCiDkJBfZKKy89n9NcxMzeeajS9b6B3KnD9YhTh4NAgMgLucLIOQhyWiawH+of/2ar5tvxR4REmVi3yJYAxSDR/bZugrMbwWQDRLrc4GHtGQ4N/sMT7LJ8r64fY1+dtn3MS4dDEOgi/8Dfta4wHkKpz2BCouX5wJDgSlfV9gFpsn56EDHuQ4ayUdC2cjoGDoaL3nyw8MtdpWObLTePv20mJIY7jPjgsZv9udVp7OS0nSIvV+iRiC+3/LCY+eJ8YAmesQupNga2565Iw==","type":"thought"},{"type":"function_call","id":"call_562913","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_562913","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"EroDCrcDAWkUfRPNFdP7FoZf5ViMP0t6lXpsvFbPPattIY0LXggO2w2iCeDjsRAkvQvxpZ9wPLXexDpV6Or/Nengqf/QGig1nkcyrt0P/BDLwiLDYVqjSyfrRVSZHA9qW5HpHju4PEn5VFQXVzYrvc7Y4kpe41vKGqX9GIvl76mQveqeIaO74SL7xSds3el4KR1309EAhAduPEj4/JuiMBTatxL5wuQKxQtKaVejcf0tyaHKWLAYlFeBI4tULl+b00L5UB+/269airOyyBW4Im891IErlBBwdmTdaiMQc3svGVTVOzbSUo3sn4mJRzqdICUxbDmeEqWWd3LI95hbL4FyMGvBci76KvAgZv0U/kEgW9kRFz9moUkG2CUMQ1EEzJnvegvd5D42pN20KfDVj1Pu+LEYU3GSb4LR2YqVW9WXJoeRGU+uaze+jsDfHciV0auVoRJazPUzaQCcX2Aw58H84IrdKjh1C08OnCmU1qL+Uj5H1xTDGjRqiuL7V7YglufbkTrGciCGA3AP5RW+pkaTfSHKla3sfEGE6I7FLB3vsL4PjhOFOM5l5YqANcczm13tDNfNZn1bQ5WWSA==","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
         is 2024-01-01."}]},{"type":"user_input","content":[{"type":"text","text":"What
         month is it? Provide the full name"}]}],"tools":[{"type":"function","name":"current_date","description":"Return
         the current date"},{"type":"function","name":"current_month","description":"Return
@@ -73,9 +73,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 13:31:18 GMT
+      date: Mon, 02 Nov 2026 14:05:39 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1528
+      server-timing: gfet4t7; dur=5496
       vary:
       - Origin
       - X-Origin
@@ -84,17 +84,17 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"requires_action","usage":{"total_tokens":351,"total_input_tokens":286,"input_tokens_by_modality":[{"modality":"text","tokens":286}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":55,"raw_prompt_token":351,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":351}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":55}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":351}],"candidates_tokens_details":[{"modality":"text","tokens":16}],"thoughts_tokens_details":[{"modality":"text","tokens":55}]}]},"created":"2026-09-25T13:31:18Z","updated":"2026-09-25T13:31:18Z","service_tier":"standard","steps":[{"signature":"ErICCq8CAWkUfRO6d/Pp8ZZz2D2Js2uU8TtDAoQGbK2NuwVNe8v/vjQf3LmWWV43qdYlkNtl/QYEdRYiEKrjxL6yWkjJ2jsPxP+qfnKVIGnZkKG+LiQrMvfHawiFfaHnbOjywADpE1He2TXYUp1jhOMf6Qj4hpNYSY0vD56KjgP5J1DF5KqpTiyhMKAqouQ62sk6yNpdwGRU07YOKBiIlRrZ7LQxEZFM/92zpy7lIEhzprizM7R4k4sMzuITop/UQxW58uWWVudWyCxInOAvZLBaw7X7pygVIbU4jJpkgkbps32MnszMHlLWkAGAZ1Ef/n/lF7prOPDiUu8SZJisvN3dudrGCFUYHVbgtUNZDd7BnltLxtk/vsHFh2ZJFi/teHXQY9SpcCBZ5tirkOHdoGvd7Ct9","type":"thought"},{"id":"call_1482947","type":"function_call","name":"current_month","arguments":{}}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 13:31:18
+      string: '{"status":"requires_action","usage":{"total_tokens":386,"total_input_tokens":326,"input_tokens_by_modality":[{"modality":"text","tokens":326}],"total_cached_tokens":0,"total_output_tokens":10,"total_tool_use_tokens":0,"total_thought_tokens":50,"initial_input_tokens":319},"created":"2026-11-02T14:05:39Z","updated":"2026-11-02T14:05:39Z","service_tier":"standard","steps":[{"signature":"Ep0CCpoCAWkUfRPHU2btX2j3gFq4m+nTbkPrZkEaDDsiIiK+Bs7dXtTIvsF5BTON0xNXvPQLHlw6+L2uLU6QkdiMtsL4H1nvoXUAJ5SMeQjUyN0xEnBxN7+bNHY3UvH4iduLLmlUWn5LU29xHVbwTf4Yfx2ArfKI8xXPmMvID2PCTrxiJm9OYmUW9Alv6VukHHWkYJeFMPOJ4CYMEqXi91ec2oO3qU/uoA3tCo1QJ6TAuyko8tTpbAs7QS30ZGHAe9yi7d3+0HjR45DKZNhClu7qPFQ4hr/Nazr5JIG3PGSBX4FuqG2uz+yOUJJ4Tmtc+TKvCGb4gTcZr4PMbNQiVxzuyCtr0zh9RdHjYRURjeEQXp89J+vgwZB13uOV+x4H","type":"thought"},{"id":"call_606072","type":"function_call","name":"current_month","arguments":{}}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:39
 - request:
     method: POST
     uri: https://generativelanguage.googleapis.com/v1beta/interactions
     body:
-      string: '{"model":"gemini-3.7-flash","store":false,"stream":false,"system_instruction":"Always
+      string: '{"model":"gemini-3.8-flash","store":false,"stream":false,"system_instruction":"Always
         use a tool to answer. Reply with ''It is ____.''.","input":[{"type":"user_input","content":[{"type":"text","text":"What''s
-        the current date in Y-M-D format?"}]},{"signature":"EpoDCpcDAWkUfRPIM0X8Lo4AdsSLqSleyHx8y5AS9eF8d9Lc4gMZOXYz/8oDKsHIcHfLKqrzfzxexXOcN50yMlE0vnHVrG10+CR2dVGX5FXmRRzPu5umwoif+oibNNA5OSfUGL3vDewE9qdSo7TlXdsafqv4MzX1vkqGDgVHb+KXsUv3A9EJO/dl08QLDs6B9bC5bpZxbu5E3kpT2TfC9i+R/ij9qppfQjYF/NIIl+NfZKjN55cOwvSP0CVpGeHpreX4b2eKeQcXTk3LPdD2wOGuXmwzYDPEBN+69nd2hdNXcKqcivrjZRdjsY44ltqa+P0vPpyoghOG99zLppL/BZWZHJHeSuPSSPL7Ga+pzUznYWrfsp9ZYqdMXG+9LtOgWlEpQC8raTs8yUWPqVlkHUco8DVU1eXDRY2ppIwcpozq159/hOdrvqnzRVHd7AMtL0byqR7+IfLr5n5ZwLVyffCL6mvTFDZxU16q1PZoyVWr4dQGWezqDJR16aVl+YFF/hSRMab4O49HvReztkWpisVoeG3AETwfdixYLrs=","type":"thought"},{"type":"function_call","id":"call_1205409","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_1205409","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"ErQCCrECAWkUfRPzog2i0zMKbN6VeTYHYGchd6aVHQvzfogCG+zLp5WqXH8G7QGl8VkEqoCqivOD1gJoYDJTX5t88lGV4GhlSNY22g2XACkZ4/emKwTRov/ksluZEuyuhDvhWsPLUcNLVer7t09WVpWwYHR0d9cxqi7BmRXxjaTzI8o5bw+Dw77izKDn7uOF+16QIJDXkk8kAwEzDtdUXhWtURQgrIdYyuBQruJo6/BejY7L/r5gqqJcENh3O0fz05Fqc9lAjq/jIYpexjFSej6JEFHGhi/N2Da22FYPbR4lM/P90Bu+U7NPKS9tINZf8+ZMk7uhlaC5abSKpmCazQs4/fL6OkYz9Ou5a7oaBYRzvfc/ECvpCA9Oqousooh3FlAV9ES2421eV8H460mkd5wtL8oo+qo=","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
+        the current date in Y-M-D format?"}]},{"signature":"EvICCu8CAWkUfRNzUxaWKdpLC/M5Snsh7eG3brOjAAaxoLlvbRo5rQNwTn9zWA2WXyp14ZbWnbcpo4WIeVx4Ow83cScRNPftlGNFRL+lg+seB+EXE2lHIiflz4DGHicSsOc54UyZ3MGNAXO1TsErlBwFJtxUpQqFgPnZwlpEs0iHsvMt3P57Rq+u3EWYA8G4cksvlojlXeOZQPM6XJMHtVS373mnTVMPKCmjCiDkJBfZKKy89n9NcxMzeeajS9b6B3KnD9YhTh4NAgMgLucLIOQhyWiawH+of/2ar5tvxR4REmVi3yJYAxSDR/bZugrMbwWQDRLrc4GHtGQ4N/sMT7LJ8r64fY1+dtn3MS4dDEOgi/8Dfta4wHkKpz2BCouX5wJDgSlfV9gFpsn56EDHuQ4ayUdC2cjoGDoaL3nyw8MtdpWObLTePv20mJIY7jPjgsZv9udVp7OS0nSIvV+iRiC+3/LCY+eJ8YAmesQupNga2565Iw==","type":"thought"},{"type":"function_call","id":"call_562913","name":"current_date","arguments":{}},{"type":"function_result","call_id":"call_562913","name":"current_date","result":"2024-01-01","is_error":false},{"signature":"EroDCrcDAWkUfRPNFdP7FoZf5ViMP0t6lXpsvFbPPattIY0LXggO2w2iCeDjsRAkvQvxpZ9wPLXexDpV6Or/Nengqf/QGig1nkcyrt0P/BDLwiLDYVqjSyfrRVSZHA9qW5HpHju4PEn5VFQXVzYrvc7Y4kpe41vKGqX9GIvl76mQveqeIaO74SL7xSds3el4KR1309EAhAduPEj4/JuiMBTatxL5wuQKxQtKaVejcf0tyaHKWLAYlFeBI4tULl+b00L5UB+/269airOyyBW4Im891IErlBBwdmTdaiMQc3svGVTVOzbSUo3sn4mJRzqdICUxbDmeEqWWd3LI95hbL4FyMGvBci76KvAgZv0U/kEgW9kRFz9moUkG2CUMQ1EEzJnvegvd5D42pN20KfDVj1Pu+LEYU3GSb4LR2YqVW9WXJoeRGU+uaze+jsDfHciV0auVoRJazPUzaQCcX2Aw58H84IrdKjh1C08OnCmU1qL+Uj5H1xTDGjRqiuL7V7YglufbkTrGciCGA3AP5RW+pkaTfSHKla3sfEGE6I7FLB3vsL4PjhOFOM5l5YqANcczm13tDNfNZn1bQ5WWSA==","type":"thought"},{"type":"model_output","content":[{"type":"text","text":"It
         is 2024-01-01."}]},{"type":"user_input","content":[{"type":"text","text":"What
-        month is it? Provide the full name"}]},{"signature":"ErICCq8CAWkUfRO6d/Pp8ZZz2D2Js2uU8TtDAoQGbK2NuwVNe8v/vjQf3LmWWV43qdYlkNtl/QYEdRYiEKrjxL6yWkjJ2jsPxP+qfnKVIGnZkKG+LiQrMvfHawiFfaHnbOjywADpE1He2TXYUp1jhOMf6Qj4hpNYSY0vD56KjgP5J1DF5KqpTiyhMKAqouQ62sk6yNpdwGRU07YOKBiIlRrZ7LQxEZFM/92zpy7lIEhzprizM7R4k4sMzuITop/UQxW58uWWVudWyCxInOAvZLBaw7X7pygVIbU4jJpkgkbps32MnszMHlLWkAGAZ1Ef/n/lF7prOPDiUu8SZJisvN3dudrGCFUYHVbgtUNZDd7BnltLxtk/vsHFh2ZJFi/teHXQY9SpcCBZ5tirkOHdoGvd7Ct9","type":"thought"},{"type":"function_call","id":"call_1482947","name":"current_month","arguments":{}},{"type":"function_result","call_id":"call_1482947","name":"current_month","result":"February","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
+        month is it? Provide the full name"}]},{"signature":"Ep0CCpoCAWkUfRPHU2btX2j3gFq4m+nTbkPrZkEaDDsiIiK+Bs7dXtTIvsF5BTON0xNXvPQLHlw6+L2uLU6QkdiMtsL4H1nvoXUAJ5SMeQjUyN0xEnBxN7+bNHY3UvH4iduLLmlUWn5LU29xHVbwTf4Yfx2ArfKI8xXPmMvID2PCTrxiJm9OYmUW9Alv6VukHHWkYJeFMPOJ4CYMEqXi91ec2oO3qU/uoA3tCo1QJ6TAuyko8tTpbAs7QS30ZGHAe9yi7d3+0HjR45DKZNhClu7qPFQ4hr/Nazr5JIG3PGSBX4FuqG2uz+yOUJJ4Tmtc+TKvCGb4gTcZr4PMbNQiVxzuyCtr0zh9RdHjYRURjeEQXp89J+vgwZB13uOV+x4H","type":"thought"},{"type":"function_call","id":"call_606072","name":"current_month","arguments":{}},{"type":"function_result","call_id":"call_606072","name":"current_month","result":"February","is_error":false}],"tools":[{"type":"function","name":"current_date","description":"Return
         the current date"},{"type":"function","name":"current_month","description":"Return
         the full name of the current month"}],"generation_config":{"temperature":0,"seed":1014}}'
   response:
@@ -103,9 +103,9 @@ http_interactions:
       alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       content-encoding: gzip
       content-type: application/json
-      date: Fri, 25 Sep 2026 13:31:19 GMT
+      date: Mon, 02 Nov 2026 14:05:45 GMT
       server: scaffolding on HTTPServer2
-      server-timing: gfet4t7; dur=1143
+      server-timing: gfet4t7; dur=5347
       vary:
       - Origin
       - X-Origin
@@ -114,7 +114,7 @@ http_interactions:
       x-frame-options: SAMEORIGIN
       x-xss-protection: '0'
     body:
-      string: '{"status":"completed","usage":{"total_tokens":399,"total_input_tokens":365,"input_tokens_by_modality":[{"modality":"text","tokens":365}],"total_cached_tokens":0,"total_output_tokens":4,"total_tool_use_tokens":0,"total_thought_tokens":30,"raw_prompt_token":440,"model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":440}],"candidates_tokens_details":[{"modality":"text","tokens":8}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}],"non_grounding_model_invocation_token_counts":[{"prompt_tokens_details":[{"modality":"text","tokens":440}],"candidates_tokens_details":[{"modality":"text","tokens":8}],"thoughts_tokens_details":[{"modality":"text","tokens":30}]}]},"created":"2026-09-25T13:31:19Z","updated":"2026-09-25T13:31:19Z","service_tier":"standard","steps":[{"signature":"Et0BCtoBAWkUfRP7XvQc3oSgVv2QRQ0aM0yhQsIxnrx+Xb5RKZCC0F9WZICvfhXomtklhJ7KZIZ+Y64Xol3YbOu7GP10GVYKkrMHwv8w4mRN+ifLzHsvauaJtmVXoqAM0HTdtw33ta8Tt0esUqjk9Q3vB27+mSYO61nbcHG1/NVqiQhjsYyZDKwRksLDghEKNElUP5YWdJntlyPiI1K8/OrnBixAjWFSzBS522J3Toxdzku/yYUegO00K+u+bKtswA4IM0DrgN3DTz24Fethc0u86yP8TcS2GemZEVLtamw=","type":"thought"},{"content":[{"text":"It
-        is February.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.7-flash"}'
-  recorded_at: 2026-09-25 13:31:19
+      string: '{"status":"completed","usage":{"total_tokens":428,"total_input_tokens":394,"input_tokens_by_modality":[{"modality":"text","tokens":394}],"total_cached_tokens":0,"total_output_tokens":4,"total_tool_use_tokens":0,"total_thought_tokens":30,"initial_input_tokens":385},"created":"2026-11-02T14:05:45Z","updated":"2026-11-02T14:05:45Z","service_tier":"standard","steps":[{"signature":"EtYBCtMBAWkUfRM0xVqV1MFkz5FBti0DHpxoVm88CGi2iMjj7nXINqJ5iBA9O34OjqhRw6xvo12uUXd3dQAv9c+DWJ1cHo2qSiXl9d9Bwke6tp8yEKQBT0QO64Ra++S3ppXGcxAR0q9mtRwUdz1ZVrqCDdZ6ewYC9aisWSxulFxO0kVt7RG4ed4swGpxdSTEIg2eZbT5drMmaDQ9J+W8cnAM14rBAuU0HjlDfT9OeiRLIdcAvKO6FLI0NnW5TXPPlpMjlrJKIHfq2wtN7bW/0jGVRCeQKYWKRw==","type":"thought"},{"content":[{"text":"It
+        is February.","type":"text"}],"type":"model_output"}],"object":"interaction","model":"gemini-3.8-flash"}'
+  recorded_at: 2026-11-02 14:05:45
 recorded_with: VCR-vcr/2.1.0
