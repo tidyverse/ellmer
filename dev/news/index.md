@@ -20,6 +20,10 @@
   `$get_cost()` match the same request without streaming
   ([@pcbeingused333](https://github.com/pcbeingused333),
   [\#1194](https://github.com/tidyverse/ellmer/issues/1194)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  no longer errors when Claude returns a `redacted_thinking` block
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1195](https://github.com/tidyverse/ellmer/issues/1195)).
 - [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   and
   [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
