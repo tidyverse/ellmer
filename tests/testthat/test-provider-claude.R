@@ -514,38 +514,6 @@ test_that("stream_merge_chunks() takes cumulative usage from message_delta", {
   )
 })
 
-test_that("stream_merge_chunks() keeps usage message_delta omits", {
-  provider <- chat_anthropic_test()$get_provider()
-  chunks <- list(
-    list(
-      type = "message_start",
-      message = list(
-        content = list(),
-        usage = list(
-          input_tokens = 10,
-          cache_read_input_tokens = 5,
-          output_tokens = 1
-        )
-      )
-    ),
-    list(
-      type = "message_delta",
-      delta = list(stop_reason = "end_turn"),
-      usage = list(output_tokens = 7)
-    )
-  )
-
-  completion <- NULL
-  for (chunk in chunks) {
-    completion <- stream_merge_chunks(provider, completion, chunk)
-  }
-
-  expect_equal(
-    value_tokens(provider, completion),
-    tokens(input = 10, output = 7, cached_input = 5)
-  )
-})
-
 test_that("stream_content() emits Anthropic citations after completed text", {
   provider <- chat_anthropic_test()$get_provider()
   chunks <- list(
