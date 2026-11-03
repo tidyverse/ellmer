@@ -17,6 +17,7 @@ rm(print)
 NULL
 
 .onUnload <- function(...) {
+  # TODO: drop this once this is in the released version and we set a minimum version
   if ("S7_on_unload" %in% getNamespaceExports("S7")) {
     getExportedValue("S7", "S7_on_unload")()
   }
