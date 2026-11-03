@@ -116,15 +116,7 @@ any number of additional cycles. Learn more about tool calling in
 <span>  finish_reason <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">AssistantPartialTurn</span><span class="op">(</span></span>
-<span>  contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  tokens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="cn">NA_real_</span>, <span class="cn">NA_real_</span><span class="op">)</span>,</span>
-<span>  cost <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
-<span>  duration <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
-<span>  finish_reason <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
-<span>  reason <span class="op">=</span> <span class="st">"interrupted"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">AssistantPartialTurn</span><span class="op">(</span><span class="va">...</span>, reason <span class="op">=</span> <span class="st">"interrupted"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -168,6 +160,10 @@ across providers to one of: <code>"success"</code>, <code>"tool_use"</code>,
 <code>"context_window"</code>.
 Unrecognized provider-specific reasons are passed through as-is.
 <code>NA</code> when not available.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments passed on to AssistantTurn.</p></dd>
 
 
 <dt id="arg-reason">reason<a class="anchor" aria-label="anchor" href="#arg-reason"></a></dt>

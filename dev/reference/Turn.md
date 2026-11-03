@@ -37,15 +37,7 @@ AssistantTurn(
   finish_reason = NA_character_
 )
 
-AssistantPartialTurn(
-  contents = list(),
-  json = list(),
-  tokens = c(NA_real_, NA_real_, NA_real_),
-  cost = NA_real_,
-  duration = NA_real_,
-  finish_reason = NA_character_,
-  reason = "interrupted"
-)
+AssistantPartialTurn(..., reason = "interrupted")
 ```
 
 ## Arguments
@@ -88,6 +80,10 @@ AssistantPartialTurn(
   `"content_filter"`, or `"context_window"`. Unrecognized
   provider-specific reasons are passed through as-is. `NA` when not
   available.
+
+- ...:
+
+  Arguments passed on to AssistantTurn.
 
 - reason:
 
