@@ -413,8 +413,11 @@ test_that("chat() reports actual charges and cost summary", {
   expect_equal(unclass(chat$get_tokens()$cost), 0.005)
 })
 
-test_that("stream() and stream_async() merge the final usage-only chunk", {
+test_that("stream() and stream_async() take cost from the final usage-only chunk", {
   local_openrouter_static_prices()
+  # Parsed through the real models_list() path, before the resp_body_json()
+  # passthrough mock below is installed
+  fallback <- local_openrouter_fallback_cache()
   local_mocked_openrouter_perform(
     stream_chunks = openrouter_stream_chunks(cost = 0.0123)
   )
@@ -435,6 +438,22 @@ test_that("stream() and stream_async() merge the final usage-only chunk", {
   expect_equal(paste0(unlist(out), collapse = ""), "Hello world\n")
 
   expect_equal(unclass(chat$last_turn()@cost), 0.0123)
+
+  # A final chunk without a reported cost is estimated from the
+  # session-cached advertised rates (12 prompt tokens, 3 cached)
+  local_mocked_openrouter_perform(
+    stream_chunks = openrouter_stream_chunks(cost = NULL)
+  )
+  chat <- chat_openrouter(
+    model = "deepseek/deepseek-v4.1-flash-1017",
+    echo = "none"
+  )
+  coro::collect(chat$stream("hi"))
+  expect_equal(
+    unclass(chat$last_turn()@cost),
+    9 * 0.15 / 1e6 + 4 * 0.6 / 1e6 + 3 * 0.003 / 1e6
+  )
+  expect_equal(fallback$fetches, 1L)
 })
 
 test_that("chat_structured() reports actual charges", {
@@ -669,7 +688,17 @@ test_that("openrouter_rate() guards invalid rates", {
 test_that("can list models", {
   vcr::local_cassette("openrouter-list-models")
 
-  test_models(models_openrouter)
+  models <- models_openrouter()
+
+  expect_gt(nrow(models), 0)
+  # The real response is parsed into the documented contract
+  expect_setequal(
+    names(models),
+    c("id", "created_at", "name", "context_length", "cached_input", "input", "output")
+  )
+  expect_true(!anyNA(models$id))
+  expect_s3_class(models$created_at, "Date")
+  expect_true(all(models$input >= 0, na.rm = TRUE))
 })
 
 test_that("chat_openrouter() still looks up credentials normally", {
