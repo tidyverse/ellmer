@@ -77,27 +77,6 @@ local_openrouter_static_prices <- function(
   )
 }
 
-# Missing-charge cases from before the fallback existed: keep them offline
-# with a fresh cache over an empty table, so the unknown test model stays
-# unknown without any real request.
-local_openrouter_no_fallback_models <- function(frame = parent.frame()) {
-  local_mocked_bindings(
-    openrouter_models_cache = openrouter_models_cache_factory(),
-    models_openrouter = function(...) {
-      data.frame(
-        id = character(),
-        created_at = as.Date(.POSIXct(numeric())),
-        name = character(),
-        context_length = integer(),
-        cached_input = numeric(),
-        input = numeric(),
-        output = numeric()
-      )
-    },
-    .env = frame
-  )
-}
-
 openrouter_value_result <- function(
   cost = NULL,
   message = NULL,
@@ -199,9 +178,118 @@ local_mocked_openrouter_perform <- function(
   )
 }
 
+# Offline model catalogue --------------------------------------------------
+# Used by the models tests below and by the session-cached cost fallback
+# tests, so it must be defined before the first test that uses it.
+
+# The first two entries are extracted from the public response of
+# https://openrouter.ai/api/v1/models; the remaining entries are minimal
+# edge cases: a router-priced model ("-1" sentinel), a model without a
+# cache-read rate, and a free model with a null completion rate.
+openrouter_models_fixture <- '{
+  "data": [
+    {
+      "id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "created": 1792379569,
+      "context_length": 1000000,
+      "pricing": {"prompt": "0", "completion": "0"}
+    },
+    {
+      "id": "deepseek/deepseek-v4.1-flash-1017",
+      "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+      "created": 1792225624,
+      "context_length": 1048576,
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006",
+        "input_cache_read": "0.000000003"
+      }
+    },
+    {
+      "id": "openai/gpt-router-5",
+      "name": "OpenAI: GPT Router 5 (dynamic pricing)",
+      "created": 1791200000,
+      "context_length": 400000,
+      "pricing": {"prompt": "-1", "completion": "-1"}
+    },
+    {
+      "id": "mistral/mistral-small-latest",
+      "name": "Mistral: Mistral Small (latest)",
+      "created": 1791300000,
+      "context_length": 128000,
+      "pricing": {"prompt": "0.000002", "completion": "0.000006"}
+    },
+    {
+      "id": "meta/llama-4-scout:free",
+      "name": "Meta: Llama 4 Scout (free)",
+      "created": 1791400000,
+      "context_length": 163840,
+      "pricing": {"prompt": "0", "completion": null, "input_cache_read": "0"}
+    }
+  ]
+}'
+
+local_openrouter_models <- function(
+  body = openrouter_models_fixture,
+  frame = parent.frame()
+) {
+  state <- new.env(parent = emptyenv())
+  state$request <- NULL
+
+  local_mocked_bindings(
+    req_perform = function(req) {
+      state$request <- req
+      httr2::new_response(
+        method = "GET",
+        url = req$url,
+        status_code = 200,
+        headers = list(`content-type` = "application/json"),
+        body = charToRaw(body)
+      )
+    },
+    .env = frame
+  )
+
+  state
+}
+
+# Fresh fallback state for a test: a cache closure from the same factory
+# as the production one, with each table load counted at the
+# models_openrouter() boundary. The req_perform() mock keeps everything
+# offline and the counted wrapper proves one table serves all models.
+# With body = '{"data": []}' it also gives the missing-charge tests an
+# offline empty table that keeps unknown test models unknown.
+local_openrouter_fallback_cache <- function(
+  body = openrouter_models_fixture,
+  frame = parent.frame()
+) {
+  state <- local_openrouter_models(body = body, frame = frame)
+  state$fetches <- 0L
+
+  # Parse the fixture once through the real models_list() path so tests
+  # can freely combine this helper with local_mocked_openrouter_perform()
+  # (whose resp_body_json() passthrough would otherwise break the parse).
+  table <- models_openrouter()
+  state$fetches <- 0L
+
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory(),
+    models_openrouter = function(...) {
+      state$fetches <- state$fetches + 1L
+      table
+    },
+    .env = frame
+  )
+
+  state
+}
+
 test_that("value_turn() uses the reported cost", {
   local_openrouter_static_prices()
-  local_openrouter_no_fallback_models()
+  # A fresh cache over an empty table keeps the missing-charge cases
+  # offline and the unknown test model unknown, with no real request.
+  local_openrouter_fallback_cache(body = '{"data": []}')
 
   provider <- openrouter_test_provider()
   model <- test_model("openrouter/test-model")
@@ -368,7 +456,8 @@ test_that("chat_structured() reports actual charges", {
 test_that("completed turns log actual charges for token_usage()", {
   local_tokens()
   local_openrouter_static_prices()
-  local_openrouter_no_fallback_models()
+  # Keep the missing-charge case offline and unknown (empty rate table)
+  local_openrouter_fallback_cache(body = '{"data": []}')
 
   chat <- chat_openrouter(model = "openrouter/test-model", echo = "none")
 
@@ -399,81 +488,16 @@ test_that("completed turns log actual charges for token_usage()", {
 
 # Models ------------------------------------------------------------------
 
-# The first two entries are extracted from the public response of
-# https://openrouter.ai/api/v1/models; the remaining entries are minimal
-# edge cases: a router-priced model ("-1" sentinel), a model without a
-# cache-read rate, and a free model with a null completion rate.
-openrouter_models_fixture <- '{
-  "data": [
-    {
-      "id": "minimax/minimax-m3.1-flash:free",
-      "name": "MiniMax: MiniMax M3.1 Flash (free)",
-      "created": 1792379569,
-      "context_length": 1000000,
-      "pricing": {"prompt": "0", "completion": "0"}
-    },
-    {
-      "id": "deepseek/deepseek-v4.1-flash-1017",
-      "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
-      "created": 1792225624,
-      "context_length": 1048576,
-      "pricing": {
-        "prompt": "0.00000015",
-        "completion": "0.0000006",
-        "input_cache_read": "0.000000003"
-      }
-    },
-    {
-      "id": "openai/gpt-router-5",
-      "name": "OpenAI: GPT Router 5 (dynamic pricing)",
-      "created": 1791200000,
-      "context_length": 400000,
-      "pricing": {"prompt": "-1", "completion": "-1"}
-    },
-    {
-      "id": "mistral/mistral-small-latest",
-      "name": "Mistral: Mistral Small (latest)",
-      "created": 1791300000,
-      "context_length": 128000,
-      "pricing": {"prompt": "0.000002", "completion": "0.000006"}
-    },
-    {
-      "id": "meta/llama-4-scout:free",
-      "name": "Meta: Llama 4 Scout (free)",
-      "created": 1791400000,
-      "context_length": 163840,
-      "pricing": {"prompt": "0", "completion": null, "input_cache_read": "0"}
-    }
-  ]
-}'
-
-local_openrouter_models <- function(
-  body = openrouter_models_fixture,
-  frame = parent.frame()
-) {
-  state <- new.env(parent = emptyenv())
-  state$request <- NULL
-
-  local_mocked_bindings(
-    req_perform = function(req) {
-      state$request <- req
-      httr2::new_response(
-        method = "GET",
-        url = req$url,
-        status_code = 200,
-        headers = list(`content-type` = "application/json"),
-        body = charToRaw(body)
-      )
-    },
-    .env = frame
-  )
-
-  state
-}
-
 test_that("can list models without credentials", {
   withr::local_envvar(OPENROUTER_API_KEY = NA)
   state <- local_openrouter_models()
+  # key_get() skips (rather than errors) when the env var is unset under
+  # testthat, so a regression to the standard credential path would skip
+  # this test silently; the loud abort mock below turns that into an error.
+  local_mocked_bindings(
+    openrouter_key = function() stop("must not be called"),
+    .env = environment()
+  )
   models <- models_openrouter()
 
   expect_s3_class(models, "data.frame")
@@ -509,22 +533,23 @@ test_that("can list models without credentials", {
   expect_contains(names(state$request$headers), c("HTTP-Referer", "X-Title"))
 })
 
-test_that("model listing never looks up OPENROUTER_API_KEY", {
-  withr::local_envvar(OPENROUTER_API_KEY = NA)
-  state <- local_openrouter_models()
-  local_mocked_bindings(
-    openrouter_key = function() stop("must not be called"),
-    .env = environment()
-  )
-
-  expect_equal(nrow(models_openrouter()), 5)
-})
-
-test_that("unix timestamps become dates, newest first", {
+test_that("model metadata is typed and sorted newest first", {
   state <- local_openrouter_models()
   models <- models_openrouter()
 
+  expect_type(models$id, "character")
+  expect_type(models$name, "character")
+  expect_type(models$context_length, "integer")
+  expect_type(models$cached_input, "double")
+  expect_type(models$input, "double")
+  expect_type(models$output, "double")
   expect_s3_class(models$created_at, "Date")
+
+  deepseek <- models[models$id == "deepseek/deepseek-v4.1-flash-1017", ]
+  expect_equal(deepseek$name, "DeepSeek: DeepSeek V4.1 Flash 1017")
+  expect_equal(deepseek$context_length, 1048576L)
+
+  # Unix timestamps become dates, with the newest models first
   expect_equal(
     models$id,
     c(
@@ -545,22 +570,6 @@ test_that("unix timestamps become dates, newest first", {
       "2026-10-05"
     ))
   )
-})
-
-test_that("model metadata uses expected types", {
-  state <- local_openrouter_models()
-  models <- models_openrouter()
-
-  expect_type(models$id, "character")
-  expect_type(models$name, "character")
-  expect_type(models$context_length, "integer")
-  expect_type(models$cached_input, "double")
-  expect_type(models$input, "double")
-  expect_type(models$output, "double")
-
-  deepseek <- models[models$id == "deepseek/deepseek-v4.1-flash-1017", ]
-  expect_equal(deepseek$name, "DeepSeek: DeepSeek V4.1 Flash 1017")
-  expect_equal(deepseek$context_length, 1048576L)
 })
 
 test_that("advertised prices convert to USD per million tokens", {
@@ -670,35 +679,6 @@ test_that("chat_openrouter() still looks up credentials normally", {
 })
 
 # Session-cached cost fallback (#1189) ------------------------------------
-
-# Fresh fallback state for a test: a cache closure from the same factory
-# as the production one, with each table load counted at the
-# models_openrouter() boundary. The req_perform() mock keeps everything
-# offline and the counted wrapper proves one table serves all models.
-local_openrouter_fallback_cache <- function(
-  body = openrouter_models_fixture,
-  frame = parent.frame()
-) {
-  state <- local_openrouter_models(body = body, frame = frame)
-  state$fetches <- 0L
-
-  # Parse the fixture once through the real models_list() path so tests
-  # can freely combine this helper with local_mocked_openrouter_perform()
-  # (whose resp_body_json() passthrough would otherwise break the parse).
-  table <- models_openrouter()
-  state$fetches <- 0L
-
-  local_mocked_bindings(
-    openrouter_models_cache = openrouter_models_cache_factory(),
-    models_openrouter = function(...) {
-      state$fetches <- state$fetches + 1L
-      table
-    },
-    .env = frame
-  )
-
-  state
-}
 
 test_that("missing cost with reported counts is estimated from advertised rates", {
   state <- local_openrouter_fallback_cache()
@@ -830,7 +810,6 @@ test_that("a failed table fetch is latched and attempted only once", {
 test_that("fallback lookup is bounded by scoped timeout and retry options", {
   observed <- new.env(parent = emptyenv())
   local_mocked_bindings(
-    openrouter_models_cache = openrouter_models_cache_factory(),
     models_openrouter = function(...) {
       observed$timeout <- getOption("ellmer_timeout_s")
       observed$tries <- getOption("ellmer_max_tries")
@@ -838,52 +817,30 @@ test_that("fallback lookup is bounded by scoped timeout and retry options", {
     }
   )
 
-  withr::local_options(
-    ellmer_timeout_s = 600,
-    ellmer_max_tries = 5
-  )
-
   provider <- openrouter_test_provider()
   model <- test_model("deepseek/deepseek-v4.1-flash-1017")
-  turn <- value_turn(
-    provider,
-    model,
-    openrouter_value_result(include_cost = FALSE)
-  )
-  expect_equal(unclass(turn@cost), NA_real_)
 
   # Inherited long/retrying transport is capped inside the fallback...
+  local_mocked_bindings(
+    openrouter_models_cache = openrouter_models_cache_factory()
+  )
+  withr::local_options(ellmer_timeout_s = 600, ellmer_max_tries = 5)
+  turn <- value_turn(provider, model, openrouter_value_result(include_cost = FALSE))
+  expect_equal(unclass(turn@cost), NA_real_)
   expect_equal(observed$timeout, 5)
   expect_equal(observed$tries, 1)
 
   # ...and caller settings are restored afterwards
   expect_equal(getOption("ellmer_timeout_s"), 600)
   expect_equal(getOption("ellmer_max_tries"), 5)
-})
 
-test_that("a shorter caller timeout stays shorter inside the fallback", {
-  observed <- new.env(parent = emptyenv())
+  # A shorter caller timeout stays shorter inside the fallback
   local_mocked_bindings(
-    openrouter_models_cache = openrouter_models_cache_factory(),
-    models_openrouter = function(...) {
-      observed$timeout <- getOption("ellmer_timeout_s")
-      rlang::abort("Failed to connect to OpenRouter")
-    }
+    openrouter_models_cache = openrouter_models_cache_factory()
   )
-
-  withr::local_options(
-    ellmer_timeout_s = 2,
-    ellmer_max_tries = 5
-  )
-
-  provider <- openrouter_test_provider()
-  turn <- value_turn(
-    provider,
-    test_model("deepseek/deepseek-v4.1-flash-1017"),
-    openrouter_value_result(include_cost = FALSE)
-  )
+  withr::local_options(ellmer_timeout_s = 2, ellmer_max_tries = 5)
+  turn <- value_turn(provider, model, openrouter_value_result(include_cost = FALSE))
   expect_equal(unclass(turn@cost), NA_real_)
-
   expect_equal(observed$timeout, 2)
   expect_equal(getOption("ellmer_timeout_s"), 2)
   expect_equal(getOption("ellmer_max_tries"), 5)
