@@ -694,7 +694,15 @@ test_that("can list models", {
   # The real response is parsed into the documented contract
   expect_setequal(
     names(models),
-    c("id", "created_at", "name", "context_length", "cached_input", "input", "output")
+    c(
+      "id",
+      "created_at",
+      "name",
+      "context_length",
+      "cached_input",
+      "input",
+      "output"
+    )
   )
   expect_true(!anyNA(models$id))
   expect_s3_class(models$created_at, "Date")
@@ -854,7 +862,11 @@ test_that("fallback lookup is bounded by scoped timeout and retry options", {
     openrouter_models_cache = openrouter_models_cache_factory()
   )
   withr::local_options(ellmer_timeout_s = 600, ellmer_max_tries = 5)
-  turn <- value_turn(provider, model, openrouter_value_result(include_cost = FALSE))
+  turn <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
   expect_equal(unclass(turn@cost), NA_real_)
   expect_equal(observed$timeout, 5)
   expect_equal(observed$tries, 1)
@@ -868,7 +880,11 @@ test_that("fallback lookup is bounded by scoped timeout and retry options", {
     openrouter_models_cache = openrouter_models_cache_factory()
   )
   withr::local_options(ellmer_timeout_s = 2, ellmer_max_tries = 5)
-  turn <- value_turn(provider, model, openrouter_value_result(include_cost = FALSE))
+  turn <- value_turn(
+    provider,
+    model,
+    openrouter_value_result(include_cost = FALSE)
+  )
   expect_equal(unclass(turn@cost), NA_real_)
   expect_equal(observed$timeout, 2)
   expect_equal(getOption("ellmer_timeout_s"), 2)
