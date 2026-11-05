@@ -1,5 +1,6 @@
 # ellmer (development version)
 
+* `chat_aws_bedrock()` now includes cache-write tokens (`cacheWriteInputTokens`) in the input token count, matching `chat_anthropic()`, so `$get_tokens()` and `$get_cost()` no longer under-report requests that write to the cache (@pcbeingused333).
 * `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
 * New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
 * `chat_anthropic()` and `chat_aws_bedrock()` now report the correct input and cache token counts when a streamed response uses server tools such as web search, so `$get_tokens()` and `$get_cost()` match the same request without streaming (@pcbeingused333, #1194).

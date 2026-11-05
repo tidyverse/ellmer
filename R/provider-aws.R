@@ -621,7 +621,7 @@ method(stream_merge_chunks, ProviderAWSBedrock) <- function(
 method(value_tokens, ProviderAWSBedrock) <- function(provider, json) {
   usage <- json$usage
   tokens(
-    input = usage$inputTokens %||% 0,
+    input = (usage$inputTokens %||% 0) + (usage$cacheWriteInputTokens %||% 0),
     output = usage$outputTokens %||% 0,
     cached_input = usage$cacheReadInputTokens %||% 0
   )
