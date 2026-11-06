@@ -77,7 +77,12 @@ test_that("service principal authentication requests look correct", {
   )
   local_mocked_responses(function(req) {
     # Snapshot relevant fields of the outgoing request.
-    expect_snapshot(str(request_summary(req)))
+    expect_snapshot(
+      str(request_summary(req)),
+      # R 4.7.0 puts a space after a nested list's label; normalise so the
+      # snapshot matches on every R version (#1208)
+      transform = \(x) sub(":List of", ": List of", x)
+    )
     response_json(body = list(access_token = "token"))
   })
   source <- default_azure_credentials()
