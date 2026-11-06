@@ -557,6 +557,7 @@ record_chat_otel_duration <- function(
   error_type = NULL,
   result = NULL
 ) {
+  check_dots_empty0(...)
   attributes <- c(
     otel_metric_attributes(provider, model, result),
     "error.type" = error_type
