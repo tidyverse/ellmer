@@ -557,11 +557,14 @@ record_chat_otel_duration <- function(
   error_type = NULL,
   result = NULL
 ) {
-  attributes <- otel_metric_attributes(provider, model, result)
+  attributes <- c(
+    otel_metric_attributes(provider, model, result),
+    "error.type" = error_type
+  )
   otel_record_histogram(
     "gen_ai.client.inference.duration",
     elapsed_secs(start),
-    c(attributes, "error.type" = error_type)
+    attributes
   )
 }
 
