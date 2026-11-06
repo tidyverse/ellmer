@@ -1156,8 +1156,8 @@ Chat <- R6::R6Class(
               private$provider,
               private$model,
               request_start,
-              error_type,
-              result
+              error_type = error_type,
+              result = result
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
             record_chat_otel_span_output(chat_span, turn)
@@ -1410,8 +1410,8 @@ Chat <- R6::R6Class(
               private$provider,
               private$model,
               request_start,
-              error_type,
-              result
+              error_type = error_type,
+              result = result
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
             record_chat_otel_span_output(chat_span, turn)

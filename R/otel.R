@@ -534,7 +534,12 @@ otel_error_type <- function(error) {
 # is `NULL` once the duration has already been recorded for this request.
 record_chat_otel_span_error <- function(span, provider, model, error, start) {
   if (!is.null(start)) {
-    record_chat_otel_duration(provider, model, start, otel_error_type(error))
+    record_chat_otel_duration(
+      provider,
+      model,
+      start,
+      error_type = otel_error_type(error)
+    )
   }
   record_otel_span_error(span, error)
   if (!is.null(span) && span_recording(span)) {
@@ -548,6 +553,7 @@ record_chat_otel_duration <- function(
   provider,
   model,
   start,
+  ...,
   error_type = NULL,
   result = NULL
 ) {
@@ -568,7 +574,7 @@ record_chat_otel_span_interrupted <- function(span, provider, model, start) {
   if (is.null(start)) {
     return()
   }
-  record_chat_otel_duration(provider, model, start, "interrupted")
+  record_chat_otel_duration(provider, model, start, error_type = "interrupted")
   if (is.null(span) || !span_recording(span)) {
     return()
   }
