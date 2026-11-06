@@ -1138,13 +1138,17 @@ Chat <- R6::R6Class(
               }
             }
 
-            record_chat_otel_span_status(
+            error_type <- NULL
+            if (controller$cancelled) {
+              error_type <- "cancelled"
+            }
+            record_chat_otel_span_response(
               chat_span,
               private$provider,
               private$model,
               result,
               request_start,
-              error_type = if (controller$cancelled) "cancelled"
+              error_type = error_type
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
@@ -1152,10 +1156,11 @@ Chat <- R6::R6Class(
               turn <- self$last_turn()
             }
             record_chat_otel_span_output(chat_span, turn)
+            record_chat_otel_span_outcome(chat_span, error_type)
           } else {
             result <- resp_body_json(response)
             duration <- resp_timing(response)[["total"]] %||% NA_real_
-            record_chat_otel_span_status(
+            record_chat_otel_span_response(
               chat_span,
               private$provider,
               private$model,
@@ -1165,6 +1170,7 @@ Chat <- R6::R6Class(
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
+            record_chat_otel_span_outcome(chat_span)
 
             text <- turn@text
             if (!is.null(text)) {
@@ -1376,13 +1382,17 @@ Chat <- R6::R6Class(
               }
             }
 
-            record_chat_otel_span_status(
+            error_type <- NULL
+            if (controller$cancelled) {
+              error_type <- "cancelled"
+            }
+            record_chat_otel_span_response(
               chat_span,
               private$provider,
               private$model,
               result,
               request_start,
-              error_type = if (controller$cancelled) "cancelled"
+              error_type = error_type
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
@@ -1390,11 +1400,12 @@ Chat <- R6::R6Class(
               turn <- self$last_turn()
             }
             record_chat_otel_span_output(chat_span, turn)
+            record_chat_otel_span_outcome(chat_span, error_type)
           } else {
             response <- await(response)
             result <- resp_body_json(response)
             duration <- resp_timing(response)[["total"]] %||% NA_real_
-            record_chat_otel_span_status(
+            record_chat_otel_span_response(
               chat_span,
               private$provider,
               private$model,
@@ -1404,6 +1415,7 @@ Chat <- R6::R6Class(
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
+            record_chat_otel_span_outcome(chat_span)
 
             text <- turn@text
             if (!is.null(text)) {

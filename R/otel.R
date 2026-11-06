@@ -437,11 +437,11 @@ elapsed_secs <- function(start) {
   as.numeric(Sys.time() - start, units = "secs")
 }
 
-# Records a completed model request. A user-cancelled stream is still a
-# completed request (tokens and response id are known), but is reported with
-# an error status and `error_type = "cancelled"` on the span and the duration
-# metric, matching the `error` finish reason set on the partial turn.
-record_chat_otel_span_status <- function(
+# Records the metrics and span attributes of a completed model request. A
+# user-cancelled stream is still a completed request (tokens and response id
+# are known), but its duration metric carries `error_type = "cancelled"`.
+# The span status is set later by `record_chat_otel_span_outcome()`.
+record_chat_otel_span_response <- function(
   span,
   provider,
   model,
@@ -507,9 +507,19 @@ record_chat_otel_span_status <- function(
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
   }
-  # The ok status is set by record_chat_otel_span_output() once the response
-  # has been parsed; see the note there.
-  if (!is.null(error_type)) {
+}
+
+# Sets the final status of a chat span. Call it last, once the response has
+# been parsed: otelsdk (>= 0.3.0) treats an ok status as final, so setting it
+# earlier would hide a later failure. A cancelled stream is reported as an
+# error with `error.type = "cancelled"`, matching the duration metric.
+record_chat_otel_span_outcome <- function(span, error_type = NULL) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
+  if (is.null(error_type)) {
+    span$set_status("ok")
+  } else {
     span$set_status("error")
     span$set_attribute("error.type", error_type)
   }
@@ -705,18 +715,14 @@ record_chat_otel_span_output <- function(span, turn) {
   } else if (!is.na(turn@finish_reason)) {
     span$set_attribute("gen_ai.response.finish_reasons", turn@finish_reason)
   }
-  if (otel_capture_content_enabled()) {
-    msg <- as_otel_message(turn)
-    span$set_attribute(
-      "gen_ai.output.messages",
-      jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
-    )
+  if (!otel_capture_content_enabled()) {
+    return()
   }
-  # Set last, once the response has been parsed and recorded: the SDK treats
-  # an ok status as final, so setting it earlier would mask a later failure.
-  if (!is_partial_turn(turn)) {
-    span$set_status("ok")
-  }
+  msg <- as_otel_message(turn)
+  span$set_attribute(
+    "gen_ai.output.messages",
+    jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
+  )
 }
 
 # Per-invocation counts backing the invoke_agent span attributes and metrics.

@@ -435,6 +435,7 @@ test_that("token usage and operation duration are recorded as metrics", {
     chat_span$attributes[["gen_ai.usage.cache_read.input_tokens"]],
     1L
   )
+  expect_equal(chat_span$status, "ok")
   expect_equal(chat_span$attributes[["gen_ai.response.finish_reasons"]], "stop")
   expect_null(chat_span$attributes[["gen_ai.request.stream"]])
 
