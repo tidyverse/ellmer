@@ -695,11 +695,6 @@ record_chat_otel_span_output <- function(span, turn) {
   if (!S7_inherits(turn, AssistantTurn)) {
     return()
   }
-  # Set only once the response has been parsed into a turn: the SDK treats an
-  # ok status as final, so setting it earlier would mask a parse failure.
-  if (!is_partial_turn(turn)) {
-    span$set_status("ok")
-  }
   # A partial turn only reaches here when the stream was cancelled; it reports
   # a `cancelled` finish reason, matching `interrupted` from
   # `record_chat_otel_span_interrupted()`. The convention types this as
@@ -710,14 +705,18 @@ record_chat_otel_span_output <- function(span, turn) {
   } else if (!is.na(turn@finish_reason)) {
     span$set_attribute("gen_ai.response.finish_reasons", turn@finish_reason)
   }
-  if (!otel_capture_content_enabled()) {
-    return()
+  if (otel_capture_content_enabled()) {
+    msg <- as_otel_message(turn)
+    span$set_attribute(
+      "gen_ai.output.messages",
+      jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
+    )
   }
-  msg <- as_otel_message(turn)
-  span$set_attribute(
-    "gen_ai.output.messages",
-    jsonlite::toJSON(list(msg), auto_unbox = TRUE, null = "null")
-  )
+  # Set last, once the response has been parsed and recorded: the SDK treats
+  # an ok status as final, so setting it earlier would mask a later failure.
+  if (!is_partial_turn(turn)) {
+    span$set_status("ok")
+  }
 }
 
 # Per-invocation counts backing the invoke_agent span attributes and metrics.
