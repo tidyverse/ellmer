@@ -59,14 +59,36 @@ method(print, Provider) <- function(x, ...) {
 
 provider_print <- function(x, hide = character()) {
   cat("<", class(x)[[1]], ">\n", sep = "")
-  utils::str(
-    provider_props(x, hide),
-    no.list = TRUE,
-    give.attr = FALSE,
-    comp.str = "@ ",
-    indent.str = " "
-  )
+  props <- provider_props(x, hide)
+  names <- format(names(props))
+  for (i in seq_along(props)) {
+    cat(" @ ", names[[i]], ":", sep = "")
+    str_prop(props[[i]])
+  }
   invisible(x)
+}
+
+# Mirrors S7's str_inline(): R 4.7.0 moved the space after a label from the
+# nested str() call to the caller, so print it here on every version.
+str_prop <- function(x) {
+  if (is.function(x)) {
+    attr(x, "srcref") <- NULL
+  }
+  needs_space <- if (getRversion() >= "4.7.0") {
+    TRUE
+  } else if (is.environment(x)) {
+    !inherits(x, "S7_object")
+  } else if (is.object(x)) {
+    is.data.frame(x)
+  } else if (is.list(x)) {
+    length(x) > 0
+  } else {
+    is.function(x)
+  }
+  if (needs_space) {
+    cat(" ")
+  }
+  utils::str(x, give.attr = FALSE, nest.lev = 1, indent.str = "  ..")
 }
 
 test_provider <- function(name = "", base_url = "", ...) {

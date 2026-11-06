@@ -395,11 +395,11 @@ with_otel_record <- function(expr) {
   otelsdk::with_otel_record({
     otel_cache_tracer()
     value <- expr
-    # otelsdk (<= 0.2.4) only exports in-memory metrics on shutdown, which
-    # happens after they are collected. Shut down early so they are returned.
-    meter_provider <- otel::get_default_meter_provider()
-    meter_provider$flush()
-    meter_provider$shutdown()
+    # otelsdk only returns in-memory metrics once they have been exported,
+    # which would otherwise happen after they are collected, so flush early.
+    # Don't also shut down: with otelsdk >= 0.3.0 that exports a second time
+    # and duplicates every metric.
+    otel::get_default_meter_provider()$flush()
     value
   })
 }
@@ -437,25 +437,13 @@ elapsed_secs <- function(start) {
   as.numeric(Sys.time() - start, units = "secs")
 }
 
-# Records a completed model request. A user-cancelled stream is still a
-# completed request (tokens and response id are known), but is reported with
-# an error status and `error_type = "cancelled"` on the span and the duration
-# metric, matching the `error` finish reason set on the partial turn.
-record_chat_otel_span_status <- function(
-  span,
-  provider,
-  model,
-  result,
-  start,
-  error_type = NULL
-) {
+# Records the token metrics and span attributes of a model response. The
+# tokens were spent even if the response later fails to parse, so this runs
+# before parsing. The duration metric and span status wait until after
+# parsing; see `record_chat_otel_duration()` and
+# `record_chat_otel_span_status()`.
+record_chat_otel_span_response <- function(span, provider, model, result) {
   attributes <- otel_metric_attributes(provider, model, result)
-  otel_record_histogram(
-    "gen_ai.client.inference.duration",
-    elapsed_secs(start),
-    c(attributes, "error.type" = error_type)
-  )
-
   tokens <- value_tokens(provider, result)
   input <- as.integer(tokens$input + tokens$cached_input)
   output <- as.integer(tokens$output)
@@ -507,6 +495,16 @@ record_chat_otel_span_status <- function(
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
   }
+}
+
+# Sets the final status of a chat span. Call it last, once the response has
+# been parsed: otelsdk (>= 0.3.0) treats an ok status as final, so setting it
+# earlier would hide a later failure. A cancelled stream is reported as an
+# error with `error.type = "cancelled"`, matching the duration metric.
+record_chat_otel_span_status <- function(span, error_type = NULL) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
+  }
   if (is.null(error_type)) {
     span$set_status("ok")
   } else {
@@ -536,11 +534,11 @@ otel_error_type <- function(error) {
 # is `NULL` once the duration has already been recorded for this request.
 record_chat_otel_span_error <- function(span, provider, model, error, start) {
   if (!is.null(start)) {
-    record_chat_otel_duration_error(
+    record_chat_otel_duration(
       provider,
       model,
-      otel_error_type(error),
-      start
+      start,
+      error_type = otel_error_type(error)
     )
   }
   record_otel_span_error(span, error)
@@ -549,14 +547,21 @@ record_chat_otel_span_error <- function(span, provider, model, error, start) {
   }
 }
 
-record_chat_otel_duration_error <- function(
+# Records the `gen_ai.client.inference.duration` metric. A successful request
+# passes the parsed `result` (for `gen_ai.response.model`) and no `error_type`.
+record_chat_otel_duration <- function(
   provider,
   model,
-  error_type,
-  start
+  start,
+  ...,
+  error_type = NULL,
+  result = NULL
 ) {
-  attributes <- otel_metric_attributes(provider, model)
-  attributes[["error.type"]] <- error_type
+  check_dots_empty0(...)
+  attributes <- c(
+    otel_metric_attributes(provider, model, result),
+    "error.type" = error_type
+  )
   otel_record_histogram(
     "gen_ai.client.inference.duration",
     elapsed_secs(start),
@@ -573,7 +578,7 @@ record_chat_otel_span_interrupted <- function(span, provider, model, start) {
   if (is.null(start)) {
     return()
   }
-  record_chat_otel_duration_error(provider, model, "interrupted", start)
+  record_chat_otel_duration(provider, model, start, error_type = "interrupted")
   if (is.null(span) || !span_recording(span)) {
     return()
   }

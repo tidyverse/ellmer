@@ -48,5 +48,5 @@
        @ name         : chr ""
        @ base_url     : chr ""
        @ extra_headers: chr(0) 
-       @ credentials  :function ()  
+       @ credentials  : function ()  
 
