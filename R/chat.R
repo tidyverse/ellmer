@@ -1146,15 +1146,20 @@ Chat <- R6::R6Class(
               chat_span,
               private$provider,
               private$model,
-              result,
-              request_start,
-              error_type = error_type
+              result
             )
-            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
             }
+            record_chat_otel_duration(
+              private$provider,
+              private$model,
+              request_start,
+              error_type = error_type,
+              result = result
+            )
+            request_start <- NULL # duration recorded; skip in error handler and defer
             record_chat_otel_span_output(chat_span, turn)
             record_chat_otel_span_status(chat_span, error_type)
           } else {
@@ -1164,11 +1169,16 @@ Chat <- R6::R6Class(
               chat_span,
               private$provider,
               private$model,
-              result,
-              request_start
+              result
+            )
+            turn <- acc$add_turn(user_turn, result, duration, type = type)
+            record_chat_otel_duration(
+              private$provider,
+              private$model,
+              request_start,
+              result = result
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
-            turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
             record_chat_otel_span_status(chat_span)
 
@@ -1390,15 +1400,20 @@ Chat <- R6::R6Class(
               chat_span,
               private$provider,
               private$model,
-              result,
-              request_start,
-              error_type = error_type
+              result
             )
-            request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$complete_turn(result, type = type)
             if (controller$cancelled) {
               turn <- self$last_turn()
             }
+            record_chat_otel_duration(
+              private$provider,
+              private$model,
+              request_start,
+              error_type = error_type,
+              result = result
+            )
+            request_start <- NULL # duration recorded; skip in error handler and defer
             record_chat_otel_span_output(chat_span, turn)
             record_chat_otel_span_status(chat_span, error_type)
           } else {
@@ -1409,11 +1424,16 @@ Chat <- R6::R6Class(
               chat_span,
               private$provider,
               private$model,
-              result,
-              request_start
+              result
+            )
+            turn <- acc$add_turn(user_turn, result, duration, type = type)
+            record_chat_otel_duration(
+              private$provider,
+              private$model,
+              request_start,
+              result = result
             )
             request_start <- NULL # duration recorded; skip in error handler and defer
-            turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
             record_chat_otel_span_status(chat_span)
 

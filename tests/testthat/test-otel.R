@@ -563,7 +563,9 @@ test_that("duration is recorded once when parsing fails after the response", {
   })
 
   points <- otel_metric_points(recorded$metrics)
-  expect_length(points[["gen_ai.client.inference.duration"]], 1L)
+  duration <- points[["gen_ai.client.inference.duration"]]
+  expect_length(duration, 1L)
+  expect_equal(duration[[1L]]$attributes[["error.type"]], "simpleError")
   expect_equal(recorded$traces[["chat "]]$status, "error")
 })
 
