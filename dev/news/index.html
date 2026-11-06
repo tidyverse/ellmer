@@ -60,7 +60,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
-<ul><li>
+<ul><li>OpenTelemetry tracing now supports otelsdk 0.3.0. A chat span is now only marked as ok once the response has been parsed, so a response that fails to parse is reported as an error (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1217" class="external-link">#1217</a>).</li>
+<li>
 <code><a href="../reference/chat_anthropic.html">chat_anthropic()</a></code> and the other Claude providers now default <code>max_tokens</code> to 32,000, rather than 4096 (<a href="https://github.com/tidyverse/ellmer/issues/1150" class="external-link">#1150</a>).</li>
 <li>New <code><a href="../articles/otel.html">vignette("otel")</a></code> describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer’s spans join your own traces (<a href="https://github.com/schloerke" class="external-link">@schloerke</a>, <a href="https://github.com/tidyverse/ellmer/issues/1187" class="external-link">#1187</a>).</li>
 <li>
