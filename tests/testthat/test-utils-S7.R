@@ -24,8 +24,9 @@ test_that("prop_whole_decimal validates inputs", {
       package = NULL
     )
   }
-  # Kept out of the snapshot because it succeeds and prints the object via
-  # str(), whose spacing changed in R-devel (#1208)
+  # TODO: move back into the snapshot once S7 0.3.0 is on CRAN. It prints via
+  # S7's str() method, whose spacing only matches across R versions from that
+  # release (#1208).
   expect_equal(check_prop()(1.5)@prop, 1.5)
   expect_snapshot(error = TRUE, {
     check_prop()("x")
