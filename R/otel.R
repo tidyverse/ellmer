@@ -395,11 +395,11 @@ with_otel_record <- function(expr) {
   otelsdk::with_otel_record({
     otel_cache_tracer()
     value <- expr
-    # otelsdk (<= 0.2.4) only exports in-memory metrics on shutdown, which
-    # happens after they are collected. Shut down early so they are returned.
-    meter_provider <- otel::get_default_meter_provider()
-    meter_provider$flush()
-    meter_provider$shutdown()
+    # otelsdk only returns in-memory metrics once they have been exported,
+    # which would otherwise happen after they are collected, so flush early.
+    # Don't also shut down: with otelsdk >= 0.3.0 that exports a second time
+    # and duplicates every metric.
+    otel::get_default_meter_provider()$flush()
     value
   })
 }
@@ -507,9 +507,9 @@ record_chat_otel_span_status <- function(
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
   }
-  if (is.null(error_type)) {
-    span$set_status("ok")
-  } else {
+  # The ok status is set by record_chat_otel_span_output() once the response
+  # has been parsed; see the note there.
+  if (!is.null(error_type)) {
     span$set_status("error")
     span$set_attribute("error.type", error_type)
   }
@@ -694,6 +694,11 @@ record_chat_otel_span_output <- function(span, turn) {
   }
   if (!S7_inherits(turn, AssistantTurn)) {
     return()
+  }
+  # Set only once the response has been parsed into a turn: the SDK treats an
+  # ok status as final, so setting it earlier would mask a parse failure.
+  if (!is_partial_turn(turn)) {
+    span$set_status("ok")
   }
   # A partial turn only reaches here when the stream was cancelled; it reports
   # a `cancelled` finish reason, matching `interrupted` from
