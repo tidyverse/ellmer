@@ -357,6 +357,9 @@ test_that("can list models without credentials", {
   expect_equal(nrow(models_openrouter()), 5)
   expect_equal(state$request$url, "https://openrouter.ai/api/v1/models")
   expect_null(state$request$headers$Authorization)
+
+  models_openrouter(base_url = "https://example.com/api/v1")
+  expect_equal(state$request$url, "https://example.com/api/v1/models")
 })
 
 test_that("advertised prices convert to USD per million tokens", {
