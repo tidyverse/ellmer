@@ -13,6 +13,13 @@ test_that("can make simple streaming request", {
   expect_match(paste0(unlist(resp), collapse = ""), "2")
 })
 
+test_that("can list models", {
+  test_models(
+    \() models_list(chat_openrouter_test()),
+    has_max_context_length = TRUE
+  )
+})
+
 test_that("handles errors", {
   chat <- chat_openrouter_test(api_args = list(temperature = "hot"))
   expect_snapshot(error = TRUE, {

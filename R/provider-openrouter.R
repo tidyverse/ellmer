@@ -108,6 +108,23 @@ method(base_request, ProviderOpenRouter) <- function(provider) {
   req
 }
 
+# Unlike OpenAI, OpenRouter doesn't report `owned_by`
+method(models_list, ProviderOpenRouter) <- function(provider) {
+  req <- base_request(provider)
+  req <- req_url_path_append(req, "/models")
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+
+  df <- data.frame(
+    id = map_chr(json$data, "[[", "id"),
+    name = map_chr(json$data, "[[", "name"),
+    created_at = as.Date(.POSIXct(map_dbl(json$data, "[[", "created"))),
+    max_context_length = map_token_limit(json$data, "context_length")
+  )
+  df <- cbind(df, match_prices(provider@name, df$id))
+  df[order(-xtfrm(df$created_at)), ]
+}
+
 method(value_turn, ProviderOpenRouter) <- function(
   provider,
   model,

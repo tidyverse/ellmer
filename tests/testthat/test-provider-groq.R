@@ -1,5 +1,5 @@
 test_that("can list models", {
-  test_models(models_groq)
+  test_models(models_groq, has_max_context_length = TRUE)
 })
 
 # Common provider interface -----------------------------------------------
