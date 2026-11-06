@@ -7,6 +7,10 @@
   that fails to parse is reported as an error
   ([@thisisnic](https://github.com/thisisnic),
   [\#1217](https://github.com/tidyverse/ellmer/issues/1217)).
+- The `gen_ai.client.inference.duration` OpenTelemetry metric is now
+  recorded after the response has been parsed, so a response that fails
+  to parse is tagged with `error.type`, matching its chat span
+  ([\#1219](https://github.com/tidyverse/ellmer/issues/1219)).
 - [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
   and the other Claude providers now default `max_tokens` to 32,000,
   rather than 4096
