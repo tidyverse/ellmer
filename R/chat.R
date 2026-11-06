@@ -1156,7 +1156,7 @@ Chat <- R6::R6Class(
               turn <- self$last_turn()
             }
             record_chat_otel_span_output(chat_span, turn)
-            record_chat_otel_span_outcome(chat_span, error_type)
+            record_chat_otel_span_status(chat_span, error_type)
           } else {
             result <- resp_body_json(response)
             duration <- resp_timing(response)[["total"]] %||% NA_real_
@@ -1170,7 +1170,7 @@ Chat <- R6::R6Class(
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
-            record_chat_otel_span_outcome(chat_span)
+            record_chat_otel_span_status(chat_span)
 
             text <- turn@text
             if (!is.null(text)) {
@@ -1400,7 +1400,7 @@ Chat <- R6::R6Class(
               turn <- self$last_turn()
             }
             record_chat_otel_span_output(chat_span, turn)
-            record_chat_otel_span_outcome(chat_span, error_type)
+            record_chat_otel_span_status(chat_span, error_type)
           } else {
             response <- await(response)
             result <- resp_body_json(response)
@@ -1415,7 +1415,7 @@ Chat <- R6::R6Class(
             request_start <- NULL # duration recorded; skip in error handler and defer
             turn <- acc$add_turn(user_turn, result, duration, type = type)
             record_chat_otel_span_output(chat_span, turn)
-            record_chat_otel_span_outcome(chat_span)
+            record_chat_otel_span_status(chat_span)
 
             text <- turn@text
             if (!is.null(text)) {

@@ -440,7 +440,7 @@ elapsed_secs <- function(start) {
 # Records the metrics and span attributes of a completed model request. A
 # user-cancelled stream is still a completed request (tokens and response id
 # are known), but its duration metric carries `error_type = "cancelled"`.
-# The span status is set later by `record_chat_otel_span_outcome()`.
+# The span status is set later by `record_chat_otel_span_status()`.
 record_chat_otel_span_response <- function(
   span,
   provider,
@@ -513,7 +513,7 @@ record_chat_otel_span_response <- function(
 # been parsed: otelsdk (>= 0.3.0) treats an ok status as final, so setting it
 # earlier would hide a later failure. A cancelled stream is reported as an
 # error with `error.type = "cancelled"`, matching the duration metric.
-record_chat_otel_span_outcome <- function(span, error_type = NULL) {
+record_chat_otel_span_status <- function(span, error_type = NULL) {
   if (is.null(span) || !span_recording(span)) {
     return()
   }
