@@ -395,11 +395,11 @@ with_otel_record <- function(expr) {
   otelsdk::with_otel_record({
     otel_cache_tracer()
     value <- expr
-    # otelsdk (<= 0.2.4) only exports in-memory metrics on shutdown, which
-    # happens after they are collected. Shut down early so they are returned.
-    meter_provider <- otel::get_default_meter_provider()
-    meter_provider$flush()
-    meter_provider$shutdown()
+    # otelsdk only returns in-memory metrics once they have been exported,
+    # which would otherwise happen after they are collected, so flush early.
+    # Don't also shut down: with otelsdk >= 0.3.0 that exports a second time
+    # and duplicates every metric.
+    otel::get_default_meter_provider()$flush()
     value
   })
 }
@@ -437,11 +437,11 @@ elapsed_secs <- function(start) {
   as.numeric(Sys.time() - start, units = "secs")
 }
 
-# Records a completed model request. A user-cancelled stream is still a
-# completed request (tokens and response id are known), but is reported with
-# an error status and `error_type = "cancelled"` on the span and the duration
-# metric, matching the `error` finish reason set on the partial turn.
-record_chat_otel_span_status <- function(
+# Records the metrics and span attributes of a completed model request. A
+# user-cancelled stream is still a completed request (tokens and response id
+# are known), but its duration metric carries `error_type = "cancelled"`.
+# The span status is set later by `record_chat_otel_span_status()`.
+record_chat_otel_span_response <- function(
   span,
   provider,
   model,
@@ -506,6 +506,16 @@ record_chat_otel_span_status <- function(
   }
   if (reasoning > 0L) {
     span$set_attribute("gen_ai.usage.reasoning.output_tokens", reasoning)
+  }
+}
+
+# Sets the final status of a chat span. Call it last, once the response has
+# been parsed: otelsdk (>= 0.3.0) treats an ok status as final, so setting it
+# earlier would hide a later failure. A cancelled stream is reported as an
+# error with `error.type = "cancelled"`, matching the duration metric.
+record_chat_otel_span_status <- function(span, error_type = NULL) {
+  if (is.null(span) || !span_recording(span)) {
+    return()
   }
   if (is.null(error_type)) {
     span$set_status("ok")
