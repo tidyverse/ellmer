@@ -68,23 +68,24 @@ provider_print <- function(x, hide = character()) {
   invisible(x)
 }
 
-# Mirrors S7's str_space() and str_function(). R 4.7.0 changed str() to
-# print the space after a label itself instead of leaving it to the nested
-# call, so print it ourselves, and on older versions also print it for the
-# types that never had one, so the output matches on all versions. S7 objects
-# print their own space.
+# Mirrors S7's str_inline(): R 4.7.0 moved the space after a label from the
+# nested str() call to the caller, so print it here on every version.
 str_prop <- function(x) {
   if (is.function(x)) {
     attr(x, "srcref") <- NULL
   }
-  if (
-    !inherits(x, c("S7_object", "S7_class")) &&
-      (getRversion() >= "4.7.0" ||
-        identical(class(x), "function") ||
-        is.environment(x) ||
-        is.data.frame(x) ||
-        (is.list(x) && length(x) > 0))
-  ) {
+  needs_space <- if (getRversion() >= "4.7.0") {
+    TRUE
+  } else if (is.environment(x)) {
+    !inherits(x, "S7_object")
+  } else if (is.object(x)) {
+    is.data.frame(x)
+  } else if (is.list(x)) {
+    length(x) > 0
+  } else {
+    is.function(x)
+  }
+  if (needs_space) {
     cat(" ")
   }
   utils::str(x, give.attr = FALSE, nest.lev = 1, indent.str = "  ..")
