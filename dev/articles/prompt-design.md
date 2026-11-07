@@ -25,7 +25,7 @@ models:
 
 - [Claude](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
 - [OpenAI](https://developers.openai.com/api/docs/guides/prompt-engineering)
-- [Gemini](https://ai.google.dev/gemini-api/docs/prompting-intro)
+- [Gemini](https://aistudio.google.com/docs/prompting-strategies)
 
 If you have a claude account, you can use its
 [prompt-generator](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/prompt-generator).

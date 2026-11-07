@@ -2,48 +2,6 @@
 
 ## ellmer (development version)
 
-- OpenTelemetry tracing now supports otelsdk 0.3.0. A chat span is now
-  only marked as ok once the response has been parsed, so a response
-  that fails to parse is reported as an error
-  ([@thisisnic](https://github.com/thisisnic),
-  [\#1217](https://github.com/tidyverse/ellmer/issues/1217)).
-- The `gen_ai.client.inference.duration` OpenTelemetry metric is now
-  recorded after the response has been parsed, so a response that fails
-  to parse is tagged with `error.type`, matching its chat span
-  ([\#1219](https://github.com/tidyverse/ellmer/issues/1219)).
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  and the other Claude providers now default `max_tokens` to 32,000,
-  rather than 4096
-  ([\#1150](https://github.com/tidyverse/ellmer/issues/1150)).
-- New
-  [`vignette("otel")`](https://ellmer.tidyverse.org/dev/articles/otel.md)
-  describes how to turn on OpenTelemetry tracing and metrics, what
-  ellmer records, and how ellmer’s spans join your own traces
-  ([@schloerke](https://github.com/schloerke),
-  [\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  and
-  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
-  now report the correct input and cache token counts when a streamed
-  response uses server tools such as web search, so `$get_tokens()` and
-  `$get_cost()` match the same request without streaming
-  ([@pcbeingused333](https://github.com/pcbeingused333),
-  [\#1194](https://github.com/tidyverse/ellmer/issues/1194)).
-- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
-  no longer errors when Claude returns a `redacted_thinking` block
-  ([@pcbeingused333](https://github.com/pcbeingused333),
-  [\#1195](https://github.com/tidyverse/ellmer/issues/1195)).
-- [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  and
-  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  now report `finish_reason = "tool_use"` rather than `"success"` for
-  turns that call a tool, matching the other providers.
-  [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  also reports the `LANGUAGE`, `IMAGE_SAFETY`,
-  `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as
-  `"content_filter"`
-  ([@pcbeingused333](https://github.com/pcbeingused333),
-  [\#1199](https://github.com/tidyverse/ellmer/issues/1199)).
 - Default models have been updated for a number of providers
   ([@thisisnic](https://github.com/thisisnic),
   [\#1176](https://github.com/tidyverse/ellmer/issues/1176)):
@@ -65,168 +23,124 @@
     now uses `claude-sonnet-5-5`.
   - [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
     now uses `claude-sonnet-5-5`.
-- [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
-  uses OpenRouter’s reported request cost when available. If no valid
-  charge is reported, it estimates from advertised token rates when
-  usage data allows; otherwise the cost is unknown. With your own
-  provider key configured through OpenRouter, the reported amount is
-  OpenRouter’s charge, and the provider may bill you separately. The
-  now-unused static OpenRouter prices have also been removed from the
-  pricing snapshot
-  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
-- When OpenRouter doesn’t report a charge, the missing cost is estimated
-  from the rates the model advertises on OpenRouter’s public `/models`
-  endpoint. The rate table is fetched lazily at most once per R session
-  — failed fetches included — and reused for every later turn, so
-  estimates can be stale
-  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+- ellmer now records OpenTelemetry metrics following the GenAI semantic
+  conventions whenever a meter is active, and the `chat` and
+  `invoke_agent` spans record additional attributes including request
+  parameters, token usage, finish reasons, and timing. See
+  [`vignette("otel")`](https://ellmer.tidyverse.org/dev/articles/otel.md)
+  for the full list
+  ([\#1142](https://github.com/tidyverse/ellmer/issues/1142),
+  [\#1143](https://github.com/tidyverse/ellmer/issues/1143),
+  [\#1147](https://github.com/tidyverse/ellmer/issues/1147),
+  [\#1148](https://github.com/tidyverse/ellmer/issues/1148),
+  [\#1174](https://github.com/tidyverse/ellmer/issues/1174)).
 - New
-  [`models_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
-  lists the models available on OpenRouter, along with their advertised
-  `input`, `output`, and `cached_input` prices in USD per million
-  tokens. No credentials are required
-  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
-- The OpenTelemetry `gen_ai.input.messages` attribute is no longer
-  dropped when a tool result returns a `Content` object, such as an
-  image ([@taekop](https://github.com/taekop),
+  [`vignette("otel")`](https://ellmer.tidyverse.org/dev/articles/otel.md)
+  describes how to turn on OpenTelemetry tracing and metrics, what
+  ellmer records, and how ellmer’s spans join your own traces
+  ([\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
+- ellmer now supports otelsdk 0.3.0, and OpenTelemetry spans and metrics
+  now record an error status and `error.type` when a request is
+  cancelled or interrupted or its response fails to parse
+  ([\#1175](https://github.com/tidyverse/ellmer/issues/1175),
+  [\#1217](https://github.com/tidyverse/ellmer/issues/1217),
+  [\#1219](https://github.com/tidyverse/ellmer/issues/1219)).
+- The OpenTelemetry `gen_ai.input.messages` attribute now includes tool
+  results that return a `Content` object, such as an image
+  ([@taekop](https://github.com/taekop),
   [\#1145](https://github.com/tidyverse/ellmer/issues/1145)).
-- OpenAI-compatible providers, including
-  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md),
-  [`chat_lmstudio()`](https://ellmer.tidyverse.org/dev/reference/chat_lmstudio.md),
-  [`chat_databricks()`](https://ellmer.tidyverse.org/dev/reference/chat_databricks.md),
-  [`chat_mistral()`](https://ellmer.tidyverse.org/dev/reference/chat_mistral.md),
-  [`chat_deepseek()`](https://ellmer.tidyverse.org/dev/reference/chat_deepseek.md),
-  [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md),
+- [`batch_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
   and
-  [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md),
-  now send standard JSON Schema instead of OpenAI’s strict-mode schema,
-  so `required = FALSE` tool arguments stay optional.
-  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md),
-  [`chat_azure_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_azure_openai.md),
-  Groq’s structured outputs, and
-  [`chat_posit()`](https://ellmer.tidyverse.org/dev/reference/chat_posit.md)
-  models whose id starts with `openai/` keep strict mode.
-  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
-  [`chat_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md),
-  [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
-  [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
-  and
-  [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md)
-  gain a `strict` argument to opt back in
-  ([\#1135](https://github.com/tidyverse/ellmer/issues/1135)).
-- `Chat$get_tokens()` no longer errors when the conversation ends with a
-  user turn that has no completed assistant response yet, or with a
-  partial (interrupted) assistant turn
+  [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
+  now warn when `include_tokens` or `include_cost` is ignored because
+  the result isn’t a data frame ([@taekop](https://github.com/taekop),
+  [\#1129](https://github.com/tidyverse/ellmer/issues/1129)).
+- `Chat$get_tokens()` now works when the conversation ends with a user
+  turn or a partial assistant turn
   ([@taekop](https://github.com/taekop),
   [\#1131](https://github.com/tidyverse/ellmer/issues/1131)).
+- `Chat$stream()` now yields chunks as they arrive rather than in large
+  bursts, so streaming from slow endpoints is smoother
+  ([@hectorgray](https://github.com/hectorgray),
+  [\#1122](https://github.com/tidyverse/ellmer/issues/1122)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and other Claude providers now default `max_tokens` to 32,000
+  ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1150](https://github.com/tidyverse/ellmer/issues/1150)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  now report correct input and cache token counts when a streamed
+  response uses server tools such as web search
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1194](https://github.com/tidyverse/ellmer/issues/1194)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/dev/reference/chat_anthropic.md)
+  now handles `redacted_thinking` blocks
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1195](https://github.com/tidyverse/ellmer/issues/1195)).
 - [`chat_cloudflare()`](https://ellmer.tidyverse.org/dev/reference/chat_cloudflare.md)
-  now uses its `account` argument to build the API URL. Previously it
-  always read `CLOUDFLARE_ACCOUNT_ID`, ignoring any `account` you passed
-  in. It also no longer errors when streaming a response that is only a
-  number, which Cloudflare sends as a JSON number instead of a string
+  now respects its `account` argument and handles streamed responses
+  that contain only a number
   ([\#1164](https://github.com/tidyverse/ellmer/issues/1164)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
-  now uses Google’s Interactions API. It now accepts remote images via
+  now uses Google’s Interactions API and supports
   [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md).
-  `frequency_penalty`, `presence_penalty`, `log_probs` and
-  `reasoning_tokens` are no longer supported and warn. Structured output
-  no longer works with Gemini 2.5 models, so upgrade to Gemini 3 or
-  newer if you use `chat_structured()`
+  `params(frequency_penalty)`, `params(presence_penalty)`,
+  `params(log_probs)`, and `params(reasoning_tokens)` are no longer
+  supported and warn. Structured output no longer works with Gemini 2.5
+  models, so upgrade to Gemini 3 or newer if you use `chat_structured()`
   ([@thisisnic](https://github.com/thisisnic),
   [\#1155](https://github.com/tidyverse/ellmer/issues/1155)).
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)’s
-  browser-based OAuth flow now uses a verified Google OAuth app, so you
-  no longer see the “unverified app” warning. It also works on hosted
-  sessions like Posit Workbench and Google Colab, and
+  browser-based OAuth flow now uses a verified Google OAuth app and
+  works in hosted sessions such as Posit Workbench and Google Colab.
   [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   no longer falls back to it
   ([@thisisnic](https://github.com/thisisnic),
   [\#1156](https://github.com/tidyverse/ellmer/issues/1156)).
+- [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  and
+  [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
+  now report `finish_reason = "tool_use"` for turns that call a tool,
+  matching other providers.
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
+  also reports the `LANGUAGE`, `IMAGE_SAFETY`,
+  `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as
+  `"content_filter"`
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1199](https://github.com/tidyverse/ellmer/issues/1199)).
 - [`chat_openai()`](https://ellmer.tidyverse.org/dev/reference/chat_openai.md)
-  now sends `type = "message"` on every input item to the Responses API,
-  so OpenAI-compatible servers that require it (e.g. llama.cpp) no
-  longer reject replayed assistant turns
-  ([@taekop](https://github.com/taekop),
+  now sends `type = "message"` on every Responses API input item, so
+  OpenAI-compatible servers such as llama.cpp accept replayed assistant
+  turns ([@taekop](https://github.com/taekop),
   [\#1153](https://github.com/tidyverse/ellmer/issues/1153)).
+- [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
+  and the providers built on it now send standard JSON Schema for tool
+  definitions, so arguments with `required = FALSE` stay optional.
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md),
+  [`chat_huggingface()`](https://ellmer.tidyverse.org/dev/reference/chat_huggingface.md),
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md),
+  [`chat_portkey()`](https://ellmer.tidyverse.org/dev/reference/chat_portkey.md),
+  and
+  [`chat_vllm()`](https://ellmer.tidyverse.org/dev/reference/chat_vllm.md)
+  gain a `strict` argument to opt back in to OpenAI’s strict mode
+  ([\#1135](https://github.com/tidyverse/ellmer/issues/1135)).
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  now uses the cost reported by OpenRouter for each request, falling
+  back to an estimate from OpenRouter’s advertised model rates when no
+  cost is reported
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+- [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
+  now forwards `detail` to OpenAI and OpenAI-compatible providers
+  ([@kbenoit](https://github.com/kbenoit),
+  [\#1132](https://github.com/tidyverse/ellmer/issues/1132)).
 - [`live_browser()`](https://ellmer.tidyverse.org/dev/reference/live_console.md)
   works again with shinychat \>= 0.5.0
   ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).
-- Streamed responses now record the time to first chunk (in seconds) as
-  the `gen_ai.response.time_to_first_chunk` attribute on the
-  OpenTelemetry `chat` span ([@schloerke](https://github.com/schloerke),
-  [\#1142](https://github.com/tidyverse/ellmer/issues/1142)).
-- ellmer now records OpenTelemetry metrics following the GenAI semantic
-  conventions whenever a meter is active:
-  `gen_ai.client.inference.duration`,
-  `gen_ai.client.inference.time_to_first_chunk`,
-  `gen_ai.client.inference.operation.input_tokens`,
-  `gen_ai.client.inference.operation.output_tokens`,
-  `gen_ai.execute_tool.duration`, `gen_ai.invoke_agent.duration`,
-  `gen_ai.invoke_agent.inference_calls`, and
-  `gen_ai.invoke_agent.tool_calls`
-  ([@schloerke](https://github.com/schloerke),
-  [\#1143](https://github.com/tidyverse/ellmer/issues/1143)).
-- The OpenTelemetry `invoke_agent` span now records total token usage
-  across the tool loop, along with its duration, inference call count,
-  and tool call count as `gen_ai.invoke_agent.*` attributes. Both it and
-  the `chat` span record
-  [`params()`](https://ellmer.tidyverse.org/dev/reference/params.md) as
-  `gen_ai.request.*` attributes, and `gen_ai.provider.name` now uses the
-  semantic convention identifiers (e.g. `aws.bedrock`, `gcp.gemini`) for
-  built-in providers ([@schloerke](https://github.com/schloerke),
-  [\#1143](https://github.com/tidyverse/ellmer/issues/1143)).
-- The OpenTelemetry `chat` span now records `gen_ai.request.stream` for
-  streamed requests, `gen_ai.response.finish_reasons`, and
-  `gen_ai.usage.cache_read.input_tokens`. Failed model requests now set
-  an error status and `error.type` on the `chat` and `invoke_agent`
-  spans and on the `gen_ai.client.inference.duration` and
-  `gen_ai.invoke_agent.duration` metrics
-  ([@schloerke](https://github.com/schloerke),
-  [\#1147](https://github.com/tidyverse/ellmer/issues/1147)).
-- The OpenTelemetry `chat` span now records `server.address` and
-  `server.port`, `gen_ai.output.type` for structured output requests,
-  `gen_ai.request.reasoning.level` from `params(reasoning_effort)`
-  (`gen_ai.request.*` attributes now omit parameters the provider
-  ignores, and the tool definitions include the private tool Claude and
-  Bedrock use for tool-based structured output),
-  `gen_ai.usage.reasoning.output_tokens` for providers that report it
-  (currently OpenAI), and, when
-  `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` is set,
-  `gen_ai.tool.definitions` ([@schloerke](https://github.com/schloerke),
-  [\#1148](https://github.com/tidyverse/ellmer/issues/1148)).
-- ellmer now also records the GenAI token usage counters
-  (`gen_ai.client.inference.usage.input_tokens`,
-  `gen_ai.client.inference.usage.output_tokens`,
-  `gen_ai.client.inference.usage.cache_read.input_tokens`, and
-  `gen_ai.client.inference.usage.reasoning.output_tokens`) and the
-  `gen_ai.client.inference.time_per_output_chunk` histogram for streamed
-  responses ([@schloerke](https://github.com/schloerke),
-  [\#1174](https://github.com/tidyverse/ellmer/issues/1174)).
-- Requests that don’t complete now set an error status on the
-  OpenTelemetry `chat`, `invoke_agent`, and `execute_tool` spans and on
-  the `gen_ai.client.inference.duration`,
-  `gen_ai.invoke_agent.duration`, and `gen_ai.execute_tool.duration`
-  metrics, with `error.type = "cancelled"` for streams cancelled through
-  a
-  [`stream_controller()`](https://ellmer.tidyverse.org/dev/reference/stream_controller.md)
-  and `error.type = "interrupted"` for requests unwound by, e.g., a
-  keyboard interrupt. `gen_ai.response.finish_reasons` reports the same
-  `cancelled` or `interrupted` value
-  ([@schloerke](https://github.com/schloerke),
-  [\#1175](https://github.com/tidyverse/ellmer/issues/1175)).
-- [`parallel_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/parallel_chat.md)
-  and
-  [`batch_chat_structured()`](https://ellmer.tidyverse.org/dev/reference/batch_chat.md)
-  now warn instead of silently ignoring `include_tokens` and
-  `include_cost` when the result isn’t a data frame, e.g. because `type`
-  is a top-level
-  [`type_array()`](https://ellmer.tidyverse.org/dev/reference/type_boolean.md)
-  or `convert = FALSE` ([@taekop](https://github.com/taekop),
-  [\#1129](https://github.com/tidyverse/ellmer/issues/1129)).
-- [`content_image_url()`](https://ellmer.tidyverse.org/dev/reference/content_image_url.md)
-  now forwards `detail` to OpenAI and OpenAI-compatible providers,
-  including for data URLs ([@kbenoit](https://github.com/kbenoit),
-  [\#1132](https://github.com/tidyverse/ellmer/issues/1132)).
+- New
+  [`models_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  lists the models available on OpenRouter along with their prices
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
 
 ## ellmer 0.5.0
 

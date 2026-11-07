@@ -116,7 +116,7 @@ models_google_vertex(
 
   Named list of arbitrary extra arguments appended to the body of every
   chat API call. `chat_google_gemini()` uses the [Interactions
-  API](https://ai.google.dev/gemini-api/docs/interactions-overview) and
+  API](https://aistudio.google.com/docs/interactions-overview) and
   `chat_google_vertex()` the [generateContent
   API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference),
   so use the field names from the matching request body.

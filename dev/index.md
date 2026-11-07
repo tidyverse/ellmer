@@ -104,7 +104,7 @@ freedom, so we have a few recommendations to help you get started:
 
 - [`chat_google_gemini()`](https://ellmer.tidyverse.org/dev/reference/chat_google_gemini.md)
   is a strong model with a free tier (with the downside that [your data
-  is used](https://ai.google.dev/gemini-api/terms#unpaid-services) to
+  is used](https://aistudio.google.com/docs/terms#unpaid-services) to
   improve the model), making it a great place to start if you don’t want
   to spend any money.
 
@@ -283,4 +283,4 @@ ellmer comes with a bunch of vignettes to help you learn more:
 
 ## Privacy
 
-[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+[Privacy policy](https://tidyverse.org/google_privacy_policy/)
