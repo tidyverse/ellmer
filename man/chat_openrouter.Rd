@@ -62,6 +62,19 @@ Sign up at \url{https://openrouter.ai}.
 Support for features depends on the underlying model that you use; see
 \url{https://openrouter.ai/models} for details.
 }
+\section{Cost reporting}{
+
+The cost of each turn is the charge OpenRouter reports in its \code{usage.cost}
+response field, not an estimate computed from token rates. See the
+\href{https://openrouter.ai/docs/cookbook/administration/usage-accounting}{OpenRouter usage accounting documentation}.
+If OpenRouter doesn't report a valid cost, the turn's cost is \code{NA}, i.e. unknown.
+Costs surface in \code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and
+\code{get_tokens()}. An unknown turn cost also makes the cumulative chat cost and
+that model's session cost unknown; known individual turn costs remain
+available. With your own provider key, the reported charge is what
+OpenRouter bills you, which may not match the upstream provider's bill.
+}
+
 \examples{
 \dontrun{
 chat <- chat_openrouter()
