@@ -52,11 +52,6 @@
       ! <class> object properties are invalid:
       - @prop must be a whole number, not a double vector.
     Code
-      check_prop()(1.5)
-    Output
-      <class>
-       @ prop: num 1.5
-    Code
       check_prop(min = 1)(0)
     Condition
       Error:

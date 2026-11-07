@@ -1,6 +1,8 @@
 # ellmer (development version)
 
 * `chat_aws_bedrock()` now includes cache-write tokens (`cacheWriteInputTokens`) in the input token count, matching `chat_anthropic()`, so `$get_tokens()` and `$get_cost()` no longer under-report requests that write to the cache (@pcbeingused333).
+* OpenTelemetry tracing now supports otelsdk 0.3.0. A chat span is now only marked as ok once the response has been parsed, so a response that fails to parse is reported as an error (@thisisnic, #1217).
+* The `gen_ai.client.inference.duration` OpenTelemetry metric is now recorded after the response has been parsed, so a response that fails to parse is tagged with `error.type`, matching its chat span (#1219).
 * `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
 * New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
 * `chat_anthropic()` and `chat_aws_bedrock()` now report the correct input and cache token counts when a streamed response uses server tools such as web search, so `$get_tokens()` and `$get_cost()` match the same request without streaming (@pcbeingused333, #1194).
