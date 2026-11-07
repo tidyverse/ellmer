@@ -13,7 +13,7 @@ responses with citations to sources. The model automatically decides when
 incorporated into the response with grounding metadata including source
 URLs and titles.
 
-Learn more in \url{https://ai.google.dev/gemini-api/docs/google-search}.
+Learn more in \url{https://aistudio.google.com/docs/google-search}.
 }
 \examples{
 \dontrun{

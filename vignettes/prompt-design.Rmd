@@ -26,7 +26,7 @@ As well as learning general prompt design skills, it's also a good idea to read 
 
 * [Claude](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview)
 * [OpenAI](https://developers.openai.com/api/docs/guides/prompt-engineering)
-* [Gemini](https://ai.google.dev/gemini-api/docs/prompting-intro)
+* [Gemini](https://aistudio.google.com/docs/prompting-strategies)
 
 If you have a claude account, you can use its [prompt-generator](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/prompt-generator). It's specifically tailored for Claude, but I suspect it will help you with many other LLMs, or at least give you some ideas as to what else to include in your prompt.
 
