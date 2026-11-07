@@ -24,3 +24,11 @@
           "message": "boom"
       }
 
+# model listing fails normally on request errors
+
+    Code
+      models_openrouter()
+    Condition
+      Error in `req_perform()`:
+      ! Failed to connect to OpenRouter
+

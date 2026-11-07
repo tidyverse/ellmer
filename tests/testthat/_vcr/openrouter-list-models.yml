@@ -1,0 +1,45 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://openrouter.ai/api/v1/models
+  response:
+    status: 200
+    headers:
+      date: Tue, 20 Oct 2026 14:11:43 GMT
+      content-type: application/json
+      cf-cache-status: HIT
+      access-control-allow-origin: '*'
+      age: '14'
+      cache-control: public, max-age=120, stale-while-revalidate=3600, stale-if-error=3600
+      vary: Host, User-Agent, Originator, Anthropic-Version
+      access-control-expose-headers: X-Generation-Id,X-Provider-Name,request-id,cf-ray
+      set-cookie: __cf_bm=ApA2sTeQwTf9UUmJZhxL3R0SJ1ue8Yw1qzR4ag4bVWI-1792505503.584989-1.0.1.1-Obf.nwlEGqSWO87sOBLxeNieZoQXFluPqLYeOVVwtfosKwElb_pjm6wNbiPaWWdGyd28.GDPyqR_UqNglFeLMxhAD2e4r2OmmVcg5SS4nsI7PF_ic_klLufQaLgjPCDn;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=openrouter.ai; Expires=Tue,
+        20 Oct 2026 14:41:43 GMT
+      permissions-policy: payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      referrer-policy: no-referrer, strict-origin-when-cross-origin
+      x-content-type-options: nosniff
+      content-encoding: gzip
+      server: cloudflare
+      cf-ray: a4d89d05683db543-ATL
+    body:
+      string: '{"data":[{"id":"minimax/minimax-m3.1-flash:free","canonical_slug":"minimax/minimax-m3.1-flash-20261019","hugging_face_id":null,"name":"MiniMax:
+        MiniMax M3.1 Flash (free)","created":1792379569,"description":"MiniMax-M3.1-Flash
+        is a multimodal model from MiniMax. Compared with M3, it delivers significant
+        improvements across multiple benchmarks, particularly in complex agentic tasks,
+        coding, and cybersecurity. It is built for complex,...","context_length":1000000,"architecture":{"modality":"text+image+video->text","input_modalities":["text","image","video"],"output_modalities":["text"],"tokenizer":"Other","instruct_type":null},"pricing":{"prompt":"0","completion":"0"},"top_provider":{"context_length":1000000,"max_completion_tokens":524288,"is_moderated":false},"per_request_limits":null,"supported_parameters":["include_reasoning","max_tokens","reasoning","reasoning_effort","response_format","temperature","tool_choice","tools","top_p"],"default_parameters":{},"supported_voices":null,"knowledge_cutoff":null,"expiration_date":null,"links":{"details":"/api/v1/models/minimax/minimax-m3.1-flash-20261019/endpoints"},"benchmarks":{"design_arena":[],"artificial_analysis":{"intelligence_index":42.7,"coding_index":null,"agentic_index":null}},"reasoning":{"mandatory":true,"supported_efforts":["max","xhigh","high","medium","low"],"default_effort":"max"}},{"id":"deepseek/deepseek-v4.1-flash-1017","canonical_slug":"deepseek/deepseek-v4.1-flash-20261017","hugging_face_id":"deepseek-ai/DeepSeek-V4.1-Flash-1017","name":"DeepSeek:
+        DeepSeek V4.1 Flash 1017","created":1792225624,"description":"DeepSeek V4.1
+        Flash 1017 is the October 17, 2026 snapshot of DeepSeek V4.1 Flash, served
+        by DeepSeek under the `deepseek-flash` API model name. V4.1 Flash is a sparse
+        mixture-of-experts model...","context_length":1048576,"architecture":{"modality":"text+image->text","input_modalities":["text","image"],"output_modalities":["text"],"tokenizer":"DeepSeek","instruct_type":null},"pricing":{"prompt":"0.00000015","completion":"0.0000006","input_cache_read":"0.000000003","overrides":[{"utc_days":["saturday","sunday"],"prompt":"0.00000015","completion":"0.0000006","input_cache_read":"0.000000003"},{"utc_days":["monday","tuesday","wednesday","thursday","friday"],"utc_start":0,"utc_end":100,"prompt":"0.00000015","completion":"0.0000006","input_cache_read":"0.000000003"},{"utc_days":["monday","tuesday","wednesday","thursday","friday"],"utc_start":100,"utc_end":400,"prompt":"0.0000003","completion":"0.0000012","input_cache_read":"0.000000006"},{"utc_days":["monday","tuesday","wednesday","thursday","friday"],"utc_start":400,"utc_end":600,"prompt":"0.00000015","completion":"0.0000006","input_cache_read":"0.000000003"},{"utc_days":["monday","tuesday","wednesday","thursday","friday"],"utc_start":600,"utc_end":1000,"prompt":"0.0000003","completion":"0.0000012","input_cache_read":"0.000000006"},{"utc_days":["monday","tuesday","wednesday","thursday","friday"],"utc_start":1000,"utc_end":0,"prompt":"0.00000015","completion":"0.0000006","input_cache_read":"0.000000003"}]},"top_provider":{"context_length":1048576,"max_completion_tokens":393216,"is_moderated":false},"per_request_limits":null,"supported_parameters":["frequency_penalty","include_reasoning","logit_bias","logprobs","max_completion_tokens","max_tokens","min_p","parallel_tool_calls","presence_penalty","reasoning","reasoning_effort","repetition_penalty","response_format","seed","stop","structured_outputs","temperature","tool_choice","tools","top_k","top_logprobs","top_p"],"default_parameters":{},"supported_voices":null,"knowledge_cutoff":null,"expiration_date":null,"links":{"details":"/api/v1/models/deepseek/deepseek-v4.1-flash-20261017/endpoints"},"benchmarks":{"design_arena":[{"arena":"agents","category":"spreadsheet","elo":1164,"win_rate":48,"rank":9},{"arena":"models","category":"3d","elo":1363,"win_rate":60.4,"rank":9},{"arena":"models","category":"codecategories","elo":1335,"win_rate":58.9,"rank":8},{"arena":"models","category":"gamedev","elo":1374,"win_rate":63.5,"rank":6},{"arena":"models","category":"uicomponent","elo":1310,"win_rate":55.5,"rank":16},{"arena":"models","category":"website","elo":1310,"win_rate":56.2,"rank":11}],"artificial_analysis":{"intelligence_index":39.5,"coding_index":null,"agentic_index":null}},"reasoning":{"mandatory":false,"default_enabled":true,"supported_efforts":["max","high","low","none"],"default_effort":"high"}},{"id":"typesafe/jev-router","canonical_slug":"typesafe/jev-router","hugging_face_id":null,"name":"TypeSafe:
+        Jev Router","created":1790363560,"description":"Jev Router picks the best
+        model and reasoning effort for each request, balancing quality, speed, and
+        cost. It runs on [Jev](https://openrouter.ai/~typesafe/jev-latest), TypeSafe''s
+        first System One model, and adapts as your...","context_length":1000000,"architecture":{"modality":"text+image+file+audio+video->text","input_modalities":["audio","file","image","text","video"],"output_modalities":["text"],"tokenizer":"Router","instruct_type":null},"pricing":{"prompt":"-1","completion":"-1"},"top_provider":{"context_length":null,"max_completion_tokens":null,"is_moderated":false},"per_request_limits":null,"supported_parameters":["frequency_penalty","include_reasoning","logit_bias","logprobs","max_completion_tokens","max_tokens","min_p","parallel_tool_calls","presence_penalty","reasoning","reasoning_effort","repetition_penalty","response_format","seed","stop","structured_outputs","temperature","tool_choice","tools","top_a","top_k","top_logprobs","top_p","verbosity"],"default_parameters":{},"supported_voices":null,"knowledge_cutoff":null,"expiration_date":null,"links":{"details":"/api/v1/models/typesafe/jev-router/endpoints"}},{"id":"moondream/moondream3-preview","canonical_slug":"moondream/moondream3-preview-20261013","hugging_face_id":"moondream/moondream3-preview","name":"Moondream:
+        Moondream 3 Preview","created":1792102385,"description":"Moondream 3 Preview
+        is a vision-language model from Moondream with 9B total parameters and 2B
+        active (mixture-of-experts). It handles visual question answering, captioning,
+        OCR, and visual reasoning over images, with...","context_length":32000,"architecture":{"modality":"text+image->text","input_modalities":["text","image"],"output_modalities":["text"],"tokenizer":"Other","instruct_type":null},"pricing":{"prompt":"0.0000003","completion":"0.0000025"},"top_provider":{"context_length":32000,"max_completion_tokens":4096,"is_moderated":false},"per_request_limits":null,"supported_parameters":["include_reasoning","max_completion_tokens","max_tokens","reasoning","temperature","top_p"],"default_parameters":{"temperature":0.2,"top_p":0.9},"supported_voices":null,"knowledge_cutoff":null,"expiration_date":null,"links":{"details":"/api/v1/models/moondream/moondream3-preview-20261013/endpoints"},"reasoning":{"mandatory":false,"default_enabled":false}}]}'
+  recorded_at: 2026-10-20 14:11:43
+recorded_with: VCR-vcr/2.1.0

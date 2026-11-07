@@ -2,6 +2,7 @@
 % Please edit documentation in R/provider-openrouter.R
 \name{chat_openrouter}
 \alias{chat_openrouter}
+\alias{models_openrouter}
 \title{Chat with one of the many models hosted on OpenRouter}
 \usage{
 chat_openrouter(
@@ -15,6 +16,8 @@ chat_openrouter(
   api_headers = character(),
   strict = FALSE
 )
+
+models_openrouter(base_url = "https://openrouter.ai/api/v1")
 }
 \arguments{
 \item{system_prompt}{A system prompt to set the behavior of the assistant.}
@@ -50,9 +53,19 @@ to every chat API call.}
 
 \item{strict}{If \code{TRUE}, use OpenAI's strict mode for tool definitions and
 structured output. Only set this if the endpoint and model support it.}
+
+\item{base_url}{The base URL of the OpenRouter API. The \verb{/models}
+endpoint used by \code{models_openrouter()} is public, so no credentials
+are required.}
 }
 \value{
-A \link{Chat} object.
+\code{chat_openrouter()} returns a \link{Chat} object. \code{models_openrouter()}
+returns a data frame with one row per model, with its \code{id}, \code{created_at},
+human-readable \code{name}, and \code{context_length}, plus the \code{cached_input},
+\code{input}, and \code{output} prices OpenRouter advertises, in US dollars per
+million tokens. An \code{NA} price means that specific rate is unknown, e.g.
+because the model's cost is set by the underlying provider at request
+time; genuinely free models report \code{0}.
 }
 \description{
 \ifelse{html}{\figure{support-community.svg}{options: alt='[Community supported provider]'}}{\strong{[Community supported provider]}}
@@ -60,19 +73,25 @@ A \link{Chat} object.
 Sign up at \url{https://openrouter.ai}.
 
 Support for features depends on the underlying model that you use; see
-\url{https://openrouter.ai/models} for details.
+\url{https://openrouter.ai/models} for details. Use \code{\link[=models_openrouter]{models_openrouter()}}
+to list the available models along with their advertised token prices.
 }
 \section{Cost reporting}{
 
-The cost of each turn is the charge OpenRouter reports in its \code{usage.cost}
-response field, not an estimate computed from token rates. See the
-\href{https://openrouter.ai/docs/cookbook/administration/usage-accounting}{OpenRouter usage accounting documentation}.
-If OpenRouter doesn't report a valid cost, the turn's cost is \code{NA}, i.e. unknown.
-Costs surface in \code{\link[=token_usage]{token_usage()}} and the \code{Chat} methods \code{get_cost()} and
-\code{get_tokens()}. An unknown turn cost also makes the cumulative chat cost and
-that model's session cost unknown; known individual turn costs remain
-available. With your own provider key, the reported charge is what
-OpenRouter bills you, which may not match the upstream provider's bill.
+OpenRouter's reported request cost is used when available, including zero.
+If no valid charge is reported, ellmer estimates from advertised token
+rates when both prompt and completion counts and the required rates are
+available. Otherwise, the cost is unknown (\code{NA}), not zero.
+
+Estimates cover token rates only and may differ from the final routed
+charge. Rates are cached for the session and may become stale. The first
+fallback lookup is synchronous and may pause even an asynchronous chat. See
+the \href{https://openrouter.ai/docs/cookbook/administration/usage-accounting}{OpenRouter usage accounting documentation}.
+
+An unknown turn cost makes cumulative chat and model totals unknown, while
+known individual turn costs remain available. With a provider key configured
+in OpenRouter (BYOK), the reported cost is OpenRouter's charge; the provider
+may bill you separately.
 }
 
 \examples{
