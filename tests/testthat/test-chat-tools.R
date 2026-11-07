@@ -975,6 +975,42 @@ test_that("normalize_tool_result handles different return types", {
   expect_snapshot(normalize_tool_result(list(a = 1, b = 2)))
 })
 
+test_that("new_tool_result() collapses a multi-element ContentToolResult value", {
+  request <- ContentToolRequest("id", "tool", list())
+
+  result <- new_tool_result(
+    request,
+    ContentToolResult(value = c("line one", "line two"))
+  )
+  expect_equal(result@value, "line one\nline two")
+  expect_identical(result@request, request)
+
+  # Strings, Content and errors are left alone
+  expect_equal(
+    new_tool_result(request, ContentToolResult(value = "ok"))@value,
+    "ok"
+  )
+  content <- list(ContentText("a"), ContentText("b"))
+  expect_identical(
+    new_tool_result(request, ContentToolResult(value = content))@value,
+    content
+  )
+  errored <- new_tool_result(request, ContentToolResult(error = "boom"))
+  expect_null(errored@value)
+  expect_equal(errored@error, "boom")
+})
+
+test_that("a ContentToolResult with a vector value is sent to OpenAI as a string", {
+  request <- ContentToolRequest("call_1", "tool", list())
+  result <- new_tool_result(
+    request,
+    ContentToolResult(value = c("line one", "line two"))
+  )
+
+  provider <- chat_openai_test()$get_provider()
+  expect_equal(as_json(provider, result)$output, "line one\nline two")
+})
+
 # Tool context ----------------------------------------------------------------
 
 test_that("invoke_tools() supplies a minimal context when tool_context is NULL", {
