@@ -68,7 +68,9 @@ For \code{batch_chat_test()}, a character vector of text responses.
 For \code{batch_chat_structured()}, a single structured data object with one
 element for each prompt. Typically, when \code{type} is an object, this will
 will be a data frame with one row for each prompt, and one column for each
-property.
+property. If the output is a data frame, and some requests error or return
+an incomplete or unparseable response, an \code{.error} column will be added with
+the error objects.
 
 For any of the above, will return \code{NULL} if \code{wait = FALSE} and the job
 is not complete.
