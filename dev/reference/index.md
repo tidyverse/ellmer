@@ -79,6 +79,7 @@ providers are especially welcome.
 - [`chat_openai_compatible()`](https://ellmer.tidyverse.org/dev/reference/chat_openai_compatible.md)
   : Chat with an OpenAI-compatible model
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  [`models_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   : Chat with one of the many models hosted on OpenRouter
 - [`chat_perplexity()`](https://ellmer.tidyverse.org/dev/reference/chat_perplexity.md)
   : Chat with a model hosted on perplexity.ai

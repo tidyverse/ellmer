@@ -1,10 +1,11 @@
 # Update cached model pricing data
 
 Downloads the latest model pricing data from GitHub and saves it to the
-local cache. Call this to refresh the prices used by
+local cache. Call this to refresh the snapshot-backed estimates used by
 [`token_usage()`](https://ellmer.tidyverse.org/dev/reference/token_usage.md)
-and related functions with the latest pricing data. The cache is stored
-in the directory returned by
+and related functions. These are published list prices for supported
+providers, not actual charges billed by the API. The cache is stored in
+the directory returned by
 `tools::R_user_dir("ellmer", which = "cache")`.
 
 ## Usage

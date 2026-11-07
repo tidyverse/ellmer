@@ -65,6 +65,27 @@
     now uses `claude-sonnet-5-5`.
   - [`chat_snowflake()`](https://ellmer.tidyverse.org/dev/reference/chat_snowflake.md)
     now uses `claude-sonnet-5-5`.
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  uses OpenRouter’s reported request cost when available. If no valid
+  charge is reported, it estimates from advertised token rates when
+  usage data allows; otherwise the cost is unknown. With your own
+  provider key configured through OpenRouter, the reported amount is
+  OpenRouter’s charge, and the provider may bill you separately. The
+  now-unused static OpenRouter prices have also been removed from the
+  pricing snapshot
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+- When OpenRouter doesn’t report a charge, the missing cost is estimated
+  from the rates the model advertises on OpenRouter’s public `/models`
+  endpoint. The rate table is fetched lazily at most once per R session
+  — failed fetches included — and reused for every later turn, so
+  estimates can be stale
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+- New
+  [`models_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  lists the models available on OpenRouter, along with their advertised
+  `input`, `output`, and `cached_input` prices in USD per million
+  tokens. No credentials are required
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
 - The OpenTelemetry `gen_ai.input.messages` attribute is no longer
   dropped when a tool result returns a `Content` object, such as an
   image ([@taekop](https://github.com/taekop),

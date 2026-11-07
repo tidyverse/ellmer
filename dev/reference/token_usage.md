@@ -14,6 +14,17 @@ token_usage()
 
 A data frame
 
+## Details
+
+Most providers' costs are estimated from published token rates.
+OpenRouter's cost reporting differs; see
+[`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+for details.
+
+An unknown charge makes the cumulative total for that provider and model
+unknown, while known individual turn costs remain available through the
+chat object's `get_tokens()` method.
+
 ## Examples
 
 ``` r
