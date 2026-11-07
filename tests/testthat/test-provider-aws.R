@@ -284,6 +284,22 @@ test_that("as_json() replays unsigned thinking blocks as text", {
   )
 })
 
+test_that("value_tokens() counts cache writes as input tokens", {
+  provider <- chat_aws_bedrock_test()$get_provider()
+  result <- list(
+    usage = list(
+      inputTokens = 10,
+      outputTokens = 5,
+      cacheReadInputTokens = 3,
+      cacheWriteInputTokens = 100
+    )
+  )
+  expect_equal(
+    value_tokens(provider, result),
+    tokens(input = 110, output = 5, cached_input = 3)
+  )
+})
+
 # Provider idiosynchronies -----------------------------------------------
 
 test_that("continues to work after whitespace only outputs (#376)", {
