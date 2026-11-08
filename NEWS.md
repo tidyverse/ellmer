@@ -1,11 +1,5 @@
 # ellmer (development version)
 
-* `chat_anthropic()` and the other Claude providers now default `max_tokens` to 32,000, rather than 4096 (#1150).
-* New `vignette("otel")` describes how to turn on OpenTelemetry tracing and metrics, what ellmer records, and how ellmer's spans join your own traces (@schloerke, #1187).
-* A `ContentToolResult()` returned by a tool now has a `value` with several strings collapsed into one string, as for any other tool result, instead of being sent to OpenAI as an array that the Responses API rejects with HTTP 400 (#1136).
-* `chat_anthropic()` and `chat_aws_bedrock()` now report the correct input and cache token counts when a streamed response uses server tools such as web search, so `$get_tokens()` and `$get_cost()` match the same request without streaming (@pcbeingused333, #1194).
-* `chat_anthropic()` no longer errors when Claude returns a `redacted_thinking` block (@pcbeingused333, #1195).
-* `chat_google_vertex()` and `chat_openai()` now report `finish_reason = "tool_use"` rather than `"success"` for turns that call a tool, matching the other providers. `chat_google_vertex()` also reports the `LANGUAGE`, `IMAGE_SAFETY`, `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as `"content_filter"` (@pcbeingused333, #1199).
 * Default models have been updated for a number of providers (@thisisnic, #1176):
   * `chat_anthropic()` now uses `claude-sonnet-5-5`.
   * `chat_aws_bedrock()` now uses `us.anthropic.claude-sonnet-5-5`.
@@ -32,6 +26,7 @@
 * `chat_openai()` now sends `type = "message"` on every Responses API input item, so OpenAI-compatible servers such as llama.cpp accept replayed assistant turns (@taekop, #1153).
 * `chat_openai_compatible()` and the providers built on it now send standard JSON Schema for tool definitions, so arguments with `required = FALSE` stay optional. `chat_openai_compatible()`, `chat_huggingface()`, `chat_openrouter()`, `chat_portkey()`, and `chat_vllm()` gain a `strict` argument to opt back in to OpenAI's strict mode (#1135).
 * `chat_openrouter()` now uses the cost reported by OpenRouter for each request, falling back to an estimate from OpenRouter's advertised model rates when no cost is reported (#1189).
+* A `ContentToolResult()` returned by a tool now has a `value` with several strings collapsed into one string, as for any other tool result, instead of being sent to OpenAI as an array that the Responses API rejects with HTTP 400 (#1136).
 * `content_image_url()` now forwards `detail` to OpenAI and OpenAI-compatible providers (@kbenoit, #1132).
 * `live_browser()` works again with shinychat >= 0.5.0 (#1167).
 * New `models_openrouter()` lists the models available on OpenRouter along with their prices (#1189).
