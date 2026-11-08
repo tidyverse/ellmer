@@ -6,13 +6,17 @@
 
 ## revdepcheck results
 
-We checked 51 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 65 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 1 new problem
+ * We saw 2 new problems
  * We failed to check 0 packages
 
 ### New problems
 
-* querychat
+* ellmercodex
   checking tests ... ERROR
-  Issue opened: https://github.com/posit-dev/querychat/issues/283
+  Issue opened: https://github.com/simxnherrera/ellmercodex/issues/15
+
+* vitals
+  checking tests ... ERROR
+  Issue opened: https://github.com/tidyverse/vitals/issues/221

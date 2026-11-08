@@ -10,7 +10,7 @@ google_tool_web_fetch()
 When this tool is enabled, you can include URLs directly in your prompts and
 Gemini will fetch and analyze the content.
 
-Learn more in \url{https://ai.google.dev/gemini-api/docs/url-context}.
+Learn more in \url{https://aistudio.google.com/docs/url-context}.
 }
 \examples{
 \dontrun{

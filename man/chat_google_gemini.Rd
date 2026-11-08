@@ -60,7 +60,7 @@ Use \code{models_google_gemini()} to see all options.}
 
 \item{api_args}{Named list of arbitrary extra arguments appended to the body
 of every chat API call. \code{chat_google_gemini()} uses the
-\href{https://ai.google.dev/gemini-api/docs/interactions-overview}{Interactions API}
+\href{https://aistudio.google.com/docs/interactions-overview}{Interactions API}
 and \code{chat_google_vertex()} the
 \href{https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference}{generateContent API},
 so use the field names from the matching request body.}
