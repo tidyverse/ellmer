@@ -14,6 +14,14 @@ Call this function to find out the cumulative number of tokens that you
 have sent and received in the current session. The price will be shown
 if known.
 }
+\details{
+Most providers' costs are estimated from published token rates. OpenRouter's
+cost reporting differs; see \code{\link[=chat_openrouter]{chat_openrouter()}} for details.
+
+An unknown charge makes the cumulative total for that provider and model
+unknown, while known individual turn costs remain available through the
+chat object's \code{get_tokens()} method.
+}
 \examples{
 token_usage()
 }

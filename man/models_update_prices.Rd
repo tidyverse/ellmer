@@ -13,7 +13,9 @@ fails.
 }
 \description{
 Downloads the latest model pricing data from GitHub and saves it to the
-local cache. Call this to refresh the prices used by \code{\link[=token_usage]{token_usage()}} and
-related functions with the latest pricing data. The cache is stored in the
-directory returned by \code{tools::R_user_dir("ellmer", which = "cache")}.
+local cache. Call this to refresh the snapshot-backed estimates used by
+\code{\link[=token_usage]{token_usage()}} and related functions. These are published list prices for
+supported providers, not actual charges billed by the API. The cache is
+stored in the directory returned by
+\code{tools::R_user_dir("ellmer", which = "cache")}.
 }

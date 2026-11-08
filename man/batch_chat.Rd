@@ -79,7 +79,7 @@ is not complete.
 \code{\link[=chat_groq]{chat_groq()}}. They use the
 \href{https://developers.openai.com/api/docs/guides/batch}{OpenAI},
 \href{https://docs.claude.com/en/docs/build-with-claude/batch-processing}{Anthropic},
-\href{https://ai.google.dev/gemini-api/docs/batch-api}{Google Gemini}, and
+\href{https://aistudio.google.com/docs/batch-api}{Google Gemini}, and
 \href{https://console.groq.com/docs/batch}{Groq} batch APIs which allow you
 to submit multiple requests simultaneously.
 The results can take up to 24 hours to complete, but in return you pay 50\%

@@ -13,3 +13,22 @@
       ! HTTP 400 Bad Request.
       i temperature: Invalid input: expected number, received string
 
+# value_turn() preserves error checking
+
+    Code
+      value_turn(provider, model, result)
+    Condition
+      Error in `method(value_turn, ellmer::ProviderOpenRouter)`:
+      ! Provider returned error
+      i {
+          "message": "boom"
+      }
+
+# model listing fails normally on request errors
+
+    Code
+      models_openrouter()
+    Condition
+      Error in `req_perform()`:
+      ! Failed to connect to OpenRouter
+

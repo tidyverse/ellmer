@@ -7,7 +7,7 @@
 #' incorporated into the response with grounding metadata including source
 #' URLs and titles.
 #'
-#' Learn more in <https://ai.google.dev/gemini-api/docs/google-search>.
+#' Learn more in <https://aistudio.google.com/docs/google-search>.
 #'
 #' @family built-in tools
 #' @export
@@ -37,7 +37,7 @@ google_tool_web_search <- function() {
 #' When this tool is enabled, you can include URLs directly in your prompts and
 #' Gemini will fetch and analyze the content.
 #'
-#' Learn more in <https://ai.google.dev/gemini-api/docs/url-context>.
+#' Learn more in <https://aistudio.google.com/docs/url-context>.
 #'
 #' @family built-in tools
 #' @export
