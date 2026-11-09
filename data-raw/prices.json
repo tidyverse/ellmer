@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "min_ellmer_version": "0.5.0",
-  "updated_at": "2026-11-02T22:13:31Z",
+  "updated_at": "2026-11-09T14:53:05Z",
   "data": [
     {
       "provider": "AWS/Bedrock",
@@ -40,11 +40,33 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-5-sonic",
+      "variant": "",
+      "input": 0.33,
+      "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "amazon.nova-2-lite-v1:0",
       "variant": "",
       "input": 0.3,
       "output": 2.5,
       "cached_input": 0.075
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-lite-v1:0",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-lite-v1:0",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 4.375,
+      "cached_input": 0.13125
     },
     {
       "provider": "AWS/Bedrock",
@@ -63,6 +85,20 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-pro-preview-20251202-v1:0",
+      "variant": "batches",
+      "input": 0.625,
+      "output": 5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-2-pro-preview-20251202-v1:0",
+      "variant": "priority",
+      "input": 2.1875,
+      "output": 17.5
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "amazon.nova-2-sonic-v1:0",
       "variant": "",
       "input": 0.33,
@@ -78,6 +114,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "amazon.nova-lite-v1:0",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "amazon.nova-micro-v1:0",
       "variant": "",
       "input": 0.035,
@@ -86,11 +129,64 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "amazon.nova-micro-v1:0",
+      "variant": "batches",
+      "input": 0.0175,
+      "output": 0.07
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-premier-v1:0",
+      "variant": "",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.625
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-premier-v1:0",
+      "variant": "batches",
+      "input": 1.25,
+      "output": 6.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-premier-v1:0",
+      "variant": "priority",
+      "input": 4.375,
+      "output": 21.875,
+      "cached_input": 1.09375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "amazon.nova-pro-v1:0",
       "variant": "",
       "input": 0.8,
       "output": 3.2,
       "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-pro-v1:0",
+      "variant": "batches",
+      "input": 0.4,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-pro-v1:0",
+      "variant": "flex",
+      "input": 0.4,
+      "output": 1.6,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "amazon.nova-pro-v1:0",
+      "variant": "priority",
+      "input": 1.4,
+      "output": 5.6,
+      "cached_input": 0.35
     },
     {
       "provider": "AWS/Bedrock",
@@ -124,15 +220,15 @@
       "provider": "AWS/Bedrock",
       "model": "amazon.titan-text-express-v1",
       "variant": "",
-      "input": 1.3,
-      "output": 1.7
+      "input": 0.2,
+      "output": 0.6
     },
     {
       "provider": "AWS/Bedrock",
       "model": "amazon.titan-text-lite-v1",
       "variant": "",
-      "input": 0.3,
-      "output": 0.4
+      "input": 0.15,
+      "output": 0.2
     },
     {
       "provider": "AWS/Bedrock",
@@ -159,27 +255,11 @@
     },
     {
       "provider": "AWS/Bedrock",
-      "model": "anthropic.claude-3-5-sonnet-20240620-v1:0",
-      "variant": "above_200k_tokens",
-      "input": 6,
-      "output": 30,
-      "cached_input": 0.6
-    },
-    {
-      "provider": "AWS/Bedrock",
       "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",
       "variant": "",
       "input": 3,
       "output": 15,
       "cached_input": 0.3
-    },
-    {
-      "provider": "AWS/Bedrock",
-      "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",
-      "variant": "above_200k_tokens",
-      "input": 6,
-      "output": 30,
-      "cached_input": 0.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -258,6 +338,22 @@
       "input": 1,
       "output": 5,
       "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -340,6 +436,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "anthropic.claude-opus-5-5",
       "variant": "",
       "input": 4,
@@ -407,7 +510,7 @@
       "variant": "",
       "input": 2,
       "output": 10,
-      "cached_input": 0.2
+      "cached_input": 0.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -453,10 +556,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.295,
+      "output": 3.885
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-northeast-1/minimax.minimax-m2.1",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -467,10 +612,94 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-mini-3b-2507",
+      "variant": "",
+      "input": 0.05,
+      "output": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-mini-3b-2507",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.03
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-mini-3b-2507",
+      "variant": "flex",
+      "input": 0.03,
+      "output": 0.03
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-mini-3b-2507",
+      "variant": "priority",
+      "input": 0.09,
+      "output": 0.09
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-small-24b-2507",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-small-24b-2507",
+      "variant": "batches",
+      "input": 0.06,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-small-24b-2507",
+      "variant": "flex",
+      "input": 0.06,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/mistral.voxtral-small-24b-2507",
+      "variant": "priority",
+      "input": 0.21,
+      "output": 0.63
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-northeast-1/moonshotai.kimi-k2-thinking",
       "variant": "",
       "input": 0.73,
       "output": 3.03
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -481,10 +710,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.26,
+      "output": 6.3
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-northeast-1/qwen.qwen3-coder-next",
       "variant": "",
       "input": 0.6,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
     },
     {
       "provider": "AWS/Bedrock",
@@ -495,10 +752,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-northeast-1/qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.32,
+      "output": 2.54
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-south-1/deepseek.v3.2",
       "variant": "",
       "input": 0.74,
       "output": 2.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.295,
+      "output": 3.885
     },
     {
       "provider": "AWS/Bedrock",
@@ -523,10 +815,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-south-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -537,10 +871,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-south-1/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.47
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-south-1/moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.72,
       "output": 3.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.26,
+      "output": 6.3
     },
     {
       "provider": "AWS/Bedrock",
@@ -551,6 +913,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-south-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-south-1/qwen.qwen3-next-80b-a3b",
       "variant": "",
       "input": 0.18,
@@ -558,10 +927,108 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-south-1/qwen.qwen3-next-80b-a3b",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.71
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.71
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-south-1/qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.32,
+      "output": 2.47
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-southeast-2/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.31,
       "output": 1.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.155,
+      "output": 0.62
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.155,
+      "output": 0.62
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.5425,
+      "output": 2.17
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-mini-3b-2507",
+      "variant": "",
+      "input": 0.0412,
+      "output": 0.0412
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-mini-3b-2507",
+      "variant": "batches",
+      "input": 0.0206,
+      "output": 0.0206
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-mini-3b-2507",
+      "variant": "flex",
+      "input": 0.0206,
+      "output": 0.0206
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-mini-3b-2507",
+      "variant": "priority",
+      "input": 0.0721,
+      "output": 0.0721
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-small-24b-2507",
+      "variant": "",
+      "input": 0.103,
+      "output": 0.309
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-small-24b-2507",
+      "variant": "batches",
+      "input": 0.0515,
+      "output": 0.1545
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-small-24b-2507",
+      "variant": "flex",
+      "input": 0.0515,
+      "output": 0.1545
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-2/mistral.voxtral-small-24b-2507",
+      "variant": "priority",
+      "input": 0.18025,
+      "output": 0.54075
     },
     {
       "provider": "AWS/Bedrock",
@@ -579,10 +1046,24 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-southeast-3/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-southeast-3/minimax.minimax-m2.1",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-3/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
     },
     {
       "provider": "AWS/Bedrock",
@@ -593,10 +1074,24 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-southeast-3/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "ap-southeast-3/moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.72,
       "output": 3.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "ap-southeast-3/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.8
     },
     {
       "provider": "AWS/Bedrock",
@@ -607,11 +1102,18 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "ap-southeast-3/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "apac.amazon.nova-2-lite-v1:0",
       "variant": "",
-      "input": 0.33,
-      "output": 2.75,
-      "cached_input": 0.0825
+      "input": 0.396,
+      "output": 3.311,
+      "cached_input": 0.099
     },
     {
       "provider": "AWS/Bedrock",
@@ -647,6 +1149,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "apac.amazon.nova-pro-v1:0",
+      "variant": "flex",
+      "input": 0.42,
+      "output": 1.68,
+      "cached_input": 0.105
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "apac.anthropic.claude-fable-5",
       "variant": "",
       "input": 11,
@@ -667,6 +1177,22 @@
       "variant": "batches",
       "input": 0.55,
       "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "apac.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.11,
+      "output": 0.55,
+      "cached_input": 0.011
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "apac.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.55,
+      "output": 2.75,
+      "cached_input": 0.055
     },
     {
       "provider": "AWS/Bedrock",
@@ -699,6 +1225,13 @@
       "input": 5.5,
       "output": 27.5,
       "cached_input": 0.55
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "apac.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.75,
+      "output": 13.75
     },
     {
       "provider": "AWS/Bedrock",
@@ -746,7 +1279,7 @@
       "variant": "",
       "input": 2.2,
       "output": 11,
-      "cached_input": 0.22
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -770,6 +1303,22 @@
       "variant": "batches",
       "input": 0.55,
       "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "au.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.11,
+      "output": 0.55,
+      "cached_input": 0.011
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "au.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.55,
+      "output": 2.75,
+      "cached_input": 0.055
     },
     {
       "provider": "AWS/Bedrock",
@@ -810,6 +1359,13 @@
       "input": 5.5,
       "output": 27.5,
       "cached_input": 0.55
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "au.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.75,
+      "output": 13.75
     },
     {
       "provider": "AWS/Bedrock",
@@ -864,7 +1420,69 @@
       "variant": "",
       "input": 2.2,
       "output": 11,
-      "cached_input": 0.22
+      "cached_input": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-east-1/moonshotai.kimi-k3",
+      "variant": "",
+      "input": 3.96,
+      "output": 19.8,
+      "cached_input": 0.396
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-east-1/moonshotai.kimi-k3",
+      "variant": "batches",
+      "input": 1.98,
+      "output": 9.9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-east-1/moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.98,
+      "output": 9.9,
+      "cached_input": 0.198
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-east-1/moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 6.93,
+      "output": 34.65,
+      "cached_input": 0.693
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-west-1/moonshotai.kimi-k3",
+      "variant": "",
+      "input": 3.96,
+      "output": 19.8,
+      "cached_input": 0.396
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-west-1/moonshotai.kimi-k3",
+      "variant": "batches",
+      "input": 1.98,
+      "output": 9.9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-west-1/moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.98,
+      "output": 9.9,
+      "cached_input": 0.198
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "bedrock/us-gov-west-1/moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 6.93,
+      "output": 34.65,
+      "cached_input": 0.693
     },
     {
       "provider": "AWS/Bedrock",
@@ -902,6 +1520,246 @@
       "variant": "batches",
       "input": 1.5,
       "output": 7.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5",
+      "variant": "batches",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5-1",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5-1",
+      "variant": "batches",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.125
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-4-5",
+      "variant": "",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-4-5",
+      "variant": "batches",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-5-5",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-5-5",
+      "variant": "above_100k_tokens_batches",
+      "input": 0.25,
+      "output": 1.25,
+      "cached_input": 0.025
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-haiku-5-5",
+      "variant": "batches",
+      "input": 0.05,
+      "output": 0.25,
+      "cached_input": 0.005
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-5",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-5",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-6",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-6",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-7",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-7",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-8",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-4-8",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-5",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-5",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-5-5",
+      "variant": "",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-opus-5-5",
+      "variant": "batches",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-4-5",
+      "variant": "",
+      "input": 3,
+      "output": 15,
+      "cached_input": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-4-5",
+      "variant": "batches",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-4-6",
+      "variant": "",
+      "input": 3,
+      "output": 15,
+      "cached_input": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-4-6",
+      "variant": "batches",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-5",
+      "variant": "",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-5",
+      "variant": "batches",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-5-5",
+      "variant": "",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-sonnet-5-5",
+      "variant": "batches",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -961,10 +1819,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.1",
+      "variant": "batches",
+      "input": 0.29,
+      "output": 0.84
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.1",
+      "variant": "flex",
+      "input": 0.29,
+      "output": 0.84
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.1",
+      "variant": "priority",
+      "input": 1.015,
+      "output": 2.94
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "deepseek.v3.2",
       "variant": "",
       "input": 0.62,
       "output": 1.85
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.085,
+      "output": 3.2375
     },
     {
       "provider": "AWS/Bedrock",
@@ -996,10 +1896,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-central-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-central-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -1010,10 +1952,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-central-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-north-1/deepseek.v3.2",
       "variant": "",
       "input": 0.74,
       "output": 2.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.295,
+      "output": 3.885
     },
     {
       "provider": "AWS/Bedrock",
@@ -1024,10 +1994,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-north-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -1038,10 +2050,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-north-1/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-north-1/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.26,
+      "output": 6.3
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-south-1/minimax.minimax-m2.1",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-south-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
     },
     {
       "provider": "AWS/Bedrock",
@@ -1052,10 +2092,24 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-south-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-south-1/qwen.qwen3-coder-next",
       "variant": "",
       "input": 0.6,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-south-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
     },
     {
       "provider": "AWS/Bedrock",
@@ -1080,10 +2134,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-west-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -1094,10 +2190,31 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-west-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-west-1/qwen.qwen3-next-80b-a3b",
       "variant": "",
       "input": 0.18,
       "output": 1.41
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.71
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-1/qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.32,
+      "output": 2.47
     },
     {
       "provider": "AWS/Bedrock",
@@ -1122,10 +2239,108 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.235,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.235,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.8225,
+      "output": 3.255
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-west-2/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.47,
       "output": 1.86
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.235,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.235,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.8225,
+      "output": 3.255
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-mini-3b-2507",
+      "variant": "",
+      "input": 0.06,
+      "output": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-mini-3b-2507",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.03
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-mini-3b-2507",
+      "variant": "flex",
+      "input": 0.03,
+      "output": 0.03
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-mini-3b-2507",
+      "variant": "priority",
+      "input": 0.11,
+      "output": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-small-24b-2507",
+      "variant": "",
+      "input": 0.16,
+      "output": 0.47
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-small-24b-2507",
+      "variant": "batches",
+      "input": 0.08,
+      "output": 0.23
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-small-24b-2507",
+      "variant": "flex",
+      "input": 0.08,
+      "output": 0.23
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/mistral.voxtral-small-24b-2507",
+      "variant": "priority",
+      "input": 0.28,
+      "output": 0.82
     },
     {
       "provider": "AWS/Bedrock",
@@ -1136,6 +2351,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-west-2/nvidia.nemotron-super-3-120b",
+      "variant": "batches",
+      "input": 0.115,
+      "output": 0.505
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/nvidia.nemotron-super-3-120b",
+      "variant": "flex",
+      "input": 0.115,
+      "output": 0.505
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/nvidia.nemotron-super-3-120b",
+      "variant": "priority",
+      "input": 0.4025,
+      "output": 1.7675
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-west-2/qwen.qwen3-coder-next",
       "variant": "",
       "input": 0.78,
@@ -1143,10 +2379,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu-west-2/qwen.qwen3-coder-next",
+      "variant": "batches",
+      "input": 0.39,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.39,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/qwen.qwen3-coder-next",
+      "variant": "priority",
+      "input": 1.365,
+      "output": 3.255
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu-west-2/qwen.qwen3-next-80b-a3b",
       "variant": "",
       "input": 0.23,
       "output": 1.86
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.12,
+      "output": 0.93
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu-west-2/qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.4,
+      "output": 3.26
     },
     {
       "provider": "AWS/Bedrock",
@@ -1173,9 +2444,9 @@
       "provider": "AWS/Bedrock",
       "model": "eu.amazon.nova-2-lite-v1:0",
       "variant": "",
-      "input": 0.33,
-      "output": 2.75,
-      "cached_input": 0.0825
+      "input": 0.429,
+      "output": 3.597,
+      "cached_input": 0.10725
     },
     {
       "provider": "AWS/Bedrock",
@@ -1208,6 +2479,14 @@
       "input": 1.05,
       "output": 4.2,
       "cached_input": 0.2625
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu.amazon.nova-pro-v1:0",
+      "variant": "flex",
+      "input": 0.525,
+      "output": 2.1,
+      "cached_input": 0.13125
     },
     {
       "provider": "AWS/Bedrock",
@@ -1282,6 +2561,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.11,
+      "output": 0.55,
+      "cached_input": 0.011
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.55,
+      "output": 2.75,
+      "cached_input": 0.055
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu.anthropic.claude-opus-4-1-20250805-v1:0",
       "variant": "",
       "input": 15,
@@ -1335,6 +2630,13 @@
       "input": 5.5,
       "output": 27.5,
       "cached_input": 0.55
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.75,
+      "output": 13.75
     },
     {
       "provider": "AWS/Bedrock",
@@ -1405,7 +2707,7 @@
       "variant": "",
       "input": 2.2,
       "output": 11,
-      "cached_input": 0.22
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -1413,6 +2715,13 @@
       "variant": "",
       "input": 0.74,
       "output": 2.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu.deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -1451,6 +2760,21 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "global.amazon.nova-2-lite-v1:0",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.amazon.nova-2-lite-v1:0",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 4.375,
+      "cached_input": 0.13125
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "global.anthropic.claude-fable-5",
       "variant": "",
       "input": 10,
@@ -1479,6 +2803,22 @@
       "variant": "batches",
       "input": 0.5,
       "output": 2.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -1527,6 +2867,13 @@
       "input": 5,
       "output": 25,
       "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.5,
+      "output": 12.5
     },
     {
       "provider": "AWS/Bedrock",
@@ -1597,7 +2944,7 @@
       "variant": "",
       "input": 2,
       "output": 10,
-      "cached_input": 0.2
+      "cached_input": 0.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -1613,6 +2960,46 @@
       "input": 3,
       "output": 15,
       "cached_input": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 5.25,
+      "output": 26.25,
+      "cached_input": 0.525
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.moonshotai.kimi-k3.1",
+      "variant": "",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.moonshotai.kimi-k3.1",
+      "variant": "flex",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.moonshotai.kimi-k3.1",
+      "variant": "priority",
+      "input": 7,
+      "output": 35,
+      "cached_input": 0.35
     },
     {
       "provider": "AWS/Bedrock",
@@ -1712,6 +3099,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6-astra",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 120,
+      "output": 450,
+      "cached_input": 12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6-astra",
+      "variant": "ultrafast",
+      "input": 60,
+      "output": 300,
+      "cached_input": 6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "global.openai.gpt-6-luna",
       "variant": "",
       "input": 0.1,
@@ -1760,7 +3163,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6.1-sol",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 24,
+      "output": 90,
+      "cached_input": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6.1-sol",
+      "variant": "ultrafast",
+      "input": 12,
+      "output": 60,
+      "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6.1-terra",
+      "variant": "",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.openai.gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "global.twelvelabs.pegasus-1-2-v1:0",
+      "variant": "",
+      "output": 7.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.twelvelabs.pegasus-1-5-v1:0",
       "variant": "",
       "output": 7.5
     },
@@ -1774,11 +3215,75 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "global.xai.grok-4.6",
+      "variant": "flex",
+      "input": 1,
+      "output": 3,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.xai.grok-4.6",
+      "variant": "priority",
+      "input": 3.5,
+      "output": 10.5,
+      "cached_input": 0.875
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "global.xai.grok-4.7",
       "variant": "",
       "input": 2,
       "output": 6,
       "cached_input": 0.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.xai.grok-4.7",
+      "variant": "flex",
+      "input": 1,
+      "output": 3,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.xai.grok-4.7",
+      "variant": "priority",
+      "input": 3.5,
+      "output": 10.5,
+      "cached_input": 0.875
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.zai.glm-5.3",
+      "variant": "",
+      "input": 1.68,
+      "output": 5.28,
+      "cached_input": 0.312
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.zai.glm-5.3",
+      "variant": "batches",
+      "input": 0.84,
+      "output": 2.64,
+      "cached_input": 0.156
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.zai.glm-5.3",
+      "variant": "flex",
+      "input": 0.84,
+      "output": 2.64,
+      "cached_input": 0.156
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.zai.glm-5.3",
+      "variant": "priority",
+      "input": 2.94,
+      "output": 9.24,
+      "cached_input": 0.546
     },
     {
       "provider": "AWS/Bedrock",
@@ -1789,10 +3294,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-12b-it",
+      "variant": "batches",
+      "input": 0.05,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-12b-it",
+      "variant": "flex",
+      "input": 0.05,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-12b-it",
+      "variant": "priority",
+      "input": 0.16,
+      "output": 0.51
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "google.gemma-3-27b-it",
       "variant": "",
       "input": 0.23,
       "output": 0.38
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-27b-it",
+      "variant": "batches",
+      "input": 0.12,
+      "output": 0.19
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-27b-it",
+      "variant": "flex",
+      "input": 0.12,
+      "output": 0.19
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-27b-it",
+      "variant": "priority",
+      "input": 0.4,
+      "output": 0.67
     },
     {
       "provider": "AWS/Bedrock",
@@ -1803,10 +3350,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-4b-it",
+      "variant": "batches",
+      "input": 0.02,
+      "output": 0.04
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-4b-it",
+      "variant": "flex",
+      "input": 0.02,
+      "output": 0.04
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-3-4b-it",
+      "variant": "priority",
+      "input": 0.07,
+      "output": 0.14
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "google.gemma-4-26b-a4b",
       "variant": "",
       "input": 0.13,
       "output": 0.4
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-26b-a4b",
+      "variant": "batches",
+      "input": 0.065,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-26b-a4b",
+      "variant": "flex",
+      "input": 0.065,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-26b-a4b",
+      "variant": "priority",
+      "input": 0.2275,
+      "output": 0.7
     },
     {
       "provider": "AWS/Bedrock",
@@ -1817,10 +3406,100 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-31b",
+      "variant": "batches",
+      "input": 0.07,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-31b",
+      "variant": "flex",
+      "input": 0.07,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-31b",
+      "variant": "priority",
+      "input": 0.245,
+      "output": 0.7
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "google.gemma-4-e2b",
       "variant": "",
       "input": 0.04,
       "output": 0.08
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-e2b",
+      "variant": "batches",
+      "input": 0.02,
+      "output": 0.04
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-e2b",
+      "variant": "flex",
+      "input": 0.02,
+      "output": 0.04
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "google.gemma-4-e2b",
+      "variant": "priority",
+      "input": 0.07,
+      "output": 0.14
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3",
+      "variant": "",
+      "input": 3.3,
+      "output": 16.5,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.65,
+      "output": 8.25,
+      "cached_input": 0.165
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 5.775,
+      "output": 28.875,
+      "cached_input": 0.5775
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3.1",
+      "variant": "",
+      "input": 4.4,
+      "output": 22,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3.1",
+      "variant": "flex",
+      "input": 2.2,
+      "output": 11,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "in.moonshotai.kimi-k3.1",
+      "variant": "priority",
+      "input": 7.7,
+      "output": 38.5,
+      "cached_input": 0.385
     },
     {
       "provider": "AWS/Bedrock",
@@ -1829,6 +3508,37 @@
       "input": 3,
       "output": 15,
       "cached_input": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.amazon.nova-2-lite-v1:0",
+      "variant": "",
+      "input": 0.396,
+      "output": 3.311,
+      "cached_input": 0.099
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.amazon.nova-2-lite-v1:0",
+      "variant": "batches",
+      "input": 0.198,
+      "output": 1.6555
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.amazon.nova-2-lite-v1:0",
+      "variant": "flex",
+      "input": 0.198,
+      "output": 1.6555,
+      "cached_input": 0.0495
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.amazon.nova-2-lite-v1:0",
+      "variant": "priority",
+      "input": 0.693,
+      "output": 5.79425,
+      "cached_input": 0.17325
     },
     {
       "provider": "AWS/Bedrock",
@@ -1844,6 +3554,22 @@
       "variant": "batches",
       "input": 0.55,
       "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.11,
+      "output": 0.55,
+      "cached_input": 0.011
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.55,
+      "output": 2.75,
+      "cached_input": 0.055
     },
     {
       "provider": "AWS/Bedrock",
@@ -1868,6 +3594,13 @@
       "input": 5.5,
       "output": 27.5,
       "cached_input": 0.55
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "jp.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.75,
+      "output": 13.75
     },
     {
       "provider": "AWS/Bedrock",
@@ -1922,7 +3655,7 @@
       "variant": "",
       "input": 2.2,
       "output": 11,
-      "cached_input": 0.22
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -1954,10 +3687,24 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "meta.llama3-1-70b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "meta.llama3-1-8b-instruct-v1:0",
       "variant": "",
       "input": 0.22,
       "output": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "meta.llama3-1-8b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.11,
+      "output": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -1993,6 +3740,13 @@
       "variant": "",
       "input": 0.72,
       "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "meta.llama3-3-70b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 0.36
     },
     {
       "provider": "AWS/Bedrock",
@@ -2045,10 +3799,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2",
+      "variant": "priority",
+      "input": 0.52,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "minimax.minimax-m2.1",
       "variant": "",
       "input": 0.3,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -2059,10 +3855,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "mistral.devstral-2-123b",
       "variant": "",
       "input": 0.4,
       "output": 2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.devstral-2-123b",
+      "variant": "batches",
+      "input": 0.2,
+      "output": 1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.devstral-2-123b",
+      "variant": "flex",
+      "input": 0.2,
+      "output": 1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.devstral-2-123b",
+      "variant": "priority",
+      "input": 0.7,
+      "output": 3.5
     },
     {
       "provider": "AWS/Bedrock",
@@ -2073,10 +3911,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "mistral.magistral-small-2509",
+      "variant": "batches",
+      "input": 0.25,
+      "output": 0.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.magistral-small-2509",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.magistral-small-2509",
+      "variant": "priority",
+      "input": 0.88,
+      "output": 2.63
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "mistral.ministral-3-14b-instruct",
       "variant": "",
       "input": 0.2,
       "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-14b-instruct",
+      "variant": "batches",
+      "input": 0.1,
+      "output": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-14b-instruct",
+      "variant": "flex",
+      "input": 0.1,
+      "output": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-14b-instruct",
+      "variant": "priority",
+      "input": 0.35,
+      "output": 0.35
     },
     {
       "provider": "AWS/Bedrock",
@@ -2087,10 +3967,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-3b-instruct",
+      "variant": "batches",
+      "input": 0.05,
+      "output": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-3b-instruct",
+      "variant": "flex",
+      "input": 0.05,
+      "output": 0.05
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-3b-instruct",
+      "variant": "priority",
+      "input": 0.17,
+      "output": 0.17
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "mistral.ministral-3-8b-instruct",
       "variant": "",
       "input": 0.15,
       "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-8b-instruct",
+      "variant": "batches",
+      "input": 0.07,
+      "output": 0.07
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-8b-instruct",
+      "variant": "flex",
+      "input": 0.07,
+      "output": 0.07
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.ministral-3-8b-instruct",
+      "variant": "priority",
+      "input": 0.26,
+      "output": 0.26
     },
     {
       "provider": "AWS/Bedrock",
@@ -2119,6 +4041,27 @@
       "variant": "",
       "input": 0.5,
       "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.mistral-large-3-675b-instruct",
+      "variant": "batches",
+      "input": 0.25,
+      "output": 0.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.mistral-large-3-675b-instruct",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.mistral-large-3-675b-instruct",
+      "variant": "priority",
+      "input": 0.88,
+      "output": 2.63
     },
     {
       "provider": "AWS/Bedrock",
@@ -2157,10 +4100,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-mini-3b-2507",
+      "variant": "batches",
+      "input": 0.02,
+      "output": 0.02
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-mini-3b-2507",
+      "variant": "flex",
+      "input": 0.02,
+      "output": 0.02
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-mini-3b-2507",
+      "variant": "priority",
+      "input": 0.07,
+      "output": 0.07
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "mistral.voxtral-small-24b-2507",
       "variant": "",
       "input": 0.1,
       "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-small-24b-2507",
+      "variant": "batches",
+      "input": 0.05,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-small-24b-2507",
+      "variant": "flex",
+      "input": 0.05,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "mistral.voxtral-small-24b-2507",
+      "variant": "priority",
+      "input": 0.17,
+      "output": 0.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -2171,17 +4156,73 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "moonshot.kimi-k2-thinking",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshot.kimi-k2-thinking",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 4.38
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "moonshotai.kimi-k2-thinking",
       "variant": "",
-      "input": 0.73,
-      "output": 3.03
+      "input": 0.6,
+      "output": 2.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2-thinking",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2-thinking",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 4.38
     },
     {
       "provider": "AWS/Bedrock",
       "model": "moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.6,
-      "output": 3.03
+      "output": 3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 5.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -2193,10 +4234,71 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.65,
+      "output": 8.25,
+      "cached_input": 0.165
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 5.775,
+      "output": 28.875,
+      "cached_input": 0.5775
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k3.1",
+      "variant": "",
+      "input": 4.4,
+      "output": 22,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k3.1",
+      "variant": "flex",
+      "input": 2.2,
+      "output": 11,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "moonshotai.kimi-k3.1",
+      "variant": "priority",
+      "input": 7.7,
+      "output": 38.5,
+      "cached_input": 0.385
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "nvidia.nemotron-nano-12b-v2",
       "variant": "",
       "input": 0.2,
       "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-12b-v2",
+      "variant": "batches",
+      "input": 0.1,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-12b-v2",
+      "variant": "flex",
+      "input": 0.1,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-12b-v2",
+      "variant": "priority",
+      "input": 0.35,
+      "output": 1.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -2207,6 +4309,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-3-30b",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-3-30b",
+      "variant": "flex",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-3-30b",
+      "variant": "priority",
+      "input": 0.11,
+      "output": 0.42
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "nvidia.nemotron-nano-9b-v2",
       "variant": "",
       "input": 0.06,
@@ -2214,10 +4337,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-9b-v2",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-9b-v2",
+      "variant": "flex",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-nano-9b-v2",
+      "variant": "priority",
+      "input": 0.11,
+      "output": 0.4
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "nvidia.nemotron-super-3-120b",
       "variant": "",
       "input": 0.15,
       "output": 0.65
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-super-3-120b",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.325
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-super-3-120b",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.325
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "nvidia.nemotron-super-3-120b",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.1375
     },
     {
       "provider": "AWS/Bedrock",
@@ -2325,6 +4490,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6-astra",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 132,
+      "output": 495,
+      "cached_input": 13.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6-astra",
+      "variant": "ultrafast",
+      "input": 66,
+      "output": 330,
+      "cached_input": 6.6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "openai.gpt-6-luna",
       "variant": "",
       "input": 0.1,
@@ -2359,17 +4540,49 @@
       "provider": "AWS/Bedrock",
       "model": "openai.gpt-6.1-sol",
       "variant": "",
-      "input": 2,
-      "output": 10,
-      "cached_input": 0.1
+      "input": 2.2,
+      "output": 11,
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
       "model": "openai.gpt-6.1-sol",
       "variant": "above_272k_tokens",
-      "input": 4,
-      "output": 15,
-      "cached_input": 0.2
+      "input": 4.4,
+      "output": 16.5,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6.1-sol",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 26.4,
+      "output": 99,
+      "cached_input": 1.32
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6.1-sol",
+      "variant": "ultrafast",
+      "input": 13.2,
+      "output": 66,
+      "cached_input": 0.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6.1-terra",
+      "variant": "",
+      "input": 1.1,
+      "output": 5.5,
+      "cached_input": 0.055
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2.2,
+      "output": 8.25,
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -2396,10 +4609,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "openai.gpt-oss-120b-1:0",
       "variant": "",
       "input": 0.15,
       "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b-1:0",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b-1:0",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-120b-1:0",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -2410,10 +4665,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b",
+      "variant": "batches",
+      "input": 0.035,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b",
+      "variant": "flex",
+      "input": 0.035,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b",
+      "variant": "priority",
+      "input": 0.1225,
+      "output": 0.525
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "openai.gpt-oss-20b-1:0",
       "variant": "",
       "input": 0.07,
       "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b-1:0",
+      "variant": "batches",
+      "input": 0.035,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b-1:0",
+      "variant": "flex",
+      "input": 0.035,
+      "output": 0.15
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-20b-1:0",
+      "variant": "priority",
+      "input": 0.1225,
+      "output": 0.525
     },
     {
       "provider": "AWS/Bedrock",
@@ -2424,6 +4721,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-120b",
+      "variant": "batches",
+      "input": 0.07,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-120b",
+      "variant": "flex",
+      "input": 0.07,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-120b",
+      "variant": "priority",
+      "input": 0.26,
+      "output": 1.05
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "openai.gpt-oss-safeguard-20b",
       "variant": "",
       "input": 0.07,
@@ -2431,10 +4749,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-20b",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-20b",
+      "variant": "flex",
+      "input": 0.03,
+      "output": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "openai.gpt-oss-safeguard-20b",
+      "variant": "priority",
+      "input": 0.12,
+      "output": 0.35
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-235b-a22b-2507",
       "variant": "",
       "input": 0.22,
       "output": 0.88
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-235b-a22b-2507",
+      "variant": "batches",
+      "input": 0.11,
+      "output": 0.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-235b-a22b-2507",
+      "variant": "flex",
+      "input": 0.11,
+      "output": 0.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-235b-a22b-2507",
+      "variant": "priority",
+      "input": 0.385,
+      "output": 1.54
     },
     {
       "provider": "AWS/Bedrock",
@@ -2452,10 +4812,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-235b-a22b-2507-v1:0",
+      "variant": "flex",
+      "input": 0.11,
+      "output": 0.44
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-32b",
       "variant": "",
       "input": 0.15,
       "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -2466,10 +4854,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b-v1:0",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b-v1:0",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-32b-v1:0",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-coder-30b-a3b-instruct",
       "variant": "",
       "input": 0.15,
       "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-30b-a3b-instruct",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-30b-a3b-instruct",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-30b-a3b-instruct",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -2480,10 +4910,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-30b-a3b-v1:0",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-30b-a3b-v1:0",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-coder-480b-a35b-instruct",
       "variant": "",
       "input": 0.45,
       "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-480b-a35b-instruct",
+      "variant": "batches",
+      "input": 0.225,
+      "output": 0.9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-480b-a35b-instruct",
+      "variant": "flex",
+      "input": 0.225,
+      "output": 0.9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-480b-a35b-instruct",
+      "variant": "priority",
+      "input": 0.7875,
+      "output": 3.15
     },
     {
       "provider": "AWS/Bedrock",
@@ -2501,10 +4966,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-next",
+      "variant": "batches",
+      "input": 0.25,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-coder-next",
+      "variant": "priority",
+      "input": 0.875,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-next-80b-a3b",
       "variant": "",
       "input": 0.15,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.07,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.26,
+      "output": 2.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -2515,10 +5015,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-next-80b-a3b-instruct",
+      "variant": "batches",
+      "input": 0.07,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-next-80b-a3b-instruct",
+      "variant": "flex",
+      "input": 0.07,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-next-80b-a3b-instruct",
+      "variant": "priority",
+      "input": 0.26,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "qwen.qwen3-vl-235b-a22b",
       "variant": "",
       "input": 0.53,
       "output": 2.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-vl-235b-a22b",
+      "variant": "batches",
+      "input": 0.26,
+      "output": 1.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-vl-235b-a22b",
+      "variant": "priority",
+      "input": 0.93,
+      "output": 4.66
     },
     {
       "provider": "AWS/Bedrock",
@@ -2529,10 +5064,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-vl-235b-a22b-instruct",
+      "variant": "batches",
+      "input": 0.26,
+      "output": 1.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-vl-235b-a22b-instruct",
+      "variant": "flex",
+      "input": 0.26,
+      "output": 1.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "qwen.qwen3-vl-235b-a22b-instruct",
+      "variant": "priority",
+      "input": 0.93,
+      "output": 4.66
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "sa-east-1/deepseek.v3.2",
       "variant": "",
       "input": 0.74,
       "output": 2.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.37,
+      "output": 1.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.295,
+      "output": 3.885
     },
     {
       "provider": "AWS/Bedrock",
@@ -2557,10 +5134,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "sa-east-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.36,
       "output": 1.44
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.18,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.63,
+      "output": 2.52
     },
     {
       "provider": "AWS/Bedrock",
@@ -2571,10 +5190,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "sa-east-1/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.52
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "sa-east-1/moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.72,
       "output": 3.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.36,
+      "output": 1.8
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.26,
+      "output": 6.3
     },
     {
       "provider": "AWS/Bedrock",
@@ -2585,6 +5232,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "sa-east-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "sa-east-1/qwen.qwen3-next-80b-a3b",
       "variant": "",
       "input": 0.18,
@@ -2592,7 +5246,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "sa-east-1/qwen.qwen3-next-80b-a3b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "sa-east-1/qwen.qwen3-next-80b-a3b",
+      "variant": "priority",
+      "input": 0.32,
+      "output": 2.54
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "twelvelabs.pegasus-1-2-v1:0",
+      "variant": "",
+      "output": 7.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "twelvelabs.pegasus-1-5-v1:0",
       "variant": "",
       "output": 7.5
     },
@@ -2626,6 +5300,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-1/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.085,
+      "output": 3.2375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-1/meta.llama3-70b-instruct-v1:0",
       "variant": "",
       "input": 2.65,
@@ -2647,10 +5342,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-1/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.3,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -2682,10 +5419,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-1/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-1/moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.6,
       "output": 3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 5.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -2696,10 +5461,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-1/qwen.qwen3-coder-next",
+      "variant": "batches",
+      "input": 0.25,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/qwen.qwen3-coder-next",
+      "variant": "priority",
+      "input": 0.875,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-1/zai.glm-5",
       "variant": "",
       "input": 1,
       "output": 3.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/zai.glm-5",
+      "variant": "batches",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/zai.glm-5",
+      "variant": "flex",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-1/zai.glm-5",
+      "variant": "priority",
+      "input": 1.75,
+      "output": 5.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -2710,10 +5517,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-2/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.085,
+      "output": 3.2375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-2/minimax.minimax-m2.1",
       "variant": "",
       "input": 0.3,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -2724,10 +5573,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-2/moonshotai.kimi-k2-thinking",
       "variant": "",
       "input": 0.6,
       "output": 2.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -2738,10 +5615,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-east-2/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 5.25
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-east-2/qwen.qwen3-coder-next",
       "variant": "",
       "input": 0.5,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-east-2/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -2762,7 +5667,7 @@
       "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/amazon.titan-embed-text-v2:0",
       "variant": "",
-      "input": 0.2,
+      "input": 0.03,
       "output": 0
     },
     {
@@ -2788,6 +5693,35 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "variant": "",
+      "input": 3.6,
+      "output": 18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "variant": "batches",
+      "input": 1.8,
+      "output": 9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "variant": "",
+      "input": 3.6,
+      "output": 18,
+      "cached_input": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-3-haiku-20240307-v1:0",
+      "variant": "",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/anthropic.claude-fable-5-1",
       "variant": "",
       "input": 12,
@@ -2804,6 +5738,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.6,
+      "cached_input": 0.012
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.6,
+      "output": 3,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/anthropic.claude-opus-4-8",
       "variant": "",
       "input": 6,
@@ -2817,6 +5767,13 @@
       "input": 6,
       "output": 30,
       "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 3,
+      "output": 15
     },
     {
       "provider": "AWS/Bedrock",
@@ -2848,7 +5805,7 @@
       "variant": "",
       "input": 2.4,
       "output": 12,
-      "cached_input": 0.24
+      "cached_input": 0.12
     },
     {
       "provider": "AWS/Bedrock",
@@ -2881,10 +5838,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "batches",
+      "input": 0.12,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "flex",
+      "input": 0.12,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "priority",
+      "input": 0.42,
+      "output": 1.26
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/nvidia.nemotron-nano-3-30b",
       "variant": "",
       "input": 0.072,
       "output": 0.288
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-3-30b",
+      "variant": "batches",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-3-30b",
+      "variant": "flex",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-3-30b",
+      "variant": "priority",
+      "input": 0.132,
+      "output": 0.504
     },
     {
       "provider": "AWS/Bedrock",
@@ -2895,10 +5894,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "batches",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "flex",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "priority",
+      "input": 0.132,
+      "output": 0.48
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/nvidia.nemotron-super-3-120b",
       "variant": "",
       "input": 0.18,
       "output": 0.78
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-super-3-120b",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.39
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-super-3-120b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.39
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/nvidia.nemotron-super-3-120b",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.365
     },
     {
       "provider": "AWS/Bedrock",
@@ -2917,10 +5958,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.26
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/openai.gpt-oss-120b-1:0",
       "variant": "",
       "input": 0.18,
       "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b-1:0",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b-1:0",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-120b-1:0",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.26
     },
     {
       "provider": "AWS/Bedrock",
@@ -2931,10 +6014,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b",
+      "variant": "batches",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b",
+      "variant": "flex",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b",
+      "variant": "priority",
+      "input": 0.147,
+      "output": 0.63
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/openai.gpt-oss-20b-1:0",
       "variant": "",
       "input": 0.084,
       "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b-1:0",
+      "variant": "batches",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b-1:0",
+      "variant": "flex",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-oss-20b-1:0",
+      "variant": "priority",
+      "input": 0.147,
+      "output": 0.63
     },
     {
       "provider": "AWS/Bedrock",
@@ -2946,10 +6071,63 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.6",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 3.96,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.6",
+      "variant": "priority",
+      "input": 4.62,
+      "output": 13.86,
+      "cached_input": 1.155
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.7",
+      "variant": "",
+      "input": 2.64,
+      "output": 7.92,
+      "cached_input": 0.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.7",
+      "variant": "batches",
+      "input": 1.32,
+      "output": 3.96
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.7",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 3.96,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/xai.grok-4.7",
+      "variant": "priority",
+      "input": 4.62,
+      "output": 13.86,
+      "cached_input": 1.155
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/amazon.nova-2-multimodal-embeddings-v1:0",
       "variant": "",
       "input": 0.162,
       "output": 0
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-2-multimodal-embeddings-v1:0",
+      "variant": "batches",
+      "input": 0.081
     },
     {
       "provider": "AWS/Bedrock",
@@ -2961,6 +6139,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-lite-v1:0",
+      "variant": "batches",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/amazon.nova-micro-v1:0",
       "variant": "",
       "input": 0.042,
@@ -2969,11 +6154,41 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-micro-v1:0",
+      "variant": "batches",
+      "input": 0.021,
+      "output": 0.084
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/amazon.nova-pro-v1:0",
       "variant": "",
       "input": 0.96,
       "output": 3.84,
       "cached_input": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-pro-v1:0",
+      "variant": "batches",
+      "input": 0.48,
+      "output": 1.92
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-pro-v1:0",
+      "variant": "flex",
+      "input": 0.48,
+      "output": 1.92,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/amazon.nova-pro-v1:0",
+      "variant": "priority",
+      "input": 1.68,
+      "output": 6.72,
+      "cached_input": 0.42
     },
     {
       "provider": "AWS/Bedrock",
@@ -2986,15 +6201,15 @@
       "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/amazon.titan-embed-text-v2:0",
       "variant": "",
-      "input": 0.2,
+      "input": 0.11,
       "output": 0
     },
     {
       "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/amazon.titan-text-express-v1",
       "variant": "",
-      "input": 1.3,
-      "output": 1.7
+      "input": 0.8,
+      "output": 1.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -3008,6 +6223,35 @@
       "model": "us-gov-west-1/amazon.titan-text-premier-v1:0",
       "variant": "",
       "input": 0.5,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "variant": "",
+      "input": 3.6,
+      "output": 18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "variant": "batches",
+      "input": 1.8,
+      "output": 9
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "variant": "",
+      "input": 3.6,
+      "output": 18,
+      "cached_input": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-3-haiku-20240307-v1:0",
+      "variant": "",
+      "input": 0.3,
       "output": 1.5
     },
     {
@@ -3028,6 +6272,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.6,
+      "cached_input": 0.012
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.6,
+      "output": 3,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/anthropic.claude-opus-4-8",
       "variant": "",
       "input": 6,
@@ -3041,6 +6301,13 @@
       "input": 6,
       "output": 30,
       "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 3,
+      "output": 15
     },
     {
       "provider": "AWS/Bedrock",
@@ -3072,7 +6339,7 @@
       "variant": "",
       "input": 2.4,
       "output": 12,
-      "cached_input": 0.24
+      "cached_input": 0.12
     },
     {
       "provider": "AWS/Bedrock",
@@ -3091,6 +6358,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-26b-a4b",
+      "variant": "batches",
+      "input": 0.078,
+      "output": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-26b-a4b",
+      "variant": "flex",
+      "input": 0.078,
+      "output": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-26b-a4b",
+      "variant": "priority",
+      "input": 0.273,
+      "output": 0.84
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/google.gemma-4-31b",
       "variant": "",
       "input": 0.168,
@@ -3098,10 +6386,51 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-31b",
+      "variant": "batches",
+      "input": 0.084,
+      "output": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-31b",
+      "variant": "flex",
+      "input": 0.084,
+      "output": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-31b",
+      "variant": "priority",
+      "input": 0.294,
+      "output": 0.84
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/google.gemma-4-e2b",
       "variant": "",
       "input": 0.048,
       "output": 0.096
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-e2b",
+      "variant": "batches",
+      "output": 0.048
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-e2b",
+      "variant": "flex",
+      "input": 0.024,
+      "output": 0.048
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/google.gemma-4-e2b",
+      "variant": "priority",
+      "input": 0.084,
+      "output": 0.168
     },
     {
       "provider": "AWS/Bedrock",
@@ -3126,10 +6455,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "batches",
+      "input": 0.12,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "flex",
+      "input": 0.12,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-12b-v2",
+      "variant": "priority",
+      "input": 0.42,
+      "output": 1.26
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/nvidia.nemotron-nano-3-30b",
       "variant": "",
       "input": 0.072,
       "output": 0.288
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-3-30b",
+      "variant": "batches",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-3-30b",
+      "variant": "flex",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-3-30b",
+      "variant": "priority",
+      "input": 0.132,
+      "output": 0.504
     },
     {
       "provider": "AWS/Bedrock",
@@ -3140,10 +6511,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "batches",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "flex",
+      "input": 0.036,
+      "output": 0.144
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-nano-9b-v2",
+      "variant": "priority",
+      "input": 0.132,
+      "output": 0.48
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/nvidia.nemotron-super-3-120b",
       "variant": "",
       "input": 0.18,
       "output": 0.78
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-super-3-120b",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.39
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-super-3-120b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.39
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/nvidia.nemotron-super-3-120b",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.365
     },
     {
       "provider": "AWS/Bedrock",
@@ -3171,6 +6584,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "above_272k_tokens_flex",
+      "input": 0.264,
+      "output": 1.188,
+      "cached_input": 0.0264
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "above_272k_tokens_priority",
+      "input": 1.056,
+      "output": 4.752,
+      "cached_input": 0.1056
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "flex",
+      "input": 0.132,
+      "output": 0.792,
+      "cached_input": 0.0132
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-luna",
+      "variant": "priority",
+      "input": 0.528,
+      "output": 3.168,
+      "cached_input": 0.0528
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/openai.gpt-5.6-terra",
       "variant": "",
       "input": 2.64,
@@ -3187,10 +6632,63 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "above_272k_tokens_flex",
+      "input": 2.64,
+      "output": 11.88,
+      "cached_input": 0.264
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "above_272k_tokens_priority",
+      "input": 10.56,
+      "output": 47.52,
+      "cached_input": 1.056
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 7.92,
+      "cached_input": 0.132
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-5.6-terra",
+      "variant": "priority",
+      "input": 5.28,
+      "output": 31.68,
+      "cached_input": 0.528
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/openai.gpt-oss-120b",
       "variant": "",
       "input": 0.18,
       "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.26
     },
     {
       "provider": "AWS/Bedrock",
@@ -3201,6 +6699,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b-1:0",
+      "variant": "batches",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b-1:0",
+      "variant": "flex",
+      "input": 0.09,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-120b-1:0",
+      "variant": "priority",
+      "input": 0.315,
+      "output": 1.26
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/openai.gpt-oss-20b",
       "variant": "",
       "input": 0.084,
@@ -3208,10 +6727,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b",
+      "variant": "batches",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b",
+      "variant": "flex",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b",
+      "variant": "priority",
+      "input": 0.147,
+      "output": 0.63
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/openai.gpt-oss-20b-1:0",
       "variant": "",
       "input": 0.084,
       "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b-1:0",
+      "variant": "batches",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b-1:0",
+      "variant": "flex",
+      "input": 0.042,
+      "output": 0.18
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/openai.gpt-oss-20b-1:0",
+      "variant": "priority",
+      "input": 0.147,
+      "output": 0.63
     },
     {
       "provider": "AWS/Bedrock",
@@ -3223,6 +6784,30 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.3",
+      "variant": "batches",
+      "input": 0.75,
+      "output": 1.5,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.3",
+      "variant": "flex",
+      "input": 0.75,
+      "output": 1.5,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.3",
+      "variant": "priority",
+      "input": 2.625,
+      "output": 5.25,
+      "cached_input": 0.42
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/xai.grok-4.6",
       "variant": "",
       "input": 2.64,
@@ -3231,11 +6816,74 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.6",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 3.96,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.6",
+      "variant": "priority",
+      "input": 4.62,
+      "output": 13.86,
+      "cached_input": 1.155
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.7",
+      "variant": "",
+      "input": 2.64,
+      "output": 7.92,
+      "cached_input": 0.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.7",
+      "variant": "batches",
+      "input": 1.32,
+      "output": 3.96
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.7",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 3.96,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/xai.grok-4.7",
+      "variant": "priority",
+      "input": 4.62,
+      "output": 13.86,
+      "cached_input": 1.155
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov.anthropic.claude-fable-5-1",
       "variant": "",
       "input": 12,
       "output": 60,
       "cached_input": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.12,
+      "output": 0.6,
+      "cached_input": 0.012
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.6,
+      "output": 3,
+      "cached_input": 0.06
     },
     {
       "provider": "AWS/Bedrock",
@@ -3252,6 +6900,13 @@
       "input": 6,
       "output": 30,
       "cached_input": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 3,
+      "output": 15
     },
     {
       "provider": "AWS/Bedrock",
@@ -3291,7 +6946,7 @@
       "variant": "",
       "input": 2.4,
       "output": 12,
-      "cached_input": 0.24
+      "cached_input": 0.12
     },
     {
       "provider": "AWS/Bedrock",
@@ -3345,6 +7000,37 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov.xai.grok-4.7",
+      "variant": "",
+      "input": 2.64,
+      "output": 7.92,
+      "cached_input": 0.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.xai.grok-4.7",
+      "variant": "batches",
+      "input": 1.32,
+      "output": 3.96
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.xai.grok-4.7",
+      "variant": "flex",
+      "input": 1.32,
+      "output": 3.96,
+      "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.xai.grok-4.7",
+      "variant": "priority",
+      "input": 4.62,
+      "output": 13.86,
+      "cached_input": 1.155
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-west-1/meta.llama3-70b-instruct-v1:0",
       "variant": "",
       "input": 2.65,
@@ -3387,6 +7073,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-west-2/deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.085,
+      "output": 3.2375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-west-2/minimax.minimax-m2.1",
       "variant": "",
       "input": 0.3,
@@ -3394,10 +7101,52 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.1",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.1",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.1",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-west-2/minimax.minimax-m2.5",
       "variant": "",
       "input": 0.3,
       "output": 1.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.5",
+      "variant": "batches",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.5",
+      "variant": "flex",
+      "input": 0.15,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/minimax.minimax-m2.5",
+      "variant": "priority",
+      "input": 0.525,
+      "output": 2.1
     },
     {
       "provider": "AWS/Bedrock",
@@ -3429,10 +7178,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-west-2/moonshotai.kimi-k2-thinking",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.25
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-west-2/moonshotai.kimi-k2.5",
       "variant": "",
       "input": 0.6,
       "output": 3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/moonshotai.kimi-k2.5",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/moonshotai.kimi-k2.5",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/moonshotai.kimi-k2.5",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 5.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -3443,10 +7220,38 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-west-2/qwen.qwen3-coder-next",
+      "variant": "flex",
+      "input": 0.25,
+      "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-west-2/zai.glm-5",
       "variant": "",
       "input": 1,
       "output": 3.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/zai.glm-5",
+      "variant": "batches",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/zai.glm-5",
+      "variant": "flex",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-west-2/zai.glm-5",
+      "variant": "priority",
+      "input": 1.75,
+      "output": 5.6
     },
     {
       "provider": "AWS/Bedrock",
@@ -3458,11 +7263,48 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-2-lite-v1:0",
+      "variant": "batches",
+      "input": 0.165,
+      "output": 1.375
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-2-lite-v1:0",
+      "variant": "flex",
+      "input": 0.165,
+      "output": 1.375,
+      "cached_input": 0.04125
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-2-lite-v1:0",
+      "variant": "priority",
+      "input": 0.5775,
+      "output": 4.8125,
+      "cached_input": 0.144375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.amazon.nova-2-pro-preview-20251202-v1:0",
       "variant": "",
       "input": 1.375,
       "output": 11,
       "cached_input": 0.34375
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-2-pro-preview-20251202-v1:0",
+      "variant": "batches",
+      "input": 0.6875,
+      "output": 5.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-2-pro-preview-20251202-v1:0",
+      "variant": "priority",
+      "input": 2.40625,
+      "output": 19.25
     },
     {
       "provider": "AWS/Bedrock",
@@ -3474,6 +7316,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-lite-v1:0",
+      "variant": "batches",
+      "input": 0.03,
+      "output": 0.12
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.amazon.nova-micro-v1:0",
       "variant": "",
       "input": 0.035,
@@ -3482,11 +7331,41 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-micro-v1:0",
+      "variant": "batches",
+      "input": 0.0175,
+      "output": 0.07
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.amazon.nova-pro-v1:0",
       "variant": "",
       "input": 0.8,
       "output": 3.2,
       "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-pro-v1:0",
+      "variant": "batches",
+      "input": 0.4,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-pro-v1:0",
+      "variant": "flex",
+      "input": 0.4,
+      "output": 1.6,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.amazon.nova-pro-v1:0",
+      "variant": "priority",
+      "input": 1.4,
+      "output": 5.6,
+      "cached_input": 0.35
     },
     {
       "provider": "AWS/Bedrock",
@@ -3558,6 +7437,22 @@
       "variant": "batches",
       "input": 0.55,
       "output": 2.75
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-haiku-5-5",
+      "variant": "",
+      "input": 0.11,
+      "output": 0.55,
+      "cached_input": 0.011
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.55,
+      "output": 2.75,
+      "cached_input": 0.055
     },
     {
       "provider": "AWS/Bedrock",
@@ -3641,6 +7536,13 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-opus-5",
+      "variant": "batches",
+      "input": 2.75,
+      "output": 13.75
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.anthropic.claude-opus-5-5",
       "variant": "",
       "input": 4.4,
@@ -3708,7 +7610,7 @@
       "variant": "",
       "input": 2.2,
       "output": 11,
-      "cached_input": 0.22
+      "cached_input": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -3733,6 +7635,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.deepseek.v3.2",
+      "variant": "batches",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.deepseek.v3.2",
+      "variant": "flex",
+      "input": 0.31,
+      "output": 0.925
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.deepseek.v3.2",
+      "variant": "priority",
+      "input": 1.085,
+      "output": 3.2375
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.meta.llama3-1-405b-instruct-v1:0",
       "variant": "",
       "input": 2.4,
@@ -3747,10 +7670,24 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.meta.llama3-1-70b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 0.36
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.meta.llama3-1-8b-instruct-v1:0",
       "variant": "",
       "input": 0.22,
       "output": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.meta.llama3-1-8b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.11,
+      "output": 0.11
     },
     {
       "provider": "AWS/Bedrock",
@@ -3786,6 +7723,13 @@
       "variant": "",
       "input": 0.72,
       "output": 0.72
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.meta.llama3-3-70b-instruct-v1:0",
+      "variant": "batches",
+      "input": 0.36,
+      "output": 0.36
     },
     {
       "provider": "AWS/Bedrock",
@@ -3829,6 +7773,46 @@
       "input": 3.3,
       "output": 16.5,
       "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.moonshotai.kimi-k3",
+      "variant": "flex",
+      "input": 1.65,
+      "output": 8.25,
+      "cached_input": 0.165
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.moonshotai.kimi-k3",
+      "variant": "priority",
+      "input": 5.775,
+      "output": 28.875,
+      "cached_input": 0.5775
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.moonshotai.kimi-k3.1",
+      "variant": "",
+      "input": 4.4,
+      "output": 22,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.moonshotai.kimi-k3.1",
+      "variant": "flex",
+      "input": 2.2,
+      "output": 11,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.moonshotai.kimi-k3.1",
+      "variant": "priority",
+      "input": 7.7,
+      "output": 38.5,
+      "cached_input": 0.385
     },
     {
       "provider": "AWS/Bedrock",
@@ -3928,6 +7912,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6-astra",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 132,
+      "output": 495,
+      "cached_input": 13.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6-astra",
+      "variant": "ultrafast",
+      "input": 66,
+      "output": 330,
+      "cached_input": 6.6
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.openai.gpt-6-luna",
       "variant": "",
       "input": 0.11,
@@ -3976,7 +7976,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6.1-sol",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 26.4,
+      "output": 99,
+      "cached_input": 1.32
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6.1-sol",
+      "variant": "ultrafast",
+      "input": 13.2,
+      "output": 66,
+      "cached_input": 0.66
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6.1-terra",
+      "variant": "",
+      "input": 1.1,
+      "output": 5.5,
+      "cached_input": 0.055
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.openai.gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2.2,
+      "output": 8.25,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.twelvelabs.pegasus-1-2-v1:0",
+      "variant": "",
+      "output": 7.5
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.twelvelabs.pegasus-1-5-v1:0",
       "variant": "",
       "output": 7.5
     },
@@ -4004,6 +8042,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.xai.grok-4.6",
+      "variant": "flex",
+      "input": 1.1,
+      "output": 3.3,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.xai.grok-4.6",
+      "variant": "priority",
+      "input": 3.85,
+      "output": 11.55,
+      "cached_input": 0.9625
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.xai.grok-4.7",
       "variant": "",
       "input": 2.2,
@@ -4012,10 +8066,79 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.xai.grok-4.7",
+      "variant": "flex",
+      "input": 1.1,
+      "output": 3.3,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.xai.grok-4.7",
+      "variant": "priority",
+      "input": 3.85,
+      "output": 11.55,
+      "cached_input": 0.9625
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.zai.glm-5.3",
+      "variant": "",
+      "input": 1.848,
+      "output": 5.808,
+      "cached_input": 0.3432
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.zai.glm-5.3",
+      "variant": "batches",
+      "input": 0.924,
+      "output": 2.904,
+      "cached_input": 0.1716
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.zai.glm-5.3",
+      "variant": "flex",
+      "input": 0.924,
+      "output": 2.904,
+      "cached_input": 0.1716
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.zai.glm-5.3",
+      "variant": "priority",
+      "input": 3.234,
+      "output": 10.164,
+      "cached_input": 0.6006
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "writer.palmyra-vision-7b",
       "variant": "",
       "input": 0.15,
       "output": 0.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "writer.palmyra-vision-7b",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "writer.palmyra-vision-7b",
+      "variant": "flex",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "writer.palmyra-vision-7b",
+      "variant": "priority",
+      "input": 0.2625,
+      "output": 1.05
     },
     {
       "provider": "AWS/Bedrock",
@@ -4041,6 +8164,30 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.3",
+      "variant": "batches",
+      "input": 0.625,
+      "output": 1.25,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.3",
+      "variant": "flex",
+      "input": 0.625,
+      "output": 1.25,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.3",
+      "variant": "priority",
+      "input": 2.1875,
+      "output": 4.375,
+      "cached_input": 0.35
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "xai.grok-4.6",
       "variant": "",
       "input": 2.2,
@@ -4049,11 +8196,50 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.6",
+      "variant": "flex",
+      "input": 1.1,
+      "output": 3.3,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.6",
+      "variant": "priority",
+      "input": 3.85,
+      "output": 11.55,
+      "cached_input": 0.9625
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "xai.grok-4.7",
       "variant": "",
-      "input": 2,
-      "output": 6,
-      "cached_input": 0.5
+      "input": 2.2,
+      "output": 6.6,
+      "cached_input": 0.55
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.7",
+      "variant": "batches",
+      "input": 1.1,
+      "output": 3.3
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.7",
+      "variant": "flex",
+      "input": 1.1,
+      "output": 3.3,
+      "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "xai.grok-4.7",
+      "variant": "priority",
+      "input": 3.85,
+      "output": 11.55,
+      "cached_input": 0.9625
     },
     {
       "provider": "AWS/Bedrock",
@@ -4064,6 +8250,27 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7",
+      "variant": "batches",
+      "input": 0.3,
+      "output": 1.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7",
+      "variant": "flex",
+      "input": 0.3,
+      "output": 1.1
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7",
+      "variant": "priority",
+      "input": 1.05,
+      "output": 3.85
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "zai.glm-4.7-flash",
       "variant": "",
       "input": 0.07,
@@ -4071,10 +8278,45 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7-flash",
+      "variant": "batches",
+      "input": 0.035,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7-flash",
+      "variant": "flex",
+      "input": 0.035,
+      "output": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-4.7-flash",
+      "variant": "priority",
+      "input": 0.1225,
+      "output": 0.7
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "zai.glm-5",
       "variant": "",
       "input": 1,
       "output": 3.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-5",
+      "variant": "batches",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-5",
+      "variant": "priority",
+      "input": 1.75,
+      "output": 5.6
     },
     {
       "provider": "Anthropic",
@@ -4139,6 +8381,38 @@
       "input": 0.5,
       "output": 2.5,
       "cached_input": 0.05
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-haiku-5-5",
+      "variant": "",
+      "input": 0.1,
+      "output": 0.5,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-haiku-5-5",
+      "variant": "above_100k_tokens",
+      "input": 0.5,
+      "output": 2.5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-haiku-5-5",
+      "variant": "above_100k_tokens_batches",
+      "input": 0.25,
+      "output": 1.25,
+      "cached_input": 0.025
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-haiku-5-5",
+      "variant": "batches",
+      "input": 0.05,
+      "output": 0.25,
+      "cached_input": 0.005
     },
     {
       "provider": "Anthropic",
@@ -4335,22 +8609,6 @@
     {
       "provider": "Anthropic",
       "model": "claude-sonnet-4-5",
-      "variant": "above_200k_tokens",
-      "input": 6,
-      "output": 22.5,
-      "cached_input": 0.6
-    },
-    {
-      "provider": "Anthropic",
-      "model": "claude-sonnet-4-5",
-      "variant": "above_200k_tokens_batches",
-      "input": 3,
-      "output": 11.25,
-      "cached_input": 0.3
-    },
-    {
-      "provider": "Anthropic",
-      "model": "claude-sonnet-4-5",
       "variant": "batches",
       "input": 1.5,
       "output": 7.5,
@@ -4362,22 +8620,6 @@
       "variant": "",
       "input": 3,
       "output": 15,
-      "cached_input": 0.3
-    },
-    {
-      "provider": "Anthropic",
-      "model": "claude-sonnet-4-5-20250929",
-      "variant": "above_200k_tokens",
-      "input": 6,
-      "output": 22.5,
-      "cached_input": 0.6
-    },
-    {
-      "provider": "Anthropic",
-      "model": "claude-sonnet-4-5-20250929",
-      "variant": "above_200k_tokens_batches",
-      "input": 3,
-      "output": 11.25,
       "cached_input": 0.3
     },
     {
@@ -4426,7 +8668,7 @@
       "variant": "",
       "input": 2,
       "output": 10,
-      "cached_input": 0.2
+      "cached_input": 0.1
     },
     {
       "provider": "Anthropic",
@@ -4434,14 +8676,46 @@
       "variant": "batches",
       "input": 1,
       "output": 5,
-      "cached_input": 0.1
+      "cached_input": 0.05
     },
     {
       "provider": "Azure/OpenAI",
       "model": "ada",
       "variant": "",
-      "input": 0.1,
+      "input": 0.11,
       "output": 0
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "apac/gpt-6.1-sol",
+      "variant": "",
+      "input": 2.4,
+      "output": 12,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "apac/gpt-6.1-sol",
+      "variant": "above_272k_tokens",
+      "input": 4.8,
+      "output": 18,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "apac/gpt-6.1-terra",
+      "variant": "",
+      "input": 1.2,
+      "output": 6,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "apac/gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2.4,
+      "output": 9,
+      "cached_input": 0.12
     },
     {
       "provider": "Azure/OpenAI",
@@ -4458,13 +8732,6 @@
       "input": 1.5,
       "output": 6,
       "cached_input": 0.375
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "command-r-plus",
-      "variant": "",
-      "input": 3,
-      "output": 15
     },
     {
       "provider": "Azure/OpenAI",
@@ -4551,6 +8818,21 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "eu/gpt-4o",
+      "variant": "",
+      "input": 2.75,
+      "output": 11,
+      "cached_input": 1.375
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/gpt-4o",
+      "variant": "batches",
+      "input": 1.375,
+      "output": 5.5
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "eu/gpt-4o-2024-05-13",
       "variant": "",
       "input": 5.5,
@@ -4595,6 +8877,20 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "eu/gpt-4o-mini",
+      "variant": "",
+      "input": 0.165,
+      "output": 0.66,
+      "cached_input": 0.083
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/gpt-4o-mini",
+      "variant": "batches",
+      "input": 0.083
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "eu/gpt-4o-mini-2024-07-18",
       "variant": "",
       "input": 0.165,
@@ -4614,14 +8910,6 @@
       "input": 0.66,
       "output": 2.64,
       "cached_input": 0.33
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "eu/gpt-4o-realtime-preview-2024-10-01",
-      "variant": "",
-      "input": 5.5,
-      "output": 22,
-      "cached_input": 2.75
     },
     {
       "provider": "Azure/OpenAI",
@@ -5361,6 +9649,53 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "eu/gpt-6.1-sol",
+      "variant": "",
+      "input": 2.4,
+      "output": 12,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/gpt-6.1-sol",
+      "variant": "above_272k_tokens",
+      "input": 4.8,
+      "output": 18,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/gpt-6.1-terra",
+      "variant": "",
+      "input": 1.2,
+      "output": 6,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2.4,
+      "output": 9,
+      "cached_input": 0.12
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o1",
+      "variant": "",
+      "input": 16.5,
+      "output": 66,
+      "cached_input": 8.25
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o1",
+      "variant": "batches",
+      "input": 8.25,
+      "output": 33
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "eu/o1-2024-12-17",
       "variant": "",
       "input": 16.5,
@@ -5406,11 +9741,18 @@
     },
     {
       "provider": "Azure/OpenAI",
-      "model": "eu/o1-preview",
+      "model": "eu/o3",
       "variant": "",
-      "input": 16.5,
-      "output": 66,
-      "cached_input": 8.25
+      "input": 2.2,
+      "output": 8.8,
+      "cached_input": 0.55
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o3",
+      "variant": "batches",
+      "input": 1.1,
+      "output": 4.4
     },
     {
       "provider": "Azure/OpenAI",
@@ -5437,6 +9779,21 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "eu/o3-mini",
+      "variant": "",
+      "input": 1.21,
+      "output": 4.84,
+      "cached_input": 0.605
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o3-mini",
+      "variant": "batches",
+      "input": 0.605,
+      "output": 2.42
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "eu/o3-mini-2025-01-31",
       "variant": "",
       "input": 1.21,
@@ -5446,6 +9803,21 @@
     {
       "provider": "Azure/OpenAI",
       "model": "eu/o3-mini-2025-01-31",
+      "variant": "batches",
+      "input": 0.605,
+      "output": 2.42
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o4-mini",
+      "variant": "",
+      "input": 1.21,
+      "output": 4.84,
+      "cached_input": 0.303
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "eu/o4-mini",
       "variant": "batches",
       "input": 0.605,
       "output": 2.42
@@ -5606,38 +9978,10 @@
     },
     {
       "provider": "Azure/OpenAI",
-      "model": "gpt-35-turbo-16k",
-      "variant": "",
-      "input": 3,
-      "output": 4
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-35-turbo-16k-0613",
-      "variant": "",
-      "input": 3,
-      "output": 4
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4",
-      "variant": "",
-      "input": 30,
-      "output": 60
-    },
-    {
-      "provider": "Azure/OpenAI",
       "model": "gpt-4-0125-preview",
       "variant": "",
       "input": 10,
       "output": 30
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4-0613",
-      "variant": "",
-      "input": 30,
-      "output": 60
     },
     {
       "provider": "Azure/OpenAI",
@@ -5648,38 +9992,24 @@
     },
     {
       "provider": "Azure/OpenAI",
-      "model": "gpt-4-32k",
-      "variant": "",
-      "input": 60,
-      "output": 120
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4-32k-0613",
-      "variant": "",
-      "input": 60,
-      "output": 120
-    },
-    {
-      "provider": "Azure/OpenAI",
       "model": "gpt-4-turbo",
       "variant": "",
-      "input": 10,
-      "output": 30
+      "input": 11,
+      "output": 33
     },
     {
       "provider": "Azure/OpenAI",
       "model": "gpt-4-turbo-2024-04-09",
       "variant": "",
-      "input": 10,
-      "output": 30
+      "input": 11,
+      "output": 33
     },
     {
       "provider": "Azure/OpenAI",
       "model": "gpt-4-turbo-vision-preview",
       "variant": "",
-      "input": 10,
-      "output": 30
+      "input": 11,
+      "output": 33
     },
     {
       "provider": "Azure/OpenAI",
@@ -5802,21 +10132,6 @@
       "variant": "batches",
       "input": 0.05,
       "output": 0.2
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4.5-preview",
-      "variant": "",
-      "input": 75,
-      "output": 150,
-      "cached_input": 37.5
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4.5-preview",
-      "variant": "batches",
-      "input": 37.5,
-      "output": 75
     },
     {
       "provider": "Azure/OpenAI",
@@ -5825,6 +10140,13 @@
       "input": 2.5,
       "output": 10,
       "cached_input": 1.25
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-4o",
+      "variant": "batches",
+      "input": 1.25,
+      "output": 5
     },
     {
       "provider": "Azure/OpenAI",
@@ -5887,6 +10209,13 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-4o-mini",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-4o-mini-2024-07-18",
       "variant": "",
       "input": 0.15,
@@ -5904,8 +10233,8 @@
       "provider": "Azure/OpenAI",
       "model": "gpt-4o-mini-audio-preview-2024-12-17",
       "variant": "",
-      "input": 2.5,
-      "output": 10
+      "input": 0.15,
+      "output": 0.6
     },
     {
       "provider": "Azure/OpenAI",
@@ -5928,14 +10257,6 @@
       "variant": "",
       "input": 0.6,
       "output": 10
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-4o-realtime-preview-2024-10-01",
-      "variant": "",
-      "input": 5,
-      "output": 20,
-      "cached_input": 2.5
     },
     {
       "provider": "Azure/OpenAI",
@@ -7224,6 +11545,22 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "above_272k_tokens_flex",
+      "input": 10,
+      "output": 37.5,
+      "cached_input": 1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra",
+      "variant": "flex",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-6-astra-2026-09-03",
       "variant": "",
       "input": 10,
@@ -7240,6 +11577,22 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra-2026-09-03",
+      "variant": "above_272k_tokens_flex",
+      "input": 10,
+      "output": 37.5,
+      "cached_input": 1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-astra-2026-09-03",
+      "variant": "flex",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-6-luna",
       "variant": "",
       "input": 0.1,
@@ -7256,6 +11609,22 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6-luna",
+      "variant": "above_272k_tokens_flex",
+      "input": 0.1,
+      "output": 0.375,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-luna",
+      "variant": "flex",
+      "input": 0.05,
+      "output": 0.25,
+      "cached_input": 0.005
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-6-luna-2026-09-22",
       "variant": "",
       "input": 0.1,
@@ -7269,6 +11638,22 @@
       "input": 0.2,
       "output": 0.75,
       "cached_input": 0.02
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-luna-2026-09-22",
+      "variant": "above_272k_tokens_flex",
+      "input": 0.1,
+      "output": 0.375,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-luna-2026-09-22",
+      "variant": "flex",
+      "input": 0.05,
+      "output": 0.25,
+      "cached_input": 0.005
     },
     {
       "provider": "Azure/OpenAI",
@@ -7284,6 +11669,38 @@
       "variant": "above_272k_tokens",
       "input": 4,
       "output": 15,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol",
+      "variant": "above_272k_tokens_flex",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol",
+      "variant": "above_272k_tokens_priority",
+      "input": 8,
+      "output": 30,
+      "cached_input": 0.8
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol",
+      "variant": "priority",
+      "input": 4,
+      "output": 20,
       "cached_input": 0.4
     },
     {
@@ -7304,6 +11721,38 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol-2026-09-22",
+      "variant": "above_272k_tokens_flex",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol-2026-09-22",
+      "variant": "above_272k_tokens_priority",
+      "input": 8,
+      "output": 30,
+      "cached_input": 0.8
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol-2026-09-22",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6-sol-2026-09-22",
+      "variant": "priority",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-6.1-sol",
       "variant": "",
       "input": 2,
@@ -7320,6 +11769,22 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-sol",
+      "variant": "above_272k_tokens_flex",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-sol",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-6.1-sol-2026-09-29",
       "variant": "",
       "input": 2,
@@ -7333,6 +11798,38 @@
       "input": 4,
       "output": 15,
       "cached_input": 0.2
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-sol-2026-09-29",
+      "variant": "above_272k_tokens_flex",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-sol-2026-09-29",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-terra",
+      "variant": "",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2,
+      "output": 7.5,
+      "cached_input": 0.1
     },
     {
       "provider": "Azure/OpenAI",
@@ -7403,6 +11900,7 @@
       "model": "gpt-image-1.5",
       "variant": "",
       "input": 5,
+      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -7410,6 +11908,7 @@
       "model": "gpt-image-1.5-2025-12-16",
       "variant": "",
       "input": 5,
+      "output": 10,
       "cached_input": 1.25
     },
     {
@@ -7482,7 +11981,23 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "gpt-realtime-2.1-2026-07-07",
+      "variant": "",
+      "input": 4,
+      "output": 24,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "gpt-realtime-2.1-mini",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.4,
+      "cached_input": 0.06
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "gpt-realtime-2.1-mini-2026-07-07",
       "variant": "",
       "input": 0.6,
       "output": 2.4,
@@ -7525,6 +12040,13 @@
       "variant": "",
       "input": 8,
       "output": 24
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "model-router",
+      "variant": "",
+      "input": 0.14,
+      "output": 0
     },
     {
       "provider": "Azure/OpenAI",
@@ -7589,6 +12111,13 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "o3",
+      "variant": "batches",
+      "input": 1,
+      "output": 4
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "o3-2025-04-16",
       "variant": "",
       "input": 2,
@@ -7617,6 +12146,13 @@
       "input": 1.1,
       "output": 4.4,
       "cached_input": 0.55
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "o3-mini",
+      "variant": "batches",
+      "input": 0.55,
+      "output": 2.2
     },
     {
       "provider": "Azure/OpenAI",
@@ -7671,6 +12207,13 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "o4-mini",
+      "variant": "batches",
+      "input": 0.55,
+      "output": 2.2
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "o4-mini-2025-04-16",
       "variant": "",
       "input": 1.1,
@@ -7688,21 +12231,21 @@
       "provider": "Azure/OpenAI",
       "model": "text-embedding-3-large",
       "variant": "",
-      "input": 0.13,
+      "input": 0.143,
       "output": 0
     },
     {
       "provider": "Azure/OpenAI",
       "model": "text-embedding-3-small",
       "variant": "",
-      "input": 0.02,
+      "input": 0.022,
       "output": 0
     },
     {
       "provider": "Azure/OpenAI",
       "model": "text-embedding-ada-002",
       "variant": "",
-      "input": 0.1,
+      "input": 0.11,
       "output": 0
     },
     {
@@ -7874,6 +12417,21 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "us/gpt-4o",
+      "variant": "",
+      "input": 2.75,
+      "output": 11,
+      "cached_input": 1.375
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-4o",
+      "variant": "batches",
+      "input": 1.375,
+      "output": 5.5
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "us/gpt-4o-2024-05-13",
       "variant": "",
       "input": 5.5,
@@ -7918,6 +12476,20 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "us/gpt-4o-mini",
+      "variant": "",
+      "input": 0.165,
+      "output": 0.66,
+      "cached_input": 0.083
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-4o-mini",
+      "variant": "batches",
+      "input": 0.083
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "us/gpt-4o-mini-2024-07-18",
       "variant": "",
       "input": 0.165,
@@ -7937,14 +12509,6 @@
       "input": 0.66,
       "output": 2.64,
       "cached_input": 0.33
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "us/gpt-4o-realtime-preview-2024-10-01",
-      "variant": "",
-      "input": 5.5,
-      "output": 22,
-      "cached_input": 2.75
     },
     {
       "provider": "Azure/OpenAI",
@@ -8684,11 +13248,98 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "us/gpt-6-sol",
+      "variant": "above_272k_tokens_priority",
+      "input": 8.8,
+      "output": 33,
+      "cached_input": 0.88
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6-sol",
+      "variant": "priority",
+      "input": 4.4,
+      "output": 22,
+      "cached_input": 0.44
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6.1-sol",
+      "variant": "",
+      "input": 2.2,
+      "output": 11,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6.1-sol",
+      "variant": "above_272k_tokens",
+      "input": 4.4,
+      "output": 16.5,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6.1-terra",
+      "variant": "",
+      "input": 1.1,
+      "output": 5.5,
+      "cached_input": 0.055
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-6.1-terra",
+      "variant": "above_272k_tokens",
+      "input": 2.2,
+      "output": 8.25,
+      "cached_input": 0.11
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "us/gpt-chat-latest",
       "variant": "",
       "input": 5.5,
       "output": 33,
       "cached_input": 0.55
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-realtime-1.5",
+      "variant": "",
+      "input": 4.4,
+      "output": 17.6,
+      "cached_input": 0.44
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-realtime-2.1",
+      "variant": "",
+      "input": 4.4,
+      "output": 26.4,
+      "cached_input": 0.44
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/gpt-realtime-2.1-mini",
+      "variant": "",
+      "input": 0.66,
+      "output": 2.64,
+      "cached_input": 0.066
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o1",
+      "variant": "",
+      "input": 16.5,
+      "output": 66,
+      "cached_input": 8.25
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o1",
+      "variant": "batches",
+      "input": 8.25,
+      "output": 33
     },
     {
       "provider": "Azure/OpenAI",
@@ -8737,11 +13388,18 @@
     },
     {
       "provider": "Azure/OpenAI",
-      "model": "us/o1-preview",
+      "model": "us/o3",
       "variant": "",
-      "input": 16.5,
-      "output": 66,
-      "cached_input": 8.25
+      "input": 2.2,
+      "output": 8.8,
+      "cached_input": 0.55
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o3",
+      "variant": "batches",
+      "input": 1.1,
+      "output": 4.4
     },
     {
       "provider": "Azure/OpenAI",
@@ -8768,6 +13426,21 @@
     },
     {
       "provider": "Azure/OpenAI",
+      "model": "us/o3-mini",
+      "variant": "",
+      "input": 1.21,
+      "output": 4.84,
+      "cached_input": 0.605
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o3-mini",
+      "variant": "batches",
+      "input": 0.605,
+      "output": 2.42
+    },
+    {
+      "provider": "Azure/OpenAI",
       "model": "us/o3-mini-2025-01-31",
       "variant": "",
       "input": 1.21,
@@ -8777,6 +13450,21 @@
     {
       "provider": "Azure/OpenAI",
       "model": "us/o3-mini-2025-01-31",
+      "variant": "batches",
+      "input": 0.605,
+      "output": 2.42
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o4-mini",
+      "variant": "",
+      "input": 1.21,
+      "output": 4.84,
+      "cached_input": 0.303
+    },
+    {
+      "provider": "Azure/OpenAI",
+      "model": "us/o4-mini",
       "variant": "batches",
       "input": 0.605,
       "output": 2.42
@@ -8914,19 +13602,22 @@
       "provider": "Google/Gemini",
       "model": "gemini-2.5-flash-image",
       "variant": "batches",
-      "input": 0.15
+      "input": 0.15,
+      "output": 1.25
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-2.5-flash-image",
       "variant": "flex",
-      "input": 0.15
+      "input": 0.15,
+      "output": 1.25
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-2.5-flash-image",
       "variant": "priority",
-      "input": 0.54
+      "input": 0.54,
+      "output": 4.5
     },
     {
       "provider": "Google/Gemini",
@@ -9009,6 +13700,22 @@
       "variant": "above_200k_tokens",
       "input": 2.5,
       "output": 15,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-2.5-pro",
+      "variant": "above_200k_tokens_batches",
+      "input": 1.25,
+      "output": 7.5,
+      "cached_input": 0.25
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-2.5-pro",
+      "variant": "above_200k_tokens_flex",
+      "input": 1.25,
+      "output": 7.5,
       "cached_input": 0.25
     },
     {
@@ -9292,6 +13999,22 @@
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.1-pro-preview",
+      "variant": "above_200k_tokens_batches",
+      "input": 2,
+      "output": 9,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.1-pro-preview",
+      "variant": "above_200k_tokens_flex",
+      "input": 2,
+      "output": 9,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.1-pro-preview",
       "variant": "above_200k_tokens_priority",
       "input": 7.2,
       "output": 32.4,
@@ -9335,6 +14058,22 @@
       "variant": "above_200k_tokens",
       "input": 4,
       "output": 18,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.1-pro-preview-customtools",
+      "variant": "above_200k_tokens_batches",
+      "input": 2,
+      "output": 9,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-3.1-pro-preview-customtools",
+      "variant": "above_200k_tokens_flex",
+      "input": 2,
+      "output": 9,
       "cached_input": 0.4
     },
     {
@@ -9415,7 +14154,7 @@
       "variant": "batches",
       "input": 0.15,
       "output": 1.25,
-      "cached_input": 0.02
+      "cached_input": 0.015
     },
     {
       "provider": "Google/Gemini",
@@ -9630,10 +14369,48 @@
     },
     {
       "provider": "Google/Gemini",
+      "model": "gemini-4-argon",
+      "variant": "",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-argon",
+      "variant": "batches",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-argon",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-argon",
+      "variant": "priority",
+      "input": 3.6,
+      "output": 18,
+      "cached_input": 0.18
+    },
+    {
+      "provider": "Google/Gemini",
       "model": "gemini-embedding-001",
       "variant": "",
       "input": 0.15,
       "output": 0
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-embedding-001",
+      "variant": "batches",
+      "input": 0.075
     },
     {
       "provider": "Google/Gemini",
@@ -9754,7 +14531,28 @@
     },
     {
       "provider": "Google/Gemini",
+      "model": "gemini-nano-banana-2.1",
+      "variant": "",
+      "input": 1.5,
+      "output": 7.5
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-nano-banana-2.1",
+      "variant": "batches",
+      "input": 0.75,
+      "output": 3.75
+    },
+    {
+      "provider": "Google/Gemini",
       "model": "gemini-omni-1.1-flash",
+      "variant": "",
+      "input": 1.5,
+      "output": 9
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-omni-1.2-flash",
       "variant": "",
       "input": 1.5,
       "output": 9
@@ -10012,6 +14810,20 @@
     {
       "provider": "Google/Vertex",
       "model": "gemini-2.5-pro",
+      "variant": "above_200k_tokens_batches",
+      "input": 1.25,
+      "output": 7.5
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-2.5-pro",
+      "variant": "above_200k_tokens_flex",
+      "input": 1.25,
+      "output": 7.5
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-2.5-pro",
       "variant": "above_200k_tokens_priority",
       "input": 4.5,
       "output": 27,
@@ -10074,8 +14886,7 @@
       "model": "gemini-3-flash-preview",
       "variant": "flex",
       "input": 0.25,
-      "output": 1.5,
-      "cached_input": 0.05
+      "output": 1.5
     },
     {
       "provider": "Google/Vertex",
@@ -10199,6 +15010,14 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "gemini-3.1-flash-image",
+      "variant": "priority",
+      "input": 0.9,
+      "output": 5.4,
+      "cached_input": 0.09
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "gemini-3.1-flash-image-preview",
       "variant": "",
       "input": 0.5,
@@ -10271,6 +15090,14 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "gemini-3.1-flash-lite-image",
+      "variant": "priority",
+      "input": 0.45,
+      "output": 2.7,
+      "cached_input": 0.045
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "gemini-3.1-flash-lite-preview",
       "variant": "",
       "input": 0.25,
@@ -10296,6 +15123,20 @@
     {
       "provider": "Google/Vertex",
       "model": "gemini-3.1-pro-preview",
+      "variant": "above_200k_tokens_batches",
+      "input": 2,
+      "output": 9
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-3.1-pro-preview",
+      "variant": "above_200k_tokens_flex",
+      "input": 2,
+      "output": 9
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-3.1-pro-preview",
       "variant": "above_200k_tokens_priority",
       "input": 7.2,
       "output": 32.4,
@@ -10313,8 +15154,7 @@
       "model": "gemini-3.1-pro-preview",
       "variant": "flex",
       "input": 1,
-      "output": 6,
-      "cached_input": 0.2
+      "output": 6
     },
     {
       "provider": "Google/Vertex",
@@ -10555,6 +15395,30 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "gemini-nano-banana-2.1",
+      "variant": "",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-nano-banana-2.1",
+      "variant": "batches",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-nano-banana-2.1",
+      "variant": "priority",
+      "input": 2.7,
+      "output": 13.5,
+      "cached_input": 0.27
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "gemini-omni-flash-preview",
       "variant": "",
       "input": 1.5,
@@ -10567,6 +15431,14 @@
       "input": 0.3,
       "output": 2.5,
       "cached_input": 0
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "gemini-robotics-er-2-preview",
+      "variant": "",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.1
     },
     {
       "provider": "Google/Vertex",
@@ -10719,6 +15591,14 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "vertex_ai/gemini-3.1-flash-image",
+      "variant": "priority",
+      "input": 0.9,
+      "output": 5.4,
+      "cached_input": 0.09
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "vertex_ai/gemini-3.1-flash-image-preview",
       "variant": "",
       "input": 0.5,
@@ -10791,6 +15671,14 @@
     },
     {
       "provider": "Google/Vertex",
+      "model": "vertex_ai/gemini-3.1-flash-lite-image",
+      "variant": "priority",
+      "input": 0.45,
+      "output": 2.7,
+      "cached_input": 0.045
+    },
+    {
+      "provider": "Google/Vertex",
       "model": "vertex_ai/gemini-3.1-flash-lite-preview",
       "variant": "",
       "input": 0.25,
@@ -10830,11 +15718,28 @@
       "cached_input": 0.054
     },
     {
-      "provider": "Groq",
-      "model": "llama-guard-3-8b",
+      "provider": "Google/Vertex",
+      "model": "vertex_ai/gemini-nano-banana-2.1",
       "variant": "",
-      "input": 0.2,
-      "output": 0.2
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.15
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "vertex_ai/gemini-nano-banana-2.1",
+      "variant": "batches",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "Google/Vertex",
+      "model": "vertex_ai/gemini-nano-banana-2.1",
+      "variant": "priority",
+      "input": 2.7,
+      "output": 13.5,
+      "cached_input": 0.27
     },
     {
       "provider": "Groq",
@@ -10918,6 +15823,14 @@
       "input": 0.25,
       "output": 0.25,
       "cached_input": 0.025
+    },
+    {
+      "provider": "Mistral",
+      "model": "deepseek-v4-1-flash-1017",
+      "variant": "",
+      "input": 0.3,
+      "output": 1.2,
+      "cached_input": 0.007
     },
     {
       "provider": "Mistral",
@@ -11093,6 +16006,22 @@
     },
     {
       "provider": "Mistral",
+      "model": "mistral-large-4",
+      "variant": "",
+      "input": 0.7,
+      "output": 2.1,
+      "cached_input": 0.07
+    },
+    {
+      "provider": "Mistral",
+      "model": "mistral-large-4-0",
+      "variant": "",
+      "input": 0.7,
+      "output": 2.1,
+      "cached_input": 0.07
+    },
+    {
+      "provider": "Mistral",
       "model": "mistral-large-latest",
       "variant": "",
       "input": 0.5,
@@ -11261,6 +16190,14 @@
     },
     {
       "provider": "Mistral",
+      "model": "zai-glm-5-3-flash",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.5,
+      "cached_input": 0.03
+    },
+    {
+      "provider": "Mistral",
       "model": "zai-glm-latest",
       "variant": "",
       "input": 1.4,
@@ -11294,6 +16231,13 @@
     {
       "provider": "OpenAI",
       "model": "computer-use-preview",
+      "variant": "",
+      "input": 3,
+      "output": 12
+    },
+    {
+      "provider": "OpenAI",
+      "model": "computer-use-preview-2025-03-11",
       "variant": "",
       "input": 3,
       "output": 12
@@ -11886,6 +16830,21 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-4o-mini-search-preview-2025-03-11",
+      "variant": "",
+      "input": 0.15,
+      "output": 0.6,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-4o-mini-search-preview-2025-03-11",
+      "variant": "batches",
+      "input": 0.075,
+      "output": 0.3
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-4o-mini-transcribe",
       "variant": "",
       "input": 1.25,
@@ -11937,6 +16896,21 @@
     {
       "provider": "OpenAI",
       "model": "gpt-4o-search-preview",
+      "variant": "batches",
+      "input": 1.25,
+      "output": 5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-4o-search-preview-2025-03-11",
+      "variant": "",
+      "input": 2.5,
+      "output": 10,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-4o-search-preview-2025-03-11",
       "variant": "batches",
       "input": 1.25,
       "output": 5
@@ -12133,12 +17107,6 @@
     },
     {
       "provider": "OpenAI",
-      "model": "gpt-5-nano",
-      "variant": "priority",
-      "input": 2.5
-    },
-    {
-      "provider": "OpenAI",
       "model": "gpt-5-nano-2025-08-07",
       "variant": "",
       "input": 0.05,
@@ -12160,12 +17128,6 @@
       "input": 0.025,
       "output": 0.2,
       "cached_input": 0.0025
-    },
-    {
-      "provider": "OpenAI",
-      "model": "gpt-5-nano-2025-08-07",
-      "variant": "priority",
-      "input": 2.5
     },
     {
       "provider": "OpenAI",
@@ -12869,6 +17831,14 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-5.5-cyber-preview",
+      "variant": "",
+      "input": 12.5,
+      "output": 75,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-5.5-pro",
       "variant": "",
       "input": 30,
@@ -13291,6 +18261,22 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-6-astra-law",
+      "variant": "",
+      "input": 10,
+      "output": 50,
+      "cached_input": 1
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-cyber",
+      "variant": "",
+      "input": 20,
+      "output": 100,
+      "cached_input": 2
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-6-luna",
       "variant": "",
       "input": 0.1,
@@ -13312,6 +18298,14 @@
       "input": 0.1,
       "output": 0.375,
       "cached_input": 0.01
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-luna",
+      "variant": "above_272k_tokens_decisions",
+      "input": 0.2,
+      "output": 0,
+      "cached_input": 0.02
     },
     {
       "provider": "OpenAI",
@@ -13340,6 +18334,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-6-luna",
+      "variant": "decisions",
+      "input": 0.1,
+      "output": 0,
+      "cached_input": 0.01
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-luna",
       "variant": "flex",
       "input": 0.05,
       "output": 0.25,
@@ -13352,6 +18354,22 @@
       "input": 0.2,
       "output": 1,
       "cached_input": 0.02
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-rosalind",
+      "variant": "",
+      "input": 15,
+      "output": 75,
+      "cached_input": 1.5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-rosalind",
+      "variant": "above_272k_tokens",
+      "input": 30,
+      "output": 112.5,
+      "cached_input": 3
     },
     {
       "provider": "OpenAI",
@@ -13460,6 +18478,14 @@
     {
       "provider": "OpenAI",
       "model": "gpt-6.1-sol",
+      "variant": "above_272k_tokens_ultrafast",
+      "input": 24,
+      "output": 90,
+      "cached_input": 1.2
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6.1-sol",
       "variant": "batches",
       "input": 1,
       "output": 5,
@@ -13480,6 +18506,14 @@
       "input": 4,
       "output": 20,
       "cached_input": 0.2
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6.1-sol",
+      "variant": "ultrafast",
+      "input": 12,
+      "output": 60,
+      "cached_input": 0.6
     },
     {
       "provider": "OpenAI",
@@ -13569,6 +18603,13 @@
     {
       "provider": "OpenAI",
       "model": "gpt-audio-mini",
+      "variant": "",
+      "input": 0.6,
+      "output": 2.4
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-audio-mini-2025-10-06",
       "variant": "",
       "input": 0.6,
       "output": 2.4
@@ -13737,6 +18778,20 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-image-2.6-flare",
+      "variant": "",
+      "input": 5,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-image-2.6-sunburst",
+      "variant": "",
+      "input": 5,
+      "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-realtime",
       "variant": "",
       "input": 4,
@@ -13798,6 +18853,14 @@
       "input": 0.6,
       "output": 2.4,
       "cached_input": 0.06
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-rosalind-discovery",
+      "variant": "",
+      "input": 5,
+      "output": 25,
+      "cached_input": 0.5
     },
     {
       "provider": "OpenAI",
@@ -13937,6 +19000,14 @@
     },
     {
       "provider": "OpenAI",
+      "model": "o3-deep-research-2025-06-26",
+      "variant": "",
+      "input": 10,
+      "output": 40,
+      "cached_input": 2.5
+    },
+    {
+      "provider": "OpenAI",
       "model": "o3-mini",
       "variant": "",
       "input": 1.1,
@@ -14058,6 +19129,14 @@
     {
       "provider": "OpenAI",
       "model": "o4-mini-deep-research",
+      "variant": "",
+      "input": 2,
+      "output": 8,
+      "cached_input": 0.5
+    },
+    {
+      "provider": "OpenAI",
+      "model": "o4-mini-deep-research-2025-06-26",
       "variant": "",
       "input": 2,
       "output": 8,
@@ -14214,22 +19293,6 @@
       "variant": "",
       "input": 3.3,
       "output": 16.5,
-      "cached_input": 0.33
-    },
-    {
-      "provider": "Posit",
-      "model": "claude-sonnet-4-5",
-      "variant": "above_200k_tokens",
-      "input": 6.6,
-      "output": 24.75,
-      "cached_input": 0.66
-    },
-    {
-      "provider": "Posit",
-      "model": "claude-sonnet-4-5",
-      "variant": "above_200k_tokens_batches",
-      "input": 3.3,
-      "output": 12.375,
       "cached_input": 0.33
     },
     {
