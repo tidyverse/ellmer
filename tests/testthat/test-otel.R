@@ -1045,9 +1045,10 @@ test_that("tool execution duration is recorded as a metric", {
     map(points, \(x) x$attributes[["gen_ai.tool.name"]]),
     list("t", "t")
   )
-  expect_equal(
-    map(points, \(x) x$attributes[["error.type"]]),
-    list(NULL, "simpleError")
+  # The SDK doesn't promise points come back in call order.
+  expect_setequal(
+    map_chr(points, \(x) x$attributes[["error.type"]] %||% "none"),
+    c("none", "simpleError")
   )
 })
 
@@ -1071,9 +1072,9 @@ test_that("metric points come from the final cumulative export (#1223)", {
   points <- otel_metric_points(recorded$metrics)
   expect_equal(names(points), "gen_ai.execute_tool.duration")
   points <- points[["gen_ai.execute_tool.duration"]]
-  expect_equal(
-    map(points, \(x) x$attributes[["error.type"]]),
-    list(NULL, "simpleError")
+  expect_setequal(
+    map_chr(points, \(x) x$attributes[["error.type"]] %||% "none"),
+    c("none", "simpleError")
   )
 })
 
