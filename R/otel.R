@@ -392,20 +392,26 @@ span_recording <- function(span) {
 
 with_otel_record <- function(expr) {
   on.exit(otel_cache_tracer())
-  otelsdk::with_otel_record({
-    otel_cache_tracer()
-    value <- expr
-    # otelsdk only returns in-memory metrics once they have been exported,
-    # which would otherwise happen after they are collected, so flush early.
-    # Don't also shut down: with otelsdk >= 0.3.0 that exports a second time
-    # and duplicates every metric.
-    otel::get_default_meter_provider()$flush()
-    value
-  })
+  otelsdk::with_otel_record(
+    {
+      otel_cache_tracer()
+      value <- expr
+      # otelsdk only returns in-memory metrics once they have been exported,
+      # which would otherwise happen after they are collected, so flush early.
+      otel::get_default_meter_provider()$flush()
+      value
+    },
+    # otel_metric_points() relies on every export holding all points so far.
+    meter_opts = list(aggregation_temporality = "cumulative")
+  )
 }
 
 # Flatten recorded metrics into a list of data points named by instrument.
+# Exports are cumulative (see with_otel_record()), and more than one can land
+# during a test (e.g. a background export on a busy machine, or the export on
+# shutdown), so only the final export is read: it already holds every point.
 otel_metric_points <- function(metrics) {
+  metrics <- metrics[length(metrics)]
   scopes <- unlist(lapply(metrics, \(x) x$scope_metric_data), recursive = FALSE)
   data <- unlist(lapply(scopes, \(x) x$metric_data), recursive = FALSE)
   points <- lapply(data, function(metric) {

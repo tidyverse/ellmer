@@ -1045,9 +1045,36 @@ test_that("tool execution duration is recorded as a metric", {
     map(points, \(x) x$attributes[["gen_ai.tool.name"]]),
     list("t", "t")
   )
-  expect_equal(
-    map(points, \(x) x$attributes[["error.type"]]),
-    list(NULL, "simpleError")
+  # The SDK doesn't promise points come back in call order.
+  expect_setequal(
+    map_chr(points, \(x) x$attributes[["error.type"]] %||% "none"),
+    c("none", "simpleError")
+  )
+})
+
+test_that("metric points come from the final cumulative export (#1223)", {
+  skip_if_not_installed("otelsdk")
+
+  request <- function(tool_f) {
+    ContentToolRequest(id = "x", name = "t", arguments = list(), tool = tool_f)
+  }
+  ok <- tool(function() 1, name = "t", description = "A tool")
+  bad <- tool(function() stop("boom"), name = "t", description = "A tool")
+
+  recorded <- with_otel_record({
+    invoke_tool(request(ok))
+    # Simulate a background export landing mid-test
+    otel::get_default_meter_provider()$flush()
+    sync(invoke_tool_async(request(bad)))
+  })
+
+  expect_gt(length(recorded$metrics), 1L)
+  points <- otel_metric_points(recorded$metrics)
+  expect_equal(names(points), "gen_ai.execute_tool.duration")
+  points <- points[["gen_ai.execute_tool.duration"]]
+  expect_setequal(
+    map_chr(points, \(x) x$attributes[["error.type"]] %||% "none"),
+    c("none", "simpleError")
   )
 })
 
