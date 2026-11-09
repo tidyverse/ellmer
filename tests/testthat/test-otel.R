@@ -1051,6 +1051,27 @@ test_that("tool execution duration is recorded as a metric", {
   )
 })
 
+test_that("metric points come from the final cumulative export (#1223)", {
+  skip_if_not_installed("otelsdk")
+
+  request <- function(tool_f) {
+    ContentToolRequest(id = "x", name = "t", arguments = list(), tool = tool_f)
+  }
+  ok <- tool(function() 1, name = "t", description = "A tool")
+  bad <- tool(function() stop("boom"), name = "t", description = "A tool")
+
+  recorded <- with_otel_record({
+    invoke_tool(request(ok))
+    # Simulate the reader thread's start-up export landing mid-test
+    otel::get_default_meter_provider()$flush()
+    sync(invoke_tool_async(request(bad)))
+  })
+
+  points <- otel_metric_points(recorded$metrics)
+  expect_equal(names(points), "gen_ai.execute_tool.duration")
+  expect_length(points[["gen_ai.execute_tool.duration"]], 2L)
+})
+
 test_that("interrupted tool calls are recorded on the span and metric", {
   skip_if_not_installed("otelsdk")
 

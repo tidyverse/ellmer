@@ -405,7 +405,11 @@ with_otel_record <- function(expr) {
 }
 
 # Flatten recorded metrics into a list of data points named by instrument.
+# The in-memory exporter is cumulative and the reader thread exports once when
+# it starts, which can land after the first measurement on a busy machine, so
+# only the final export is read: it already holds every point.
 otel_metric_points <- function(metrics) {
+  metrics <- metrics[length(metrics)]
   scopes <- unlist(lapply(metrics, \(x) x$scope_metric_data), recursive = FALSE)
   data <- unlist(lapply(scopes, \(x) x$metric_data), recursive = FALSE)
   points <- lapply(data, function(metric) {
