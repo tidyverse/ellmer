@@ -2,6 +2,10 @@
 
 ## ellmer (development version)
 
+## ellmer 0.5.1
+
+CRAN release: 2026-11-08
+
 - Default models have been updated for a number of providers
   ([@thisisnic](https://github.com/thisisnic),
   [\#1176](https://github.com/tidyverse/ellmer/issues/1176)):
