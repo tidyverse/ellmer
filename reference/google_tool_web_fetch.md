@@ -3,7 +3,7 @@
 When this tool is enabled, you can include URLs directly in your prompts
 and Gemini will fetch and analyze the content.
 
-Learn more in <https://ai.google.dev/gemini-api/docs/url-context>.
+Learn more in <https://aistudio.google.com/docs/url-context>.
 
 ## Usage
 

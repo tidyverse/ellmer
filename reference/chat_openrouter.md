@@ -5,7 +5,8 @@
 Sign up at <https://openrouter.ai>.
 
 Support for features depends on the underlying model that you use; see
-<https://openrouter.ai/models> for details.
+<https://openrouter.ai/models> for details. Use `models_openrouter()` to
+list the available models along with their advertised token prices.
 
 ## Usage
 
@@ -18,8 +19,11 @@ chat_openrouter(
   params = NULL,
   api_args = list(),
   echo = c("none", "output", "all"),
-  api_headers = character()
+  api_headers = character(),
+  strict = FALSE
 )
+
+models_openrouter(base_url = "https://openrouter.ai/api/v1")
 ```
 
 ## Arguments
@@ -37,8 +41,7 @@ chat_openrouter(
   Override the default credentials. You generally should not need this
   argument; instead set the `OPENROUTER_API_KEY` environment variable.
   The best place to set this is in `.Renviron`, which you can easily
-  edit by calling
-  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
+  edit by calling `usethis::edit_r_environ()`.
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -46,7 +49,7 @@ chat_openrouter(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-5.6-terra"). We
+  The model to use for the chat (defaults to "gpt-6.1-terra"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 
@@ -80,9 +83,44 @@ chat_openrouter(
   Named character vector of arbitrary extra headers appended to every
   chat API call.
 
+- strict:
+
+  If `TRUE`, use OpenAI's strict mode for tool definitions and
+  structured output. Only set this if the endpoint and model support it.
+
+- base_url:
+
+  The base URL of the OpenRouter API. The `/models` endpoint used by
+  `models_openrouter()` is public, so no credentials are required.
+
 ## Value
 
-A [Chat](https://ellmer.tidyverse.org/reference/Chat.md) object.
+`chat_openrouter()` returns a
+[Chat](https://ellmer.tidyverse.org/reference/Chat.md) object.
+`models_openrouter()` returns a data frame with one row per model, with
+its `id`, `created_at`, human-readable `name`, and `context_length`,
+plus the `cached_input`, `input`, and `output` prices OpenRouter
+advertises, in US dollars per million tokens. An `NA` price means that
+specific rate is unknown, e.g. because the model's cost is set by the
+underlying provider at request time; genuinely free models report `0`.
+
+## Cost reporting
+
+OpenRouter's reported request cost is used when available, including
+zero. If no valid charge is reported, ellmer estimates from advertised
+token rates when both prompt and completion counts and the required
+rates are available. Otherwise, the cost is unknown (`NA`), not zero.
+
+Estimates cover token rates only and may differ from the final routed
+charge. Rates are cached for the session and may become stale. The first
+fallback lookup is synchronous and may pause even an asynchronous chat.
+See the [OpenRouter usage accounting
+documentation](https://openrouter.ai/docs/cookbook/administration/usage-accounting).
+
+An unknown turn cost makes cumulative chat and model totals unknown,
+while known individual turn costs remain available. With a provider key
+configured in OpenRouter (BYOK), the reported cost is OpenRouter's
+charge; the provider may bill you separately.
 
 ## See also
 

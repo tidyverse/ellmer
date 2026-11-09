@@ -6,7 +6,7 @@ decides when (and how) to search the web based on your prompt. Search
 results are incorporated into the response with grounding metadata
 including source URLs and titles.
 
-Learn more in <https://ai.google.dev/gemini-api/docs/google-search>.
+Learn more in <https://aistudio.google.com/docs/google-search>.
 
 ## Usage
 

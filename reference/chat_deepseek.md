@@ -54,8 +54,7 @@ models_deepseek(
   Override the default credentials. You generally should not need this
   argument; instead set the `DEEPSEEK_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling
-  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
+  calling `usethis::edit_r_environ()`.
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -63,7 +62,7 @@ models_deepseek(
 
 - model:
 
-  The model to use for the chat (defaults to "deepseek-v4-flash"). We
+  The model to use for the chat (defaults to "deepseek-flash"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use.
 

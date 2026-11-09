@@ -67,5 +67,5 @@ Provider(
 #>  @ name         : chr "CoolModels"
 #>  @ base_url     : chr "https://cool-models.com"
 #>  @ extra_headers: chr(0) 
-#>  @ credentials  :function ()  
+#>  @ credentials  : function ()  
 ```

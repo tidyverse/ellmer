@@ -1,4 +1,4 @@
-# Are credentials avaiable?
+# Are credentials available?
 
 Used for examples/testing.
 

@@ -65,14 +65,8 @@ parallel_chat_structured(
   For
   [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md),
   note that the number of active connections is limited primarily by the
-  output tokens per minute limit (OTPM) which is estimated from the
-  `max_tokens` parameter, which defaults to 4096. That means if your
-  usage tier limits you to 16,000 OTPM, you should either set
-  `max_active = 4` (16,000 / 4096) to decrease the number of active
-  connections or use
-  [`params()`](https://ellmer.tidyverse.org/reference/params.md) in
-  [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
-  to decrease `max_tokens`.
+  output tokens per minute limit (OTPM), which counts the tokens
+  actually generated. If you hit rate limits, decrease `max_active`.
 
 - rpm:
 
@@ -123,7 +117,7 @@ successful), a `NULL` (if the request wasn't performed) or an error
 object (if it failed).
 
 For `parallel_chat_text()`, a character vector with one element for each
-prompt. Requests that weren't succesful get an `NA`.
+prompt. Requests that weren't successful get an `NA`.
 
 For `parallel_chat_structured()`, a single structured data object with
 one element for each prompt. Typically, when `type` is an object, this
@@ -135,39 +129,39 @@ property. If the output is a data frame, and some requests error, an
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 
 # Chat ----------------------------------------------------------------------
 country <- c("Canada", "New Zealand", "Jamaica", "United States")
 prompts <- interpolate("What's the capital of {{country}}?")
 parallel_chat(chat, prompts)
 #> [[1]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=13 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Canada?
-#> ── assistant [input=12 output=13 cost=$0.00] ──────────────────────────
-#> The capital of Canada is Ottawa, Ontario.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Ottawa.
 #> 
 #> [[2]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=7 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=13 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of New Zealand?
 #> ── assistant [input=13 output=7 cost=$0.00] ───────────────────────────
 #> Wellington.
 #> 
 #> [[3]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=12 output=11 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=12 output=7 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of Jamaica?
-#> ── assistant [input=12 output=11 cost=$0.00] ──────────────────────────
-#> The capital of Jamaica is Kingston.
+#> ── assistant [input=12 output=7 cost=$0.00] ───────────────────────────
+#> Kingston.
 #> 
 #> [[4]]
-#> <Chat OpenAI/gpt-5.6-terra turns=2 input=13 output=9 cost=$0.00>
+#> <Chat OpenAI/gpt-6.1-terra turns=2 input=13 output=18 cost=$0.00>
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of United States?
-#> ── assistant [input=13 output=9 cost=$0.00] ───────────────────────────
-#> Washington, D.C.
+#> ── assistant [input=13 output=18 cost=$0.00] ──────────────────────────
+#> The capital of the United States is **Washington, D.C.**
 #> 
 
 # Structured data -----------------------------------------------------------

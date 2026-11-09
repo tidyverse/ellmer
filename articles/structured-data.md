@@ -27,7 +27,7 @@ a string:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat_structured(
   "My name is Susan and I'm 13 years old",
   type = type_object(
@@ -47,7 +47,7 @@ The same basic idea works with images too:
 ``` r
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat_structured(
   content_image_url("https://www.r-project.org/Rlogo.png"),
   type = type_object(
@@ -83,7 +83,7 @@ type_person <- type_object(
   age = type_number()
 )
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 parallel_chat_structured(chat, prompts, type = type_person)
 #> # A tibble: 6 × 2
 #>   name     age
@@ -215,12 +215,12 @@ no_match <- list(
 )
 parallel_chat_structured(chat, no_match, type = type_person)
 #> # A tibble: 4 × 2
-#>   name                       age
-#>   <chr>                    <dbl>
-#> 1 apples                       0
-#> 2 Current time unavailable     0
-#> 3 cheese                       3
-#> 4 Hadley                       0
+#>   name                                         age
+#>   <chr>                                      <dbl>
+#> 1 ""                                             0
+#> 2 "I don’t have access to the current time."     0
+#> 3 "cheese"                                       3
+#> 4 "Hadley."                                      0
 ```
 
 You can often avoid this problem by setting `required = FALSE`:
@@ -278,7 +278,7 @@ type_people <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat_structured(prompt, type = type_people)
 #> $name
 #> [1] "John Smith"     "Jane Doe"       "Jose Rodriguez" "June Lee"      
@@ -290,7 +290,7 @@ chat$chat_structured(prompt, type = type_people)
 #> [1] 1.800 1.651 1.900 1.750
 #> 
 #> $weight
-#> [1] 80.0 49.9 90.0 70.0
+#> [1] 80.000 49.895 90.000 70.000
 ```
 
 This doesn’t work because there’s no constraint that each array should
@@ -310,7 +310,7 @@ type_people <- type_array(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat_structured(prompt, type = type_people)
 #> # A tibble: 4 × 4
 #>   name             age height weight
@@ -329,10 +329,9 @@ vectorisation like R, row-oriented data frames are more common.
 
 Note that you’ll generally want to avoid nesting objects inside of
 objects as this will generate a data frame where each column is itself a
-data frame. You can use
-[`tidyr::unpack()`](https://tidyr.tidyverse.org/reference/pack.html) to
-unpack these df-columns back into a regular flat data frame, but your
-life will be simpler if you re-consider the type.
+data frame. You can use `tidyr::unpack()` to unpack these df-columns
+back into a regular flat data frame, but your life will be simpler if
+you re-consider the type.
 
 ## Examples
 
@@ -367,20 +366,20 @@ type_summary <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 data <- chat$chat_structured(text, type = type_summary)
 cat(data$summary)
-#> Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted third-party testing regime. Because general-purpose models can be adapted to many downstream uses, they may create risks involving election integrity, discrimination, cyberattacks, bioweapons, and unintended autonomous behavior that sector-specific regulation alone cannot adequately address. Anthropic proposes a two-stage approach: broad, rapid automated evaluations designed to avoid missed risks, followed by deeper expert-led testing when concerns are identified. Testing should apply only to a narrow class of the most computationally intensive frontier systems, minimizing burdens on smaller developers.
+#> Anthropic argues that independent testing of frontier AI systems is needed to complement self-governance and sector-specific regulation. It proposes a narrowly scoped, iterative regime involving industry, academia, and government, with fast automated screening followed by expert-led testing where risks are identified. Potential tests include assessments of bioweapons and cyberattack capabilities.
 #> 
-#> The article calls for an ecosystem of private auditors, universities, and government agencies to develop and administer evaluations, with governments funding capacity at institutions such as NIST and national AI research infrastructure. Anthropic presents its Responsible Scaling Policy as an early prototype but says voluntary company self-governance is insufficient. It also argues that shared evaluation standards could help international coordination and reduce regulatory capture. On open models, it supports openness for most current systems but contends that future models with demonstrable severe misuse potential may require controlled release, hardened safeguards, or limits on fine-tuning—decisions that should rely on legitimate independent testing rather than AI companies alone.
+#> The company calls for public investment in testing infrastructure and applies the same principle to both proprietary and openly released models. It acknowledges its own interest as a proprietary developer and emphasizes limiting compliance burdens and regulatory capture while developing standards for serious risks.
 
 str(data)
 #> List of 5
 #>  $ author    : chr "Anthropic"
-#>  $ topics    : chr [1:9] "AI policy" "third-party AI testing" "frontier AI safety" "AI evaluations" ...
-#>  $ summary   : chr "Anthropic argues that frontier generative AI systems should be subject to a carefully scoped, broadly trusted t"| __truncated__
-#>  $ coherence : int 91
-#>  $ persuasion: num 0.78
+#>  $ topics    : chr [1:7] "frontier AI governance" "third-party AI safety testing" "AI model evaluation" "national security and AI misuse" ...
+#>  $ summary   : chr "Anthropic argues that independent testing of frontier AI systems is needed to complement self-governance and se"| __truncated__
+#>  $ coherence : int 92
+#>  $ persuasion: num 0.8
 ```
 
 ### Example 2: Named entity recognition
@@ -400,17 +399,17 @@ type_named_entity <- type_object(
 type_named_entities <- type_array(type_named_entity)
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat_structured(text, type = type_named_entities)
 #> # A tibble: 6 × 3
 #>   name          type         context                                   
 #>   <chr>         <fct>        <chr>                                     
-#> 1 John          person       John works at Google in New York.         
-#> 2 Google        organization John works at Google in New York.         
-#> 3 New York      location     John works at Google in New York.         
-#> 4 Sarah         person       He met with Sarah, the CEO of Acme Inc., …
-#> 5 Acme Inc.     organization Sarah is the CEO of Acme Inc.             
-#> 6 San Francisco location     He met with Sarah, the CEO of Acme Inc., …
+#> 1 John          person       Works at Google in New York and met with …
+#> 2 Google        organization John's employer.                          
+#> 3 New York      location     Where John works.                         
+#> 4 Sarah         person       CEO of Acme Inc. who met with John.       
+#> 5 Acme Inc.     organization The company where Sarah is CEO.           
+#> 6 San Francisco location     Where John met with Sarah last week.
 ```
 
 ### Example 3: Sentiment analysis
@@ -436,11 +435,11 @@ type_sentiment <- type_object(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 str(chat$chat_structured(text, type = type_sentiment))
 #> List of 3
-#>  $ positive_score: num 0.1
-#>  $ negative_score: num 0.8
+#>  $ positive_score: num 0.05
+#>  $ negative_score: num 0.85
 #>  $ neutral_score : num 0.1
 ```
 
@@ -476,15 +475,14 @@ type_classification <- type_array(
 )
 
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 data <- chat$chat_structured(text, type = type_classification)
 data
-#> # A tibble: 3 × 2
+#> # A tibble: 2 × 2
 #>   name       score
 #>   <fct>      <dbl>
-#> 1 Technology  0.98
+#> 1 Technology  0.99
 #> 2 Business    0.01
-#> 3 Other       0.01
 ```
 
 ### Example 5: Working with unknown keys
@@ -508,16 +506,17 @@ text <- "
 "
 
 chat <- chat_anthropic("Extract all characteristics of supplied character")
-#> Using model = "claude-sonnet-5".
+#> Using model = "claude-sonnet-5-5".
 chat$chat_structured(text, type = type_characteristics)
-#> # A tibble: 5 × 2
+#> # A tibble: 6 × 2
 #>   name                value               
 #>   <chr>               <chr>               
-#> 1 height              tall                
-#> 2 facial hair         beard               
-#> 3 distinguishing mark scar on left cheek  
-#> 4 voice               deep                
-#> 5 clothing            black leather jacket
+#> 1 gender              male                
+#> 2 height              tall                
+#> 3 facial hair         beard               
+#> 4 distinguishing mark scar on left cheek  
+#> 5 voice               deep                
+#> 6 clothing            black leather jacket
 ```
 
 ### Example 6: Extracting data from an image
@@ -567,7 +566,7 @@ conversation.
 
 ## Token usage
 
-| provider  | model           | input | output | cached_input |  price |
-|:----------|:----------------|------:|-------:|-------------:|-------:|
-| OpenAI    | gpt-5.6-terra   |  1664 |   1423 |         4331 | \$0.02 |
-| Anthropic | claude-sonnet-5 |   317 |     95 |            0 | \$0.00 |
+| provider  | model             | input | output | cached_input |  price |
+|:----------|:------------------|------:|-------:|-------------:|-------:|
+| OpenAI    | gpt-6.1-terra     |  5995 |   1565 |            0 | \$0.01 |
+| Anthropic | claude-sonnet-5-5 |   319 |    109 |            0 | \$0.00 |

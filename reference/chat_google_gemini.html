@@ -3,6 +3,8 @@
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.
+chat_google_gemini() doesn't support structured output with Gemini 2.5
+models, so upgrade to Gemini 3 or newer if you use chat_structured().
 Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
@@ -10,14 +12,19 @@ Authentication
 These functions try a number of authentication strategies, in this order:
 An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
 (Gemini only).
+Viewer-based credentials on Posit Connect, if the connectcreds
+package is installed.
 Google's default application credentials, if the gargle package
 is installed.
-Viewer-based credentials on Posit Connect, if the connectcreds
-package.
-. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.
+A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the ELLMER_GEMINI_OAUTH_CLIENT env var to
+&quot;desktop&quot; or &quot;web&quot; to force one flow or the other.
+Browser sign-in doesn't give access to file uploads, so the
+$file_upload() and related methods, google_upload(), and
+batch_chat() won't work with it. Use an API key or application default
+credentials for those.
 
 
 
@@ -25,6 +32,8 @@ near future.
 Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.
+chat_google_gemini() doesn't support structured output with Gemini 2.5
+models, so upgrade to Gemini 3 or newer if you use chat_structured().
 Use google_upload() to upload files (PDFs, images, video, audio, etc.)
 Authentication
 
@@ -32,14 +41,19 @@ Authentication
 These functions try a number of authentication strategies, in this order:
 An API key set in the GOOGLE_API_KEY or GEMINI_API_KEY env var
 (Gemini only).
+Viewer-based credentials on Posit Connect, if the connectcreds
+package is installed.
 Google's default application credentials, if the gargle package
 is installed.
-Viewer-based credentials on Posit Connect, if the connectcreds
-package.
-. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.
+A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the ELLMER_GEMINI_OAUTH_CLIENT env var to
+&quot;desktop&quot; or &quot;web&quot; to force one flow or the other.
+Browser sign-in doesn't give access to file uploads, so the
+$file_upload() and related methods, google_upload(), and
+batch_chat() won't work with it. Use an API key or application default
+credentials for those.
 
 
 
@@ -54,7 +68,7 @@ near future.
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,11 +80,16 @@ near future.
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/programming.html">Programming with ellmer</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Working with models</h6></li>
     <li><a class="dropdown-item" href="../articles/prompt-design.html">Prompt design</a></li>
-    <li><a class="dropdown-item" href="../articles/streaming-async.html">Streaming and async APIs</a></li>
     <li><a class="dropdown-item" href="../articles/structured-data.html">Structured data</a></li>
     <li><a class="dropdown-item" href="../articles/tool-calling.html">Tool/function calling</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Building with ellmer</h6></li>
+    <li><a class="dropdown-item" href="../articles/programming.html">Programming with ellmer</a></li>
+    <li><a class="dropdown-item" href="../articles/streaming-async.html">Streaming and async APIs</a></li>
+    <li><a class="dropdown-item" href="../articles/otel.html">Monitoring with OpenTelemetry</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
@@ -94,7 +113,7 @@ near future.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Chat with a Google Gemini or Vertex AI model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.5.0/R/provider-google.R" class="external-link"><code>R/provider-google.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/R/provider-google.R" class="external-link"><code>R/provider-google.R</code></a></small>
       <div class="d-none name"><code>chat_google_gemini.Rd</code></div>
     </div>
 
@@ -103,20 +122,27 @@ near future.
 <p>Google's AI offering is broken up into two parts: Gemini and Vertex AI.
 Most enterprises are likely to use Vertex AI, and individuals are likely
 to use Gemini.</p>
+<p><code>chat_google_gemini()</code> doesn't support structured output with Gemini 2.5
+models, so upgrade to Gemini 3 or newer if you use <code>chat_structured()</code>.</p>
 <p>Use <code><a href="google_upload.html">google_upload()</a></code> to upload files (PDFs, images, video, audio, etc.)</p><div class="section">
 <h3 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a></h3>
 
 
 <p>These functions try a number of authentication strategies, in this order:</p><ul><li><p>An API key set in the <code>GOOGLE_API_KEY</code> or <code>GEMINI_API_KEY</code> env var
 (Gemini only).</p></li>
+<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
+package is installed.</p></li>
 <li><p>Google's default application credentials, if the <span class="pkg">gargle</span> package
 is installed.</p></li>
-<li><p>Viewer-based credentials on Posit Connect, if the <span class="pkg">connectcreds</span>
-package.</p></li>
-<li><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a>. An browser-based OAuth flow, if
-you're in an interactive session. This currently uses an unverified
-OAuth app (so you will get a scary warning); we plan to verify in the
-near future.</p></li>
+<li><p>A browser-based OAuth flow, if you're in an interactive session (Gemini
+only). On a hosted session (e.g. Posit Workbench or Google Colab), the
+browser can't redirect back to R, so you'll be shown a code to paste into
+the console instead. Set the <code>ELLMER_GEMINI_OAUTH_CLIENT</code> env var to
+<code>"desktop"</code> or <code>"web"</code> to force one flow or the other.</p>
+<p>Browser sign-in doesn't give access to file uploads, so the
+<code>$file_upload()</code> and related methods, <code><a href="google_upload.html">google_upload()</a></code>, and
+<code><a href="batch_chat.html">batch_chat()</a></code> won't work with it. Use an API key or application default
+credentials for those.</p></li>
 </ul></div>
 
     </div>
@@ -181,7 +207,7 @@ or <code>NULL</code>, the default, to use ambient credentials. See above for det
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>The model to use for the chat (defaults to "gemini-3.7-flash").
+<dd><p>The model to use for the chat (defaults to "gemini-3.8-flash").
 We regularly update the default, so we strongly recommend explicitly specifying a model for anything other than casual use.
 Use <code>models_google_gemini()</code> to see all options.</p></dd>
 
@@ -192,8 +218,11 @@ Use <code>models_google_gemini()</code> to see all options.</p></dd>
 
 <dt id="arg-api-args">api_args<a class="anchor" aria-label="anchor" href="#arg-api-args"></a></dt>
 <dd><p>Named list of arbitrary extra arguments appended to the body
-of every chat API call. Combined with the body object generated by ellmer
-with <code><a href="https://rdrr.io/r/utils/modifyList.html" class="external-link">modifyList()</a></code>.</p></dd>
+of every chat API call. <code>chat_google_gemini()</code> uses the
+<a href="https://aistudio.google.com/docs/interactions-overview" class="external-link">Interactions API</a>
+and <code>chat_google_vertex()</code> the
+<a href="https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference" class="external-link">generateContent API</a>,
+so use the field names from the matching request body.</p></dd>
 
 
 <dt id="arg-api-headers">api_headers<a class="anchor" aria-label="anchor" href="#arg-api-headers"></a></dt>

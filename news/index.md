@@ -1,5 +1,149 @@
 # Changelog
 
+## ellmer 0.5.1
+
+CRAN release: 2026-11-08
+
+- Default models have been updated for a number of providers
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1176](https://github.com/tidyverse/ellmer/issues/1176)):
+  - [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+    now uses `claude-sonnet-5-5`.
+  - [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+    now uses `us.anthropic.claude-sonnet-5-5`.
+  - [`chat_deepseek()`](https://ellmer.tidyverse.org/reference/chat_deepseek.md)
+    now uses `deepseek-flash`.
+  - [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+    and
+    [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+    now use `gemini-3.8-flash`.
+  - [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+    now uses `gpt-6.1-terra`.
+  - [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+    now uses `gpt-6.1-terra`.
+  - [`chat_posit()`](https://ellmer.tidyverse.org/reference/chat_posit.md)
+    now uses `claude-sonnet-5-5`.
+  - [`chat_snowflake()`](https://ellmer.tidyverse.org/reference/chat_snowflake.md)
+    now uses `claude-sonnet-5-5`.
+- ellmer now records OpenTelemetry metrics following the GenAI semantic
+  conventions whenever a meter is active, and the `chat` and
+  `invoke_agent` spans record additional attributes including request
+  parameters, token usage, finish reasons, and timing. See
+  [`vignette("otel")`](https://ellmer.tidyverse.org/articles/otel.md)
+  for the full list
+  ([\#1142](https://github.com/tidyverse/ellmer/issues/1142),
+  [\#1143](https://github.com/tidyverse/ellmer/issues/1143),
+  [\#1147](https://github.com/tidyverse/ellmer/issues/1147),
+  [\#1148](https://github.com/tidyverse/ellmer/issues/1148),
+  [\#1174](https://github.com/tidyverse/ellmer/issues/1174)).
+- New
+  [`vignette("otel")`](https://ellmer.tidyverse.org/articles/otel.md)
+  describes how to turn on OpenTelemetry tracing and metrics, what
+  ellmer records, and how ellmer’s spans join your own traces
+  ([\#1187](https://github.com/tidyverse/ellmer/issues/1187)).
+- ellmer now supports otelsdk 0.3.0, and OpenTelemetry spans and metrics
+  now record an error status and `error.type` when a request is
+  cancelled or interrupted or its response fails to parse
+  ([\#1175](https://github.com/tidyverse/ellmer/issues/1175),
+  [\#1217](https://github.com/tidyverse/ellmer/issues/1217),
+  [\#1219](https://github.com/tidyverse/ellmer/issues/1219)).
+- The OpenTelemetry `gen_ai.input.messages` attribute now includes tool
+  results that return a `Content` object, such as an image
+  ([@taekop](https://github.com/taekop),
+  [\#1145](https://github.com/tidyverse/ellmer/issues/1145)).
+- [`batch_chat_structured()`](https://ellmer.tidyverse.org/reference/batch_chat.md)
+  and
+  [`parallel_chat_structured()`](https://ellmer.tidyverse.org/reference/parallel_chat.md)
+  now warn when `include_tokens` or `include_cost` is ignored because
+  the result isn’t a data frame ([@taekop](https://github.com/taekop),
+  [\#1129](https://github.com/tidyverse/ellmer/issues/1129)).
+- `Chat$get_tokens()` now works when the conversation ends with a user
+  turn or a partial assistant turn
+  ([@taekop](https://github.com/taekop),
+  [\#1131](https://github.com/tidyverse/ellmer/issues/1131)).
+- `Chat$stream()` now yields chunks as they arrive rather than in large
+  bursts, so streaming from slow endpoints is smoother
+  ([@hectorgray](https://github.com/hectorgray),
+  [\#1122](https://github.com/tidyverse/ellmer/issues/1122)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  and other Claude providers now default `max_tokens` to 32,000
+  ([@simonpcouch](https://github.com/simonpcouch),
+  [\#1150](https://github.com/tidyverse/ellmer/issues/1150)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  and
+  [`chat_aws_bedrock()`](https://ellmer.tidyverse.org/reference/chat_aws_bedrock.md)
+  now report correct input and cache token counts when a streamed
+  response uses server tools such as web search
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1194](https://github.com/tidyverse/ellmer/issues/1194)).
+- [`chat_anthropic()`](https://ellmer.tidyverse.org/reference/chat_anthropic.md)
+  now handles `redacted_thinking` blocks
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1195](https://github.com/tidyverse/ellmer/issues/1195)).
+- [`chat_cloudflare()`](https://ellmer.tidyverse.org/reference/chat_cloudflare.md)
+  now respects its `account` argument and handles streamed responses
+  that contain only a number
+  ([\#1164](https://github.com/tidyverse/ellmer/issues/1164)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  now uses Google’s Interactions API and supports
+  [`content_image_url()`](https://ellmer.tidyverse.org/reference/content_image_url.md).
+  `params(frequency_penalty)`, `params(presence_penalty)`,
+  `params(log_probs)`, and `params(reasoning_tokens)` are no longer
+  supported and warn. Structured output no longer works with Gemini 2.5
+  models, so upgrade to Gemini 3 or newer if you use `chat_structured()`
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1155](https://github.com/tidyverse/ellmer/issues/1155)).
+- [`chat_google_gemini()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)’s
+  browser-based OAuth flow now uses a verified Google OAuth app and
+  works in hosted sessions such as Posit Workbench and Google Colab.
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  no longer falls back to it
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1156](https://github.com/tidyverse/ellmer/issues/1156)).
+- [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  and
+  [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+  now report `finish_reason = "tool_use"` for turns that call a tool,
+  matching other providers.
+  [`chat_google_vertex()`](https://ellmer.tidyverse.org/reference/chat_google_gemini.md)
+  also reports the `LANGUAGE`, `IMAGE_SAFETY`,
+  `IMAGE_PROHIBITED_CONTENT`, and `IMAGE_RECITATION` finish reasons as
+  `"content_filter"`
+  ([@pcbeingused333](https://github.com/pcbeingused333),
+  [\#1199](https://github.com/tidyverse/ellmer/issues/1199)).
+- [`chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.md)
+  now sends `type = "message"` on every Responses API input item, so
+  OpenAI-compatible servers such as llama.cpp accept replayed assistant
+  turns ([@taekop](https://github.com/taekop),
+  [\#1153](https://github.com/tidyverse/ellmer/issues/1153)).
+- [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md)
+  and the providers built on it now send standard JSON Schema for tool
+  definitions, so arguments with `required = FALSE` stay optional.
+  [`chat_openai_compatible()`](https://ellmer.tidyverse.org/reference/chat_openai_compatible.md),
+  [`chat_huggingface()`](https://ellmer.tidyverse.org/reference/chat_huggingface.md),
+  [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md),
+  [`chat_portkey()`](https://ellmer.tidyverse.org/reference/chat_portkey.md),
+  and
+  [`chat_vllm()`](https://ellmer.tidyverse.org/reference/chat_vllm.md)
+  gain a `strict` argument to opt back in to OpenAI’s strict mode
+  ([\#1135](https://github.com/tidyverse/ellmer/issues/1135)).
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+  now uses the cost reported by OpenRouter for each request, falling
+  back to an estimate from OpenRouter’s advertised model rates when no
+  cost is reported
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+- [`content_image_url()`](https://ellmer.tidyverse.org/reference/content_image_url.md)
+  now forwards `detail` to OpenAI and OpenAI-compatible providers
+  ([@kbenoit](https://github.com/kbenoit),
+  [\#1132](https://github.com/tidyverse/ellmer/issues/1132)).
+- [`live_browser()`](https://ellmer.tidyverse.org/reference/live_console.md)
+  works again with shinychat \>= 0.5.0
+  ([\#1167](https://github.com/tidyverse/ellmer/issues/1167)).
+- New
+  [`models_openrouter()`](https://ellmer.tidyverse.org/reference/chat_openrouter.md)
+  lists the models available on OpenRouter along with their prices
+  ([\#1189](https://github.com/tidyverse/ellmer/issues/1189)).
+
 ## ellmer 0.5.0
 
 CRAN release: 2026-09-04

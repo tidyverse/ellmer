@@ -56,8 +56,7 @@ models_openai(
   Override the default credentials. You generally should not need this
   argument; instead set the `OPENAI_API_KEY` environment variable. The
   best place to set this is in `.Renviron`, which you can easily edit by
-  calling
-  [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
+  calling `usethis::edit_r_environ()`.
 
   If you do need additional control, this argument takes a zero-argument
   function that returns either a string (the API key), or a named list
@@ -65,7 +64,7 @@ models_openai(
 
 - model:
 
-  The model to use for the chat (defaults to "gpt-5.6-terra"). We
+  The model to use for the chat (defaults to "gpt-6.1-terra"). We
   regularly update the default, so we strongly recommend explicitly
   specifying a model for anything other than casual use. Use
   `models_openai()` to see all options.
@@ -143,64 +142,31 @@ Other chatbots:
 
 ``` r
 chat <- chat_openai()
-#> Using model = "gpt-5.6-terra".
+#> Using model = "gpt-6.1-terra".
 chat$chat("
   What is the difference between a tibble and a data frame?
   Answer with a bulleted list
 ")
-#> - **Origin**
-#>   - A **data frame** is a base R data structure.
-#>   - A **tibble** is a modern reimplementation of a data frame from the
-#> **tibble** package, commonly used in the tidyverse.
-#> 
-#> - **Printing**
-#>   - Data frames often print all rows and columns, which can be 
-#> overwhelming for large datasets.
-#>   - Tibbles print a compact preview: only the first few rows and 
-#> columns, along with column types.
-#> 
-#> - **Data types**
-#>   - Data frames may automatically convert character columns to factors
-#> in older versions of R (depending on settings).
-#>   - Tibbles do not automatically convert strings to factors.
-#> 
-#> - **Column names**
-#>   - Data frames can modify invalid or duplicate column names by 
-#> default (for example, adding dots).
-#>   - Tibbles preserve column names more consistently and can support 
-#> non-syntactic names.
-#> 
-#> - **Subsetting**
-#>   - Extracting a single column from a data frame with `df[, "x"]` may 
-#> simplify the result to a vector.
-#>   - Extracting from a tibble with `tbl[, "x"]` always returns another 
-#> tibble; use `tbl[["x"]]` or `tbl$x` to get a vector.
-#> 
-#> - **Partial matching**
-#>   - Data frames may allow partial matching of column names, such as 
-#> `df$long` matching a column called `long_name`.
-#>   - Tibbles do not allow partial matching, helping prevent accidental 
-#> mistakes.
-#> 
-#> - **Recycling behavior**
-#>   - Data frames may silently recycle shorter vectors when creating or 
-#> modifying columns.
-#>   - Tibbles are stricter and generally require vectors to have 
-#> compatible lengths, reducing silent errors.
-#> 
-#> - **Compatibility**
-#>   - A tibble is still a type of data frame, so many functions that 
-#> work with data frames also work with tibbles.
-#>   - Some base R functions or older code may expect a plain data frame,
-#> in which case a tibble can be converted with `as.data.frame()`.
+#> - **Relationship:** A tibble is a modern type of R data frame provided
+#> by the **tibble** package. It inherits from `data.frame`, so most 
+#> data-frame functions work with it.
+#> - **Printing:** Tibbles display a preview of rows and columns, along 
+#> with column types. Data frames typically print more of their contents.
+#> - **Subsetting:** `[` always returns a tibble, even when selecting one
+#> column. A data frame may simplify the result to a vector.
+#> - **Column names:** Tibbles preserve nonstandard names, such as names 
+#> containing spaces. Data frames normally adjust them by default.
+#> - **Column access:** Tibbles do not support partial matching with `$` 
+#> and warn when a column does not exist. Data frames can partially match
+#> names and return `NULL` for missing columns.
+#> - **Recycling:** Tibbles recycle only length-one inputs when creating 
+#> columns; data frames allow more permissive recycling.
 
 chat$chat("Tell me three funny jokes about statisticians")
-#> - Why did the statistician drown crossing a river?  
-#>   Because it was three feet deep on average.
-#> 
-#> - A statistician’s favorite type of joke?  
-#>   One with a significant *p*-unchline.
-#> 
-#> - There are three kinds of statisticians:  
-#>   Those who can count, and those who can’t account for sampling error.
+#> - Why did the statistician break up with their partner? They couldn’t 
+#> find a significant relationship.
+#> - A statistician drowned crossing a river that was, on average, three 
+#> feet deep.
+#> - Why don’t statisticians trust atoms? They make up everything—and the
+#> sample size is suspiciously large.
 ```

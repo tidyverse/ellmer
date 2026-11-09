@@ -52,9 +52,9 @@ ContentCitation(
 
 ContentImage()
 
-ContentImageRemote(url = stop("Required"), detail = "")
+ContentImageRemote(url = stop("Required"), detail = "auto")
 
-ContentImageInline(type = stop("Required"), data = NULL)
+ContentImageInline(type = stop("Required"), data = NULL, detail = "auto")
 
 ContentToolRequest(
   id = stop("Required"),
@@ -120,7 +120,9 @@ ContentDocument(
 
 - detail:
 
-  Not currently used.
+  Image detail setting for OpenAI and OpenAI-compatible providers. Can
+  be `"auto"`, `"low"`, or `"high"`. Currently ignored by other
+  providers.
 
 - type:
 
@@ -202,7 +204,7 @@ ContentText("Tell me a joke")
 ContentImageRemote("https://www.r-project.org/Rlogo.png")
 #> <ellmer::ContentImageRemote>
 #>  @ url   : chr "https://www.r-project.org/Rlogo.png"
-#>  @ detail: chr ""
+#>  @ detail: chr "auto"
 ContentToolRequest(id = "abc", name = "mean", arguments = list(x = 1:5))
 #> <ellmer::ContentToolRequest>
 #>  @ id       : chr "abc"

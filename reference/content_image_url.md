@@ -27,7 +27,8 @@ content_image_plot(width = 768, height = 768)
 
   The [detail
   setting](https://developers.openai.com/api/docs/guides/images-vision#image-input-requirements)
-  for this image. Can be `"auto"`, `"low"`, or `"high"`.
+  for this image. Can be `"auto"`, `"low"`, or `"high"`. Used by OpenAI
+  and OpenAI-compatible providers; currently ignored by other providers.
 
 - path:
 

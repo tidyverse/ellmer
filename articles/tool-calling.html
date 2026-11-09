@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ellmer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,11 +45,16 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/programming.html">Programming with ellmer</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Working with models</h6></li>
     <li><a class="dropdown-item" href="../articles/prompt-design.html">Prompt design</a></li>
-    <li><a class="dropdown-item" href="../articles/streaming-async.html">Streaming and async APIs</a></li>
     <li><a class="dropdown-item" href="../articles/structured-data.html">Structured data</a></li>
     <li><a class="dropdown-item" href="../articles/tool-calling.html">Tool/function calling</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Building with ellmer</h6></li>
+    <li><a class="dropdown-item" href="../articles/programming.html">Programming with ellmer</a></li>
+    <li><a class="dropdown-item" href="../articles/streaming-async.html">Streaming and async APIs</a></li>
+    <li><a class="dropdown-item" href="../articles/otel.html">Monitoring with OpenTelemetry</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -86,7 +91,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Tool/function calling</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/pkgdown-v0.5.0/vignettes/tool-calling.Rmd" class="external-link"><code>vignettes/tool-calling.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidyverse/ellmer/blob/main/vignettes/tool-calling.Rmd" class="external-link"><code>vignettes/tool-calling.Rmd</code></a></small>
       <div class="d-none name"><code>tool-calling.Rmd</code></div>
     </div>
 
@@ -133,15 +138,22 @@ its response.</p>
 <h3 id="motivating-example">Motivating example<a class="anchor" aria-label="anchor" href="#motivating-example"></a>
 </h3>
 <p>Let’s take a look at an example where we really need an external
-tool. Chat models generally do not know the current time, which makes
-questions like these impossible.</p>
+tool. Chat models don’t have access to a clock, which makes questions
+like this impossible to answer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4o"</span><span class="op">)</span></span>
-<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, </span></span>
-<span><span class="co">#&gt; that was 54 years ago.</span></span></code></pre></div>
-<p>Since the model doesn’t know what day it is, the result is
-incorrect.</p>
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-5.4-mini"</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What time is it right now in Chicago?"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; I can’t see the current live time. Chicago is in the </span></span>
+<span><span class="co">#&gt; **America/Chicago** time zone, which is:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - **Central Standard Time (CST)**, UTC−6, or</span></span>
+<span><span class="co">#&gt; - **Central Daylight Time (CDT)**, UTC−5, depending on daylight saving</span></span>
+<span><span class="co">#&gt; time.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; If you want, I can help you calculate the current Chicago time from </span></span>
+<span><span class="co">#&gt; your local time or show you how to check it quickly on your device.</span></span></code></pre></div>
+<p>Nothing tells the model the time of day, so the best it can do is
+explain that it doesn’t know.</p>
 </div>
 <div class="section level3">
 <h3 id="defining-a-tool-function">Defining a tool function<a class="anchor" aria-label="anchor" href="#defining-a-tool-function"></a>
@@ -195,9 +207,8 @@ with <code>$register_tool()</code>:</p>
 <code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_current_time</span><span class="op">)</span></span></code></pre></div>
 <p>That’s all we need to do! Let’s retry our query:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"How long ago did Neil Armstrong touch down on the moon?"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of June </span></span>
-<span><span class="co">#&gt; 25, 2025, that was almost 56 years ago.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"What time is it right now in Chicago?"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; The current time in Chicago is **11:53:23 AM CDT**.</span></span></code></pre></div>
 <p>That’s correct! Without any further guidance, the chat model decided
 to call our tool function and successfully used its result in
 formulating its response.</p>
@@ -205,23 +216,24 @@ formulating its response.</p>
 tool:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-4o turns=6 input=286 output=82 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-5.4-mini turns=6 input=417 output=135 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=19 output=30 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of 2023, that was 54 years ago.</span></span>
+<span><span class="co">#&gt; What time is it right now in Chicago?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=15 output=94 cost=$0.00] ──────────────────────────</span></span>
+<span><span class="co">#&gt; I can’t see the current live time. Chicago is in the **America/Chicago** time zone, which is:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - **Central Standard Time (CST)**, UTC−6, or</span></span>
+<span><span class="co">#&gt; - **Central Daylight Time (CDT)**, UTC−5, depending on daylight saving time.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; If you want, I can help you calculate the current Chicago time from your local time or show you how to check it quickly on your device.</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; How long ago did Neil Armstrong touch down on the moon?</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=116 output=16 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: get_current_time(tz = "UTC")</span></span>
+<span><span class="co">#&gt; What time is it right now in Chicago?</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=178 output=21 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_042764b047271399016ae7ae65082487d281aec35d0faaa330)]: get_current_time(tz = "America/Chicago")</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_0f19f871ea49202b016a6fc5b589bc81968b2a20c52239f613)]: 2025-06-25 16:53:23 UTC</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=151 output=36 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; Neil Armstrong touched down on the moon on July 20, 1969. As of June 25, 2025, that was almost 56 years ago.</span></span></code></pre></div>
-<p>(Full disclosure: I originally tried this example with the default
-model of <code>gpt-4o-mini</code> and it got the tool calling right but
-the date math wrong, hence the explicit
-<code>model="gpt-4o"</code>.)</p>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_042764b047271399016ae7ae65082487d281aec35d0faaa330)]: 2025-06-25 11:53:23 CDT</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=224 output=20 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; The current time in Chicago is **11:53:23 AM CDT**.</span></span></code></pre></div>
 <p>This tool example was extremely simple, but you can imagine doing
 much more interesting things from tool functions: calling APIs, reading
 from or writing to a database, kicking off a complex simulation, or even
@@ -283,27 +295,25 @@ LLMs.</p>
 <p>Now we register and use it:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-5.6-terra"</span>.</span></span>
+<span><span class="co">#&gt; Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-6.1-terra"</span>.</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_weather</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Give me a weather update for London and Chicago"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; - **London:** Heavy rain, cool temperatures, and strong winds. Bring </span></span>
-<span><span class="co">#&gt; waterproof layers and expect difficult conditions outdoors.</span></span>
-<span><span class="co">#&gt; - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty </span></span>
-<span><span class="co">#&gt; conditions are likely.</span></span></code></pre></div>
+<span><span class="co">#&gt; - **London:** Cool, with heavy rain and strong winds.</span></span>
+<span><span class="co">#&gt; - **Chicago:** Warm and overcast, with strong winds.</span></span></code></pre></div>
 <p>We can print the chat to confirm that the model only performed a
 single tool call:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span></span>
-<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-5.6-terra turns=4 input=214 output=71 cost=$0.00&gt;</span></span>
+<span><span class="co">#&gt; &lt;Chat OpenAI/gpt-6.1-terra turns=4 input=214 output=51 cost=$0.00&gt;</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Give me a weather update for London and Chicago</span></span>
 <span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=72 output=21 cost=$0.00] ──────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: get_weather(cities = c("London", "Chicago"))</span></span>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool request</span> (fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5)]: get_weather(cities = c("London", "Chicago"))</span></span>
 <span><span class="co">#&gt; ── <span style="color: #0000BB;">user</span> ───────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_067a2e7696ea5827016a6fc5b7e76c8196894bff386923330d)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
-<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=142 output=50 cost=$0.00] ─────────────────────────</span></span>
-<span><span class="co">#&gt; - **London:** Heavy rain, cool temperatures, and strong winds. Bring waterproof layers and expect difficult conditions outdoors.</span></span>
-<span><span class="co">#&gt; - **Chicago:** Overcast, warm, and windy. No rain reported, but gusty conditions are likely.</span></span></code></pre></div>
+<span><span class="co">#&gt; [<span style="font-weight: bold;">tool result</span>  (fc_01d02caa3ab47b0c016ae8f41288c087d2812bb7b78ce240a5)]: [{"city":"London","raining":"heavy","temperature":"cool","wind":"strong"},{"city":"Chicago","raining":"overcast","temperature":"warm","wind":"strong"}]</span></span>
+<span><span class="co">#&gt; ── <span style="color: #00BB00;">assistant</span> [input=142 output=30 cost=$0.00] ─────────────────────────</span></span>
+<span><span class="co">#&gt; - **London:** Cool, with heavy rain and strong winds.</span></span>
+<span><span class="co">#&gt; - **Chicago:** Warm and overcast, with strong winds.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="image-and-pdf-tool-output">Image and PDF tool output<a class="anchor" aria-label="anchor" href="#image-and-pdf-tool-output"></a>
@@ -330,7 +340,7 @@ function. For example, here’s a simple tool to screenshot a website:</p>
 <p>You could use this tool to allow the LLM to “see” websites, like <a href="https://tidyverse.org" class="external-link">the tidyverse website</a>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chat_openai.html">chat_openai</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using model = "gpt-4.1".</span></span>
+<span><span class="co">#&gt; Using model = "gpt-6.1-terra".</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">screenshot_website</span><span class="op">)</span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">"Describe the design aesthetic of https://tidyverse.org"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; https://tidyverse.org screenshot completed</span></span>

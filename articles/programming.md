@@ -4,6 +4,11 @@ This vignette includes tips and tricks for programming with ellmer,
 and/or using it inside your own package. It’s currently fairly short but
 will grow over time.
 
+The examples use `gpt-5.4-mini`, a cheap OpenAI model. Any provider
+works the same way, but the exact responses vary from model to model,
+and a couple of the examples rely on behavior that smaller models don’t
+reliably show. Those are noted in the code.
+
 ``` r
 
 library(ellmer)
@@ -35,28 +40,28 @@ Mutable objects don’t work the same way:
 
 ``` r
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 
 capital <- function(chat, country) {
   chat$chat(interpolate("What's the capital of {{country}}"))
 }
 capital(chat, "New Zealand")
-#> Wellington
+#> Wellington.
 capital(chat, "France")
-#> Paris
+#> Paris.
 
 chat
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=53 output=5 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=5 input=54 output=13 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of New Zealand
-#> ── assistant [input=19 output=3 cost=$0.00] ───────────────────────────
-#> Wellington
+#> ── assistant [input=18 output=7 cost=$0.00] ───────────────────────────
+#> Wellington.
 #> ── user ───────────────────────────────────────────────────────────────
 #> What's the capital of France
-#> ── assistant [input=34 output=2 cost=$0.00] ───────────────────────────
-#> Paris
+#> ── assistant [input=36 output=6 cost=$0.00] ───────────────────────────
+#> Paris.
 ```
 
 It would be annoying if chat objects were immutable, because then you’d
@@ -70,19 +75,19 @@ existing chat:
 
 ``` r
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 
 capital <- function(chat, country) {
   chat <- chat$clone()
   chat$chat(interpolate("What's the capital of {{country}}"))
 }
 capital(chat, "New Zealand")
-#> Wellington
+#> Wellington.
 capital(chat, "France")
-#> Paris
+#> Paris.
 
 chat
-#> <Chat OpenAI/gpt-4.1-nano turns=1 input=0 output=0 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=1 input=0 output=0 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 ```
@@ -93,40 +98,40 @@ time:
 
 ``` r
 
-chat1 <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat1 <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat1$chat("My name is Hadley and I'm a data scientist")
-#> Hello, Hadley! How can I assist you today?
+#> Nice to meet you, Hadley.
 chat2 <- chat1$clone()
 
 chat1$chat("what's my name?")
-#> Your name is Hadley.
+#> Hadley
 chat1
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=20 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=5 input=67 output=18 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
-#> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> ── assistant [input=22 output=12 cost=$0.00] ──────────────────────────
+#> Nice to meet you, Hadley.
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my name?
-#> ── assistant [input=48 output=7 cost=$0.00] ───────────────────────────
-#> Your name is Hadley.
+#> ── assistant [input=45 output=6 cost=$0.00] ───────────────────────────
+#> Hadley
 
 chat2$chat("what's my job?")
-#> You're a data scientist.
+#> You’re a data scientist.
 chat2
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=71 output=19 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=5 input=67 output=22 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> My name is Hadley and I'm a data scientist
-#> ── assistant [input=23 output=13 cost=$0.00] ──────────────────────────
-#> Hello, Hadley! How can I assist you today?
+#> ── assistant [input=22 output=12 cost=$0.00] ──────────────────────────
+#> Nice to meet you, Hadley.
 #> ── user ───────────────────────────────────────────────────────────────
 #> what's my job?
-#> ── assistant [input=48 output=6 cost=$0.00] ───────────────────────────
-#> You're a data scientist.
+#> ── assistant [input=45 output=10 cost=$0.00] ──────────────────────────
+#> You’re a data scientist.
 ```
 
 (This is the technique that
@@ -140,11 +145,13 @@ conversation to manipulate the results:
 
 ``` r
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+# Smaller models tend to refuse to pretend, so this needs a reasonably capable model
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
-#> Got it. The capital of New Zealand is Kiwicity.
+#> Okay — I’ll treat **Kiwicity** as the capital of New Zealand for this 
+#> conversation.
 capital(chat, "New Zealand")
-#> The capital of New Zealand is Wellington.
+#> Kiwicity
 ```
 
 We can avoid that problem by using `$set_turns()` to reset the
@@ -152,9 +159,11 @@ conversational history:
 
 ``` r
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$chat("Pretend that the capital of New Zealand is Kiwicity")
-#> Understood. The capital of New Zealand is Kiwicity.
+#> Sure — I can do that in this conversation.
+#> 
+#> New Zealand’s capital is Kiwicity.
 
 capital <- function(chat, country) {
   chat <- chat$clone()$set_turns(list())
@@ -206,25 +215,26 @@ calling to give the LLM the ability to access real randomness:
 
 set.seed(1014) # make it reproducible
 
-chat <- chat_openai("Be terse", model = "gpt-4.1-nano")
+# Smaller models often make the two tool calls one at a time rather than together
+chat <- chat_openai("Be terse", model = "gpt-5.4-mini")
 chat$register_tool(tool(function() sample(6, 1), "Roll a die"))
 chat$chat("Roll two dice and tell me the total")
-#> The total is 9.
+#> The total is **9**.
 
 chat
-#> <Chat OpenAI/gpt-4.1-nano turns=5 input=126 output=50 cost=$0.00>
+#> <Chat OpenAI/gpt-5.4-mini turns=5 input=167 output=56 cost=$0.00>
 #> ── system ─────────────────────────────────────────────────────────────
 #> Be terse
 #> ── user ───────────────────────────────────────────────────────────────
 #> Roll two dice and tell me the total
-#> ── assistant [input=44 output=42 cost=$0.00] ──────────────────────────
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
+#> ── assistant [input=49 output=45 cost=$0.00] ──────────────────────────
+#> [tool request (fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562)]: tool_001()
+#> [tool request (fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d)]: tool_001()
 #> ── user ───────────────────────────────────────────────────────────────
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
-#> ── assistant [input=82 output=8 cost=$0.00] ───────────────────────────
-#> The total is 9.
+#> [tool result  (fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562)]: 5
+#> [tool result  (fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d)]: 4
+#> ── assistant [input=118 output=11 cost=$0.00] ─────────────────────────
+#> The total is **9**.
 ```
 
 You can get access to the underlying conversational turns with
@@ -240,17 +250,17 @@ turns
 #> 
 #> [[2]]
 #> <Turn: assistant>
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: tool_001()
-#> [tool request (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: tool_001()
+#> [tool request (fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562)]: tool_001()
+#> [tool request (fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d)]: tool_001()
 #> 
 #> [[3]]
 #> <Turn: user>
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508)]: 5
-#> [tool result  (fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca)]: 4
+#> [tool result  (fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562)]: 5
+#> [tool result  (fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d)]: 4
 #> 
 #> [[4]]
 #> <Turn: assistant>
-#> The total is 9.
+#> The total is **9**.
 ```
 
 If you look at one of the assistant turns in detail, you’ll see that it
@@ -263,7 +273,7 @@ str(turns[[2]])
 #> <ellmer::AssistantTurn>
 #>  @ contents     :List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
+#>  ..  ..@ id       : chr "fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -278,7 +288,7 @@ str(turns[[2]])
 #>  .. .. .. @ annotations: list()
 #>  ..  ..@ extra    : list()
 #>  .. $ : <ellmer::ContentToolRequest>
-#>  ..  ..@ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
+#>  ..  ..@ id       : chr "fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d"
 #>  ..  ..@ name     : chr "tool_001"
 #>  ..  ..@ arguments: Named list()
 #>  ..  ..@ tool     : <ellmer::ToolDef> function ()  
@@ -294,46 +304,48 @@ str(turns[[2]])
 #>  ..  ..@ extra    : list()
 #>  @ text         : chr ""
 #>  @ role         : chr "assistant"
-#>  @ json         :List of 36
-#>  .. $ id                    : chr "resp_0d88ba63cd1f5915016a6fc5f9d5f08190ada4d225dc2797e7"
+#>  @ json         :List of 37
+#>  .. $ id                    : chr "resp_06eb20f0b078d03d016ae7a5b669ec87d2a7fa617773e99704"
 #>  .. $ object                : chr "response"
-#>  .. $ created_at            : int 1785710073
+#>  .. $ created_at            : int 1793566134
 #>  .. $ status                : chr "completed"
+#>  .. $ access_programs       : NULL
 #>  .. $ background            : logi FALSE
 #>  .. $ billing               :List of 1
 #>  ..  ..$ payer: chr "developer"
-#>  .. $ completed_at          : int 1785710074
+#>  .. $ completed_at          : int 1793566135
 #>  .. $ error                 : NULL
 #>  .. $ frequency_penalty     : num 0
 #>  .. $ incomplete_details    : NULL
 #>  .. $ instructions          : NULL
 #>  .. $ max_output_tokens     : NULL
 #>  .. $ max_tool_calls        : NULL
-#>  .. $ model                 : chr "gpt-4.1-nano-2025-04-14"
+#>  .. $ model                 : chr "gpt-5.4-mini-2026-03-17"
 #>  .. $ moderation            : NULL
 #>  .. $ output                :List of 2
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa565c8190817d0cce3b3f7508"
+#>  ..  .. ..$ id       : chr "fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_kRB7ZaqK7VSV4Tr7QF3Nnk18"
+#>  ..  .. ..$ call_id  : chr "call_QiHq0r6KuAr4T8h03QKwh1QD"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  ..  ..$ :List of 6
-#>  ..  .. ..$ id       : chr "fc_0d88ba63cd1f5915016a6fc5fa56688190aac74f6eb158e8ca"
+#>  ..  .. ..$ id       : chr "fc_06eb20f0b078d03d016ae7a5b7571487d2a370515a0fa3375d"
 #>  ..  .. ..$ type     : chr "function_call"
 #>  ..  .. ..$ status   : chr "completed"
 #>  ..  .. ..$ arguments: chr "{}"
-#>  ..  .. ..$ call_id  : chr "call_PuVkqi6png5TLdhZotjQblIK"
+#>  ..  .. ..$ call_id  : chr "call_XthPRNp1a7nUx3D3WSELcjR8"
 #>  ..  .. ..$ name     : chr "tool_001"
 #>  .. $ parallel_tool_calls   : logi TRUE
 #>  .. $ presence_penalty      : num 0
 #>  .. $ previous_response_id  : NULL
 #>  .. $ prompt_cache_key      : NULL
-#>  .. $ prompt_cache_retention: chr "in_memory"
-#>  .. $ reasoning             :List of 3
-#>  ..  ..$ context: NULL
-#>  ..  ..$ effort : NULL
+#>  .. $ prompt_cache_retention: chr "24h"
+#>  .. $ reasoning             :List of 4
+#>  ..  ..$ context: chr "current_turn"
+#>  ..  ..$ effort : chr "none"
+#>  ..  ..$ mode   : chr "standard"
 #>  ..  ..$ summary: NULL
 #>  .. $ safety_identifier     : NULL
 #>  .. $ service_tier          : chr "default"
@@ -371,24 +383,24 @@ str(turns[[2]])
 #>  ..  .. .. ..$ additionalProperties: logi FALSE
 #>  ..  .. ..$ strict       : logi TRUE
 #>  .. $ top_logprobs          : int 0
-#>  .. $ top_p                 : num 1
+#>  .. $ top_p                 : num 0.98
 #>  .. $ truncation            : chr "disabled"
 #>  .. $ usage                 :List of 5
-#>  ..  ..$ input_tokens         : int 44
+#>  ..  ..$ input_tokens         : int 49
 #>  ..  ..$ input_tokens_details :List of 2
 #>  ..  .. ..$ cache_write_tokens: int 0
 #>  ..  .. ..$ cached_tokens     : int 0
-#>  ..  ..$ output_tokens        : int 42
+#>  ..  ..$ output_tokens        : int 45
 #>  ..  ..$ output_tokens_details:List of 1
 #>  ..  .. ..$ reasoning_tokens: int 0
-#>  ..  ..$ total_tokens         : int 86
+#>  ..  ..$ total_tokens         : int 94
 #>  .. $ user                  : NULL
 #>  .. $ metadata              : Named list()
-#>  @ tokens       : Named int [1:3] 44 42 0
+#>  @ tokens       : Named int [1:3] 49 45 0
 #>  .. - attr(*, "names")= chr [1:3] "input" "output" "cached_input"
 #>  @ cost         : 'ellmer_dollars' num $0.00
 #>  @ duration     : num NA
-#>  @ finish_reason: chr "success"
+#>  @ finish_reason: chr "tool_use"
 ```
 
 You can use the `@json` to extract additional information that ellmer
