@@ -1062,14 +1062,19 @@ test_that("metric points come from the final cumulative export (#1223)", {
 
   recorded <- with_otel_record({
     invoke_tool(request(ok))
-    # Simulate the reader thread's start-up export landing mid-test
+    # Simulate a background export landing mid-test
     otel::get_default_meter_provider()$flush()
     sync(invoke_tool_async(request(bad)))
   })
 
+  expect_gt(length(recorded$metrics), 1L)
   points <- otel_metric_points(recorded$metrics)
   expect_equal(names(points), "gen_ai.execute_tool.duration")
-  expect_length(points[["gen_ai.execute_tool.duration"]], 2L)
+  points <- points[["gen_ai.execute_tool.duration"]]
+  expect_equal(
+    map(points, \(x) x$attributes[["error.type"]]),
+    list(NULL, "simpleError")
+  )
 })
 
 test_that("interrupted tool calls are recorded on the span and metric", {
