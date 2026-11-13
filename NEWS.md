@@ -24,6 +24,7 @@
 * `Chat$stream()` now yields chunks as they arrive rather than in large bursts, so streaming from slow endpoints is smoother (@hectorgray, #1122).
 * `chat_anthropic()` and other Claude providers now default `max_tokens` to 32,000 (@simonpcouch, #1150).
 * `chat_anthropic()` and `chat_aws_bedrock()` now report correct input and cache token counts when a streamed response uses server tools such as web search (@pcbeingused333, #1194).
+* `chat_aws_bedrock()` now includes cache-write tokens (`cacheWriteInputTokens`) in the input token count, matching `chat_anthropic()`, so `$get_tokens()` and `$get_cost()` no longer under-report requests that write to the cache (@pcbeingused333).
 * `chat_anthropic()` now handles `redacted_thinking` blocks (@pcbeingused333, #1195).
 * `chat_cloudflare()` now respects its `account` argument and handles streamed responses that contain only a number (#1164).
 * `chat_google_gemini()` now uses Google's Interactions API and supports `content_image_url()`. `params(frequency_penalty)`, `params(presence_penalty)`, `params(log_probs)`, and `params(reasoning_tokens)` are no longer supported and warn. Structured output no longer works with Gemini 2.5 models, so upgrade to Gemini 3 or newer if you use `chat_structured()` (@thisisnic, #1155).
