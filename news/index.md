@@ -1,5 +1,13 @@
 # Changelog
 
+## ellmer 0.5.2
+
+CRAN release: 2026-11-10
+
+- Fixed a timing-dependent failure in the OpenTelemetry metric tests on
+  busy machines
+  ([\#1223](https://github.com/tidyverse/ellmer/issues/1223)).
+
 ## ellmer 0.5.1
 
 CRAN release: 2026-11-08
