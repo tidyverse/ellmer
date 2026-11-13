@@ -1,4 +1,4 @@
-# ellmer (development version)
+# ellmer 0.5.2
 
 * Fixed a timing-dependent failure in the OpenTelemetry metric tests on busy machines (#1223).
 
