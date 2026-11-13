@@ -152,6 +152,9 @@ new_tool_result <- function(request, result = NULL, error = NULL) {
   if (!is.null(error)) {
     ContentToolResult(error = error, request = request)
   } else if (is_tool_result(result)) {
+    if (is.character(result@value)) {
+      result@value <- paste(result@value, collapse = "\n")
+    }
     set_props(result, request = request)
   } else {
     ContentToolResult(value = normalize_tool_result(result), request = request)
