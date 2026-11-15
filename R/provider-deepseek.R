@@ -21,10 +21,10 @@ NULL
 #' `api_args = list(thinking = list(type = "enabled"))` or `type = "disabled"`.
 #' This setting takes precedence over `reasoning_effort` for selecting the mode.
 #'
-#' ellmer sends previous assistant thinking back as `reasoning_content`, following
-#' DeepSeek's documented requirements for thinking conversations with tools.
-#' DeepSeek ignores this content when tools are absent. See the
-#' [DeepSeek thinking guide](https://api-docs.deepseek.com/guides/thinking_mode/)
+#' ellmer sends previous assistant thinking back as `reasoning_content`,
+#' following DeepSeek's documented requirements for thinking conversations with
+#' tools. DeepSeek ignores this content when tools are absent. See the
+#' [thinking guide](https://api-docs.deepseek.com/guides/thinking_mode/)
 #' for details.
 #'
 #' ## Known limitations

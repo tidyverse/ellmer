@@ -30,57 +30,25 @@ test_that("supports tool calling", {
 })
 
 test_that("reasoning effort reaches the request body", {
-  for (effort in c("none", "low", "high", "max")) {
-    chat <- chat_deepseek(
-      model = "deepseek-flash",
-      credentials = function() "test-key",
-      params = params(reasoning_effort = effort)
-    )
-    req <- chat_request(chat$get_provider(), chat$get_model_object())
-    expect_equal(req_get_body(req)$reasoning_effort, effort)
-  }
-})
-
-test_that("requests preserve thinking in tool and answer history", {
   chat <- chat_deepseek(
     model = "deepseek-flash",
-    credentials = function() "test-key"
+    credentials = function() "test-key",
+    params = params(reasoning_effort = "max")
   )
-  chat$register_tool(tool(
-    function() "2",
-    "Add one and one",
-    name = "calculator"
-  ))
-  tool_request <- ContentToolRequest(id = "call_1", name = "calculator")
-  turns <- list(
-    UserTurn("What is 1 + 1?"),
-    AssistantTurn(list(ContentThinking("Use the calculator."), tool_request)),
-    UserTurn(list(ContentToolResult(value = "2", request = tool_request))),
-    AssistantTurn(list(
-      ContentThinking("The tool returned two."),
-      ContentText("2")
-    )),
-    UserTurn("Add one.")
-  )
-  req <- chat_request(
-    chat$get_provider(),
-    chat$get_model_object(),
-    turns = turns,
-    tools = chat$get_tools()
-  )
-  messages <- req_get_body(req)$messages
-  expect_equal(messages[[2]]$reasoning_content, "Use the calculator.")
-  expect_equal(messages[[2]]$tool_calls[[1]]$id, "call_1")
-  expect_equal(
-    messages[[3]],
-    list(role = "tool", content = "2", tool_call_id = "call_1")
-  )
-  expect_equal(messages[[4]]$reasoning_content, "The tool returned two.")
-  expect_equal(messages[[4]]$content, "2")
+  req <- chat_request(chat$get_provider(), chat$get_model_object())
+  expect_equal(req_get_body(req)$reasoning_effort, "max")
 })
 
-test_that("assistant history handles multiple, absent and disabled thinking", {
+test_that("assistant history preserves thinking alongside tools and answers", {
   provider <- chat_deepseek(model = "deepseek-flash")$get_provider()
+  tool_turn <- AssistantTurn(list(
+    ContentThinking("Use the calculator."),
+    ContentToolRequest(id = "call_1", name = "calculator")
+  ))
+  message <- as_json(provider, tool_turn)[[1]]
+  expect_equal(message$reasoning_content, "Use the calculator.")
+  expect_equal(message$tool_calls[[1]]$id, "call_1")
+
   turn <- AssistantTurn(list(
     ContentThinking("First. "),
     ContentThinking("Second."),

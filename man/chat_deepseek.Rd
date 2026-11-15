@@ -77,10 +77,10 @@ You can also explicitly enable or disable thinking with
 \code{api_args = list(thinking = list(type = "enabled"))} or \code{type = "disabled"}.
 This setting takes precedence over \code{reasoning_effort} for selecting the mode.
 
-ellmer sends previous assistant thinking back as \code{reasoning_content}, following
-DeepSeek's documented requirements for thinking conversations with tools.
-DeepSeek ignores this content when tools are absent. See the
-\href{https://api-docs.deepseek.com/guides/thinking_mode/}{DeepSeek thinking guide}
+ellmer sends previous assistant thinking back as \code{reasoning_content},
+following DeepSeek's documented requirements for thinking conversations with
+tools. DeepSeek ignores this content when tools are absent. See the
+\href{https://api-docs.deepseek.com/guides/thinking_mode/}{thinking guide}
 for details.
 }
 
