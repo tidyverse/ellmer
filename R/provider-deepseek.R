@@ -21,9 +21,9 @@ NULL
 #' `api_args = list(thinking = list(type = "enabled"))` or `type = "disabled"`.
 #' This setting takes precedence over `reasoning_effort` for selecting the mode.
 #'
-#' ellmer sends previous assistant thinking back as `reasoning_content`, which
-#' DeepSeek requires for thinking conversations with tools. DeepSeek ignores
-#' this content when tools are absent. See the
+#' ellmer sends previous assistant thinking back as `reasoning_content`, following
+#' DeepSeek's documented requirements for thinking conversations with tools.
+#' DeepSeek ignores this content when tools are absent. See the
 #' [DeepSeek thinking guide](https://api-docs.deepseek.com/guides/thinking_mode/)
 #' for details.
 #'
@@ -79,6 +79,7 @@ chat_deepseek <- function(
     base_url = base_url,
     credentials = credentials,
     extra_headers = api_headers,
+    preserve_thinking = TRUE,
     strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
@@ -146,7 +147,9 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
     tools <- keep(x@contents, is_tool_request)
     thinking <- keep(x@contents, S7_inherits, ContentThinking)
 
-    reasoning_content <- if (length(thinking) > 0) {
+    reasoning_content <- if (
+      provider@preserve_thinking && length(thinking) > 0
+    ) {
       paste0(map_chr(thinking, function(x) x@thinking), collapse = "")
     }
 

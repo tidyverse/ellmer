@@ -1,6 +1,6 @@
 # ellmer (development version)
 
-* `chat_deepseek()` now supports `params(reasoning_effort = ...)` and preserves thinking content in conversation history so thinking mode can continue after tool calls.
+* `chat_deepseek()` now supports `params(reasoning_effort = ...)` and includes previous assistant thinking as `reasoning_content`, following DeepSeek's current requirements for conversations with tools.
 
 # ellmer 0.5.2
 
