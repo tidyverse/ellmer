@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `chat_deepseek()` now supports `params(reasoning_effort = ...)` and preserves thinking content in conversation history so thinking mode can continue after tool calls.
+
 # ellmer 0.5.2
 
 * Fixed a timing-dependent failure in the OpenTelemetry metric tests on busy machines (#1223).

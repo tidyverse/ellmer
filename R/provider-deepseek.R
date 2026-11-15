@@ -10,6 +10,23 @@ NULL
 #'
 #' Built on top of [chat_openai_compatible()].
 #'
+#' ## Thinking
+#'
+#' Set `reasoning_effort` in [params()] to `"low"`, `"high"`, or `"max"` to
+#' control thinking effort. Use `params(reasoning_effort = "none")` to disable
+#' thinking. When omitted, DeepSeek enables thinking with `"high"` effort by
+#' default.
+#'
+#' You can also explicitly enable or disable thinking with
+#' `api_args = list(thinking = list(type = "enabled"))` or `type = "disabled"`.
+#' This setting takes precedence over `reasoning_effort` for selecting the mode.
+#'
+#' ellmer sends previous assistant thinking back as `reasoning_content`, which
+#' DeepSeek requires for thinking conversations with tools. DeepSeek ignores
+#' this content when tools are absent. See the
+#' [DeepSeek thinking guide](https://api-docs.deepseek.com/guides/thinking_mode/)
+#' for details.
+#'
 #' ## Known limitations
 #'
 #' * Structured data extraction is not supported.
@@ -27,6 +44,12 @@ NULL
 #' \dontrun{
 #' chat <- chat_deepseek()
 #' chat$chat("Tell me three jokes about statisticians")
+#'
+#' chat <- chat_deepseek(
+#'   model = "deepseek-flash",
+#'   params = params(reasoning_effort = "max")
+#' )
+#' chat$chat("What is the smallest prime greater than 100?")
 #' }
 chat_deepseek <- function(
   system_prompt = NULL,
@@ -73,13 +96,14 @@ ProviderDeepSeek <- new_class(
 )
 
 method(chat_params, ProviderDeepSeek) <- function(provider, params) {
-  # https://platform.deepseek.com/api-docs/api/create-chat-completion
+  # https://api-docs.deepseek.com/api/create-chat-completion/
   standardise_params(
     params,
     c(
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
+      reasoning_effort = "reasoning_effort",
       stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
@@ -120,12 +144,18 @@ method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
     # Tool requests come out of content and go into own argument
     text <- detect(x@contents, S7_inherits, ContentText)
     tools <- keep(x@contents, is_tool_request)
+    thinking <- keep(x@contents, S7_inherits, ContentThinking)
+
+    reasoning_content <- if (length(thinking) > 0) {
+      paste0(map_chr(thinking, function(x) x@thinking), collapse = "")
+    }
 
     content <- if (!is.null(text)) as_json(provider, text, ...)
     list(compact(list(
       role = "assistant",
       content = content,
-      tool_calls = as_json(provider, tools, ...)
+      tool_calls = as_json(provider, tools, ...),
+      reasoning_content = reasoning_content
     )))
   } else {
     as_json(super(provider, ProviderOpenAICompatible), x, ...)
