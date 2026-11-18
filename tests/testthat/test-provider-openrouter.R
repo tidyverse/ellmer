@@ -344,7 +344,7 @@ test_that("stream() and stream_async() take cost from the final usage-only chunk
 
 test_that("can list models", {
   vcr::local_cassette("openrouter-list-models")
-  test_models(models_openrouter)
+  test_models(models_openrouter, has_max_context_length = TRUE)
 })
 
 test_that("can list models without credentials", {
