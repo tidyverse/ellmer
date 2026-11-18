@@ -116,9 +116,11 @@ models_aws_bedrock(profile = NULL, base_url = NULL, api = NULL)
   endpoint override environment variables:
   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
   `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
-  (which append their API-specific path to the override).
-  `models_aws_bedrock()` talks to a different AWS service, so it honors
-  `AWS_ENDPOINT_URL_BEDROCK` instead.
+  (which append their API-specific path to the override). For
+  `"converse"`, `models_aws_bedrock()` lists models from a different AWS
+  service, so it honors `AWS_ENDPOINT_URL_BEDROCK` instead. For
+  `"messages"` and `"responses"`, it lists models from `base_url`, with
+  the API-specific path replaced by `/v1`.
 
 - model:
 

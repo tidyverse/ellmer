@@ -2,6 +2,12 @@
 
 ## ellmer (development version)
 
+- [`models_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
+  with `api = "messages"` or `api = "responses"` now lists models from
+  `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat
+  requests ([@karawoo](https://github.com/karawoo),
+  [\#1205](https://github.com/tidyverse/ellmer/issues/1205)).
+
 ## ellmer 0.5.2
 
 CRAN release: 2026-11-10
@@ -170,9 +176,9 @@ CRAN release: 2026-09-04
   functions that return complex objects like data frames or lists now
   produce a deprecation warning. Tool functions should return a
   character vector, an atomic vector, a JSON string (from
-  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+  [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)),
   or a `Content` object. Use
-  [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+  [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)
   to convert complex objects before returning
   ([@thisisnic](https://github.com/thisisnic),
   [\#858](https://github.com/tidyverse/ellmer/issues/858)).

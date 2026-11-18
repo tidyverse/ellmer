@@ -37,7 +37,7 @@ tool(
   - An atomic vector.
 
   - A `json`-class object (e.g. from
-    [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)).
+    [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)).
 
   - A [Content](https://ellmer.tidyverse.org/dev/reference/Content.md)
     object (e.g.

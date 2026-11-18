@@ -206,11 +206,11 @@ scalar types as much as you can.
 The output of the tool call will be interpreted by the LLM, just as if
 you had typed that information into the chat. Tool functions should
 return a string, an atomic vector, a JSON string (e.g. from
-[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)),
+[`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)),
 or a `Content` object.
 
 For complex data like data frames or lists, use
-[`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+[`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)
 to convert them explicitly before returning. Returning JSON doesn’t let
 the model do anything extra with the data; unlike a program, it can’t
 parse the JSON and compute with the values. If the answer requires exact
