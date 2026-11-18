@@ -135,11 +135,10 @@ NULL
 #'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
 #'   `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
 #'   (which append their API-specific path to the override).
-#'   For `"converse"`, `models_aws_bedrock()` lists models from the Bedrock
-#'   control plane, which is a different AWS service, so it honors
-#'   `AWS_ENDPOINT_URL_BEDROCK` instead. For `"messages"` and `"responses"`,
-#'   it lists models from `base_url`, with the API-specific path replaced by
-#'   `/v1`.
+#'   For `"converse"`, `models_aws_bedrock()` lists models from a different
+#'   AWS service, so it honors `AWS_ENDPOINT_URL_BEDROCK` instead. For
+#'   `"messages"` and `"responses"`, it lists models from `base_url`, with
+#'   the API-specific path replaced by `/v1`.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
