@@ -1,5 +1,7 @@
 # ellmer (development version)
 
+* `models_aws_bedrock()` with `api = "messages"` or `api = "responses"` now lists models from `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat requests (@karawoo, #1205).
+
 # ellmer 0.5.2
 
 * Fixed a timing-dependent failure in the OpenTelemetry metric tests on busy machines (#1223).
