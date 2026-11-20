@@ -271,7 +271,7 @@ the exact json that the provider returned:
 
 str(turns[[2]])
 #> <ellmer::AssistantTurn>
-#>  @ contents     :List of 2
+#>  @ contents     : List of 2
 #>  .. $ : <ellmer::ContentToolRequest>
 #>  ..  ..@ id       : chr "fc_06eb20f0b078d03d016ae7a5b7570487d2818db3f0502cf562"
 #>  ..  ..@ name     : chr "tool_001"
@@ -304,7 +304,7 @@ str(turns[[2]])
 #>  ..  ..@ extra    : list()
 #>  @ text         : chr ""
 #>  @ role         : chr "assistant"
-#>  @ json         :List of 37
+#>  @ json         : List of 37
 #>  .. $ id                    : chr "resp_06eb20f0b078d03d016ae7a5b669ec87d2a7fa617773e99704"
 #>  .. $ object                : chr "response"
 #>  .. $ created_at            : int 1793566134

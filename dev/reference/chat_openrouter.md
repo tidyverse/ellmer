@@ -100,7 +100,7 @@ models_openrouter(base_url = "https://openrouter.ai/api/v1")
 `chat_openrouter()` returns a
 [Chat](https://ellmer.tidyverse.org/dev/reference/Chat.md) object.
 `models_openrouter()` returns a data frame with one row per model, with
-its `id`, `created_at`, human-readable `name`, and `context_length`,
+its `id`, `created_at`, human-readable `name`, and `max_context_length`,
 plus the `cached_input`, `input`, and `output` prices OpenRouter
 advertises, in US dollars per million tokens. An `NA` price means that
 specific rate is unknown, e.g. because the model's cost is set by the

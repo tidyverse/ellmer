@@ -62,6 +62,8 @@ A Chat object
 
 - [`Chat$token_count()`](#method-Chat-token_count)
 
+- [`Chat$get_max_context_length()`](#method-Chat-get_max_context_length)
+
 - [`Chat$file_upload()`](#method-Chat-file_upload)
 
 - [`Chat$file_list()`](#method-Chat-file_list)
@@ -378,6 +380,26 @@ endpoint.
 #### Returns
 
 The estimated number of input tokens.
+
+------------------------------------------------------------------------
+
+### `Chat$get_max_context_length()`
+
+The current model's maximum context length, in tokens, as reported by
+the provider. Compare it to the input tokens in `$get_tokens()` to see
+how much of it a conversation has used.
+
+The first call lists the provider's models, which takes a request to its
+model listing endpoint.
+
+#### Usage
+
+    Chat$get_max_context_length()
+
+#### Returns
+
+A single integer, or `NA` if the provider doesn't list models or doesn't
+report a maximum context length for this one.
 
 ------------------------------------------------------------------------
 

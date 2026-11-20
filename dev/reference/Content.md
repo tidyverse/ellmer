@@ -210,7 +210,7 @@ ContentToolRequest(id = "abc", name = "mean", arguments = list(x = 1:5))
 #> <ellmer::ContentToolRequest>
 #>  @ id       : chr "abc"
 #>  @ name     : chr "mean"
-#>  @ arguments:List of 1
+#>  @ arguments: List of 1
 #>  .. $ x: int [1:5] 1 2 3 4 5
 #>  @ tool     : NULL
 #>  @ extra    : list()

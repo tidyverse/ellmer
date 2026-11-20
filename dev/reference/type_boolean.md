@@ -143,7 +143,7 @@ type_array(type_object(
 #>  @ items      : <ellmer::TypeObject>
 #>  .. @ description          : NULL
 #>  .. @ required             : logi TRUE
-#>  .. @ properties           :List of 3
+#>  .. @ properties           : List of 3
 #>  .. .. $ x: <ellmer::TypeBasic>
 #>  .. ..  ..@ description: NULL
 #>  .. ..  ..@ required   : logi TRUE

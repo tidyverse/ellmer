@@ -153,7 +153,7 @@ are required.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>chat_openrouter()</code> returns a <a href="Chat.html">Chat</a> object. <code>models_openrouter()</code>
 returns a data frame with one row per model, with its <code>id</code>, <code>created_at</code>,
-human-readable <code>name</code>, and <code>context_length</code>, plus the <code>cached_input</code>,
+human-readable <code>name</code>, and <code>max_context_length</code>, plus the <code>cached_input</code>,
 <code>input</code>, and <code>output</code> prices OpenRouter advertises, in US dollars per
 million tokens. An <code>NA</code> price means that specific rate is unknown, e.g.
 because the model's cost is set by the underlying provider at request

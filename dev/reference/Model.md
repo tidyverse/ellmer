@@ -51,7 +51,7 @@ Model(name = "gpt-4.1")
 Model(name = "claude-sonnet-4-6", params = params(temperature = 0))
 #> <ellmer::Model>
 #>  @ name      : chr "claude-sonnet-4-6"
-#>  @ params    :List of 1
+#>  @ params    : List of 1
 #>  .. $ temperature: num 0
 #>  @ extra_args: list()
 ```
