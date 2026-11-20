@@ -124,4 +124,7 @@ test_that("match_model_id() matches undated aliases and Ollama's default tag", {
 
   prefixed <- c("openai/gpt-6.1-terra-pro", "openai/gpt-6.1-terra")
   expect_equal(match_model_id("gpt-6.1-terra", prefixed), 2L)
+
+  ambiguous <- c("openai/gpt-6.1-terra", "azure/gpt-6.1-terra")
+  expect_equal(match_model_id("gpt-6.1-terra", ambiguous), NA_integer_)
 })
