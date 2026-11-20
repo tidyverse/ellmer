@@ -1,6 +1,6 @@
 ---
 name: http-mocking
-description: Write tests involving HTTP requests using vcr cassettes. Use when adding or modifying provider tests that make real API calls, recording new cassettes, creating chat_*_test() helper functions for new providers, or setting up vcr cassettes for vignettes and roxygen examples.
+description: Guides testing of chat_*() providers, including when to use a vcr cassette versus constructed objects or mocked_chat(). Use before writing or changing any provider test (tests/testthat/test-provider-*.R), even one that makes no HTTP requests, such as a test of request formatting, response parsing, or streaming. Also use when recording cassettes, adding a chat_*_test() helper for a new provider, or setting up vcr for vignettes and roxygen examples.
 ---
 
 # HTTP mocking in ellmer
