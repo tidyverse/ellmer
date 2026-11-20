@@ -38,7 +38,7 @@ NULL
 #' @inheritParams chat_openai_compatible
 #' @return `chat_openrouter()` returns a [Chat] object. `models_openrouter()`
 #'   returns a data frame with one row per model, with its `id`, `created_at`,
-#'   human-readable `name`, and `context_length`, plus the `cached_input`,
+#'   human-readable `name`, and `max_context_length`, plus the `cached_input`,
 #'   `input`, and `output` prices OpenRouter advertises, in US dollars per
 #'   million tokens. An `NA` price means that specific rate is unknown, e.g.
 #'   because the model's cost is set by the underlying provider at request
@@ -338,7 +338,7 @@ method(models_list, ProviderOpenRouter) <- function(provider) {
       )
     ),
     name = map_chr(models, \(x) x$name %||% NA_character_),
-    context_length = map_int(models, \(x) {
+    max_context_length = map_int(models, \(x) {
       as.integer(x$context_length %||% NA_integer_)
     })
   )

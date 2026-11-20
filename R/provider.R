@@ -405,6 +405,62 @@ method(models_list, new_S3_class("Chat")) <- function(provider) {
   models_list(provider$get_provider())
 }
 
+model_max_context_length <- function(provider, model) {
+  models <- model_listing(provider)
+  if (is.null(models) || !has_name(models, "max_context_length")) {
+    return(NA_integer_)
+  }
+
+  idx <- match_model_id(model, models$id)
+  models$max_context_length[idx]
+}
+
+the$model_listings <- new_environment()
+
+# Lists the provider's models once per session. A listing that fails isn't
+# cached, so a later call can try again.
+model_listing <- function(provider) {
+  key <- paste(provider@name, provider@base_url, sep = "|")
+  if (env_has(the$model_listings, key)) {
+    return(the$model_listings[[key]])
+  }
+
+  models <- try_fetch(
+    models_list(provider),
+    not_implemented = function(cnd) NULL,
+    httr2_error = function(cnd) NULL
+  )
+  if (!is.null(models)) {
+    the$model_listings[[key]] <- models
+  }
+  models
+}
+
+# Anthropic lists older models only as dated snapshots, so an undated alias
+# like `claude-sonnet-4-5` matches `claude-sonnet-4-5-20250929`, or the latest
+# snapshot if there are several. Ollama lists models without their default
+# `:latest` tag. OpenRouter lists models with a vendor prefix, like
+# `openai/gpt-6.1-terra`.
+match_model_id <- function(model, ids) {
+  model <- sub(":latest$", "", model)
+  if (model %in% ids) {
+    return(match(model, ids))
+  }
+
+  prefixed <- which(endsWith(ids, paste0("/", model)))
+  if (length(prefixed) == 1) {
+    return(prefixed)
+  }
+
+  date <- substring(ids, nchar(model) + 2)
+  is_snapshot <- startsWith(ids, paste0(model, "-")) & grepl("^[0-9]{8}$", date)
+  snapshots <- ids[is_snapshot]
+  if (length(snapshots) == 0) {
+    return(NA_integer_)
+  }
+  match(max(snapshots), ids)
+}
+
 # Give a provider the chance to react to a model change, e.g. to swap in
 # a sibling provider with a different wire format. Returns a provider.
 provider_set_model <- new_generic(

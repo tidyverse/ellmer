@@ -61,7 +61,7 @@ are required.}
 \value{
 \code{chat_openrouter()} returns a \link{Chat} object. \code{models_openrouter()}
 returns a data frame with one row per model, with its \code{id}, \code{created_at},
-human-readable \code{name}, and \code{context_length}, plus the \code{cached_input},
+human-readable \code{name}, and \code{max_context_length}, plus the \code{cached_input},
 \code{input}, and \code{output} prices OpenRouter advertises, in US dollars per
 million tokens. An \code{NA} price means that specific rate is unknown, e.g.
 because the model's cost is set by the underlying provider at request

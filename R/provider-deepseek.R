@@ -167,6 +167,10 @@ method(models_list, ProviderDeepSeek) <- function(provider) {
   id <- map_chr(json$data, "[[", "id")
   owned_by <- map_chr(json$data, "[[", "owned_by")
 
-  df <- data.frame(id = id, owned_by = owned_by)
+  df <- data.frame(
+    id = id,
+    owned_by = owned_by,
+    max_context_length = map_token_limit(json$data, "context_window")
+  )
   cbind(df, match_prices(provider@name, df$id))
 }

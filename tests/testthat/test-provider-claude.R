@@ -18,7 +18,11 @@ test_that("can make simple streaming request", {
 test_that("can list models", {
   vcr::local_cassette("anthropic-list-models")
 
-  test_models(models_anthropic)
+  models <- test_models(models_anthropic, has_max_context_length = TRUE)
+  expect_equal(
+    models$max_context_length[models$id == "claude-opus-5"],
+    1000000L
+  )
 })
 
 # Common provider interface -----------------------------------------------

@@ -19,7 +19,7 @@ test_that("can handle errors", {
 })
 
 test_that("can list models", {
-  test_models(models_mistral)
+  test_models(models_mistral, has_max_context_length = TRUE)
 })
 
 # Common provider interface -----------------------------------------------
