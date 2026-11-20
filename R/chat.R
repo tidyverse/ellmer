@@ -284,8 +284,7 @@ Chat <- R6::R6Class(
     #'   `$get_tokens()` to see how much of it a conversation has used.
     #'
     #'   The first call lists the provider's models, which takes a request to
-    #'   its model listing endpoint. The listing is then cached for the rest of
-    #'   the session.
+    #'   its model listing endpoint.
     #' @return A single integer, or `NA` if the provider doesn't list models
     #'   or doesn't report a maximum context length for this one.
     get_max_context_length = function() {

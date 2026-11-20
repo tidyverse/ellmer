@@ -373,8 +373,7 @@ reported by the provider. Compare it to the input tokens in
 \verb{$get_tokens()} to see how much of it a conversation has used.
 
 The first call lists the provider's models, which takes a request to
-its model listing endpoint. The listing is then cached for the rest of
-the session.
+its model listing endpoint.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{Chat$get_max_context_length()}

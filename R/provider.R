@@ -407,10 +407,12 @@ method(models_list, new_S3_class("Chat")) <- function(provider) {
 
 model_max_context_length <- function(provider, model) {
   models <- model_listing(provider)
-  if (is.null(models)) {
+  if (is.null(models) || !has_name(models, "max_context_length")) {
     return(NA_integer_)
   }
-  models$max_context_length[match_model_id(model, models$id)] %||% NA_integer_
+
+  idx <- match_model_id(model, models$id)
+  models$max_context_length[idx]
 }
 
 the$model_listings <- new_environment()
@@ -437,19 +439,26 @@ model_listing <- function(provider) {
 # Anthropic lists older models only as dated snapshots, so an undated alias
 # like `claude-sonnet-4-5` matches `claude-sonnet-4-5-20250929`, or the latest
 # snapshot if there are several. Ollama lists models without their default
-# `:latest` tag.
+# `:latest` tag. OpenRouter lists models with a vendor prefix, like
+# `openai/gpt-6.1-terra`.
 match_model_id <- function(model, ids) {
-  idx <- match(c(model, sub(":latest$", "", model)), ids)
-  if (any(!is.na(idx))) {
-    return(idx[!is.na(idx)][[1]])
+  model <- sub(":latest$", "", model)
+  if (model %in% ids) {
+    return(match(model, ids))
+  }
+
+  prefixed <- which(endsWith(ids, paste0("/", model)))
+  if (length(prefixed) == 1) {
+    return(prefixed)
   }
 
   date <- substring(ids, nchar(model) + 2)
-  snapshot <- startsWith(ids, paste0(model, "-")) & grepl("^[0-9]{8}$", date)
-  if (!any(snapshot)) {
+  is_snapshot <- startsWith(ids, paste0(model, "-")) & grepl("^[0-9]{8}$", date)
+  snapshots <- ids[is_snapshot]
+  if (length(snapshots) == 0) {
     return(NA_integer_)
   }
-  which(snapshot)[[which.max(as.numeric(date[snapshot]))]]
+  match(max(snapshots), ids)
 }
 
 # Give a provider the chance to react to a model change, e.g. to swap in
