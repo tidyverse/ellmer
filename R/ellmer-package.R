@@ -10,6 +10,14 @@ silence_r_cmd_check_note <- function() {
   later::later()
 }
 
+release_bullets <- function() {
+  c(
+    "Review the default models and update where appropriate",
+    "Delete VCR cassettes, re-record with `vcr_rebuild()`, and review diffs",
+    "Run revdep checks and notify maintainers of any failures"
+  )
+}
+
 ## usethis namespace: start
 #' @import httr2
 #' @import rlang
