@@ -121,4 +121,7 @@ test_that("match_model_id() matches undated aliases and Ollama's default tag", {
 
   snapshots <- c("claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022")
   expect_equal(match_model_id("claude-3-5-sonnet", snapshots), 2L)
+
+  prefixed <- c("openai/gpt-6.1-terra-pro", "openai/gpt-6.1-terra")
+  expect_equal(match_model_id("gpt-6.1-terra", prefixed), 2L)
 })
