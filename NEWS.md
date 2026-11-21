@@ -1,6 +1,7 @@
 # ellmer (development version)
 
 * New `Chat$get_max_context_length()` returns the maximum context length of the current model, in tokens, so you can compare it with `$get_tokens()`. Where the provider reports it, `models_*()` functions also include it in a new `max_context_length` column, which replaces the `context_length` column of `models_openrouter()` (@nbenn, #1083).
+* `chat_openrouter()` no longer errors when `chat_structured()` is used with a `required = FALSE` type and an OpenAI model (@thisisnic, #1222).
 * `models_aws_bedrock()` with `api = "messages"` or `api = "responses"` now lists models from `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat requests (@karawoo, #1205).
 
 # ellmer 0.5.2
