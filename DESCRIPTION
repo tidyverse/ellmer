@@ -54,6 +54,8 @@ Suggests:
     testthat (>= 3.0.0),
     vcr (>= 2.0.0),
     withr
+Remotes:
+    r-lib/coro#81
 VignetteBuilder:
     knitr
 Config/Needs/prices: cli, dplyr, jsonlite, jsonvalidate, stringr, tidyr,
