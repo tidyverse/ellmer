@@ -72,7 +72,7 @@
     Code
       Round(input = list(fixture_tool_result_turn()), response = list())
     Condition
-      Error:
+      Error in `Round()`:
       ! <ellmer::Round> object is invalid:
       - `input` must not contain tool-result turns.
 

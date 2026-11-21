@@ -103,13 +103,13 @@
     Code
       ContentToolResult("id", error = TRUE)
     Condition
-      Error:
+      Error in `ContentToolResult()`:
       ! <ellmer::ContentToolResult> object properties are invalid:
       - @error must be <NULL>, <character>, or S3<condition>, not <logical>
     Code
       ContentToolResult("id", error = c("one", "two"))
     Condition
-      Error:
+      Error in `ContentToolResult()`:
       ! <ellmer::ContentToolResult> object properties are invalid:
       - @error must be a single string or a condition object, not a character vector.
 
