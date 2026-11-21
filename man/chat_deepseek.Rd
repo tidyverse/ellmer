@@ -68,20 +68,9 @@ Sign up at \url{https://platform.deepseek.com}.
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
 \subsection{Thinking}{
 
-Set \code{reasoning_effort} in \code{\link[=params]{params()}} to \code{"low"}, \code{"high"}, or \code{"max"} to
-control thinking effort. Use \code{params(reasoning_effort = "none")} to disable
-thinking. When omitted, DeepSeek enables thinking with \code{"high"} effort by
-default.
-
-You can also explicitly enable or disable thinking with
-\code{api_args = list(thinking = list(type = "enabled"))} or \code{type = "disabled"}.
-This setting takes precedence over \code{reasoning_effort} for selecting the mode.
-
-ellmer sends previous assistant thinking back as \code{reasoning_content},
-following DeepSeek's documented requirements for thinking conversations with
-tools. DeepSeek ignores this content when tools are absent. See the
-\href{https://api-docs.deepseek.com/guides/thinking_mode/}{thinking guide}
-for details.
+DeepSeek models think by default. Use \code{reasoning_effort} in \code{\link[=params]{params()}} to
+control this: \code{"low"}, \code{"high"} (the default), or \code{"max"}, or \code{"none"} to
+turn thinking off. \code{"medium"} is treated as \code{"high"}.
 }
 
 \subsection{Known limitations}{
@@ -95,12 +84,6 @@ for details.
 \dontrun{
 chat <- chat_deepseek()
 chat$chat("Tell me three jokes about statisticians")
-
-chat <- chat_deepseek(
-  model = "deepseek-flash",
-  params = params(reasoning_effort = "max")
-)
-chat$chat("What is the smallest prime greater than 100?")
 }
 }
 \seealso{

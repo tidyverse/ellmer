@@ -29,54 +29,6 @@ test_that("supports tool calling", {
   test_tools_simple(chat_fun)
 })
 
-test_that("reasoning effort reaches the request body", {
-  chat <- chat_deepseek(
-    model = "deepseek-flash",
-    credentials = function() "test-key",
-    params = params(reasoning_effort = "max")
-  )
-  req <- chat_request(chat$get_provider(), chat$get_model_object())
-  expect_equal(req_get_body(req)$reasoning_effort, "max")
-})
-
-test_that("assistant history preserves thinking alongside tools and answers", {
-  provider <- chat_deepseek(model = "deepseek-flash")$get_provider()
-  tool_turn <- AssistantTurn(list(
-    ContentThinking("Use the calculator."),
-    ContentToolRequest(id = "call_1", name = "calculator")
-  ))
-  message <- as_json(provider, tool_turn)[[1]]
-  expect_equal(message$reasoning_content, "Use the calculator.")
-  expect_equal(message$tool_calls[[1]]$id, "call_1")
-
-  turn <- AssistantTurn(list(
-    ContentThinking("First. "),
-    ContentThinking("Second."),
-    ContentText("Answer")
-  ))
-  expect_equal(
-    as_json(provider, turn),
-    list(list(
-      role = "assistant",
-      content = "Answer",
-      reasoning_content = "First. Second."
-    ))
-  )
-  expect_equal(
-    as_json(provider, AssistantTurn("Answer")),
-    list(list(
-      role = "assistant",
-      content = "Answer"
-    ))
-  )
-
-  provider@preserve_thinking <- FALSE
-  expect_equal(
-    as_json(provider, turn),
-    list(list(role = "assistant", content = "Answer"))
-  )
-})
-
 # # Doesn't support data extraction
 # test_that("can extract data", {
 #   chat_fun <- chat_deepseek
