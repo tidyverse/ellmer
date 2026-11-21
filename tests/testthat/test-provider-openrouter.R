@@ -259,7 +259,7 @@ test_that("value_turn() uses the reported cost over an estimate", {
   expect_equal(unclass(reported@cost), 0.005)
   expect_equal(unname(reported@tokens), c(10, 5, 0))
 
-  zero <- value_turn(provider, model, openrouter_value_result(cost = 0))
+  zero <- value_turn(provider, model, openrouter_value_result(cost = 0L))
   expect_equal(unclass(zero@cost), 0)
 
   tiny <- value_turn(
