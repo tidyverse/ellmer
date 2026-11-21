@@ -605,6 +605,21 @@ test_that("aws_bedrock_models_url() resolves the model-listing endpoint", {
   )
 })
 
+test_that("aws_mantle_models_url() lists models on the base_url host", {
+  expect_equal(
+    aws_mantle_models_url("https://bedrock-mantle.us-east-1.api.aws/openai/v1"),
+    "https://bedrock-mantle.us-east-1.api.aws/v1"
+  )
+  expect_equal(
+    aws_mantle_models_url("https://gateway.example.com/mantle/anthropic/v1/"),
+    "https://gateway.example.com/mantle/v1"
+  )
+  expect_equal(
+    aws_mantle_models_url("https://bedrock-mantle.us-east-1.api.aws/v1"),
+    "https://bedrock-mantle.us-east-1.api.aws/v1"
+  )
+})
+
 test_that("sends placeholder for empty assistant turns (#1070)", {
   provider <- test_aws_bedrock_provider()
   turns_json <- as_json(provider, list(UserTurn("Hi"), AssistantTurn()))

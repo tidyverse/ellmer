@@ -14,5 +14,8 @@ test_that("can make simple streaming request", {
 })
 
 test_that("can list models", {
-  test_models(\(...) models_vllm("https://llm.nrp-nautilus.io/"))
+  test_models(
+    \(...) models_vllm("https://llm.nrp-nautilus.io/"),
+    has_max_context_length = TRUE
+  )
 })

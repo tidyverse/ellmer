@@ -173,9 +173,32 @@ method(models_list, ProviderLMStudio) <- function(provider) {
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
+  id <- map_chr(json$data, "[[", "id")
+
   data.frame(
-    id = map_chr(json$data, "[[", "id")
+    id = id,
+    max_context_length = lmstudio_max_context_lengths(
+      base_url,
+      id,
+      provider@credentials
+    )
   )
+}
+
+lmstudio_max_context_lengths <- function(
+  base_url,
+  ids,
+  credentials = lmstudio_credentials()
+) {
+  req <- request(base_url)
+  req <- ellmer_req_credentials(req, credentials(), "Authorization")
+  req <- req_url_path_append(req, "/api/v1/models")
+
+  json <- tryCatch(resp_body_json(req_perform(req)), error = function(cnd) NULL)
+
+  keys <- map_chr(json$models, \(model) model[["key"]] %||% NA_character_)
+  limits <- map_token_limit(json$models, "max_context_length")
+  limits[match(ids, keys)]
 }
 
 has_lmstudio <- function(

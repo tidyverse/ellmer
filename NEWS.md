@@ -1,6 +1,8 @@
 # ellmer (development version)
 
-* `chat_deepseek()` now supports `params(reasoning_effort = ...)` and includes previous assistant thinking as `reasoning_content`, following DeepSeek's current requirements for conversations with tools.
+* New `Chat$get_max_context_length()` returns the maximum context length of the current model, in tokens, so you can compare it with `$get_tokens()`. Where the provider reports it, `models_*()` functions also include it in a new `max_context_length` column, which replaces the `context_length` column of `models_openrouter()` (@nbenn, #1083).
+* `chat_deepseek()` now supports `params(reasoning_effort = ...)` and sends previous thinking back to the model (@songyue-chen, #1229).
+* `models_aws_bedrock()` with `api = "messages"` or `api = "responses"` now lists models from `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat requests (@karawoo, #1205).
 
 # ellmer 0.5.2
 

@@ -135,8 +135,10 @@ NULL
 #'   `AWS_ENDPOINT_URL_BEDROCK_RUNTIME` for `"converse"`, and
 #'   `AWS_ENDPOINT_URL_BEDROCK_MANTLE` for `"messages"` and `"responses"`
 #'   (which append their API-specific path to the override).
-#'   `models_aws_bedrock()` talks to a different AWS service, so it honors
-#'   `AWS_ENDPOINT_URL_BEDROCK` instead.
+#'   For `"converse"`, `models_aws_bedrock()` lists models from a different
+#'   AWS service, so it honors `AWS_ENDPOINT_URL_BEDROCK` instead. For
+#'   `"messages"` and `"responses"`, it lists models from `base_url`, with
+#'   the API-specific path replaced by `/v1`.
 #' @inheritParams chat_openai
 #' @inherit chat_openai return
 #' @family chatbots
@@ -297,7 +299,8 @@ method(models_list, ProviderAWSBedrock) <- function(provider) {
   df <- data.frame(
     id = map_chr(models, "[[", "modelId"),
     name = map_chr(models, "[[", "modelName"),
-    provider = map_chr(models, "[[", "providerName")
+    provider = map_chr(models, "[[", "providerName"),
+    max_context_length = rep(NA_integer_, length(models))
   )
   cbind(df, match_prices("AWS/Bedrock", df$id))
 }
@@ -924,18 +927,24 @@ aws_base_request <- function(provider, req) {
 # OpenAI-shaped /v1/models, and AWS warns that only the id is reliable.
 # https://docs.aws.amazon.com/bedrock/latest/userguide/models-get-info.html
 aws_mantle_models <- function(provider) {
-  provider@base_url <- sprintf(
-    "https://bedrock-mantle.%s.api.aws/v1",
-    provider@region
-  )
+  provider@base_url <- aws_mantle_models_url(provider@base_url)
 
   req <- base_request(provider)
   req <- req_url_path_append(req, "/models")
   resp <- req_perform(req)
   json <- resp_body_json(resp)
 
-  df <- data.frame(id = map_chr(json$data, "[[", "id"))
+  df <- data.frame(
+    id = map_chr(json$data, "[[", "id"),
+    max_context_length = rep(NA_integer_, length(json$data))
+  )
   cbind(df, match_prices(provider@name, df$id))
+}
+
+# Change only the path, so that a custom base_url or
+# AWS_ENDPOINT_URL_BEDROCK_MANTLE also applies to model listing.
+aws_mantle_models_url <- function(base_url) {
+  sub("/(openai|anthropic)/v1/?$", "/v1", base_url)
 }
 
 aws_error_body <- function(resp) {

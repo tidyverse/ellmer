@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "min_ellmer_version": "0.5.0",
-  "updated_at": "2026-11-09T14:53:05Z",
+  "updated_at": "2026-11-16T14:29:16Z",
   "data": [
     {
       "provider": "AWS/Bedrock",
@@ -303,6 +303,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "anthropic.claude-haiku-4-5",
       "variant": "",
       "input": 1,
@@ -369,6 +377,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
     },
     {
       "provider": "AWS/Bedrock",
@@ -1555,6 +1571,22 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "claude_platform/claude-fable-5-2",
+      "variant": "batches",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "claude_platform/claude-haiku-4-5",
       "variant": "",
       "input": 1,
@@ -2546,6 +2578,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 8.8,
+      "output": 44,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.1,
@@ -2574,6 +2614,14 @@
       "input": 0.55,
       "output": 2.75,
       "cached_input": 0.055
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "eu.anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 8.8,
+      "output": 44,
+      "cached_input": 0.22
     },
     {
       "provider": "AWS/Bedrock",
@@ -2791,6 +2839,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1,
@@ -2827,6 +2883,14 @@
       "input": 10,
       "output": 50,
       "cached_input": 0.25
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "global.anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
     },
     {
       "provider": "AWS/Bedrock",
@@ -5730,6 +5794,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-east-1/anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.2,
@@ -5751,6 +5823,14 @@
       "input": 0.6,
       "output": 3,
       "cached_input": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -5948,6 +6028,14 @@
       "input": 3.3,
       "output": 19.8,
       "cached_input": 0.33
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-east-1/openai.gpt-5.6-cyber",
+      "variant": "",
+      "input": 16.875,
+      "output": 101.25,
+      "cached_input": 1.6875
     },
     {
       "provider": "AWS/Bedrock",
@@ -6264,6 +6352,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov-west-1/anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.2,
@@ -6285,6 +6381,14 @@
       "input": 0.6,
       "output": 3,
       "cached_input": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov-west-1/anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -6871,6 +6975,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us-gov.anthropic.claude-haiku-5-5",
       "variant": "",
       "input": 0.12,
@@ -6884,6 +6996,14 @@
       "input": 0.6,
       "output": 3,
       "cached_input": 0.06
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us-gov.anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 9.6,
+      "output": 48,
+      "cached_input": 0.24
     },
     {
       "provider": "AWS/Bedrock",
@@ -7425,6 +7545,14 @@
     },
     {
       "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-fable-5-2",
+      "variant": "",
+      "input": 8.8,
+      "output": 44,
+      "cached_input": 0.22
+    },
+    {
+      "provider": "AWS/Bedrock",
       "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
       "variant": "",
       "input": 1.1,
@@ -7469,6 +7597,14 @@
       "input": 11,
       "output": 55,
       "cached_input": 0.275
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "us.anthropic.claude-mythos-5-2",
+      "variant": "",
+      "input": 8.8,
+      "output": 44,
+      "cached_input": 0.22
     },
     {
       "provider": "AWS/Bedrock",
@@ -8314,6 +8450,13 @@
     {
       "provider": "AWS/Bedrock",
       "model": "zai.glm-5",
+      "variant": "flex",
+      "input": 0.5,
+      "output": 1.6
+    },
+    {
+      "provider": "AWS/Bedrock",
+      "model": "zai.glm-5",
       "variant": "priority",
       "input": 1.75,
       "output": 5.6
@@ -8349,6 +8492,22 @@
       "input": 5,
       "output": 25,
       "cached_input": 0.125
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-fable-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-fable-5-2",
+      "variant": "batches",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.1
     },
     {
       "provider": "Anthropic",
@@ -8445,6 +8604,22 @@
       "input": 5,
       "output": 25,
       "cached_input": 0.125
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-mythos-5-2",
+      "variant": "",
+      "input": 8,
+      "output": 40,
+      "cached_input": 0.2
+    },
+    {
+      "provider": "Anthropic",
+      "model": "claude-mythos-5-2",
+      "variant": "batches",
+      "input": 4,
+      "output": 20,
+      "cached_input": 0.1
     },
     {
       "provider": "Anthropic",
@@ -11553,14 +11728,6 @@
     },
     {
       "provider": "Azure/OpenAI",
-      "model": "gpt-6-astra",
-      "variant": "flex",
-      "input": 5,
-      "output": 25,
-      "cached_input": 0.5
-    },
-    {
-      "provider": "Azure/OpenAI",
       "model": "gpt-6-astra-2026-09-03",
       "variant": "",
       "input": 10,
@@ -11606,22 +11773,6 @@
       "input": 0.2,
       "output": 0.75,
       "cached_input": 0.02
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-6-luna",
-      "variant": "above_272k_tokens_flex",
-      "input": 0.1,
-      "output": 0.375,
-      "cached_input": 0.01
-    },
-    {
-      "provider": "Azure/OpenAI",
-      "model": "gpt-6-luna",
-      "variant": "flex",
-      "input": 0.05,
-      "output": 0.25,
-      "cached_input": 0.005
     },
     {
       "provider": "Azure/OpenAI",
@@ -14294,64 +14445,56 @@
       "model": "gemini-3.8-flash-lite-tts",
       "variant": "",
       "input": 0.5,
-      "output": 6,
-      "cached_input": 0.125
+      "output": 6
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-lite-tts",
       "variant": "batches",
       "input": 0.25,
-      "output": 3,
-      "cached_input": 0.0625
+      "output": 3
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-lite-tts",
       "variant": "flex",
       "input": 0.25,
-      "output": 3,
-      "cached_input": 0.025
+      "output": 3
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-lite-tts",
       "variant": "priority",
       "input": 0.9,
-      "output": 10.8,
-      "cached_input": 0.225
+      "output": 10.8
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-tts",
       "variant": "",
       "input": 0.5,
-      "output": 9,
-      "cached_input": 0.125
+      "output": 9
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-tts",
       "variant": "batches",
       "input": 0.25,
-      "output": 4.5,
-      "cached_input": 0.0625
+      "output": 4.5
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-tts",
       "variant": "flex",
       "input": 0.25,
-      "output": 4.5,
-      "cached_input": 0.025
+      "output": 4.5
     },
     {
       "provider": "Google/Gemini",
       "model": "gemini-3.8-flash-tts",
       "variant": "priority",
       "input": 0.9,
-      "output": 16.2,
-      "cached_input": 0.225
+      "output": 16.2
     },
     {
       "provider": "Google/Gemini",
@@ -14398,6 +14541,77 @@
       "input": 3.6,
       "output": 18,
       "cached_input": 0.18
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-carbon",
+      "variant": "",
+      "input": 2,
+      "output": 10,
+      "cached_input": 0.1
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-carbon",
+      "variant": "batches",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-carbon",
+      "variant": "flex",
+      "input": 1,
+      "output": 5,
+      "cached_input": 0.05
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-carbon",
+      "variant": "priority",
+      "input": 3.6,
+      "output": 18,
+      "cached_input": 0.18
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-hydrogen",
+      "variant": "",
+      "input": 1.5,
+      "output": 7.5,
+      "cached_input": 0.075
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-hydrogen",
+      "variant": "batches",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.0375
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-hydrogen",
+      "variant": "flex",
+      "input": 0.75,
+      "output": 3.75,
+      "cached_input": 0.0375
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-4-hydrogen",
+      "variant": "priority",
+      "input": 2.7,
+      "output": 13.5,
+      "cached_input": 0.135
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-decision-1",
+      "variant": "",
+      "input": 0.1,
+      "output": 0
     },
     {
       "provider": "Google/Gemini",
@@ -14459,7 +14673,8 @@
       "model": "gemini-flash-latest",
       "variant": "batches",
       "input": 0.375,
-      "output": 1.875
+      "output": 1.875,
+      "cached_input": 0.0375
     },
     {
       "provider": "Google/Gemini",
@@ -14490,7 +14705,8 @@
       "model": "gemini-flash-lite-latest",
       "variant": "batches",
       "input": 0.15,
-      "output": 1.25
+      "output": 1.25,
+      "cached_input": 0.015
     },
     {
       "provider": "Google/Gemini",
@@ -14583,6 +14799,22 @@
     {
       "provider": "Google/Gemini",
       "model": "gemini-pro-latest",
+      "variant": "above_200k_tokens_batches",
+      "input": 2,
+      "output": 9,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-pro-latest",
+      "variant": "above_200k_tokens_flex",
+      "input": 2,
+      "output": 9,
+      "cached_input": 0.4
+    },
+    {
+      "provider": "Google/Gemini",
+      "model": "gemini-pro-latest",
       "variant": "above_200k_tokens_priority",
       "input": 7.2,
       "output": 32.4,
@@ -14593,7 +14825,8 @@
       "model": "gemini-pro-latest",
       "variant": "batches",
       "input": 1,
-      "output": 6
+      "output": 6,
+      "cached_input": 0.2
     },
     {
       "provider": "Google/Gemini",
@@ -15777,7 +16010,7 @@
       "variant": "",
       "input": 0.075,
       "output": 0.3,
-      "cached_input": 0.037
+      "cached_input": 0.0375
     },
     {
       "provider": "Groq",
@@ -15980,13 +16213,15 @@
       "provider": "Mistral",
       "model": "mistral-embed",
       "variant": "",
-      "input": 0.1
+      "input": 0.1,
+      "cached_input": 0.01
     },
     {
       "provider": "Mistral",
       "model": "mistral-embed-2312",
       "variant": "",
-      "input": 0.1
+      "input": 0.1,
+      "cached_input": 0.01
     },
     {
       "provider": "Mistral",
@@ -17854,13 +18089,6 @@
     {
       "provider": "OpenAI",
       "model": "gpt-5.5-pro",
-      "variant": "above_272k_tokens_batches",
-      "input": 30,
-      "output": 135
-    },
-    {
-      "provider": "OpenAI",
-      "model": "gpt-5.5-pro",
       "variant": "batches",
       "input": 15,
       "output": 90
@@ -18274,6 +18502,14 @@
       "input": 20,
       "output": 100,
       "cached_input": 2
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-6-cyber",
+      "variant": "above_272k_tokens",
+      "input": 40,
+      "output": 150,
+      "cached_input": 4
     },
     {
       "provider": "OpenAI",
@@ -18785,10 +19021,24 @@
     },
     {
       "provider": "OpenAI",
+      "model": "gpt-image-2.6-flare",
+      "variant": "batches",
+      "input": 2.5,
+      "cached_input": 0.625
+    },
+    {
+      "provider": "OpenAI",
       "model": "gpt-image-2.6-sunburst",
       "variant": "",
       "input": 5,
       "cached_input": 1.25
+    },
+    {
+      "provider": "OpenAI",
+      "model": "gpt-image-2.6-sunburst",
+      "variant": "batches",
+      "input": 2.5,
+      "cached_input": 0.625
     },
     {
       "provider": "OpenAI",
