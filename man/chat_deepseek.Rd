@@ -66,6 +66,13 @@ A \link{Chat} object.
 Sign up at \url{https://platform.deepseek.com}.
 
 Built on top of \code{\link[=chat_openai_compatible]{chat_openai_compatible()}}.
+\subsection{Thinking}{
+
+DeepSeek models think by default. Use \code{reasoning_effort} in \code{\link[=params]{params()}} to
+control this: \code{"low"}, \code{"high"} (the default), or \code{"max"}, or \code{"none"} to
+turn thinking off. \code{"medium"} is treated as \code{"high"}.
+}
+
 \subsection{Known limitations}{
 \itemize{
 \item Structured data extraction is not supported.
