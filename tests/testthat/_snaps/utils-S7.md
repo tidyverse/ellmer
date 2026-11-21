@@ -40,6 +40,11 @@
 # prop_whole_decimal validates inputs
 
     Code
+      check_prop()(1.5)
+    Output
+      <class>
+       @ prop: num 1.5
+    Code
       check_prop()("x")
     Condition
       Error:
