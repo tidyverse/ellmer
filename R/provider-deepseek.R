@@ -10,6 +10,12 @@ NULL
 #'
 #' Built on top of [chat_openai_compatible()].
 #'
+#' ## Thinking
+#'
+#' DeepSeek models think by default. Use `reasoning_effort` in [params()] to
+#' control this: `"low"`, `"high"` (the default), or `"max"`, or `"none"` to
+#' turn thinking off. `"medium"` is treated as `"high"`.
+#'
 #' ## Known limitations
 #'
 #' * Structured data extraction is not supported.
@@ -56,6 +62,7 @@ chat_deepseek <- function(
     base_url = base_url,
     credentials = credentials,
     extra_headers = api_headers,
+    preserve_thinking = TRUE,
     strict = FALSE
   )
   model <- Model(name = model, params = params, extra_args = api_args)
@@ -73,63 +80,20 @@ ProviderDeepSeek <- new_class(
 )
 
 method(chat_params, ProviderDeepSeek) <- function(provider, params) {
-  # https://platform.deepseek.com/api-docs/api/create-chat-completion
+  # https://api-docs.deepseek.com/api/create-chat-completion/
   standardise_params(
     params,
     c(
       frequency_penalty = "frequency_penalty",
       max_tokens = "max_tokens",
       presence_penalty = "presence_penalty",
+      reasoning_effort = "reasoning_effort",
       stop = "stop_sequences",
       temperature = "temperature",
       top_p = "top_p",
       logprobs = "log_probs"
     )
   )
-}
-
-method(as_json, list(ProviderDeepSeek, ContentText)) <- function(
-  provider,
-  x,
-  ...
-) {
-  x@text
-}
-
-method(as_json, list(ProviderDeepSeek, Turn)) <- function(provider, x, ...) {
-  if (is_user_turn(x)) {
-    x <- turn_contents_expand(x)
-    data <- turn_split_tool_results(x)
-
-    # Text and tool results go in separate messages
-    texts <- keep(data$contents, S7_inherits, ContentText)
-    texts_out <- lapply(texts, function(text) {
-      list(role = "user", content = as_json(provider, text, ...))
-    })
-
-    tools_out <- lapply(data$tool_results, function(tool) {
-      list(
-        role = "tool",
-        content = tool_string(tool),
-        tool_call_id = tool@request@id
-      )
-    })
-
-    c(tools_out, texts_out)
-  } else if (is_assistant_turn(x)) {
-    # Tool requests come out of content and go into own argument
-    text <- detect(x@contents, S7_inherits, ContentText)
-    tools <- keep(x@contents, is_tool_request)
-
-    content <- if (!is.null(text)) as_json(provider, text, ...)
-    list(compact(list(
-      role = "assistant",
-      content = content,
-      tool_calls = as_json(provider, tools, ...)
-    )))
-  } else {
-    as_json(super(provider, ProviderOpenAICompatible), x, ...)
-  }
 }
 
 deepseek_key <- function() key_get("DEEPSEEK_API_KEY")
