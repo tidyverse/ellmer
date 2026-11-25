@@ -11,6 +11,11 @@
   ([@nbenn](https://github.com/nbenn),
   [\#1083](https://github.com/tidyverse/ellmer/issues/1083)).
 - [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  no longer errors when `chat_structured()` is used with a
+  `required = FALSE` type and an OpenAI model
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1222](https://github.com/tidyverse/ellmer/issues/1222)).
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   no longer errors with free models
   ([@thisisnic](https://github.com/thisisnic),
   [\#1236](https://github.com/tidyverse/ellmer/issues/1236)).
