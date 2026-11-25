@@ -42,6 +42,14 @@ test_that("can use images", {
   test_images_remote(chat_fun)
 })
 
+test_that("structured output sends `strict = FALSE` explicitly", {
+  provider <- ProviderOpenRouter(name = "", base_url = "")
+  type <- type_object(x = type_number(required = FALSE))
+
+  body <- chat_body(provider, test_model(), type = type)
+  expect_equal(body$response_format$json_schema$strict, FALSE)
+})
+
 # Response-reported actual costs (#1189) ----------------------------------
 
 openrouter_test_provider <- function() {
@@ -259,7 +267,7 @@ test_that("value_turn() uses the reported cost over an estimate", {
   expect_equal(unclass(reported@cost), 0.005)
   expect_equal(unname(reported@tokens), c(10, 5, 0))
 
-  zero <- value_turn(provider, model, openrouter_value_result(cost = 0))
+  zero <- value_turn(provider, model, openrouter_value_result(cost = 0L))
   expect_equal(unclass(zero@cost), 0)
 
   tiny <- value_turn(

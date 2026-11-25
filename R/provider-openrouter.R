@@ -117,6 +117,32 @@ ProviderOpenRouter <- new_class(
   parent = ProviderOpenAICompatible,
 )
 
+method(chat_body, ProviderOpenRouter) <- function(
+  provider,
+  model,
+  stream = TRUE,
+  turns = list(),
+  tools = list(),
+  type = NULL
+) {
+  body <- chat_body(
+    super(provider, ProviderOpenAICompatible),
+    model = model,
+    stream = stream,
+    turns = turns,
+    tools = tools,
+    type = type
+  )
+
+  # OpenRouter treats a missing `strict` as `TRUE` for OpenAI models, which
+  # rejects schemas with optional properties, so always send it (#1222).
+  if (!is.null(type)) {
+    body$response_format$json_schema$strict <- provider@strict
+  }
+
+  body
+}
+
 method(chat_params, ProviderOpenRouter) <- function(provider, params) {
   # https://openrouter.ai/docs/api-reference/parameters
   standardise_params(
