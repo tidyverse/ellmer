@@ -42,6 +42,14 @@ test_that("can use images", {
   test_images_remote(chat_fun)
 })
 
+test_that("structured output sends `strict = FALSE` explicitly", {
+  provider <- ProviderOpenRouter(name = "", base_url = "")
+  type <- type_object(x = type_number(required = FALSE))
+
+  body <- chat_body(provider, test_model(), type = type)
+  expect_equal(body$response_format$json_schema$strict, FALSE)
+})
+
 # Response-reported actual costs (#1189) ----------------------------------
 
 openrouter_test_provider <- function() {
