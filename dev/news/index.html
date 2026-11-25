@@ -62,6 +62,8 @@
 <h2 class="pkg-version" data-toc-text="development version" id="ellmer-development-version">ellmer (development version)<a class="anchor" aria-label="anchor" href="#ellmer-development-version"></a></h2>
 <ul><li>New <code>Chat$get_max_context_length()</code> returns the maximum context length of the current model, in tokens, so you can compare it with <code>$get_tokens()</code>. Where the provider reports it, <code>models_*()</code> functions also include it in a new <code>max_context_length</code> column, which replaces the <code>context_length</code> column of <code><a href="../reference/chat_openrouter.html">models_openrouter()</a></code> (<a href="https://github.com/nbenn" class="external-link">@nbenn</a>, <a href="https://github.com/tidyverse/ellmer/issues/1083" class="external-link">#1083</a>).</li>
 <li>
+<code><a href="../reference/chat_openrouter.html">chat_openrouter()</a></code> no longer errors with free models (<a href="https://github.com/thisisnic" class="external-link">@thisisnic</a>, <a href="https://github.com/tidyverse/ellmer/issues/1236" class="external-link">#1236</a>).</li>
+<li>
 <code><a href="../reference/chat_aws_bedrock.html">models_aws_bedrock()</a></code> with <code>api = "messages"</code> or <code>api = "responses"</code> now lists models from <code>base_url</code> and <code>AWS_ENDPOINT_URL_BEDROCK_MANTLE</code>, the same as chat requests (<a href="https://github.com/karawoo" class="external-link">@karawoo</a>, <a href="https://github.com/tidyverse/ellmer/issues/1205" class="external-link">#1205</a>).</li>
 </ul></div>
     <div class="section level2">

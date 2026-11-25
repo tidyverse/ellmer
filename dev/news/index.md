@@ -10,6 +10,10 @@
   [`models_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
   ([@nbenn](https://github.com/nbenn),
   [\#1083](https://github.com/tidyverse/ellmer/issues/1083)).
+- [`chat_openrouter()`](https://ellmer.tidyverse.org/dev/reference/chat_openrouter.md)
+  no longer errors with free models
+  ([@thisisnic](https://github.com/thisisnic),
+  [\#1236](https://github.com/tidyverse/ellmer/issues/1236)).
 - [`models_aws_bedrock()`](https://ellmer.tidyverse.org/dev/reference/chat_aws_bedrock.md)
   with `api = "messages"` or `api = "responses"` now lists models from
   `base_url` and `AWS_ENDPOINT_URL_BEDROCK_MANTLE`, the same as chat
