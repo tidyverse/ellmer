@@ -155,7 +155,7 @@ get_token_cost <- function(provider_name, model_name, tokens, variant = "") {
 }
 
 dollars <- function(x) {
-  structure(x, class = c("ellmer_dollars", "numeric"))
+  structure(as.double(x), class = c("ellmer_dollars", "numeric"))
 }
 #' @export
 format.ellmer_dollars <- function(x, ...) {
