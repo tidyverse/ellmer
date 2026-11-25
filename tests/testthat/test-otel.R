@@ -148,7 +148,7 @@ test_that("tracing works as expected for asynchronous chats", {
   # Capture spans for an async chat with async tool calls interleaved with
   # other synchronous and asynchronous spans.
   spans <- with_otel_record({
-    p1 <- chat$chat_async("What's the current date in Y-M-D format?") |>
+    p1 <- chat$chat_async("What's the current date in YYYY-MM-DD format?") |>
       promises::then(function(result) {
         chat$chat_async("What date will it be 47 days from now?")
       })

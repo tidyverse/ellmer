@@ -184,7 +184,9 @@ test_that("can use async tools", {
     description = "Return the current date"
   ))
 
-  result <- sync(chat$chat_async("What's the current date in Y-M-D format?"))
+  result <- sync(chat$chat_async(
+    "What's the current date in YYYY-MM-DD format?"
+  ))
   expect_match(result, "2024-01-01")
 
   # Can't use async tools in sync context
@@ -394,7 +396,7 @@ test_that("$stream(stream='content') yields tool request/result contents", {
 
   res <- coro::collect(
     chat$stream(
-      "What's the current date in Y-M-D format?",
+      "What's the current date in YYYY-MM-DD format?",
       stream = "content"
     )
   )
